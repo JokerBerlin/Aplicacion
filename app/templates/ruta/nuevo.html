@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block imports %}
+<script type="text/javascript" src="/static/js/crearRutas.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $( "#id_cliente" ).focus();
+    $( "#id_cliente" ).autocomplete({
+        source: function (request, response) {
+
+            var datos = {nombreCliente: $("#id_cliente").val()};
+            var sendData = JSON.stringify(datos);
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/cliente/buscar/",
+                data: sendData,
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                cache: false,
+                CrossDomain: true,
+
+                success: function (result) {
+                var ListasClientes = result['clientes'];
+                response($.map(ListasClientes, function (item) {
+                    return {
+                        label: item.nombre,
+                        idcliente: item.nombre,
+                        direccion: item.direccion,
+                        Id: item.id
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 1,
+        select: function (event, ui) {
+            $.data(document.body, 'idcliente', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
+             $( "#direccion" ).val( ui.item.direccion);
+
+            var iDPro = ui.item.Id;
+            //agregar();
+        }
+
+
+    });
+});
+
+</script>
+
+ <style>
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
+    #content{
+        position: absolute;
+        min-height: 50%;
+        width: 80%;
+        top: 20%;
+        left: 5%;
+    }
+
+    .selected{
+        cursor: pointer;
+    }
+    .selected:hover{
+        background-color: #0585C0;
+        color: white;
+    }
+    .seleccionada{
+        background-color: #0585C0;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+
+{% block title %}
+Nuevo Pedido
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Nueva Ruta</h3>
+
+
+                <label for="id_nombre">Cliente:</label>
+                <br>
+                <input type="text" name="id_cliente" id="id_cliente" required="" class="form-control" maxlength="45">
+                <br>
+                <label for="id_nombre">direccion:</label>
+                <br>
+                <input type="text" name="direccion" id="direccion" required="" class="form-control" disabled="disabled">
+                <!-- <label for="id_nombre">Precio:</label> 
+                <br>
+                <input type="number" name="precio" id="precio" required="" class="form-control">
+                <br>-->
+                <br>
+                <button id="bt_add" class="btn btn-success">Agregar</button>
+                <button id="bt_del" class="btn btn-warning">Eliminar</button>
+                <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
+            
+                    <div class="row">
+                        <div class="form-group">
+                            <label ><center>Concepto Operación</center></label>
+                            <table id="tabla" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <td>Nº</td>
+                                    <td>Cliente</td>
+                                    <td>Dirección</td>
+
+                                </tr>
+                            </thead>
+                            <br>
+                        </div>
+
+                        <button id="bt_GenerarVenta" class="btn btn-success">Guardar</button>
+
+                    </div>
+                        
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-8 col-md-8 col-lg-6">
+                                <div id="tabs" style="display:none;">
+                                    <table id="listaProducto"></table>
+                                    <div id="pagerlistaProducto"  style="text-align: center;"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 col-md-2 col-lg-4">
+
+                            </div>
+                        </div>
+                    </div>
+                       
+                       <h4 class="box-title">Geolocalizacion cliente</h4>
+                    <div id="mapa" style="position: relative;overflow: hidden;height: 300px;">
+                
+                        <br>
+                        <script async defer
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=fn_coder">
+                        </script>
+                            <script type="text/javascript">
+                            
+                            
+                            var divMapa = document.getElementById('mapa');
+                            navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
+
+                            function fn_mal(){}
+                            function fn_ok(rta){
+
+                                var lat = rta.coords.latitude;
+                                var lon = rta.coords.longitude;
+
+                                var gLatLon= new google.maps.LatLng(lat, lon); //guardamos las coordenadas en un objeto de google, el LatLng es propio de google.
+                                var objConfig={
+                                    zoom:17,
+                                    center: gLatLon //donde debe estar el mapa centrado cuando se rederice.
+                                }
+
+                                var gMapa= new google.maps.Map(divMapa, objConfig); //indica a donde se va renderizar nuestro mapa y el segundo dato es una configuración del mapa.
+                                objConfigMarker={
+                                position:gLatLon,
+                                map:gMapa,
+                                draggable: true,
+                                title:"Aqui andamos"
+                                }
+
+                                var gMarker = new google.maps.Marker(objConfigMarker);
+                                    //gMarker.setIcon('icon_usuario.gif');
+
+                                var gCoder = new google.maps.Geocoder();
+
+                                var objInformacion={
+                                    address: 'alfonso ugarte 620, huamanga, ayacucho'
+                                }
+
+                                gCoder.geocode(objInformacion, fn_coder);
+
+                                function fn_coder(datos){
+                                    var coordenadas = datos[0].geometry.location; //obj LatLong
+
+                                    var config = {
+                                        map: gMapa,
+                                        position: coordenadas,
+                                        title: '{{oCliente.nombre}}'
+                                    }
+                                    var gMarkerDV=new google.maps.Marker(config)
+                                        //gMarkerDV.setIcon('icon_edificio.png')
+
+                                    var objHTML={
+                                        content: '<div style= "height: 150px; width: 300px"><h2>Cliente: {{oCliente.nombre}}</h2><h3>Direccion: {{oCliente.direccion}}</h3></div>'
+                                    }
+                                    var gIW = new google.maps.InfoWindow(objHTML);
+
+                                    google.maps.event.addListener(gMarkerDV, 'click', function(){
+                                        gIW.open(gMapa, gMarkerDV);
+
+                                    });
+
+                                        var objConfigDR = { //objeto de configuración directions render.
+                                            map: gMapa,
+                                            suppressMarkers: true
+                                        }
+                                    
+                                        var objConfigDS= {
+                                            origin: gLatLon, //LatLong 
+                                            destination:objInformacion.address,
+                                            travelMode: google.maps.TravelMode.WALKING //se puede variar segun tipo de movil a usar
+                                        
+                                        }
+                                    
+                                        var ds= new google.maps.DirectionsService();
+                                        //obtener coordenadas
+                                        var dr = new google.maps.DirectionsRenderer(objConfigDR);
+                                        //traduce coordenadas a la ruta visible
+
+                                            ds.route(objConfigDS, fnRutear );
+
+                                        function fnRutear(resultados, status){
+                                            //mostrar la linea entre A y B
+                                            if(status=='OK'){
+                                                dr.setDirections(resultados);
+                                            }else{
+                                                alert('Error'+status);
+                                            }
+                                        }
+                                }
+                            }
+                            </script>
+                    </div>
+            
+                      <br>
+                    
+    </div>  
+{% endblock %}

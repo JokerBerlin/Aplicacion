@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% block imports %}
+Clientes
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script type="text/javascript">
+
+//evento click para boton editar
+
+$(document).on('Click', '.btn-editar', function(e){
+
+	e.preventDefault();
+	 var row=$(this).paren().parent()[0];
+	 console.log(row);
+});
+
+
+</script>
+
+<!-- Devuelve datos de clientes ajax -->
+<script type="text/javascript">
+$(document).ready(function(){
+  $( "#inpt-cliente" ).focus();
+  $( "#inpt-cliente" ).autocomplete({
+      source: function (request, response) {
+
+          var datos = {nombreCliente: $("#inpt-cliente").val()};
+          var sendData = JSON.stringify(datos);
+          $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "/cliente/buscar/",
+              data: sendData,
+              contentType: "application/json; charset=utf-8",
+              async: false,
+              cache: false,
+              CrossDomain: true,
+
+              success: function (result) {
+              var ListasClientes = result['clientes'];
+              response($.map(ListasClientes, function (item) {
+                var valorCliente = document.getElementById('inpt-cliente').value;
+								document.forms.form_busca.action =  "/Cliente/detalle/"+item.id+"/" ;
+                if( isNaN(valorCliente) ){
+                    return {label: item.nombre};
+                }else{
+                    return {label: item.numerodocumento};
+                }
+
+              }));
+              }
+          });
+      },
+      minLength: 1,
+  });
+});
+
+</script>
+<!-- Action al presionar enter -->
+<script>
+  var input = document.getElementById("myInput");
+
+  // Execute a function when the user releases a key on the keyboard
+  input.addEventListener("keyup", function(event) {
+  // Cancel the default action, if needed
+  event.preventDefault();
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Trigger the button element with a click
+    document.getElementById("myBtn").click();
+  }
+  });
+</script>
+
+
+
+
+<!-- Modal Structure -->
+
+<!--<script type="text/javascript">
+    function eliminarIdentificador(identificadorId) {
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'eliminar_identificador' %}",
+            data: {
+                "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "identificador_id": identificadorId
+            },
+        });
+        request.done(function(response) {
+            alert("Identificador eliminado");
+            // Cierra el modal, oculta el identificador eliminado, etc.
+        });
+    }
+</script>-->
+
+<style>
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+
+ul.pagination li a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+ul.pagination li a:hover:not(.active) {background-color: #ddd;}
+
+div.center {text-align: center;}
+</style>
+
+<style>
+ul.ui-autocomplete {
+  z-index: 1100;
+}
+#content{
+  position: absolute;
+  min-height: 50%;
+  width: 80%;
+  top: 20%;
+  left: 5%;
+}
+
+.selected{
+  cursor: pointer;
+}
+.selected:hover{
+  background-color: #0585C0;
+  color: white;
+}
+.seleccionada{
+  background-color: #0585C0;
+  color: white;
+}
+</style>
+
+<script>
+$(document).on('click','.estado_cliente',function(){
+	var id = $(this).data('id');
+
+	$.ajax({
+			url:'',
+			type:'POST',
+			data:{
+					'id':id,
+					'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+			},
+			success:function(data){
+					$('#modal-default .modal-dialog').html($('#modal-default .modal-dialog',data));
+					$('#modal-default').modal('show');
+			},
+			error:function(){
+					console.log('error')
+			},
+	});
+});
+</script>
+
+
+{% endblock %}
+
+{% block title %}
+Clientes
+{% endblock %}
+
+{% block content %}
+
+<li>
+<form action="" method="post" name="form_busca" class="form-inline mr-auto">
+	{% csrf_token %}
+		<input type="text" id="inpt-cliente" placeholder="DNI Cliente..." name="cliente_buscado" class="form-control">
+		<button class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
+</form>
+</li>
+
+<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Cliente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+				<p>estas apunto de eliminar  {{oCliente.nombe }} 	<span id="data-name"></span> </p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Lista de clientes</h3>
+				{% load widget_tweaks %}
+				{% csrf_token %}
+					<div class="form-group">
+					<table id="tCamiones"  class="table">
+						<thead>
+	                        <tr>
+	                            <th>#</th>
+	                            <th>Nombre</th>
+	                            <th>Dirección</th>
+	                            <th>N° Documento</th>
+	                            <th>Opciones</th>
+	                        </tr>
+	                    </thead>
+				    {% for oCliente in oClientes %}
+				    <tr>
+				    	<td>{{ forloop.counter }}</td>
+				    	<td>{{oCliente.nombre}}</td>
+				    	<td>{{oCliente.direccion}}</td>
+				    	<td>{{oCliente.numerodocumento}}</td>
+				    	<td>
+				    		<a href="/Cliente/detalle/{{oCliente.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
+				    		<a href="/Cliente/editar/{{oCliente.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
+				    		<a href="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oCliente.id }}" data-name="{{ oCliente.nombre }}">Eliminar</a>
+				    	</td>
+				    </tr>
+
+				    {% endfor %}
+
+					</table>
+					<br>
+
+			        <div class="center">
+			          <ul class="pagination">
+			            {% if oVenta.has_previous %}
+			                      <li><a href="?page={{oVenta.previous_page_number}}"><<</a></li>
+			                  {% endif %}
+
+
+			                {% for pg in page_range %}
+			                    {% if oVenta.number == pg %}
+			                        <li><a class="active" href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
+			                    {% else %}
+			                        <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
+			                    {% endif %}
+			                {% endfor %}
+
+			                  {% if oVenta.has_next %}
+			                      <li><a href="?page={{oVenta.next_page_number}}">>></a></li>
+			                  {% endif %}
+			          </ul>
+			        </div>
+
+				    <br>
+	    			<a href="/Cliente/nuevo/"><button type="button" class="btn btn-success">Nuevo Cliente</button> </a>
+
+			</div>
+	    </div>
+    </div>
+	</div>
+
+
+
+{% endblock %}

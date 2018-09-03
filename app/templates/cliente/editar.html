@@ -1,0 +1,146 @@
+<!-- Usuario: Erick sulca
+	 fecha: 01/06/18
+	 última modificación: 12/06/18
+	 Descripción: se agrego la función getMapa, y toggleBounce para hacer más dinámico el marcador del mapa -->
+
+{% extends "base.html" %}
+
+{% block imports %}
+
+<!--
+<script>
+
+  		$( document ).ready(function() {
+    		console.log( "ready!" );
+		});
+		function obtenerCoordenadas(){
+        url = $('#id_url').val();
+        var arrSlash = url.split("/");
+        console.log(arrSlash);
+        coordX=arrSlash[4].split(",")[0];
+        coordX=coordX.substring(1, coordX.length);
+        coordY=arrSlash[4].split(",")[1];
+        $('#id_longitud').val(coordX);
+		$('#id_latitud').val(coordY);
+		initMap(parseFloat(coordX),parseFloat(coordY));
+
+	}
+	function initMap(coordX,coordY) {
+	  	//const var1= -13.1680054;
+	  	//const var2= -74.221639;
+	    var uluru = {lat: parseFloat(coordX), lng: parseFloat(coordY)};
+
+	    var map = new google.maps.Map(document.getElementById('map'), {
+	      zoom: 20,
+	      center: uluru
+	    });
+	    var marker = new google.maps.Marker({
+	      position: uluru,
+	      map: map
+	    });
+	  }
+
+	</script>
+-->
+	<script >
+
+	var marker;
+	var coords={};
+
+	initMap= function() {
+
+		//usamos la API para geolocalización
+		navigator.geolocation.getCurrentPosition(
+				function (position){
+
+					coords={
+						lng: position.coords.longitude,
+						lat: position.coords.latitude
+					};
+
+					setMapa(coords); //pasamos las coordenadas al método para crear el mapa.
+
+				}, function(error){console.log(error);});
+		}
+
+		function setMapa(coords){
+
+		var map=new google.maps.Map(document.getElementById('map'),
+		{
+			zoom: 13,
+			center: new google.maps.LatLng(coords.lat, coords.lng),
+
+		});
+
+		marker = new google.maps.Marker({
+
+			map: map,
+			draggable: true,
+			animation: google.maps.Animation.DROP,
+			position: new google.maps.LatLng(coords.lat, coords.lng),
+
+
+		});
+
+		marker.addListener('click', toggleBounce);
+		marker.addListener('dragend', function(event){
+
+		   document.getElementById("id_latitud").value=this.getPosition().lat();
+		   document.getElementById("id_longitud").value=this.getPosition().lng();
+		});
+
+	}
+
+
+	function toggleBounce(){
+
+		if(marker.getAnimation() !== null){
+			marker.setAnimation(null);
+		}else{
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		}
+	}
+
+	</script>
+{% endblock %}
+
+{% block title %}
+Editar Cliente {{oCliente.nombre}}
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Editar datos de {{oCliente.nombre}}</h3>
+                <form action="." method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+
+				<ul>
+
+				{% load widget_tweaks %}
+				{% csrf_token %}
+					<div class="form-group">
+				    {% for field in form %}
+							{{ field.errors }}
+							{{ field.label_tag }}</br>
+							{{ field|add_class:"form-control" }}
+				    {% endfor %}
+
+
+
+					<label for="id_latitud">Geolocalización de {{oCliente.nombre}}</label><br>
+			    			<div id="map" style="position: relative;overflow: hidden;height: 300px;">
+							    <script async defer
+							    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=initMap">
+				    			</script>
+
+			   			 	</div>
+			   		<br>
+					<button type="submit" class="btn btn-success">Actualizar</button>
+				</ul>
+				</form>
+	    	</div>
+	    </div>
+    </div>
+{% endblock %}
