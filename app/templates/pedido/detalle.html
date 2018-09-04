@@ -13,7 +13,7 @@ Información de Pedido
             <div class="white-box">
                 <h3 class="box-title">Datos de cliente</h3>
 			<div>
-				<table id="tCamiones"  class="table">	
+				<table id="tCamiones"  class="table">
 					<tr>
 						<td>Nombre: </td>
 						<td>{{ oCliente.nombre }}</td>
@@ -26,10 +26,10 @@ Información de Pedido
 						<td>N° Documento: </td>
 						<td>{{ oCliente.numerodocumento }}</td>
 					</tr>
-					
-				</table>	
-				<br>	
-				<table id="tProductos"  class="table">			
+
+				</table>
+				<br>
+				<table id="tProductos"  class="table">
 					<thead>
 	                    <tr>
 	                        <th>#</th>
@@ -43,15 +43,15 @@ Información de Pedido
 				    	<td>{{ forloop.counter }}</td>
 				    	<td>{{oProducto.nombreProducto}}</td>
 				    	<td>{{oProducto.nombrePresentacion}}</td>
-				    	<td>{{oProducto.cantidad}}</td>
+				    	<td>{{oProducto.total}}</td>
 				    </tr>
 
 				    {% endfor %}
-				</table>	
+				</table>
 
 			</div>
 			</div>
 
 	    </div>
-    </div>  
+    </div>
 {% endblock %}

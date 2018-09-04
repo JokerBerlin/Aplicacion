@@ -15,11 +15,12 @@ from app.fomularios.cierrecajaForm import *
 from app.fomularios.pedidoForm import *
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
+from django.db.models import Sum
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
 #   Última modificación:
-#   Descripción: 
+#   Descripción:
 #   servicio de busqueda de usuario para la app movil
 ###########################################################
 
@@ -43,16 +44,23 @@ def ResumenPedidos(request):
         return render(request, 'pedido/listar.html')
     else:
         oPedidos = Pedido.objects.filter(estado = True)
+
         oProductos = []
-        for oPedido in oPedidos:
-            oPedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
-            for oPedidoproductospresentacion in oPedidoproductospresentacions:
-                oProducto = {}
-                oProducto["nombreProducto"] = oPedidoproductospresentacion.productopresentacions.producto.nombre
-                oProducto["nombrePresentacion"] = oPedidoproductospresentacion.productopresentacions.presentacion.nombre
-                oProducto["cantidad"] = oPedidoproductospresentacion.cantidad
-                oProductos.append(oProducto)
-        
+        #for oPedido in oPedidos:
+
+        oPedidopropre = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in oPedidos]).values('productopresentacions_id').annotate(Sum('cantidad'))
+        for o in oPedidopropre:
+            #if oPedido.id == o['pedido_id']:
+            id = o['productopresentacions_id']
+            oProductopresentacions = Productopresentacions.objects.get(id=id)
+            #oPedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
+            #for oPedidoproductospresentacion in oPedidoproductospresentacions:
+            oProducto = {}
+            oProducto["nombreProducto"] = oProductopresentacions.producto.nombre
+            oProducto["nombrePresentacion"] = oProductopresentacions.presentacion.nombre
+            oProducto["cantidad"] = o['cantidad__sum']
+            oProductos.append(oProducto)
+
         return render(request, 'pedido/resumen.html', {"oProductos": oProductos})
 
 @csrf_exempt
@@ -179,7 +187,7 @@ def editarPedido(request,pedido_id):
 
                 return redirect('/Pedido/listar/')
 
-                
+
         else:
          form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
          form2= ProductopresentacionsForm(instance=oProductopresentacions)
