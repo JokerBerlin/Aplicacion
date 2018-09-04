@@ -74,28 +74,6 @@ $(document).ready(function(){
   });
 </script>
 
-
-
-
-<!-- Modal Structure -->
-
-<!--<script type="text/javascript">
-    function eliminarIdentificador(identificadorId) {
-        var request = $.ajax({
-            type: "POST",
-            url: "{% url 'eliminar_identificador' %}",
-            data: {
-                "csrfmiddlewaretoken": "{{ csrf_token }}",
-                "identificador_id": identificadorId
-            },
-        });
-        request.done(function(response) {
-            alert("Identificador eliminado");
-            // Cierra el modal, oculta el identificador eliminado, etc.
-        });
-    }
-</script>-->
-
 <style>
 ul.pagination {
     display: inline-block;
@@ -172,6 +150,28 @@ $(document).on('click','.estado_cliente',function(){
 });
 </script>
 
+<script type="text/javascript">
+function eliminarIdentificador(identificadorId) {
+		var request = $.ajax({
+				type: "POST",
+				url: "{% url 'eliminar_identificador' %}",
+				data: {
+						"csrfmiddlewaretoken": "{{ csrf_token }}",
+						"identificador_id": identificadorId
+				},
+		});
+		request.done(function(response) {
+				alert("El cliente fue desactivado con exito");
+				$('#myModal').modal('toggle');
+				$("#tabla" + identificadorId).remove();
+		});
+};
+	selPersona = function(idPersona, nombre){
+		document.getElementById('nombreCliente').innerHTML = nombre;
+		$("#eliminar").attr("onclick","eliminarIdentificador('"+idPersona+"')");
+	};
+</script>
+
 
 {% endblock %}
 
@@ -189,27 +189,36 @@ Clientes
 </form>
 </li>
 
-<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Cliente</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+	<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Cliente</h5>
 
-      <div class="modal-body">
-				<p>estas apunto de eliminar  {{oCliente.nombe }} 	<span id="data-name"></span> </p>
+					<script type="text/javascript">
+						var idCliente = document.getElementById('codigo').value;
+						var nombreCliente = document.getElementById('nombre').value;
+					</script>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+				<div class="modal-body">
+
+
+
+						<p>Estás a punto de desactivar al cliente <label id="nombreCliente"></label> </p>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+				</div>
+			</div>
+		</div>
 </div>
+
 
 	<div class="row">
         <div class="col-sm-12">
@@ -229,17 +238,20 @@ Clientes
 	                        </tr>
 	                    </thead>
 				    {% for oCliente in oClientes %}
-				    <tr>
-				    	<td>{{ forloop.counter }}</td>
-				    	<td>{{oCliente.nombre}}</td>
-				    	<td>{{oCliente.direccion}}</td>
-				    	<td>{{oCliente.numerodocumento}}</td>
-				    	<td>
-				    		<a href="/Cliente/detalle/{{oCliente.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
-				    		<a href="/Cliente/editar/{{oCliente.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
-				    		<a href="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oCliente.id }}" data-name="{{ oCliente.nombre }}">Eliminar</a>
-				    	</td>
-				    </tr>
+
+
+					    <tr id="tabla{{ oCliente.id }}">
+					    	<td>{{ forloop.counter }}</td>
+					    	<td>{{oCliente.nombre}}</td>
+					    	<td>{{oCliente.direccion}}</td>
+					    	<td>{{oCliente.numerodocumento}}</td>
+					    	<td>
+					    		<a href="/Cliente/detalle/{{oCliente.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
+					    		<a href="/Cliente/editar/{{oCliente.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
+									<a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oCliente.id }}" onclick="selPersona('{{oCliente.id}}','{{oCliente.nombre}}');">Eliminar</a>
+
+								</td>
+					    </tr>
 
 				    {% endfor %}
 

@@ -157,6 +157,7 @@ def listarCliente(request):
 def eliminar_identificador(request):
     pk = request.POST.get('identificador_id')
     identificador = Cliente.objects.get(pk=pk)
-    identificador.delete()
+    identificador.estado = 0
+    identificador.save()
     response = {}
     return JsonResponse(response)
