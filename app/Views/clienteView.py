@@ -36,7 +36,7 @@ def buscarCliente(request):
             jsonfinal = {}
             jsonfinal["clientes"] = []
             try:
-                oClientes = Cliente.objects.filter(nombre__icontains=nombreCliente,estado = 1)
+                oClientes = Cliente.objects.filter(nombre__icontains=nombreCliente,estado = 1)|Cliente.objects.filter(numerodocumento__icontains=nombreCliente,estado = 1)
                 for oCliente in oClientes:
                     jsonCliente = {}
                     jsonCliente["id"] = oCliente.id

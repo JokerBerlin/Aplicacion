@@ -248,21 +248,30 @@ Ventas
 
 
 
-<li>
-  <form action="" name="buscar_filtro" method="post" class="form-inline mr-auto">
-    {% csrf_token %}
-      <input type="text" id="inpt-producto"  placeholder="Producto..." name="producto_buscado" class="form-control">
-      <input type="text" id="inpt-cliente" placeholder="DNI Cliente..." name="cliente_buscado" class="form-control">
-      <input type="text" class="form-control" id="desde" placeholder="Fecha inicio..." name="desde" autocomplete="off">
-      <input type="text" class="form-control" id="hasta" placeholder="Fecha final..." name="hasta" autocomplete="off">
-      <button class="btn blue-gradient btn-rounded btn-sm my-0" onclick="modificar_url();" type="submit">Buscar</button>
-  </form>
-</li>
+
 
 
   <div class="row">
+
         <div class="col-sm-12">
             <div class="white-box">
+              <form action="" name="buscar_filtro" method="post" class="form-inline mr-auto">
+                {% csrf_token %}
+                  <input type="text" id="inpt-producto"  placeholder="Producto..." name="producto_buscado" class="form-control">
+                  <input type="text" id="inpt-cliente" placeholder="DNI o Nombre Cliente..." name="cliente_buscado" class="form-control">
+                  <input type="text" class="form-control" id="desde" placeholder="Fecha inicio..." name="desde" autocomplete="off">
+                  <input type="text" class="form-control" id="hasta" placeholder="Fecha final..." name="hasta" autocomplete="off">
+                  <button class="btn blue-gradient btn-rounded btn-sm my-0" onclick="modificar_url();" type="submit">Buscar</button>
+              </form>
+              <br>
+              {% for i in tags %}
+                <span class="label label-primary">{{i.producto}}</span>
+                <span class="label label-success">{{i.dni}}</span>
+                <span class="label label-info">{{i.fecha_inicio}}</span>
+                <span class="label label-warning">{{i.fecha_fin}}</span>
+              {% endfor %}
+              <br>
+              <br>
                 <h3 class="box-title">Lista de Ventas</h3>
         {% load widget_tweaks %}
         {% csrf_token %}

@@ -62,7 +62,13 @@ def Fentas(request, producto_buscado='',cliente='',inicio='',fin=''):
     dni = cliente
     fecha_inicio = inicio
     fecha_fin = fin
+
+    tags=[]
+
     if producto != '':
+        objetotag={}
+        objetotag['producto']=producto
+        tags.append(objetotag)
         producto = Producto.objects.get(nombre=producto).id
         presentacion = Productopresentacions.objects.filter(producto=producto)
         pedidoproductopresentacion = Pedidoproductospresentacions.objects.filter(productopresentacions_id__in=[p.id for p in presentacion])
@@ -76,6 +82,9 @@ def Fentas(request, producto_buscado='',cliente='',inicio='',fin=''):
             oProductos.append(oNuevo)
         oVentas = venta
     if dni != '':
+        objetotag={}
+        objetotag['dni']=dni
+        tags.append(objetotag)
         if dni.isdigit() == False :
             dni = Cliente.objects.get(nombre=dni).numerodocumento
 
@@ -97,6 +106,10 @@ def Fentas(request, producto_buscado='',cliente='',inicio='',fin=''):
                     oProductos.append(oNuevo)
         oVentas = venta
     if fecha_inicio!='' and fecha_fin!='':
+        objetotag={}
+        objetotag['fecha_inicio']=fecha_inicio
+        objetotag['fecha_fin']=fecha_fin
+        tags.append(objetotag);
         fecha1=datetime.strftime(datetime.strptime(fecha_inicio,'%d-%m-%Y'),'%Y-%m-%d')
         fecha2=datetime.strftime(datetime.strptime(fecha_fin,'%d-%m-%Y'),'%Y-%m-%d')
         if producto !='' or dni!='':
@@ -114,6 +127,9 @@ def Fentas(request, producto_buscado='',cliente='',inicio='',fin=''):
                     oProductos.append(oNuevo)
         oVentas = venta
     elif fecha_inicio!='':
+        objetotag={}
+        objetotag['fecha_inicio']=fecha_inicio
+        tags.append(objetotag);
         fecha1=datetime.strftime(datetime.strptime(fecha_inicio,'%d-%m-%Y'),'%Y-%m-%d')
         fecha2=date.today()
         if producto !='' or dni!='':
@@ -131,6 +147,9 @@ def Fentas(request, producto_buscado='',cliente='',inicio='',fin=''):
                     oProductos.append(oNuevo)
         oVentas = venta
     elif fecha_fin!='':
+        objetotag={}
+        objetotag['fecha_fin']=fecha_fin
+        tags.append(objetotag);
         fecha2=datetime.strftime(datetime.strptime(fecha_fin,'%d-%m-%Y'),'%Y-%m-%d')
         if producto !='' or dni!='':
             venta = Venta.objects.filter(estado=True,id__in=[p.id for p in oVentas],fecha__lte=fecha2).order_by('-id')
@@ -163,7 +182,7 @@ def Fentas(request, producto_buscado='',cliente='',inicio='',fin=''):
     end_index = index + 5 if index <= max_index - 5 else max_index
     page_range = paginator.page_range[start_index:end_index]
 
-    return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range":page_range})
+    return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range":page_range,"tags":tags,})
 
 """
 @csrf_exempt
