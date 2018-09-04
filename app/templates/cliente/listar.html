@@ -248,13 +248,13 @@ Clientes
 
 			        <div class="center">
 			          <ul class="pagination">
-			            {% if oVenta.has_previous %}
-			                      <li><a href="?page={{oVenta.previous_page_number}}"><<</a></li>
+			            {% if oClientes.has_previous %}
+			                      <li><a href="?page={{oClientes.previous_page_number}}"><<</a></li>
 			                  {% endif %}
 
 
 			                {% for pg in page_range %}
-			                    {% if oVenta.number == pg %}
+			                    {% if oClientes.number == pg %}
 			                        <li><a class="active" href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
 			                    {% else %}
 			                        <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
@@ -262,7 +262,7 @@ Clientes
 			                {% endfor %}
 
 			                  {% if oVenta.has_next %}
-			                      <li><a href="?page={{oVenta.next_page_number}}">>></a></li>
+			                      <li><a href="?page={{oClientes.next_page_number}}">>></a></li>
 			                  {% endif %}
 			          </ul>
 			        </div>

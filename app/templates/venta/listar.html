@@ -316,8 +316,8 @@ Ventas
             {% if oVenta.has_previous %}
                       <li><a href="?page={{oVenta.previous_page_number}}"><<</a></li>
                   {% endif %}
-                
-                
+
+
                 {% for pg in page_range %}
                     {% if oVenta.number == pg %}
                         <li><a class="active" href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
@@ -325,14 +325,14 @@ Ventas
                         <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
                     {% endif %}
                 {% endfor %}
-                
+
                   {% if oVenta.has_next %}
                       <li><a href="?page={{oVenta.next_page_number}}">>></a></li>
                   {% endif %}
           </ul>
         </div>
 
-        
+
 
         <br>
         <a href="/venta/nuevo/"><button type="button" class="btn btn-success">Nueva Venta</button> </a>

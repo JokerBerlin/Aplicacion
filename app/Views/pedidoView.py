@@ -15,7 +15,13 @@ from app.fomularios.cierrecajaForm import *
 from app.fomularios.pedidoForm import *
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
+
+#funcion sum
 from django.db.models import Sum
+
+##paginacion
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
@@ -46,22 +52,34 @@ def ResumenPedidos(request):
         oPedidos = Pedido.objects.filter(estado = True)
 
         oProductos = []
-        #for oPedido in oPedidos:
 
         oPedidopropre = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in oPedidos]).values('productopresentacions_id').annotate(Sum('cantidad'))
         for o in oPedidopropre:
-            #if oPedido.id == o['pedido_id']:
             id = o['productopresentacions_id']
             oProductopresentacions = Productopresentacions.objects.get(id=id)
-            #oPedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
-            #for oPedidoproductospresentacion in oPedidoproductospresentacions:
             oProducto = {}
             oProducto["nombreProducto"] = oProductopresentacions.producto.nombre
             oProducto["nombrePresentacion"] = oProductopresentacions.presentacion.nombre
             oProducto["cantidad"] = o['cantidad__sum']
             oProductos.append(oProducto)
 
-        return render(request, 'pedido/resumen.html', {"oProductos": oProductos})
+        paginator = Paginator(oProductos,3)
+
+        page = request.GET.get('page')
+        try:
+            productoPagina = paginator.page(page)
+        except PageNotAnInteger:
+            productoPagina = paginator.page(1)
+        except EmptyPage:
+            productoPagina = paginator.page(paginator.num_pages)
+
+        index = productoPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        return render(request, 'pedido/resumen.html', {"oProductos": productoPagina,"page_range":page_range})
 
 @csrf_exempt
 def DetallePedidoMovil(request):
