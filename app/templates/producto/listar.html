@@ -12,8 +12,84 @@ $(document).on('Click', '.btn-editar', function(e){
 	console.log(row);
 });
 
+<!-- busqueda al presionar enter -->
+<script>
+  var input = document.getElementById("myInput");
+
+  // Execute a function when the user releases a key on the keyboard
+  input.addEventListener("keyup", function(event) {
+  // Cancel the default action, if needed
+  event.preventDefault();
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Trigger the button element with a click
+    document.getElementById("myBtn").click();
+  }
+  });
+</script>
 
 </script>
+
+<!-- buscar producto ajax -->
+<script type="text/javascript">
+$(document).ready(function(){
+  $( "#inpt-producto" ).focus();
+  $( "#inpt-producto" ).autocomplete({
+      source: function (request, response) {
+
+          var datos = {nombreProducto: $("#inpt-producto").val()};
+          var sendData = JSON.stringify(datos);
+          $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "/producto/buscar/",
+              data: sendData,
+              contentType: "application/json; charset=utf-8",
+              async: false,
+              cache: false,
+              CrossDomain: true,
+
+              success: function (result) {
+              var ListasProductos = result['productos'];
+              response($.map(ListasProductos, function (item) {
+                  document.forms.form_busca.action =  "/Producto/detalle/"+item.id+"/" ;
+                  return {label: item.nombre};
+                  }));
+              }
+          });
+      },
+      minLength: 1,
+  });
+});
+
+</script>
+
+<style>
+ul.ui-autocomplete {
+  z-index: 1100;
+}
+#content{
+  position: absolute;
+  min-height: 50%;
+  width: 80%;
+  top: 20%;
+  left: 5%;
+}
+
+.selected{
+  cursor: pointer;
+}
+.selected:hover{
+  background-color: #0585C0;
+  color: white;
+}
+.seleccionada{
+  background-color: #0585C0;
+  color: white;
+}
+</style>
+
+
 {% endblock %}
 
 {% block title %}
@@ -24,6 +100,12 @@ Lista de productos
 	<div class="row">
         <div class="col-sm-12">
             <div class="white-box">
+              <form action="" method="post" name="form_busca" class="form-inline mr-auto">
+								{% csrf_token %}
+                <input type="text" id="inpt-producto"  placeholder="Producto..." name="producto_buscado" class="form-control">
+                <button class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
+							</form>
+              <br>
                 <h3 class="box-title">Listado de productos</h3>
 				{% load widget_tweaks %}
 				{% csrf_token %}

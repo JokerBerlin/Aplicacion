@@ -17,7 +17,8 @@ Información  detallada de Producto
 				<table id="tCamiones"  class="table">
 					<tr>
 						<td>Imagen: </td>
-						<td>{{ oProducto.imagen }}</td>
+						<td><img src="/media/{{oProducto.imagen}}" height="100" width="100" alt="" /></td>
+
 					</tr>
 					<tr>
 						<td>Nombre: </td>
@@ -39,6 +40,10 @@ Información  detallada de Producto
 							{% endfor %}
 						</td>
 					</tr>
+				</table>
+				<br>
+				<a href="/Producto/editar/{{oProducto.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
+
 			</div>
 			</div>
 
