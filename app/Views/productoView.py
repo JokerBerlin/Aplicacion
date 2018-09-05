@@ -15,12 +15,16 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.productoForm import *
 from django.views.generic import DetailView
+
+##paginacion
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
 #   Última modificación:
-#   Descripción: 
-#   servicio de busqueda de usuario para la app movil, 
+#   Descripción:
+#   servicio de busqueda de usuario para la app movil,
 #   y en buscaar producto retorno de imagen.
 ###########################################################
 
@@ -28,8 +32,24 @@ def ListarProductos(request):
     if request.method == 'POST':
         return render(request, 'Producto/listar.html')
     else:
-        oProductos = Producto.objects.filter(estado = True)
-        return render(request, 'producto/listar.html', {"oProductos": oProductos})
+        oProductos = Producto.objects.filter(estado = True).order_by('-id')
+        paginator = Paginator(oProductos,2)
+
+        page = request.GET.get('page')
+        try:
+            productoPagina = paginator.page(page)
+        except PageNotAnInteger:
+            productoPagina = paginator.page(1)
+        except EmptyPage:
+            productoPagina = paginator.page(paginator.num_pages)
+
+        index = productoPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        return render(request, 'producto/listar.html', {"oProductos": productoPagina,"page_range": page_range})
 
 
 def registrarProducto(request):
@@ -71,7 +91,7 @@ def BuscarProducto (request):
         #print Datos
         usuario=True
         #usuario= BuscarUsuario(Datos["idUsuario"])
-        
+
         if usuario==True:
             nombreProducto = Datos["nombreProducto"]
             oProductos = Producto.objects.filter(nombre__icontains=nombreProducto,estado = True)
@@ -184,7 +204,7 @@ def detalleProducto(request,producto_id):
         return render(request, 'producto/listar.html',{"oProductos": oPedi})
 """
 def detalleProducto(request,producto_id):
-    
+
     oProducto = Producto.objects.get(pk=producto_id)
     return render(request, 'producto/detalle.html', {'oProducto':oProducto})
 
@@ -197,13 +217,13 @@ def editarProducto(request,producto_id):
             form.save_m2m()
             edit_prod.status=True
             edit_prod.save()
-           
+
             return redirect('/Producto/listar/')
     else:
         form= ProductoForm(instance=oProducto)
         ctx = {'form':form, 'oProducto': oProducto}
     return render(request, 'Producto/editar.html',ctx)
-   
+
 """
 def actualizarProducto(request, producto_id):
     oProducto=Producto.objects.get(id=producto_id)
@@ -211,6 +231,6 @@ def actualizarProducto(request, producto_id):
         form= ProductoForm(request.POST, instance=oProducto)
         form.save()
 
-    return 
+    return
 
     """

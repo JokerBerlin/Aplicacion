@@ -65,6 +65,35 @@ $(document).ready(function(){
 </script>
 
 <style>
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+
+ul.pagination li a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+ul.pagination li a:hover:not(.active) {background-color: #ddd;}
+
+div.center {text-align: center;}
+</style>
+
+<style>
 ul.ui-autocomplete {
   z-index: 1100;
 }
@@ -88,7 +117,6 @@ ul.ui-autocomplete {
   color: white;
 }
 </style>
-
 
 {% endblock %}
 
@@ -138,7 +166,29 @@ Lista de productos
 				    {% endfor %}
 
 					</table>
-				    <br>
+				   <br>
+            <!--paginacion-->
+			        <div class="center">
+			          <ul class="pagination">
+			            {% if oProductos.has_previous %}
+			                      <li><a href="?page={{oProductos.previous_page_number}}"><<</a></li>
+			                  {% endif %}
+
+
+			                {% for pg in page_range %}
+			                    {% if oProductos.number == pg %}
+			                        <li><a class="active" href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
+			                    {% else %}
+			                        <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
+			                    {% endif %}
+			                {% endfor %}
+
+			                  {% if oProductos.has_next %}
+			                      <li><a href="?page={{oProductos.next_page_number}}">>></a></li>
+			                  {% endif %}
+			          </ul>
+			        </div>
+            <br>
 	    			<a href="/Producto/nuevo/"><button type="button" class="btn btn-success">Nuevo Producto</button> </a>
 
 			</div>

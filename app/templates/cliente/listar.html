@@ -259,7 +259,7 @@ Clientes
 
 					</table>
 					<br>
-
+						<!--paginacion-->
 			        <div class="center">
 			          <ul class="pagination">
 			            {% if oClientes.has_previous %}
@@ -275,7 +275,7 @@ Clientes
 			                    {% endif %}
 			                {% endfor %}
 
-			                  {% if oVenta.has_next %}
+			                  {% if oClientes.has_next %}
 			                      <li><a href="?page={{oClientes.next_page_number}}">>></a></li>
 			                  {% endif %}
 			          </ul>
