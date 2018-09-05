@@ -42,7 +42,7 @@ Lista de productos
 				    {% for oProducto in oProductos %}
 				    <tr>
 				    	<td>{{ forloop.counter }}</td>
-				    	<td>{{oProducto.imagen}}</td>
+              <td><img src="/media/{{oProducto.imagen}}" height="100" width="100" alt="" /></td>
 				    	<td>{{oProducto.nombre}}</td>
 				    	<td>{{oProducto.codigo}}</td>
 				    	<td>{{oProducto.cantidad}}</td>

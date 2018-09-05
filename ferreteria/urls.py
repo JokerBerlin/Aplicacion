@@ -163,4 +163,4 @@ urlpatterns = [
     #url(r'^Reporte/caja/$', reporteCaja),
     #url(r'^Reporte/ventas/$', reporteVentas),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

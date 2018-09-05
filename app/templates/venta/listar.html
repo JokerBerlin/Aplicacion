@@ -264,8 +264,20 @@ Ventas
                   <button class="btn blue-gradient btn-rounded btn-sm my-0" onclick="modificar_url();" type="submit">Buscar</button>
               </form>
               <br>
+
+
+                <span class="tag label label-warning" data-value="10">Beijing<span data-role="remove"></span></span>
+
+                <div class="tag label label-warning">
+                        Blue color
+                        <i class="close fa fa-times"></i>
+                    </div>
+
+              <br>
               {% for i in tags %}
-                <span class="label label-primary">{{i.producto}}</span>
+
+
+                <span class="label label-primary">{{i.producto}}<i class="close fa fa-times"></i></span>
                 <span class="label label-success">{{i.dni}}</span>
                 <span class="label label-info">{{i.fecha_inicio}}</span>
                 <span class="label label-warning">{{i.fecha_fin}}</span>
