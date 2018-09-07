@@ -154,7 +154,7 @@ $(document).on('click','.estado_cliente',function(){
 function eliminarIdentificador(identificadorId) {
 		var request = $.ajax({
 				type: "POST",
-				url: "{% url 'eliminar_identificador' %}",
+				url: "{% url 'eliminar_cliente' %}",
 				data: {
 						"csrfmiddlewaretoken": "{{ csrf_token }}",
 						"identificador_id": identificadorId

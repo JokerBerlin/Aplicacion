@@ -154,7 +154,7 @@ def listarCliente(request):
     else:
         return render(request, 'cliente/nuevo.html', {})
 
-def eliminar_identificador(request):
+def eliminar_identificador_cliente(request):
     pk = request.POST.get('identificador_id')
     identificador = Cliente.objects.get(pk=pk)
     identificador.estado = 0

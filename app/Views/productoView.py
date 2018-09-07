@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from ferreteria import settings
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -223,6 +223,15 @@ def editarProducto(request,producto_id):
         form= ProductoForm(instance=oProducto)
         ctx = {'form':form, 'oProducto': oProducto}
     return render(request, 'Producto/editar.html',ctx)
+
+def eliminar_identificador_producto(request):
+    pk = request.POST.get('identificador_id')
+    identificador = Producto.objects.get(pk=pk)
+    identificador.estado = 0
+    identificador.save()
+    response = {}
+    return JsonResponse(response)
+
 
 """
 def actualizarProducto(request, producto_id):

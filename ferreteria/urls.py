@@ -63,6 +63,7 @@ urlpatterns = [
     url(r'^Producto/nuevo/$', registrarProducto),
     url(r'^Producto/detalle/(?P<producto_id>\d+)/$', detalleProducto),
     url(r'^Producto/editar/(?P<producto_id>\d+)/$', editarProducto),
+    url(r'^Producto/eliminar/$', eliminar_identificador_producto,name='eliminar_producto'),
 
     ################## Catalogo #######################
     url(r'^Presentacion/Listar/(?P<producto_id>\d+)/$', presentacion_detalle),
@@ -78,10 +79,10 @@ urlpatterns = [
     url(r'^Cliente/detalle/(?P<cliente_id>\d+)/$', detalleCliente),
     url(r'^Cliente/editar/(?P<cliente_id>\d+)/$', editarCliente),
     url(r'^Cliente/listar/$', listarCliente, name="listar_cliente"),
-    url(r'^Cliente/eliminar/$', eliminar_identificador, name="eliminar_identificador"),
+    url(r'^Cliente/eliminar/$', eliminar_identificador_cliente, name="eliminar_cliente"),
     #url(r'^Cliente/buscar/$', IngresarPrecios),
     url(r'^Cliente/actualizar/$', IngresarPrecios),
-    url(r'eliminar_identificador/$', eliminar_identificador, name='eliminar_identificador'),
+    #url(r'eliminar_identificador/$', eliminar_identificador_cliente, name='eliminar_identificador'),
 
     ################## Pedidos #######################
 

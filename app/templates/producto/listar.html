@@ -118,6 +118,29 @@ ul.ui-autocomplete {
 }
 </style>
 
+<script type="text/javascript">
+function eliminarIdentificador(identificadorId) {
+		var request = $.ajax({
+				type: "POST",
+				url: "{% url 'eliminar_producto' %}",
+				data: {
+						"csrfmiddlewaretoken": "{{ csrf_token }}",
+						"identificador_id": identificadorId
+				},
+		});
+		request.done(function(response) {
+				alert("El producto fue desactivado con exito");
+				$('#myModal').modal('toggle');
+				$("#tabla" + identificadorId).remove();
+		});
+};
+	selProducto = function(idProducto, nombre){
+		document.getElementById('nombreProducto').innerHTML = nombre;
+		$("#eliminar").attr("onclick","eliminarIdentificador('"+idProducto+"')");
+	};
+</script>
+
+
 {% endblock %}
 
 {% block title %}
@@ -125,6 +148,37 @@ Lista de productos
 {% endblock %}
 
 {% block content %}
+
+<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Producto</h5>
+
+        <script type="text/javascript">
+          var idProducto = document.getElementById('codigo').value;
+          var nombreProducto = document.getElementById('nombre').value;
+        </script>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+
+
+          <p>Estás a punto de desactivar el producto <label id="nombreProducto"></label> </p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 	<div class="row">
         <div class="col-sm-12">
             <div class="white-box">
@@ -150,7 +204,7 @@ Lista de productos
 	                        </tr>
 	                    </thead>
 				    {% for oProducto in oProductos %}
-				    <tr>
+				    <tr id="tabla{{ oProducto.id }}">
 				    	<td>{{ forloop.counter }}</td>
               <td><img src="/media/{{oProducto.imagen}}" height="100" width="100" alt="" /></td>
 				    	<td>{{oProducto.nombre}}</td>
@@ -160,7 +214,9 @@ Lista de productos
 				    		<a href="/Producto/detalle/{{oProducto.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
 				    		<a href="/Producto/editar/{{oProducto.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
 				    		<a href="/Producto/eliminar/{{oProducto.id}}/"><button type="button" class="btn btn-danger">Eliminar</button></a>
-				    	</td>
+                <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oProducto.id }}" onclick="selProducto('{{oProducto.id}}','{{oProducto.nombre}}');">Eliminar</a>
+
+              </td>
 				    </tr>
 
 				    {% endfor %}
