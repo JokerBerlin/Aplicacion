@@ -42,66 +42,37 @@
 
 	</script>
 -->
-	<script >
+<script >
 
-	var marker;
-	var coords={};
+		var marker;  //variable de marcador
 
-	initMap= function() {
 
-		//usamos la API para geolocalización
-		navigator.geolocation.getCurrentPosition(
-				function (position){
+		var a= parseFloat('{{oCliente.latitud}}');
+		var b= parseFloat('{{oCliente.longitud}}');
 
-					coords={
-						lng: position.coords.longitude,
-						lat: position.coords.latitude
-					};
 
-					setMapa(coords); //pasamos las coordenadas al método para crear el mapa.
+		$( document ).ready(function() {
+			console.log( "ready!" );
+	});
 
-				}, function(error){console.log(error);});
-		}
+function initMap() {
+		//const var1= -13.1680054;
+		//const var2= -74.221639;
+		var uluru = {lat: a, lng: b};
 
-		function setMapa(coords){
-
-		var map=new google.maps.Map(document.getElementById('map'),
-		{
-			zoom: 13,
-			center: new google.maps.LatLng(coords.lat, coords.lng),
-
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 10,
+			center: uluru
 		});
-
-		marker = new google.maps.Marker({
-
-			map: map,
-			draggable: true,
-			animation: google.maps.Animation.DROP,
-			position: new google.maps.LatLng(coords.lat, coords.lng),
-
-
+		var marker = new google.maps.Marker({
+			position: uluru,
+			map: map
 		});
-
-		marker.addListener('click', toggleBounce);
-		marker.addListener('dragend', function(event){
-
-		   document.getElementById("id_latitud").value=this.getPosition().lat();
-		   document.getElementById("id_longitud").value=this.getPosition().lng();
-		});
-
 	}
 
 
-	function toggleBounce(){
+</script>
 
-		if(marker.getAnimation() !== null){
-			marker.setAnimation(null);
-		}else{
-			marker.setAnimation(google.maps.Animation.BOUNCE);
-		}
-	}
-
-	</script>
 {% endblock %}
 
 {% block title %}

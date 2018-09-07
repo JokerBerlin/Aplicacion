@@ -235,6 +235,36 @@ ul.ui-autocomplete {
   background-color: #0585C0;
   color: white;
 }
+
+.chip.chip-md {
+    height: 42px;
+    line-height: 42px;
+    border-radius: 21px;
+}
+.chip.chip-md img {
+    height: 42px;
+    width: 42px;
+}
+.chip.chip-md .close {
+    height: 42px;
+    line-height: 42px;
+    border-radius: 21px;
+}
+
+.chip.chip-lg {
+    height: 52px;
+    line-height: 52px;
+    border-radius: 26px;
+}
+.chip.chip-lg img {
+    height: 52px;
+    width: 52px;
+}
+.chip.chip-lg .close {
+    height: 52px;
+    line-height: 52px;
+    border-radius: 26px;
+}
 </style>
 
 
@@ -263,20 +293,9 @@ Ventas
                   <input type="text" class="form-control" id="hasta" placeholder="Fecha final..." name="hasta" autocomplete="off">
                   <button class="btn blue-gradient btn-rounded btn-sm my-0" onclick="modificar_url();" type="submit">Buscar</button>
               </form>
-              <br>
-
-
-                <span class="tag label label-warning" data-value="10">Beijing<span data-role="remove"></span></span>
-
-                <div class="tag label label-warning">
-                        Blue color
-                        <i class="close fa fa-times"></i>
-                    </div>
 
               <br>
               {% for i in tags %}
-
-
                 <span class="label label-primary">{{i.producto}}<i class="close fa fa-times"></i></span>
                 <span class="label label-success">{{i.dni}}</span>
                 <span class="label label-info">{{i.fecha_inicio}}</span>
