@@ -13,7 +13,7 @@ Registrar Nuevo Producto
         <div class="col-sm-12">
             <div class="white-box">
                 <h3 class="box-title">Registrar de Producto</h3>
-                <form action="." method="post" enctype="multipart/form-data"> 
+                <form action="." method="post" enctype="multipart/form-data">
 				<ul>
 				{% load widget_tweaks %}
 				{% csrf_token %}
@@ -39,10 +39,9 @@ Registrar Nuevo Producto
 					<label for="">Precio - {{ precio.nombre }}</label></br>
 				    <input type="number" name="{{precio.id}}" id="{{precio.id}}" required="" class="form-control">
 				    {% endfor %}</br>
-					<!-- <a href='#' onclick='AgregarUnidad();'><button type="button" class="btn btn-success">Agregar Contenido</button></a> -->
-				    </div>
+				  </div>
 				    <div class="form-group OtrasUnidades" id="OtrasUnidades">
-				    	
+
 				    </div>
 
 					<button class="btn btn-success" data-toggle="modal" data-target="#agrearPresentacion">Agregar Contenido</button>
@@ -50,17 +49,16 @@ Registrar Nuevo Producto
 
 				</ul>
 				</form>
-				
-				          
+
+
 				          </form>
 
 
 				        </div>
 
 				      </div>
-			    </div>  
+			    </div>
             </div>
         </div>
     </div>
 {% endblock %}
-

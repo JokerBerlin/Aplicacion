@@ -59,7 +59,7 @@ urlpatterns = [
     url(r'^Venta/nuevo/$', registrarPedido),
 
     ################## Producto #######################
-    url(r'^Producto/listar/$', ListarProductos),
+    url(r'^Producto/listar/$', ListarProductos, name='listar_producto'),
     url(r'^Producto/nuevo/$', registrarProducto),
     url(r'^Producto/detalle/(?P<producto_id>\d+)/$', detalleProducto),
     url(r'^Producto/editar/(?P<producto_id>\d+)/$', editarProducto),

@@ -55,26 +55,24 @@ def ListarProductos(request):
 def registrarProducto(request):
     if request.method == 'POST':
         Datos = request.POST
-        form = ProductoForm(request.POST)
+        form = ProductoForm(request.POST, request.FILES)
+
         if form.is_valid():
+
             form = form.save(commit=False)
             form.save()
             oProducto = form
             oPresentacion = Presentacion.objects.get(id = int(Datos['cmbPresentacionPrincipal']))
-            oProducto.presentacions.add(oPresentacion)
-            oProductopresentacions = Productopresentacions.objects.get(producto=oProducto, presentacion=oPresentacion)
-            oProductopresentacions.valor = 1
-            oProductopresentacions.unidadprincipal = True
+            print(oPresentacion.id)
+            print(oProducto.id)
+            #Productopresentacions.add(oPresentacion)
+            oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id,valor=Datos['valor'],unidadprincipal=True)
             oProductopresentacions.save()
-            oPrecios = Precio.objects.filter(estado=1)
-            for oPrecio in oPrecios:
-                oProductoPresentacionsprecios = Productopresentacionsprecios()
-                oProductoPresentacionsprecios.precio = oPrecio
-                oProductoPresentacionsprecios.productopresentacions = oProductopresentacions
-                idPrecio = str(oPrecio.id)
-                oProductoPresentacionsprecios.valor = Datos[idPrecio]
-                oProductoPresentacionsprecios.save()
-            return render(request, 'producto/agregarPresentacion.html')
+            oProductopresentacions = Productopresentacions.objects.get(producto=oProducto.id, presentacion=oPresentacion.id)
+            oPrecios = Precio.objects.get(id=1,estado=1)
+            oProductoPresentacionsprecios = Productopresentacionsprecios(valor=Datos['valor'],precio_id=oPrecios.id,productopresentacions_id=oProductopresentacions.id)
+            oProductoPresentacionsprecios.save()
+            return redirect('listar_producto')
         else:
             return render(request, 'producto/listar.html')
 

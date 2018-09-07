@@ -128,28 +128,6 @@ ul.ui-autocomplete {
 }
 </style>
 
-<script>
-$(document).on('click','.estado_cliente',function(){
-	var id = $(this).data('id');
-
-	$.ajax({
-			url:'',
-			type:'POST',
-			data:{
-					'id':id,
-					'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-			},
-			success:function(data){
-					$('#modal-default .modal-dialog').html($('#modal-default .modal-dialog',data));
-					$('#modal-default').modal('show');
-			},
-			error:function(){
-					console.log('error')
-			},
-	});
-});
-</script>
-
 <script type="text/javascript">
 function eliminarIdentificador(identificadorId) {
 		var request = $.ajax({

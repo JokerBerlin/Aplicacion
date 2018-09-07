@@ -6,7 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
- 
+
 from django.db import models
 
 
@@ -108,9 +108,9 @@ class Producto(models.Model):
     def __str__(self):
         return '%s' % self.nombre
 class Productopresentacions(models.Model):
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE) 
-    presentacion = models.ForeignKey(Presentacion, on_delete=models.CASCADE)  
-    valor = models.FloatField()
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    presentacion = models.ForeignKey(Presentacion, on_delete=models.CASCADE)
+    valor = models.FloatField(default=1)
     unidadprincipal = models.BooleanField(default=False,blank=True)
     precios = models.ManyToManyField(Precio)
     class Meta:
@@ -152,7 +152,7 @@ class Venta(models.Model):
     estado  = models.BooleanField(blank=True,default=True)
     pedido  = models.ForeignKey(Pedido, on_delete=models.CASCADE)  # Field name made lowercase.
     cliente = models.ForeignKey(Cliente, blank=True, null=True, on_delete=models.CASCADE)  # Field name made lowercase.
- 
+
 class Pedidoproductospresentacions(models.Model):
     valor                 = models.FloatField(blank=True, null=True)
     cantidad              = models.FloatField(blank=True,default=0)
@@ -177,7 +177,7 @@ class Ruta(models.Model):
     fecha    = models.DateTimeField(auto_now_add=True, blank=True)
     activo   = models.BooleanField(blank=True,default=True)
     estado   = models.BooleanField(blank=True,default=True)
-    clientes = models.ManyToManyField(Cliente) 
+    clientes = models.ManyToManyField(Cliente)
 
 
 class Rutaclientes(models.Model):
@@ -195,7 +195,7 @@ class Rutaclientes(models.Model):
 class Visita(models.Model):
     fecha        = models.DateTimeField(auto_now_add=True, blank=True)
     modificacion = models.DateTimeField(auto_now=True, blank=True)
-    rutacliente  = models.ForeignKey(Rutaclientes, on_delete=models.CASCADE) 
+    rutacliente  = models.ForeignKey(Rutaclientes, on_delete=models.CASCADE)
     empleado     = models.ForeignKey('Empleado', on_delete=models.CASCADE)  # Field name made lowercase.
     nivel        = models.IntegerField(blank=True,null=True,default=1)
     activo       = models.BooleanField(blank=True,default=True)
