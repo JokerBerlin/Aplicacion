@@ -18,22 +18,27 @@ $(document).ready(function(){
                 //alert("hola");
                 //$('#valor2').val($(this).val());
         });
-        
+
     });
     function CalcularSubTotal(id,cantidad){
         SubTotal = $('#precioUnitario'+id).val()*cantidad;
         SubTotal = parseFloat(SubTotal).toFixed(2);
         $('#SubTotal'+id).text(SubTotal);
         RefrescarTotal();
-           
+
 
         //console.log($(this));
     }
     function reset_values(){
         $('#inpt-producto').val('');
+        var preRemove = document.getElementById("presentacion");
+        pre.options.length = 0;
+        var valorRemove = document.getElementById("valor");
+        valorRemove.options.length = 0;
         $('#codigo').val('');
         $('#precio').val('');
         $('#cantidad').val('');
+
     }
 
     var TotalVenta=0;
@@ -49,7 +54,7 @@ $(document).ready(function(){
         if (Producto==''){
             error = 1;
         }
-        
+
         if (cantidad==''){
             error = 2;
         }
@@ -75,7 +80,7 @@ $(document).ready(function(){
                 alert("Ingrese una cantidad");
                 $( "#cantidad" ).focus();
                 break;
-            
+
             }
         }
     }
@@ -163,15 +168,15 @@ $(document).ready(function(){
         //console.log(productos);
         if (contador == 1) {
             var datos = {productos: productos};
-            var sendData = JSON.stringify(datos); 
+            var sendData = JSON.stringify(datos);
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: "/venta/insertar/",                  
-                data: sendData,                    
+                url: "/venta/nuevo/",
+                data: JSON.stringify({ ListJson: tabla }),
                 contentType: "application/json; charset=utf-8",
                 async: false,
-                cache: false,                    
+                cache: false,
                 CrossDomain: true,
 
                 success: function (result) {

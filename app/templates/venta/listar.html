@@ -1,272 +1,11 @@
 {% extends "base.html" %}
 {% block imports %}
 Ventas
-
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-    $.datepicker.regional['es'] = {
-      closeText: 'Cerrar',
-      prevText: '< Ant',
-      nextText: 'Sig >',
-      currentText: 'Hoy',
-      monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-      monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
-      dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-      dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
-      dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
-      weekHeader: 'Sm',
-      dateFormat: 'dd-mm-yy',
-      firstDay: 1,
-      isRTL: false,
-      showMonthAfterYear: false,
-      yearSuffix: ''
-    };
-
-    $( function() {
-      $.datepicker.setDefaults($.datepicker.regional['es']);
-      $( "#desde" ).datepicker();
-      $( "#hasta" ).datepicker();
-    } );
-</script>
-
-  <script>
-  $( function() {
-    $( "#desde" ).datepicker();
-  } );
-  </script>
-  <script>
-  $( function() {
-    $( "#hasta" ).datepicker();
-  } );
-  </script>
- <script type="text/javascript">
-
-//evento click para boton editar
-
-$(document).on('Click', '.btn-editar', function(e){
-
-  e.preventDefault();
-   var row=$(this).paren().parent()[0];
-   console.log(row);
-});
-
-
-</script>
-
-<script>
-  var input = document.getElementById("myInput");
-
-  // Execute a function when the user releases a key on the keyboard
-  input.addEventListener("keyup", function(event) {
-  // Cancel the default action, if needed
-  event.preventDefault();
-  // Number 13 is the "Enter" key on the keyboard
-  if (event.keyCode === 13) {
-    // Trigger the button element with a click
-    document.getElementById("myBtn").click();
-  }
-  });
-</script>
-
-<!-- filtro de clientes por dni o numero documento ajax -->
-<script type="text/javascript">
-$(document).ready(function(){
-  $( "#inpt-cliente" ).focus();
-  $( "#inpt-cliente" ).autocomplete({
-      source: function (request, response) {
-
-          var datos = {nombreCliente: $("#inpt-cliente").val()};
-          var sendData = JSON.stringify(datos);
-          $.ajax({
-              type: "POST",
-              dataType: "json",
-              url: "/cliente/buscar/",
-              data: sendData,
-              contentType: "application/json; charset=utf-8",
-              async: false,
-              cache: false,
-              CrossDomain: true,
-
-              success: function (result) {
-              var ListasClientes = result['clientes'];
-              response($.map(ListasClientes, function (item) {
-                var valorCliente = document.getElementById('inpt-cliente').value;
-                if( isNaN(valorCliente) ){
-                    return {label: item.nombre};
-                }else{
-                    return {label: item.numerodocumento};
-                }
-
-              }));
-              }
-          });
-      },
-      minLength: 1,
-  });
-});
-
-</script>
-<!-- filtrar producto por nombre -->
-<script type="text/javascript">
-$(document).ready(function(){
-  $( "#inpt-producto" ).focus();
-  $( "#inpt-producto" ).autocomplete({
-      source: function (request, response) {
-
-          var datos = {nombreProducto: $("#inpt-producto").val()};
-          var sendData = JSON.stringify(datos);
-          $.ajax({
-              type: "POST",
-              dataType: "json",
-              url: "/producto/buscar/",
-              data: sendData,
-              contentType: "application/json; charset=utf-8",
-              async: false,
-              cache: false,
-              CrossDomain: true,
-
-              success: function (result) {
-              var ListasProductos = result['productos'];
-              response($.map(ListasProductos, function (item) {
-                  return {label: item.nombre};
-                  }));
-              }
-          });
-      },
-      minLength: 1,
-  });
-});
-
-</script>
-
-<!-- Url de busqueda -->
-<script type="text/javascript">
-  function modificar_url(){
-      var productoText= document.getElementById("inpt-producto").value;
-      var clienteText = document.getElementById("inpt-cliente").value;
-      var desdeText = document.getElementById("desde").value;
-      var hastaText = document.getElementById("hasta").value;
-      if(productoText!=''&&clienteText!=''&&desdeText!=''&&hastaText!=''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/cliente/"+clienteText+"/desde/"+desdeText+"/hasta/"+hastaText+"/" ;
-      } else if(productoText!=''&&clienteText!=''&&desdeText!=''&&hastaText==''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/cliente/"+clienteText+"/desde/"+desdeText+"/" ;
-      } else if(productoText!=''&&clienteText!=''&&desdeText==''&&hastaText!=''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/cliente/"+clienteText+"/hasta/"+hastaText+"/" ;
-      } else if(productoText!=''&&clienteText==''&&desdeText!=''&&hastaText!=''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/desde/"+desdeText+"/hasta/"+hastaText+"/" ;
-      } else if(productoText!=''&&clienteText==''&&desdeText!=''&&hastaText==''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/desde/"+desdeText+"/" ;
-      } else if(productoText!=''&&clienteText==''&&desdeText==''&&hastaText!=''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/hasta/"+hastaText+"/" ;
-      } else if(productoText==''&&clienteText!=''&&desdeText!=''&&hastaText!=''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/cliente/"+clienteText+"/desde/"+desdeText+"/hasta/"+hastaText+"/" ;
-      } else if(productoText==''&&clienteText!=''&&desdeText!=''&&hastaText==''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/cliente/"+clienteText+"/desde/"+desdeText+"/" ;
-      } else if(productoText==''&&clienteText!=''&&desdeText==''&&hastaText!=''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/cliente/"+clienteText+"/hasta/"+hastaText+"/" ;
-      } else if(productoText!=''&&clienteText!=''&&desdeText==''&&hastaText==''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/cliente/"+clienteText+"/" ;
-      } else if(productoText==''&&clienteText==''&&desdeText!=''&&hastaText!=''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/desde/"+desdeText+"/hasta/"+hastaText+"/" ;
-      } else if(productoText!=''&&clienteText==''&&desdeText==''&&hastaText==''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/" ;
-      }  else if(productoText==''&&clienteText!=''&&desdeText==''&&hastaText==''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/cliente/"+clienteText+"/" ;
-      }  else if(productoText==''&&clienteText==''&&desdeText!=''&&hastaText==''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/desde/"+desdeText+"/" ;
-      }  else if(productoText==''&&clienteText==''&&desdeText==''&&hastaText!=''){
-        document.forms.buscar_filtro.action =  "/venta/filtrar/hasta/"+hastaText+"/" ;
-      }
-    }
-</script>
-
-
-<style>
-ul.pagination {
-    display: inline-block;
-    padding: 0;
-    margin: 0;
-}
-
-ul.pagination li {display: inline;}
-
-ul.pagination li a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-    transition: background-color .3s;
-    border: 1px solid #ddd;
-}
-
-ul.pagination li a.active {
-    background-color: #4CAF50;
-    color: white;
-    border: 1px solid #4CAF50;
-}
-
-ul.pagination li a:hover:not(.active) {background-color: #ddd;}
-
-div.center {text-align: center;}
-</style>
-
-<style>
-ul.ui-autocomplete {
-  z-index: 1100;
-}
-#content{
-  position: absolute;
-  min-height: 50%;
-  width: 80%;
-  top: 20%;
-  left: 5%;
-}
-
-.selected{
-  cursor: pointer;
-}
-.selected:hover{
-  background-color: #0585C0;
-  color: white;
-}
-.seleccionada{
-  background-color: #0585C0;
-  color: white;
-}
-
-.chip.chip-md {
-    height: 42px;
-    line-height: 42px;
-    border-radius: 21px;
-}
-.chip.chip-md img {
-    height: 42px;
-    width: 42px;
-}
-.chip.chip-md .close {
-    height: 42px;
-    line-height: 42px;
-    border-radius: 21px;
-}
-
-.chip.chip-lg {
-    height: 52px;
-    line-height: 52px;
-    border-radius: 26px;
-}
-.chip.chip-lg img {
-    height: 52px;
-    width: 52px;
-}
-.chip.chip-lg .close {
-    height: 52px;
-    line-height: 52px;
-    border-radius: 26px;
-}
-</style>
-
+<script type="text/javascript" src="/static/js/listarVenta.js"></script>
+<link href="/static/css/styleAutocomplete.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 {% endblock %}
 
@@ -275,28 +14,22 @@ Ventas
 {% endblock %}
 
 {% block content %}
-
-
-
-
-
-
   <div class="row">
 
         <div class="col-sm-12">
             <div class="white-box">
-              <form action="" name="buscar_filtro" method="post" class="form-inline mr-auto">
+              <form action="/venta/filtrar/" name="buscar_filtro" method="post" class="form-inline mr-auto">
                 {% csrf_token %}
                   <input type="text" id="inpt-producto"  placeholder="Producto..." name="producto_buscado" class="form-control">
                   <input type="text" id="inpt-cliente" placeholder="DNI o Nombre Cliente..." name="cliente_buscado" class="form-control">
                   <input type="text" class="form-control" id="desde" placeholder="Fecha inicio..." name="desde" autocomplete="off">
                   <input type="text" class="form-control" id="hasta" placeholder="Fecha final..." name="hasta" autocomplete="off">
-                  <button class="btn blue-gradient btn-rounded btn-sm my-0" onclick="modificar_url();" type="submit">Buscar</button>
+                  <button id="btn_buscar" class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
               </form>
 
               <br>
               {% for i in tags %}
-                <span class="label label-primary">{{i.producto}}<i class="close fa fa-times"></i></span>
+                <span name="productob" class="label label-primary">{{i.producto}}<i class="close fa fa-times"></i></span>
                 <span class="label label-success">{{i.dni}}</span>
                 <span class="label label-info">{{i.fecha_inicio}}</span>
                 <span class="label label-warning">{{i.fecha_fin}}</span>

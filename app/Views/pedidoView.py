@@ -16,6 +16,8 @@ from app.fomularios.pedidoForm import *
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
+from datetime import datetime,date
+
 #funcion sum
 from django.db.models import Sum
 
@@ -29,11 +31,28 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 #   Descripción:
 #   servicio de busqueda de usuario para la app movil
 ###########################################################
-
+@csrf_exempt
 def registrarPedido(request):
     if request.method == 'POST':
-        return render(request, 'caja/cierre.html')
+        Datos = request.POST
+        dni = Datos["cliente_buscado"]
+        if dni.isdigit() == False :
+            dni = Cliente.objects.get(nombre=dni).numerodocumento
+
+        oCliente = Cliente.objects.get(numerodocumento=dni)
+        fechaHoy=date.today()
+        empleado = 1
+        oPedido = Pedido(fecha=fechaHoy,estado=True,empleado_id=empleado,cliente_id=oCliente.id)
+        oPedido.save()
+
+        oTable = Data[ListJson]
+        print(oTable)
+
+
+
+        return render(request, '/pedido/listar.html')
     else:
+
         return render(request, 'pedido/nuevo.html', {})
         #return render(request, 'venta/prueba.html', {})
         #

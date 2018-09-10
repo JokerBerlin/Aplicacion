@@ -132,6 +132,71 @@ def BuscarProducto (request):
         return HttpResponse(data_json,mimetype)
 
 
+@csrf_exempt
+def BuscarProductoPresentacion (request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        #print Datos
+        usuario=True
+        #usuario= BuscarUsuario(Datos["idUsuario"])
+
+        if usuario==True:
+            nombreProducto = Datos["nombreProducto"]
+            oProductos = Producto.objects.filter(nombre__icontains=nombreProducto,estado = True)
+
+
+
+            jsonProductos = {}
+
+            jsonProductos["productos"] = []
+            jsonProductos["presentacion"]=[]
+
+            for oProducto in oProductos:
+                jsonProducto = {}
+                jsonProducto["id"] = oProducto.id
+                jsonProducto["nombre"] = oProducto.nombre
+                jsonProducto["codigo"] = oProducto.codigo
+                jsonProducto["valor"] = oProducto.valor
+                print ("------------------")
+                print (oProducto.imagen)
+                print ("------------------")
+                if oProducto.imagen=="":
+                    jsonProducto["imagen"] = "/imagen/default.jpg"
+                else:
+                    jsonProducto["imagen"] = oProducto.imagen.url
+                jsonProductos["productos"].append(jsonProducto)
+
+                oPresentaciones = Productopresentacions.objects.filter(producto=oProducto.id)
+
+                for oPresentacion in oPresentaciones:
+                    jsonPresentacion={}
+                    jsonPresentacion["id"] = oPresentacion.id
+                    jsonPresentacion["nombre"] = oPresentacion.presentacion.nombre
+                    jsonPresentacion["valor"] = oPresentacion.valor
+                    jsonProductos["presentacion"].append(jsonPresentacion)
+                print(jsonProductos)
+
+            return HttpResponse(json.dumps(jsonProductos), content_type="application/json")
+
+        if request.is_ajax:
+            palabra=request.GET.get('term','')
+
+            doctores=Doctor.objects.filter(name__icontains=palabra)
+
+            results=[]
+
+            for doctor in doctores:
+                doctor_json={}
+                doctor_json['label']=doctor.name
+                doctor_json['value']=doctor.name
+                results.append(doctor_json)
+
+            data_json=json.dumps(results)
+        else:
+            data_json='fail'
+        mimetype="application/json"
+        return HttpResponse(data_json,mimetype)
+
 
 @csrf_exempt
 def ListarPresentacionesProducto (request):

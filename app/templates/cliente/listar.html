@@ -49,6 +49,21 @@ $(document).ready(function(){
                     return {label: item.numerodocumento};
                 }
 
+								$(document).on('ready',function(){
+						    $('#btn-buscar').submit(function(){
+						        var url = "/Cliente/detalle/"+item.id+"/";
+						        $.ajax({
+						           type: "POST",
+						           url: url,
+						           data: $("#form_busca").serialize(),
+						           success: function(data)
+						           {
+						             $('#resp').html(data);
+						           }
+						       });
+						    });
+						});
+
               }));
               }
           });
@@ -141,7 +156,8 @@ function eliminarIdentificador(identificadorId) {
 		request.done(function(response) {
 				alert("El cliente fue desactivado con exito");
 				$('#myModal').modal('toggle');
-				$("#tabla" + identificadorId).remove();
+				location.reload(true);
+				//$("#tabla" + identificadorId).remove();
 		});
 };
 	selPersona = function(idPersona, nombre){
@@ -197,10 +213,10 @@ Clientes
 	<div class="row">
         <div class="col-sm-12">
             <div class="white-box">
-							<form action="" method="post" name="form_busca" class="form-inline mr-auto">
+							<form action="" method="post" id="form_busca" name="form_busca" class="form-inline mr-auto">
 								{% csrf_token %}
 									<input type="text" id="inpt-cliente" placeholder="DNI Cliente..." name="cliente_buscado" class="form-control">
-									<button class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
+									<button id="btn-buscar" class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
 							</form>
 							<br>
                 <h3 class="box-title">Lista de clientes</h3>

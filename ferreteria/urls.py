@@ -57,6 +57,7 @@ urlpatterns = [
 
     ################## Venta #######################
     url(r'^Venta/nuevo/$', registrarPedido),
+    url(r'^venta/insertar/$', registrarPedido),
 
     ################## Producto #######################
     url(r'^Producto/listar/$', ListarProductos, name='listar_producto'),
@@ -121,6 +122,7 @@ urlpatterns = [
 
 
     url(r'^producto/buscar/$', BuscarProducto),
+    url(r'^productopre/buscar/$', BuscarProductoPresentacion),
     url(r'^producto/presentacion/listar/$', ListarPresentacionesProducto),
     url(r'^producto/presentacion/cantidad/$', CantidadPresentacionesProducto),
 
@@ -133,21 +135,23 @@ urlpatterns = [
     url(r'^venta/listar/$', ListarVentas, name="venta_listar"),
 
     #filtros de Ventas
-    url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/$', Fentas),
-    url(r'^venta/filtrar/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/$', Fentas),
-    url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/$', Fentas),
-    url(r'^venta/filtrar/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    url(r'^venta/filtrar/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    url(r'^venta/filtrar/', filtrarVentas, name="filtrar_ventas"),
+    #
+    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/$', Fentas),
+    # url(r'^venta/filtrar/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/$', Fentas),
+    # url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/$', Fentas),
+    # url(r'^venta/filtrar/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
+    # url(r'^venta/filtrar/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
 
 
     url(r'^Lote/nuevo/$', nuevoLote),
