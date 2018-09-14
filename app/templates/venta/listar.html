@@ -6,7 +6,9 @@ Ventas
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+<script type="text/javascript">
+  
+</script>
 {% endblock %}
 
 {% block title %}
@@ -29,12 +31,22 @@ Ventas
 
               <br>
               {% for i in tags %}
+              <div class="btn btn-danger">
+                <span>{{i.producto}}</span>
+                  <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+
                 <span name="productob" class="label label-primary">{{i.producto}}<i class="close fa fa-times"></i></span>
                 <span class="label label-success">{{i.dni}}</span>
                 <span class="label label-info">{{i.fecha_inicio}}</span>
                 <span class="label label-warning">{{i.fecha_fin}}</span>
               {% endfor %}
               <br>
+
+
+
               <br>
                 <h3 class="box-title">Lista de Ventas</h3>
         {% load widget_tweaks %}

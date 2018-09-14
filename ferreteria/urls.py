@@ -131,7 +131,7 @@ urlpatterns = [
 
 #######################Ventas##############################
 
-    url(r'^venta/nuevo/$', nuevoVenta),
+    #url(r'^venta/nuevo/$', registrarPedido),
     url(r'^venta/listar/$', ListarVentas, name="venta_listar"),
 
     #filtros de Ventas

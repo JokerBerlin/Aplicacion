@@ -22,6 +22,7 @@ def nuevoVenta(request):
         Datos = request.POST
         return render(request, 'venta/nuevo.html', {})
         nombre = Datos()
+
 def ListarVentas(request):
     oProductos=[]
     if request.method == 'POST':

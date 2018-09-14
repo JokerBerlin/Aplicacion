@@ -34,23 +34,38 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @csrf_exempt
 def registrarPedido(request):
     if request.method == 'POST':
-        Datos = request.POST
-        dni = Datos["cliente_buscado"]
-        if dni.isdigit() == False :
-            dni = Cliente.objects.get(nombre=dni).numerodocumento
+        Datos = json.loads(request.body)
+        #Dato = json.loads(request.body)
+        #Dato = request.POST
+        dnis = Datos['cliente']
 
-        oCliente = Cliente.objects.get(numerodocumento=dni)
+        # if dnis.isdigit() == False :
+        #     dni = Cliente.objects.get(nombre=dnis).numerodocumento
+
+        oCliente = Cliente.objects.get(nombre=dnis)
         fechaHoy=date.today()
         empleado = 1
         oPedido = Pedido(fecha=fechaHoy,estado=True,empleado_id=empleado,cliente_id=oCliente.id)
         oPedido.save()
 
-        oTable = Data[ListJson]
-        print(oTable)
+        #Datos = request.POST.getlist('datos')
+        Dato = Datos['productos']
+        oPedidoProductos = Dato
+        #oPedidoProductos = json.dumps(Datos)
 
+        for oPedidoProducto in oPedidoProductos:
+            oPedidoproductospresentacions = Pedidoproductospresentacions()
+            print(oPedidoProducto[1])
+            oPedidoproductospresentacions.valor = oPedidoProducto[2]
+            oPedidoproductospresentacions.cantidad = oPedidoProducto[0]
+            oPedidoproductospresentacions.pedido = oPedido
+            oPedidoproductospresentacions.productopresentacions_id=oPedidoProducto[1]
+            oPedidoproductospresentacions.save()
+        return HttpResponse(json.dumps({'exito':1,"idPedido": oPedido.id}), content_type="application/json")
 
+        #datos_list = json.loads(datos[0])
 
-        return render(request, '/pedido/listar.html')
+        #return render(request, '/pedido/listar.html')
     else:
 
         return render(request, 'pedido/nuevo.html', {})
@@ -60,7 +75,7 @@ def ListarPedidos(request):
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
     else:
-        oPedidos = Pedido.objects.filter(estado = True)
+        oPedidos = Pedido.objects.filter(estado = True).order_by('-id')
         return render(request, 'pedido/listar.html', {"oPedidos": oPedidos})
         #return render(request, 'venta/prueba.html', {})
 

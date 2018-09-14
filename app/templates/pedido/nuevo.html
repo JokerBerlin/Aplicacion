@@ -190,8 +190,8 @@ Nuevo Pedido
         <div class="col-sm-12">
             <div class="white-box">
                 <h3 class="box-title">Nuevo Pedido</h3>
-                <form action="." method="post" name="insertar">
-                  {% csrf_token %}
+                <!--<form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}-->
 
 
                 <label for="id_nombre">Cliente:</label>
@@ -250,14 +250,14 @@ Nuevo Pedido
                             <br>
 
                         <button id="bt_GenerarVenta" class="btn btn-success">Generar Venta</button>
-                      </form>
+                      <!--</form>-->
                     </div>
 
                     <div class="row">
                         <div class="form-group">
                             <div class="col-sm-8 col-md-8 col-lg-6">
                                 <div id="tabs" style="display:none;">
-                                    <table id="listaProducto" name="lista_producto"></table>
+                                    <table id="listaProducto"></table>
                                     <div id="pagerlistaProducto"  style="text-align: center;"></div>
                                 </div>
                             </div>
