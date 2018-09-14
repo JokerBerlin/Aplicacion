@@ -83,7 +83,7 @@ def registrarProducto(request):
     return render(request, 'producto/registrar.html', {'form': form,'precios':oPrecios,'presentaciones':oPresentaciones})
 
 @csrf_exempt
-def BuscarProducto (request):
+def BuscarProducto(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
         #print Datos

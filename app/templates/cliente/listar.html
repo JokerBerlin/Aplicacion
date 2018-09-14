@@ -44,10 +44,15 @@ $(document).ready(function(){
                 var valorCliente = document.getElementById('inpt-cliente').value;
 								document.forms.form_busca.action =  "/Cliente/detalle/"+item.id+"/" ;
                 if( isNaN(valorCliente) ){
-                    return {label: item.nombre};
+                    return {label: item.nombre,
+														idcliente: item.id};
+
                 }else{
-                    return {label: item.numerodocumento};
+                    return {label: item.numerodocumento,
+											idcliente:item.id};
+
                 }
+
 
 								$(document).on('ready',function(){
 						    $('#btn-buscar').submit(function(){
@@ -68,7 +73,15 @@ $(document).ready(function(){
               }
           });
       },
-      minLength: 1,
+      minLength: 2,
+			select: function (event, ui) {
+          //$.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
+          //$( "#precio" ).val( ui.item.precio);
+          //$( "#codigo" ).val( ui.item.codigo);
+          //$('#presentacion').focus();
+          // de tu elemento
+          document.location.href="/Cliente/detalle/"+ui.item.idcliente+"/";
+      }
   });
 });
 

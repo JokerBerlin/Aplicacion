@@ -11,24 +11,10 @@ $(document).on('Click', '.btn-editar', function(e){
 	var row=$(this).paren().parent()[0];
 	console.log(row);
 });
-
-<!-- busqueda al presionar enter -->
-<script>
-  var input = document.getElementById("myInput");
-
-  // Execute a function when the user releases a key on the keyboard
-  input.addEventListener("keyup", function(event) {
-  // Cancel the default action, if needed
-  event.preventDefault();
-  // Number 13 is the "Enter" key on the keyboard
-  if (event.keyCode === 13) {
-    // Trigger the button element with a click
-    document.getElementById("myBtn").click();
-  }
-  });
 </script>
 
-</script>
+
+
 
 <!-- buscar producto ajax -->
 <script type="text/javascript">
@@ -48,17 +34,29 @@ $(document).ready(function(){
               async: false,
               cache: false,
               CrossDomain: true,
-
               success: function (result) {
               var ListasProductos = result['productos'];
               response($.map(ListasProductos, function (item) {
-                  document.forms.form_busca.action =  "/Producto/detalle/"+item.id+"/" ;
-                  return {label: item.nombre};
-                  }));
+                  document.forms.form_busca.action =  "/Producto/detalle/"+item.id+"/";
+                  var idValor = item.id;
+                  return {label:item.nombre,
+                        idproducto: item.id};
+
+              }));
+
+
               }
           });
       },
-      minLength: 1,
+      minLength: 2,
+      select: function (event, ui) {
+          //$.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
+          //$( "#precio" ).val( ui.item.precio);
+          //$( "#codigo" ).val( ui.item.codigo);
+          //$('#presentacion').focus();
+          // de tu elemento
+          document.location.href='/Producto/detalle/'+ui.item.idproducto+"/";
+      }
   });
 });
 
@@ -117,7 +115,6 @@ ul.ui-autocomplete {
   color: white;
 }
 </style>
-
 <script type="text/javascript">
 function eliminarIdentificador(identificadorId) {
 		var request = $.ajax({
@@ -155,10 +152,6 @@ Lista de productos
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Producto</h5>
 
-        <script type="text/javascript">
-          var idProducto = document.getElementById('codigo').value;
-          var nombreProducto = document.getElementById('nombre').value;
-        </script>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

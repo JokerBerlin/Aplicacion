@@ -20,7 +20,12 @@ $(document).ready(function(){
               var ListasProductos = result['productos'];
               response($.map(ListasProductos, function (item) {
                   return {label: item.nombre};
+
+                  document.getElementById('productoNuevo').innerHTML = item.nombre;
+
                   }));
+
+
               }
           });
       },
@@ -57,8 +62,8 @@ $(document).ready(function(){
                 }else{
                     return {label: item.numerodocumento};
                 }
+                }));
 
-              }));
               }
           });
       },
@@ -103,7 +108,7 @@ $('#btn_buscar').keypress(function(e) {
     var keycode = (e.keyCode ? e.keyCode : e.which);
     if (keycode == '13') {
         e.preventDefault();
-        
+
     }
 });
 
@@ -145,3 +150,52 @@ $('#btn_buscar').keypress(function(e) {
   //       document.forms.buscar_filtro.action =  "/venta/filtrar/hasta/"+hastaText+"/" ;
   //     }
   //   }
+
+  function BuscarProductos(){
+      var num=1;
+      productos = [];
+      contador = 0;
+      $("#tabla tbody tr").each(function (index) {
+          $(this).children("td").each(function (index2) {
+              producto = [];
+              switch (index2) {
+                  case 1:
+                      cantidad = $("#cantidad"+index2).val();
+
+                  case 2:
+                      codigo = $(this).text();
+                      break;
+                  case 5:
+                      precioVenta = $(this).text();
+                      break;
+              }
+          });
+          contador = 1;
+          productos.push([cantidad,codigo,precioVenta]);
+      });
+      console.log(productos);
+      var cliente = document.getElementById("inpt-cliente").value;
+      if (contador == 1) {
+          var datos = {productos: productos,cliente:cliente};
+          var sendData = JSON.stringify(datos);
+          $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "/venta/insertar/",
+              data: sendData,
+              contentType: "application/json; charset=utf-8",
+              async: false,
+              cache: false,
+              CrossDomain: true,
+
+              success: function (result) {
+              //     var id_venta = result["id_venta"];
+                   alert('Venta Registrada');
+                   //location.reload(true);
+                   document.location.href='/Pedido/listar/';
+              }
+          });
+      }else{
+          alert("No registró ningún producto");
+      }
+  }
