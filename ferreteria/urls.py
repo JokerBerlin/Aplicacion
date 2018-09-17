@@ -133,29 +133,9 @@ urlpatterns = [
 
     #url(r'^venta/nuevo/$', registrarPedido),
     url(r'^venta/listar/$', ListarVentas, name="venta_listar"),
-
-    #filtros de Ventas
-    #url(r'^venta/filtrar/', filtrarVentas, name="filtrar_ventas"),
-    url(r'^venta/filtras/', FiltrarVenta),
+    url(r'^venta/filtrar/', FiltrarVenta),
     url(r'^venta/filtrase/', guardar_cookies),
     url(r'^venta/filtrar/eliminar/', eliminar_cookies),
-    #url(r'^venta/filtrase/', leer),
-    #
-    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/$', Fentas),
-    # url(r'^venta/filtrar/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/$', Fentas),
-    # url(r'^venta/filtrar/cliente/(?P<cliente>\w+)/$', Fentas),
-    # url(r'^venta/filtrar/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
-    # url(r'^venta/filtrar/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
 
 
     url(r'^Lote/nuevo/$', nuevoLote),
