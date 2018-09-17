@@ -235,6 +235,7 @@ def guardar_cookies(request):
         Datos = json.loads(request.body)
         response = HttpResponse()
         if "nombreProductos" in Datos:
+            producto=Datos["nombreProductos"]
             response.set_cookie("producto_busca",producto)
         if "nombreClientes" in Datos:
             cliente=Datos["nombreClientes"]
@@ -251,12 +252,20 @@ def guardar_cookies(request):
 
 @csrf_exempt
 def eliminar_cookies(request):
-    response = HttpResponse()
-    response.delete_cookie("producto_busca")
-    response.delete_cookie("cliente_busca")
-    return response
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        response = HttpResponse()
+        if "nombreProductos" in Datos:
+            response.delete_cookie("producto_busca")
+        if "nombreClientes" in Datos:
+            response.delete_cookie("cliente_busca")
+        if "fechaInicio" in Datos:
+            response.delete_cookie("fecha_inicio")
+        if "fechaFin" in Datos:
+            response.delete_cookie("fecha_fin")
+        return response
 
-def Fentas(request):
+def FiltrarVenta(request):
     oProductos=[]
     oVentas=[]
     if "producto_busca" in request.COOKIES:

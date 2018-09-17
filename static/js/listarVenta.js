@@ -38,6 +38,7 @@ $(document).ready(function(){
 
           }
     });
+    $("#btn_bsc").click();
   }
 });
     $( "#hasta" ).datepicker({onSelect: function() {
@@ -58,6 +59,7 @@ $(document).ready(function(){
 
           }
     });
+    $("#btn_bsc").click();
   }
 });
 
@@ -115,6 +117,7 @@ $(document).ready(function(){
 
               }
         });
+        $("#btn_bsc").click();
       }
 });
 });
@@ -175,6 +178,7 @@ $(document).ready(function(){
 
               }
         });
+        $("#btn_bsc").click();
       }
   });
 });
@@ -187,48 +191,85 @@ $('#btn_buscar').keypress(function(e) {
     }
 });
 
-//Url de busqueda
-  // function modificar_url(){
-  //     var productoText= document.getElementById("inpt-producto").value;
-  //     var clienteText = document.getElementById("inpt-cliente").value;
-  //     var desdeText = document.getElementById("desde").value;
-  //     var hastaText = document.getElementById("hasta").value;
-  //     if(productoText!=''&&clienteText!=''&&desdeText!=''&&hastaText!=''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/cliente/"+clienteText+"/desde/"+desdeText+"/hasta/"+hastaText+"/" ;
-  //     } else if(productoText!=''&&clienteText!=''&&desdeText!=''&&hastaText==''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/cliente/"+clienteText+"/desde/"+desdeText+"/" ;
-  //     } else if(productoText!=''&&clienteText!=''&&desdeText==''&&hastaText!=''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/cliente/"+clienteText+"/hasta/"+hastaText+"/" ;
-  //     } else if(productoText!=''&&clienteText==''&&desdeText!=''&&hastaText!=''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/desde/"+desdeText+"/hasta/"+hastaText+"/" ;
-  //     } else if(productoText!=''&&clienteText==''&&desdeText!=''&&hastaText==''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/desde/"+desdeText+"/" ;
-  //     } else if(productoText!=''&&clienteText==''&&desdeText==''&&hastaText!=''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/hasta/"+hastaText+"/" ;
-  //     } else if(productoText==''&&clienteText!=''&&desdeText!=''&&hastaText!=''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/cliente/"+clienteText+"/desde/"+desdeText+"/hasta/"+hastaText+"/" ;
-  //     } else if(productoText==''&&clienteText!=''&&desdeText!=''&&hastaText==''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/cliente/"+clienteText+"/desde/"+desdeText+"/" ;
-  //     } else if(productoText==''&&clienteText!=''&&desdeText==''&&hastaText!=''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/cliente/"+clienteText+"/hasta/"+hastaText+"/" ;
-  //     } else if(productoText!=''&&clienteText!=''&&desdeText==''&&hastaText==''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/cliente/"+clienteText+"/" ;
-  //     } else if(productoText==''&&clienteText==''&&desdeText!=''&&hastaText!=''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/desde/"+desdeText+"/hasta/"+hastaText+"/" ;
-  //     } else if(productoText!=''&&clienteText==''&&desdeText==''&&hastaText==''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/producto/"+productoText+"/" ;
-  //     }  else if(productoText==''&&clienteText!=''&&desdeText==''&&hastaText==''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/cliente/"+clienteText+"/" ;
-  //     }  else if(productoText==''&&clienteText==''&&desdeText!=''&&hastaText==''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/desde/"+desdeText+"/" ;
-  //     }  else if(productoText==''&&clienteText==''&&desdeText==''&&hastaText!=''){
-  //       document.forms.buscar_filtro.action =  "/venta/filtrar/hasta/"+hastaText+"/" ;
-  //     }
-  //   }
-
   $(document).ready(function(){
     $('#btn_buscar').click(function(){
         BuscarProductos();
+    });
+    $("#close").click(function(){
+        $("#producto").hide();
+        var datos = {nombreProductos: 'eliminar'};
+        var sendData = JSON.stringify(datos);
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/venta/filtrar/eliminar/",
+            data: sendData,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            cache: false,
+            CrossDomain: true,
+            success: function (result) {
+
+            }
+      });
+      location.reload(true);
+    });
+    $("#close2").click(function(){
+        $("#cliente").hide();
+        var datos = {nombreClientes: 'eliminar'};
+        var sendData = JSON.stringify(datos);
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/venta/filtrar/eliminar/",
+            data: sendData,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            cache: false,
+            CrossDomain: true,
+            success: function (result) {
+
+            }
+      });
+      location.reload(true);
+    });
+    $("#close3").click(function(){
+        $("#inicio").hide();
+        var datos = {fechaInicio: 'eliminar'};
+        var sendData = JSON.stringify(datos);
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/venta/filtrar/eliminar/",
+            data: sendData,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            cache: false,
+            CrossDomain: true,
+            success: function (result) {
+
+            }
+      });
+      location.reload(true);
+    });
+    $("#close4").click(function(){
+        $("#fin").hide();
+        var datos = {fechaFin: 'eliminar'};
+        var sendData = JSON.stringify(datos);
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/venta/filtrar/eliminar/",
+            data: sendData,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            cache: false,
+            CrossDomain: true,
+            success: function (result) {
+
+            }
+      });
+      location.reload(true);
     });
   });
 
@@ -277,23 +318,7 @@ $('#btn_buscar').keypress(function(e) {
               }
 
 
-              // for (var j in listarV2) {
-              //
-              //     console.log(listarV2[j][0][0]);
-              // }
 
-
-              // for (x=0;x<listarV.length;x++){
-              //     document.write(listarV[x] + " ");
-              // }
-              // for (var variable in listarV) {
-              //   var a = variable.id;
-              //   Console.log(variable);
-              //
-              // }
-               //alert(a);
-               //location.reload(true);
-               //document.location.href='/Pedido/listar/';
           }
       });
 

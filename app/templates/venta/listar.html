@@ -35,7 +35,7 @@ Ventas
                   <div class="col-xs-2 col-sm-2 col-md-2 ">
                       <input type="text" class="form-control" id="hasta" placeholder="Fecha final..." name="hasta" autocomplete="off">
                   </div>
-                  <div class="col-xs-2 col-sm-2 col-md-2 ">
+                  <div class="col-xs-4 col-sm-4 col-md-4 ">
                       <button id="btn_bsc" class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
                   </div>
                 </div>
@@ -43,24 +43,46 @@ Ventas
                 <!--</form>-->
 
               <br>
+
+              
+              <div class="col-lg-12" style="margin-top:2px;">
+
               {% for i in tags %}
-              <div class="btn btn-danger">
-                <span id="productoNuevo"></span>
-                  <button type="button" class="close" aria-label="Close">
+              {% if i.producto %}
+                <div id="producto" class="btn btn-danger">
+                  <span id="productoNuevo">{{i.producto}}</span>
+                    <button id="close" type="button" class="close" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+              {% endif %}
+              {% if i.dni %}
+              <div id="cliente" class="btn btn-danger">
+                <span id="productoNuevo">{{i.dni}}</span>
+                  <button id="close2" type="button" class="close" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
               </div>
-              <div class="btn btn-danger">
-                <label>{{i.producto}}</label>
-                <span class="removeIcon">&times;</span>
+              {% endif %}
+              {% if i.fecha_inicio %}
+              <div id="inicio" class="btn btn-danger">
+                <span id="productoNuevo">{{i.fecha_inicio}}</span>
+                  <button id="close3" type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
               </div>
-                <span name="productob" class="label label-primary">{{i.producto}}<i class="close fa fa-times"></i></span>
-                <span class="label label-success">{{i.dni}}</span>
-                <span class="label label-info">{{i.fecha_inicio}}</span>
-                <span class="label label-warning">{{i.fecha_fin}}</span>
+              {% endif %}
+              {% if i.fecha_fin %}
+              <div id="fin" class="btn btn-danger">
+                <span id="productoNuevo">{{i.fecha_fin}}</span>
+                  <button id="close4" type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              {% endif %}
               {% endfor %}
+            </div>
               <br>
-
 
 
               <br>
