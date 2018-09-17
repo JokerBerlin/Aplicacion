@@ -395,6 +395,17 @@ def FiltrarVenta(request):
                     oProductos.append(oNuevo)
             oVentas = venta
 
+    if producto=='' and dni=='' and fecha_inicio=='' and fecha_fin=='':
+        oVenta = Venta.objects.filter(estado = True).order_by('-id')
+        for o in oVenta:
+            pedido = Pedido.objects.filter(id=o.pedido_id,estado=True)
+            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
+            for ope in pedidoproductospresentacions:
+                oNuevo={}
+                oNuevo['id']=o.id
+                oNuevo['producto']=ope.productopresentacions.producto.nombre
+                oProductos.append(oNuevo)
+        oVentas = oVenta
     paginator = Paginator(oVentas,2)
 
     page = request.GET.get('page')
