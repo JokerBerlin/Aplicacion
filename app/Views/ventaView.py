@@ -60,6 +60,176 @@ def ListarVentas(request):
         return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range": page_range})
 
 @csrf_exempt
+def filtrarVentas(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        #Datos = request.POST
+        producto = Datos["producto"]
+        print(producto)
+        dni = Datos["cliente"]
+        fecha_inicio = Datos["desde"]
+        fecha_fin = Datos["hasta"]
+        oProductos=[]
+        oVentas=[]
+        tags=[]
+        oDatosVenta = {}
+        oDatosVenta["oProductos"]=[]
+        oDatosVenta["oVenta"]=[]
+        if producto != '':
+            objetotag={}
+            objetotag['producto']=producto
+            tags.append(objetotag)
+            producto = Producto.objects.get(nombre=producto).id
+            presentacion = Productopresentacions.objects.filter(producto=producto)
+            pedidoproductopresentacion = Pedidoproductospresentacions.objects.filter(productopresentacions_id__in=[p.id for p in presentacion])
+            pedido = Pedido.objects.filter(estado=True,id__in=[s.pedido_id for s in pedidoproductopresentacion])
+            #venta = Venta.objects.filter(estado=True,pedido_id__in=[p.id for p in pedido]).order_by("-id")
+            venta = Venta.objects.filter(estado=True,pedido_id__in=[p.id for p in pedido]).order_by("-id").values('id','fecha','monto','nrecibo','pedido','cliente')
+            for instance in venta:
+                instance['fecha'] = instance['fecha'].strftime('%d de %B del %Y %H:%M:%S')
+                instance['cliente']=Cliente.objects.get(id=instance['cliente']).nombre
+
+            #ase = list(dict((m.id, m.fecha) for m in venta))
+            #print('------*-----------')
+            #print(ase)
+            #print('------*-----------')
+            productonombre = Producto.objects.get(id=producto).nombre
+            print('------')
+            print(list(venta))
+            print('------')
+            for v in venta:
+                oNuevo={}
+                oNuevo['id']=v['id']
+                oNuevo['producto']=productonombre
+                oDatosVenta["oProductos"].append(oNuevo)
+                oProductos.append(oNuevo)
+            oVentas = venta
+            print(venta)
+            #print(model_to_dict(venta))
+            #ventass = serializers.serialize('json',venta)
+            # ventado = list(ventass)
+            # for i in ventado:
+            #     print(i)
+            oDatosVenta["oVenta"] = list(venta)
+
+        if dni != '':
+            objetotag={}
+            objetotag['dni']=dni
+            tags.append(objetotag)
+            if dni.isdigit() == False :
+                dni = Cliente.objects.get(nombre=dni).numerodocumento
+
+            if producto != '':
+                cliente = Cliente.objects.get(numerodocumento=dni)
+                venta = Venta.objects.filter(estado=True,id__in=[p.id for p in oVentas],cliente_id=cliente.id).order_by('-id')
+
+            else:
+                oProductos=[]
+                cliente = Cliente.objects.get(numerodocumento=dni)
+                venta = Venta.objects.filter(estado=True,cliente_id=cliente.id).order_by('-id')
+                for oVenta in venta:
+                    pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
+                    pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
+                    for oPedidopedidoproductopresentacion in pedidoproductospresentacions:
+                        oNuevo={}
+                        oNuevo['id']=oVenta.id
+                        oNuevo['producto']=oPedidopedidoproductopresentacion.productopresentacions.producto.nombre
+                        oDatosVenta["oProductos"].append(oNuevo)
+                        oProductos.append(oNuevo)
+            oVentas = venta
+            ventass = serializers.serialize('json',venta)
+            oDatosVenta["oVenta"] = ventass
+        if fecha_inicio!='' and fecha_fin!='':
+            objetotag={}
+            objetotag['fecha_inicio']=fecha_inicio
+            objetotag['fecha_fin']=fecha_fin
+            tags.append(objetotag);
+            fecha1=datetime.strftime(datetime.strptime(fecha_inicio,'%d-%m-%Y'),'%Y-%m-%d')
+            fecha2=datetime.strftime(datetime.strptime(fecha_fin,'%d-%m-%Y'),'%Y-%m-%d')
+            if producto !='' or dni!='':
+                venta = Venta.objects.filter(estado=True,id__in=[p.id for p in oVentas],fecha__range=[fecha1,fecha2]).order_by('-id')
+            else:
+                oProductos = []
+                venta = Venta.objects.filter(estado=True,fecha__range=[fecha1,fecha2]).order_by('-id')
+                for oVenta in venta:
+                    pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
+                    pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
+                    for oPedidopedidoproductopresentacion in pedidoproductospresentacions:
+                        oNuevo={}
+                        oNuevo['id']=oVenta.id
+                        oNuevo['producto']=oPedidopedidoproductopresentacion.productopresentacions.producto.nombre
+                        oProductos.append(oNuevo)
+            oVentas = venta
+        elif fecha_inicio!='':
+            objetotag={}
+            objetotag['fecha_inicio']=fecha_inicio
+            tags.append(objetotag);
+            fecha1=datetime.strftime(datetime.strptime(fecha_inicio,'%d-%m-%Y'),'%Y-%m-%d')
+            fecha2=date.today()
+            if producto !='' or dni!='':
+                venta = Venta.objects.filter(estado=True,id__in=[p.id for p in oVentas],fecha__range=[fecha1,fecha2]).order_by('-id')
+            else:
+                oProductos=[]
+                venta = Venta.objects.filter(estado=True,fecha__range=[fecha1,fecha2]).order_by('-id')[:50]
+                for oVenta in venta:
+                    pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
+                    pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
+                    for oPedidopedidoproductopresentacion in pedidoproductospresentacions:
+                        oNuevo={}
+                        oNuevo['id']=oVenta.id
+                        oNuevo['producto']=oPedidopedidoproductopresentacion.productopresentacions.producto.nombre
+                        oProductos.append(oNuevo)
+            oVentas = venta
+        elif fecha_fin!='':
+            objetotag={}
+            objetotag['fecha_fin']=fecha_fin
+            tags.append(objetotag);
+            fecha2=datetime.strftime(datetime.strptime(fecha_fin,'%d-%m-%Y'),'%Y-%m-%d')
+            if producto !='' or dni!='':
+                venta = Venta.objects.filter(estado=True,id__in=[p.id for p in oVentas],fecha__lte=fecha2).order_by('-id')
+            else:
+                oProductos=[]
+                venta = Venta.objects.filter(estado=True,fecha__lte=fecha2).order_by('-id')[:50]
+                for oVenta in venta:
+                    pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
+                    pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
+                    for oPedidopedidoproductopresentacion in pedidoproductospresentacions:
+                        oNuevo={}
+                        oNuevo['id']=oVenta.id
+                        oNuevo['producto']=oPedidopedidoproductopresentacion.productopresentacions.producto.nombre
+                        oProductos.append(oNuevo)
+                oVentas = venta
+
+        paginator = Paginator(oVentas,2)
+
+        page = request.GET.get('page')
+        try:
+            ventaPagina = paginator.page(page)
+        except PageNotAnInteger:
+            ventaPagina = paginator.page(1)
+        except EmptyPage:
+            ventaPagina = paginator.page(paginator.num_pages)
+
+        index = ventaPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+        #ventas = {}
+        #print(oProductos)
+        #ventas["oVentas"] = oVentas
+        #ventas["oProductos"] = oProductos
+        #ventas["page_range"] = []
+        #ventas["tags"] = []
+        #ventas["oVentas"].append(oVentas)
+        #ventas["oProductos"].append(oProductos)
+        #ventas["page_range"].append(page_range)
+        #ventas["tags"].append(tags)
+        print(oDatosVenta["oProductos"])
+        #print(ventass)
+        return HttpResponse(json.dumps(oDatosVenta), content_type='application/json')
+        #return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range":page_range,"tags":tags,})
+@csrf_exempt
 def guardar_cookies(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
@@ -224,17 +394,6 @@ def FiltrarVenta(request):
                     oNuevo['producto']=oPedidopedidoproductopresentacion.productopresentacions.producto.nombre
                     oProductos.append(oNuevo)
             oVentas = venta
-    if producto=='' and dni=='' and fecha_inicio=='' and fecha_fin=='':
-        oVenta = Venta.objects.filter(estado = True).order_by('-id')
-        for o in oVenta:
-            pedido = Pedido.objects.filter(id=o.pedido_id,estado=True)
-            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
-            for ope in pedidoproductospresentacions:
-                oNuevo={}
-                oNuevo['id']=o.id
-                oNuevo['producto']=ope.productopresentacions.producto.nombre
-                oProductos.append(oNuevo)
-        oVentas = oVenta
 
     paginator = Paginator(oVentas,2)
 
