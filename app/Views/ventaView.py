@@ -79,7 +79,14 @@ def guardar_cookies(request):
             response.set_cookie("fecha_fin",fecha_fin)
         return response
 
-
+def eliminar(request):
+    
+    response = HttpResponse()
+    response.delete_cookie("producto_busca")
+    response.delete_cookie("cliente_busca")
+    response.delete_cookie("fecha_inicio")
+    response.delete_cookie("fecha_fin")
+    return response
 @csrf_exempt
 def eliminar_cookies(request):
     if request.method == 'POST':
@@ -94,6 +101,7 @@ def eliminar_cookies(request):
         if "fechaFin" in Datos:
             response.delete_cookie("fecha_fin")
         return response
+
 
 def FiltrarVenta(request):
     oProductos=[]
@@ -122,7 +130,7 @@ def FiltrarVenta(request):
         fecha_fin = ''
 
     tags=[]
-    #
+
     if producto != '':
         objetotag={}
         objetotag['producto']=producto
