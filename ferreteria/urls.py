@@ -133,9 +133,13 @@ urlpatterns = [
 
     #url(r'^venta/nuevo/$', registrarPedido),
     url(r'^venta/listar/$', ListarVentas, name="venta_listar"),
+
+    #filtros de Ventas
+    #url(r'^venta/filtrar/', filtrarVentas, name="filtrar_ventas"),
     url(r'^venta/filtrar/', FiltrarVenta),
     url(r'^venta/filtrase/', guardar_cookies),
     url(r'^venta/filtrar/eliminar/', eliminar_cookies),
+        url(r'^venta/eliminare/', eliminar),
 
 
     url(r'^Lote/nuevo/$', nuevoLote),

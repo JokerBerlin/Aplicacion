@@ -197,7 +197,7 @@ $('#btn_buscar').keypress(function(e) {
     });
     $("#close").click(function(){
         $("#producto").hide();
-        var datos = {nombreProductos: 'eliminar'};
+        var datos = {"csrfmiddlewaretoken": "{{ csrf_token }}",nombreProductos: 'eliminar'};
         var sendData = JSON.stringify(datos);
         $.ajax({
             type: "POST",
@@ -212,7 +212,7 @@ $('#btn_buscar').keypress(function(e) {
 
             }
       });
-      location.reload(true);
+      //location.reload(true);
     });
     $("#close2").click(function(){
         $("#cliente").hide();
