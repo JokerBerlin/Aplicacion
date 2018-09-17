@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import redirect
 from django.shortcuts import render, render_to_response
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from ferreteria import settings
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -14,8 +14,11 @@ from django.views.generic import ListView
 import json
 from datetime import datetime,date
 
+from django.forms.models import model_to_dict
 ##paginacion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from django.core import serializers
 
 def nuevoVenta(request):
     if request.method == 'GET':
@@ -56,18 +59,22 @@ def ListarVentas(request):
 
         return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range": page_range})
 
+@csrf_exempt
 def filtrarVentas(request):
     if request.method == 'POST':
-        Datos = request.POST
-        producto = Datos["producto_buscado"]
+        Datos = json.loads(request.body)
+        #Datos = request.POST
+        producto = Datos["producto"]
         print(producto)
-        dni = Datos["cliente_buscado"]
+        dni = Datos["cliente"]
         fecha_inicio = Datos["desde"]
         fecha_fin = Datos["hasta"]
         oProductos=[]
         oVentas=[]
         tags=[]
-
+        oDatosVenta = {}
+        oDatosVenta["oProductos"]=[]
+        oDatosVenta["oVenta"]=[]
         if producto != '':
             objetotag={}
             objetotag['producto']=producto
@@ -76,14 +83,35 @@ def filtrarVentas(request):
             presentacion = Productopresentacions.objects.filter(producto=producto)
             pedidoproductopresentacion = Pedidoproductospresentacions.objects.filter(productopresentacions_id__in=[p.id for p in presentacion])
             pedido = Pedido.objects.filter(estado=True,id__in=[s.pedido_id for s in pedidoproductopresentacion])
-            venta = Venta.objects.filter(estado=True,pedido_id__in=[p.id for p in pedido]).order_by("-id")
+            #venta = Venta.objects.filter(estado=True,pedido_id__in=[p.id for p in pedido]).order_by("-id")
+            venta = Venta.objects.filter(estado=True,pedido_id__in=[p.id for p in pedido]).order_by("-id").values('id','fecha','monto','nrecibo','pedido','cliente')
+            for instance in venta:
+                instance['fecha'] = instance['fecha'].strftime('%d de %B del %Y %H:%M:%S')
+                instance['cliente']=Cliente.objects.get(id=instance['cliente']).nombre
+
+            #ase = list(dict((m.id, m.fecha) for m in venta))
+            #print('------*-----------')
+            #print(ase)
+            #print('------*-----------')
             productonombre = Producto.objects.get(id=producto).nombre
+            print('------')
+            print(list(venta))
+            print('------')
             for v in venta:
                 oNuevo={}
-                oNuevo['id']=v.id
+                oNuevo['id']=v['id']
                 oNuevo['producto']=productonombre
+                oDatosVenta["oProductos"].append(oNuevo)
                 oProductos.append(oNuevo)
             oVentas = venta
+            print(venta)
+            #print(model_to_dict(venta))
+            #ventass = serializers.serialize('json',venta)
+            # ventado = list(ventass)
+            # for i in ventado:
+            #     print(i)
+            oDatosVenta["oVenta"] = list(venta)
+
         if dni != '':
             objetotag={}
             objetotag['dni']=dni
@@ -106,8 +134,11 @@ def filtrarVentas(request):
                         oNuevo={}
                         oNuevo['id']=oVenta.id
                         oNuevo['producto']=oPedidopedidoproductopresentacion.productopresentacions.producto.nombre
+                        oDatosVenta["oProductos"].append(oNuevo)
                         oProductos.append(oNuevo)
             oVentas = venta
+            ventass = serializers.serialize('json',venta)
+            oDatosVenta["oVenta"] = ventass
         if fecha_inicio!='' and fecha_fin!='':
             objetotag={}
             objetotag['fecha_inicio']=fecha_inicio
@@ -184,20 +215,75 @@ def filtrarVentas(request):
         start_index = index - 5 if index >= 5 else 0
         end_index = index + 5 if index <= max_index - 5 else max_index
         page_range = paginator.page_range[start_index:end_index]
+        #ventas = {}
+        #print(oProductos)
+        #ventas["oVentas"] = oVentas
+        #ventas["oProductos"] = oProductos
+        #ventas["page_range"] = []
+        #ventas["tags"] = []
+        #ventas["oVentas"].append(oVentas)
+        #ventas["oProductos"].append(oProductos)
+        #ventas["page_range"].append(page_range)
+        #ventas["tags"].append(tags)
+        print(oDatosVenta["oProductos"])
+        #print(ventass)
+        return HttpResponse(json.dumps(oDatosVenta), content_type='application/json')
+        #return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range":page_range,"tags":tags,})
+@csrf_exempt
+def guardar_cookies(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        response = HttpResponse()
+        if "nombreProductos" in Datos:
+            response.set_cookie("producto_busca",producto)
+        if "nombreClientes" in Datos:
+            cliente=Datos["nombreClientes"]
+            response.set_cookie("cliente_busca",cliente)
+        if "fechaInicio" in Datos:
+            fecha_inicio=Datos["fechaInicio"]
+            response.set_cookie("fecha_inicio",fecha_inicio)
+        if "fechaFin" in Datos:
+            print(Datos["fechaFin"])
+            fecha_fin=Datos["fechaFin"]
+            response.set_cookie("fecha_fin",fecha_fin)
+        return response
 
-        return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range":page_range,"tags":tags,})
 
+@csrf_exempt
+def eliminar_cookies(request):
+    response = HttpResponse()
+    response.delete_cookie("producto_busca")
+    response.delete_cookie("cliente_busca")
+    return response
 
-def Fentas(request, producto_buscado='',cliente='',inicio='',fin=''):
+def Fentas(request):
     oProductos=[]
     oVentas=[]
-    producto = producto_buscado
-    dni = cliente
-    fecha_inicio = inicio
-    fecha_fin = fin
+    if "producto_busca" in request.COOKIES:
+        producto = request.COOKIES["producto_busca"]
+        print(request.COOKIES["producto_busca"])
+    else:
+        producto = ''
+
+    if "cliente_busca" in request.COOKIES:
+        dni = request.COOKIES["cliente_busca"]
+        print(request.COOKIES["cliente_busca"])
+    else:
+        dni = ''
+
+    if "fecha_inicio" in request.COOKIES:
+        fecha_inicio = request.COOKIES["fecha_inicio"]
+        print(request.COOKIES["fecha_inicio"])
+    else:
+        fecha_inicio = ''
+    if "fecha_fin" in request.COOKIES:
+        fecha_fin = request.COOKIES["fecha_fin"]
+        print(request.COOKIES["fecha_fin"])
+    else:
+        fecha_fin = ''
 
     tags=[]
-
+    #
     if producto != '':
         objetotag={}
         objetotag['producto']=producto
@@ -213,6 +299,7 @@ def Fentas(request, producto_buscado='',cliente='',inicio='',fin=''):
             oNuevo['id']=v.id
             oNuevo['producto']=productonombre
             oProductos.append(oNuevo)
+
         oVentas = venta
     if dni != '':
         objetotag={}

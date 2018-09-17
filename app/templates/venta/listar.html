@@ -20,17 +20,28 @@ Ventas
 
         <div class="col-sm-12">
             <div class="white-box">
-              <form action="/venta/filtrar/" name="buscar_filtro" method="post" class="form-inline mr-auto">
+              <form class="" action="/venta/filtras/" method="post">
                 {% csrf_token %}
-                  <input type="text" id="inpt-producto"  placeholder="Producto..." name="producto_buscado" class="form-control">
-                  <input type="text" id="inpt-cliente" placeholder="DNI o Nombre Cliente..." name="cliente_buscado" class="form-control">
-                  <input type="text" class="form-control" id="desde" placeholder="Fecha inicio..." name="desde" autocomplete="off">
-                  <input type="text" class="form-control" id="hasta" placeholder="Fecha final..." name="hasta" autocomplete="off">
-                  <button id="btn_buscar" class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-2 col-sm-2 col-md-2">
+                      <input type="text" id="inpt-producto"  placeholder="Producto..." name="producto_buscado" class="form-control">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 col-md-2">
+                        <input type="text" id="inpt-cliente" placeholder="DNI o Nombre Cliente..." name="cliente_buscado" class="form-control">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 col-md-2 ">
+                      <input type="text" class="form-control" id="desde" placeholder="Fecha inicio..." name="desde" autocomplete="off">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 col-md-2 ">
+                      <input type="text" class="form-control" id="hasta" placeholder="Fecha final..." name="hasta" autocomplete="off">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 col-md-2 ">
+                      <button id="btn_bsc" class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
+                  </div>
+                </div>
               </form>
-              <script type="text/javascript">
+                <!--</form>-->
 
-              </script>
               <br>
               {% for i in tags %}
               <div class="btn btn-danger">
@@ -57,7 +68,7 @@ Ventas
         {% load widget_tweaks %}
         {% csrf_token %}
           <div class="form-group">
-          <table id="tCamiones"  class="table">
+          <table id="tVentas"  class="table">
             <thead>
               <tr>
                   <th>#id</th>
@@ -81,7 +92,7 @@ Ventas
                 <td>
                   {% for oNue in oProductos %}
                     {% if oVent.id == oNue.id %}
-                        <table class="table">
+                        <table id="tProductos" class="table">
                           <tr>
                             {{ oNue.producto }}
                           </tr>

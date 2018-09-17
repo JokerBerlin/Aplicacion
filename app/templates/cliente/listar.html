@@ -17,6 +17,7 @@ $(document).on('Click', '.btn-editar', function(e){
 });
 
 
+
 </script>
 
 <!-- Devuelve datos de clientes ajax -->
@@ -80,6 +81,9 @@ $(document).ready(function(){
           //$( "#codigo" ).val( ui.item.codigo);
           //$('#presentacion').focus();
           // de tu elemento
+					// localStorage.setItem("dato","lunes");
+					// var dato = localStorage.getItem("dato");
+					// alert(dato);
           document.location.href="/Cliente/detalle/"+ui.item.idcliente+"/";
       }
   });
@@ -231,6 +235,7 @@ Clientes
 									<input type="text" id="inpt-cliente" placeholder="DNI Cliente..." name="cliente_buscado" class="form-control">
 									<button id="btn-buscar" class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
 							</form>
+
 							<br>
                 <h3 class="box-title">Lista de clientes</h3>
 				{% load widget_tweaks %}
