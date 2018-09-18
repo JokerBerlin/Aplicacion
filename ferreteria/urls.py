@@ -99,7 +99,7 @@ urlpatterns = [
     url(r'^Pedido/imprimir/$', IngresarPrecios),
 
         ################## RUTA #######################
-    url(r'^Ruta/nuevo/$', nuevaRuta),
+    url(r'^Ruta/nuevo/$', registrarRuta),
     #url(r'^Ruta/listar/$',listarRuta),
 
     ################## APP Movil #######################
@@ -127,7 +127,7 @@ urlpatterns = [
     url(r'^producto/presentacion/cantidad/$', CantidadPresentacionesProducto),
 
     url(r'^error/registrar/$', registrarError),
-
+    url(r'^ruta/insertar/$', registrarRuta),
 
 #######################Ventas##############################
 
