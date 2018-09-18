@@ -100,7 +100,7 @@ urlpatterns = [
 
         ################## RUTA #######################
     url(r'^Ruta/nuevo/$', registrarRuta),
-    #url(r'^Ruta/listar/$',listarRuta),
+    url(r'^Ruta/listar/$',listarRutas),
 
     ################## APP Movil #######################
 

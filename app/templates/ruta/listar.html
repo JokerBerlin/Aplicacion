@@ -1,3 +1,61 @@
 {% extends "base.html" %}
 {% block imports %}
-{%endblock%}
+Lista de Rutas
+<script type="text/javascript">
+
+//evento click para boton editar
+
+</script>
+{% endblock %}
+
+{% block title %}
+Lista de Rutas
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Listado de rutas</h3>
+				{% load widget_tweaks %}
+				{% csrf_token %}
+					<div class="form-group">
+					<table id="tCamiones"  class="table">
+						<thead>
+	                        <tr>
+	                            <th>#</th>
+	                            <th>Nombre</th>
+	                            <th>Cliente</th>
+	                            <th>fecha</th>
+								<th>Opciones</th>
+	                        </tr>
+	                    </thead>
+				    {% for oRuta in oRutas %}
+				    <tr>
+				    	<td>{{ forloop.counter }}</td>
+				    	<td>{{oRuta.nombre}}</td>
+				    	<td>
+				    		<ul>
+				    		{%for cliente in oRuta.clientes.all %}
+				    			<li>{{cliente.nombre}}</li>
+								{%endfor%}
+							</ul>
+				    	</td>
+				    	<td>{{oRuta.fecha}}</td>
+						<td> 
+					    		<a href="/Ruta/detalle/{{oRuta.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
+					    		<a href="/Ruta/editar/{{oRuta.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
+					    		<a href="/Ruta/eliminar/{{oRuta.id}}/"><button type="button" class="btn btn-danger">Eliminar</button></a>
+					    	</td>
+					    	</tr>
+
+				    	{% endfor %}
+
+					</table>
+				    <br>
+	    			<a href="/Ruta/nuevo/"><button type="button" class="btn btn-success">Nueva Ruta</button> </a>
+
+			</div>
+	    </div>
+    </div>
+{% endblock %}
