@@ -30,9 +30,9 @@ from app.Views.clienteView import *
 from app.Views.rutaView import *
 from app.Views.visitaView import *
 from app.Views.errorView import *
-
+from app.Views.proveedorView import *
 from app.Views.ventaView import *
-
+from app.Views.reciboView import *
 from app.Views.loteView import *
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
@@ -65,7 +65,7 @@ urlpatterns = [
     url(r'^Producto/detalle/(?P<producto_id>\d+)/$', detalleProducto),
     url(r'^Producto/editar/(?P<producto_id>\d+)/$', editarProducto),
     url(r'^Producto/eliminar/$', eliminar_identificador_producto,name='eliminar_producto'),
-
+    url(r'^lote/nuevo/$', registrarLote),
     ################## Catalogo #######################
     url(r'^Presentacion/Listar/(?P<producto_id>\d+)/$', presentacion_detalle),
     url(r'^Presentacion/registrar/$', registrarPresentacionProducto),
@@ -129,6 +129,11 @@ urlpatterns = [
     url(r'^error/registrar/$', registrarError),
     url(r'^ruta/insertar/$', registrarRuta),
 
+    url(r'^lote/insertar/$', registrarLote),
+
+    url(r'^proveedor/buscar/$', BuscarProveedor),
+
+    url(r'^recibo/buscar/$', BuscarRecibo),
 #######################Ventas##############################
 
     #url(r'^venta/nuevo/$', registrarPedido),
@@ -158,7 +163,6 @@ urlpatterns = [
     # url(r'^venta/filtrar/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),
 
 
-    url(r'^Lote/nuevo/$', nuevoLote),
     #####################################################
 
 #######################Rutas##############################

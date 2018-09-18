@@ -34,6 +34,7 @@ $(document).ready(function(){
         $('#codigo').val('');
         $('#precio').val('');
         $('#cantidad').val('');
+
     }
 
     var TotalVenta=0;
@@ -45,7 +46,6 @@ $(document).ready(function(){
         codigo = $('#codigo').val();
         precio = $('#precio').val();
         cantidad = $('#cantidad').val();
-        presentacion = $('#cmbPresentacionPrincipal').val();
         error = "";
         if (Producto==''){
             error = 1;
@@ -56,7 +56,7 @@ $(document).ready(function(){
         }
         if (error=="") {
             SubTotal = parseFloat(precio*cantidad).toFixed(2);
-            var fila='<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td><input type="number" name="cantidad'+cont+'" id="cantidad"'+cont+'" required="" class="form-control" value="'+cantidad+'"></td><td>'+codigo+'</td><td>'+Producto+'</td><td><input type="number" name="precioUnitario'+cont+'" id="precioUnitario'+cont+'" required="" class="form-control" value="'+precio+'" onchange="CalcularSubTotal('+cont+','+cantidad+')" ></td></td><td><label id="SubTotal'+cont+'" name="SubTotal'+cont+'">'+SubTotal+'</label></td></tr>';
+            var fila='<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td><input type="number" name="cantidad'+cont+'" id="cantidad'+cont+'" required="" class="form-control" value="'+cantidad+'"></td><td>'+codigo+'</td><td>'+Producto+'</td><td><input type="number" name="precioUnitario'+cont+'" id="precioUnitario'+cont+'" required="" class="form-control" value="'+precio+'" onchange="CalcularSubTotal('+cont+','+cantidad+')" ></td></td><td><label id="SubTotal'+cont+'" name="SubTotal'+cont+'">'+SubTotal+'</label></td></tr>';
             $('#tabla').append(fila);
 
             TotalVenta =  parseFloat(Math.round((TotalVenta + (precio*cantidad)) * 100) / 100).toFixed(2);
@@ -148,8 +148,8 @@ $(document).ready(function(){
                 producto = [];
                 switch (index2) {
                     case 1:
-                        cantidad = $(this).text();
-                        break;
+                        cantidad = $("#cantidad"+index2).val();
+
                     case 2:
                         codigo = $(this).text();
                         break;
@@ -161,14 +161,16 @@ $(document).ready(function(){
             contador = 1;
             productos.push([cantidad,codigo,precioVenta]);
         });
-        //console.log(productos);
+        console.log(productos);
+        var proveedor = document.getElementById("inpt-proveedor").value;
+        var recibo = document.getElementById("inpt-recibo").value;
         if (contador == 1) {
-            var datos = {productos: productos};
+            var datos = {productos: {productos}, proveedor: proveedor, recibo: recibo};
             var sendData = JSON.stringify(datos);
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: "/venta/insertar/",
+                url: "/lote/insertar/",
                 data: sendData,
                 contentType: "application/json; charset=utf-8",
                 async: false,
@@ -176,16 +178,13 @@ $(document).ready(function(){
                 CrossDomain: true,
 
                 success: function (result) {
-                    var id_venta = result["id_venta"];
-                    alert('Venta Registrada');
-                    location.reload(true);
-                    imprimir_venta(id_venta);
+                //     var id_venta = result["id_venta"];
+                     alert('Lote Registrado');
+                     //location.reload(true);
+                     //document.location.href='/Pedido/listar/';
                 }
             });
         }else{
             alert("No registró ningún producto");
         }
-    }
-function imprimir_venta(id_venta){
-        window.open('/venta/imprimir/'+id_venta+'/', '_blank');
     }

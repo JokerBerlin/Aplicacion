@@ -136,7 +136,9 @@ class Proveedor(models.Model):
     direccion = models.CharField(max_length=45)
     documento = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
-
+    def __str__(self):
+        return '%s' % self.nombre
+        
 class Recibo(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
