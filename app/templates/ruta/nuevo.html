@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/static/js/crearRutas.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-    $( "#id_cliente" ).focus();
+    $( "#id_nombre" ).focus();
     $( "#id_cliente" ).autocomplete({
         source: function (request, response) {
 
@@ -35,15 +35,104 @@ $(document).ready(function(){
         minLength: 1,
         select: function (event, ui) {
             $.data(document.body, 'idcliente', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
-             $( "#direccion" ).val( ui.item.direccion);
+            // var direccion=  ui.item.direccion;
 
             var iDPro = ui.item.Id;
             //agregar();
-        }
+      
+
+    var divMapa = document.getElementById('mapa');
+                            navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
+
+                            function fn_mal(){}
+                            function fn_ok(rta){
+
+                                var lat = rta.coords.latitude;
+                                var lon = rta.coords.longitude;
+
+                                var gLatLon= new google.maps.LatLng(lat, lon); //guardamos las coordenadas en un objeto de google, el LatLng es propio de google.
+                                var objConfig={
+                                    zoom:17,
+                                    center: gLatLon //donde debe estar el mapa centrado cuando se rederice.
+                                }
+
+                                var gMapa= new google.maps.Map(divMapa, objConfig); //indica a donde se va renderizar nuestro mapa y el segundo dato es una configuración del mapa.
+                                objConfigMarker={
+                                position:gLatLon,
+                                map:gMapa,
+                                draggable: true,
+                                title:"Nuesta ubicación"
+                                }
+
+                                var gMarker = new google.maps.Marker(objConfigMarker);
+                                    //gMarker.setIcon('icon_usuario.gif');
+
+                                var gCoder = new google.maps.Geocoder();
+
+                                var objInformacion={
+                                    address: ui.item.direccion
+                                }
+
+                                gCoder.geocode(objInformacion, fn_coder);
+
+                                function fn_coder(datos){
+                                    var coordenadas = datos[0].geometry.location; //obj LatLong
+
+                                    var config = {
+                                        map: gMapa,
+                                        position: coordenadas,
+                                        title: ''
+                                    }
+                                    var gMarkerDV=new google.maps.Marker(config)
+                                        //gMarkerDV.setIcon('icon_edificio.png')
+
+                                    var objHTML={
+                                        content: '<div style= "height: 150px; width: 300px"><h2>Cliente:</h2><h3>Direccion: {{oCliente.direccion}}</h3></div>'
+                                    }
+                                    var gIW = new google.maps.InfoWindow(objHTML);
+
+                                    google.maps.event.addListener(gMarkerDV, 'click', function(){
+                                        gIW.open(gMapa, gMarkerDV);
+
+                                    });
+
+                                        var objConfigDR = { //objeto de configuración directions render.
+                                            map: gMapa,
+                                            suppressMarkers: true
+                                        }
+                                    
+                                        var objConfigDS= {
+                                            origin: gLatLon, //LatLong 
+                                            destination:objInformacion.address,
+                                            travelMode: google.maps.TravelMode.WALKING //se puede variar segun tipo de movil a usar
+                                        
+                                        }
+                                    
+                                        var ds= new google.maps.DirectionsService();
+                                        //obtener coordenadas
+                                        var dr = new google.maps.DirectionsRenderer(objConfigDR);
+                                        //traduce coordenadas a la ruta visible
+
+                                            ds.route(objConfigDS, fnRutear );
+
+                                        function fnRutear(resultados, status){
+                                            //mostrar la linea entre A y B
+                                            if(status=='OK'){
+                                                dr.setDirections(resultados);
+                                            }else{
+                                                alert('Error'+status);
+                                            }
+                                        }
+                                }
+                            }
+                              }
 
 
     });
+
 });
+
+
 
 </script>
 
@@ -84,22 +173,28 @@ Nuevo Pedido
             <div class="white-box">
                 <h3 class="box-title">Nueva Ruta</h3>
 
-
-                <label for="id_nombre">Cliente:</label>
-                <br>
-                <input type="text" name="id_cliente" id="id_cliente" required="" class="form-control" maxlength="45">
-                <br>
-                <label for="id_nombre">direccion:</label>
-                <br>
-                <input type="text" name="direccion" id="direccion" required="" class="form-control" disabled="disabled">
-                <!-- <label for="id_nombre">Precio:</label> 
-                <br>
-                <input type="number" name="precio" id="precio" required="" class="form-control">
-                <br>-->
-                <br>
-                <button id="bt_add" class="btn btn-success">Agregar</button>
-                <button id="bt_del" class="btn btn-warning">Eliminar</button>
-                <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
+            <form action="." method="post" enctype="multipart/form-data">
+                 {% csrf_token %}
+                 <ul>
+                    <label for="id_nombre">Nombre:</label>
+                    <br>
+                    <input type="text" name="id_nombre" id="id_nombre" placeholder="Nombre Ruta..." required="" class="form-control" maxlength="45">
+                    <label for="id_nombre">Cliente:</label>
+                    <br>
+                    <input type="text" name="id_cliente" id="id_cliente" placeholder="Nombre Cliente..." required="" class="form-control" maxlength="45">
+                
+                    <br>
+                   <!-- <label for="id_nombre">direccion:</label>
+                    <br>
+                    <input type="text" name="direccion" id="direccion" required="" class="form-control" disabled="disabled"> -->
+                    <!-- <label for="id_nombre">Precio:</label> 
+                    <br>
+                    <input type="number" name="precio" id="precio" required="" class="form-control">
+                    <br>-->
+                    <br>
+                    <button id="bt_add" class="btn btn-success">Agregar</button>
+                    <button id="bt_del" class="btn btn-warning">Eliminar</button>
+                    <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
             
                     <div class="row">
                         <div class="form-group">
@@ -108,18 +203,20 @@ Nuevo Pedido
                             <thead>
                                 <tr>
                                     <td>Nº</td>
+                                    <td>Nombre</td>
                                     <td>Cliente</td>
-                                    <td>Dirección</td>
+                                    <!--<td>Dirección</td>-->
 
                                 </tr>
                             </thead>
+                            </table>
                             <br>
                         </div>
-
-                        <button id="bt_GenerarVenta" class="btn btn-success">Guardar</button>
+                            
+                       
 
                     </div>
-                        
+                        <button id="bt_GenerarRuta" class="btn btn-success">Generar Ruta</button>
                     <div class="row">
                         <div class="form-group">
                             <div class="col-sm-8 col-md-8 col-lg-6">
@@ -134,7 +231,8 @@ Nuevo Pedido
                             </div>
                         </div>
                     </div>
-                       
+
+
                        <h4 class="box-title">Geolocalizacion cliente</h4>
                     <div id="mapa" style="position: relative;overflow: hidden;height: 300px;">
                 
@@ -142,97 +240,12 @@ Nuevo Pedido
                         <script async defer
                         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=fn_coder">
                         </script>
-                            <script type="text/javascript">
-                            
-                            
-                            var divMapa = document.getElementById('mapa');
-                            navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
 
-                            function fn_mal(){}
-                            function fn_ok(rta){
+            </div>
+            </ul>
+        </form>
 
-                                var lat = rta.coords.latitude;
-                                var lon = rta.coords.longitude;
-
-                                var gLatLon= new google.maps.LatLng(lat, lon); //guardamos las coordenadas en un objeto de google, el LatLng es propio de google.
-                                var objConfig={
-                                    zoom:17,
-                                    center: gLatLon //donde debe estar el mapa centrado cuando se rederice.
-                                }
-
-                                var gMapa= new google.maps.Map(divMapa, objConfig); //indica a donde se va renderizar nuestro mapa y el segundo dato es una configuración del mapa.
-                                objConfigMarker={
-                                position:gLatLon,
-                                map:gMapa,
-                                draggable: true,
-                                title:"Aqui andamos"
-                                }
-
-                                var gMarker = new google.maps.Marker(objConfigMarker);
-                                    //gMarker.setIcon('icon_usuario.gif');
-
-                                var gCoder = new google.maps.Geocoder();
-
-                                var objInformacion={
-                                    address: 'alfonso ugarte 620, huamanga, ayacucho'
-                                }
-
-                                gCoder.geocode(objInformacion, fn_coder);
-
-                                function fn_coder(datos){
-                                    var coordenadas = datos[0].geometry.location; //obj LatLong
-
-                                    var config = {
-                                        map: gMapa,
-                                        position: coordenadas,
-                                        title: '{{oCliente.nombre}}'
-                                    }
-                                    var gMarkerDV=new google.maps.Marker(config)
-                                        //gMarkerDV.setIcon('icon_edificio.png')
-
-                                    var objHTML={
-                                        content: '<div style= "height: 150px; width: 300px"><h2>Cliente: {{oCliente.nombre}}</h2><h3>Direccion: {{oCliente.direccion}}</h3></div>'
-                                    }
-                                    var gIW = new google.maps.InfoWindow(objHTML);
-
-                                    google.maps.event.addListener(gMarkerDV, 'click', function(){
-                                        gIW.open(gMapa, gMarkerDV);
-
-                                    });
-
-                                        var objConfigDR = { //objeto de configuración directions render.
-                                            map: gMapa,
-                                            suppressMarkers: true
-                                        }
-                                    
-                                        var objConfigDS= {
-                                            origin: gLatLon, //LatLong 
-                                            destination:objInformacion.address,
-                                            travelMode: google.maps.TravelMode.WALKING //se puede variar segun tipo de movil a usar
-                                        
-                                        }
-                                    
-                                        var ds= new google.maps.DirectionsService();
-                                        //obtener coordenadas
-                                        var dr = new google.maps.DirectionsRenderer(objConfigDR);
-                                        //traduce coordenadas a la ruta visible
-
-                                            ds.route(objConfigDS, fnRutear );
-
-                                        function fnRutear(resultados, status){
-                                            //mostrar la linea entre A y B
-                                            if(status=='OK'){
-                                                dr.setDirections(resultados);
-                                            }else{
-                                                alert('Error'+status);
-                                            }
-                                        }
-                                }
-                            }
-                            </script>
-                    </div>
-            
                       <br>
-                    
+              </div>      
     </div>  
 {% endblock %}

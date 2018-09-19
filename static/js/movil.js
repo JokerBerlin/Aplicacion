@@ -47,7 +47,7 @@ function ObtenerURL(x, y){
   	location.href=URL;
     //alert(URL);
 };
-
+/*
 $(document).ready(function(){
         $('#bt_add').click(function(){
             agregar();
@@ -109,7 +109,7 @@ $(document).ready(function(){
 
     function eliminar(id_fila){
         /*$('#'+id_fila).remove();
-        reordenar();*/
+        reordenar();
         ValorRestar = 0;
         for(var i=0; i<id_fila.length; i++){
             $('#'+id_fila[i]).children("td").each(function (index2) {
@@ -140,3 +140,4 @@ $(document).ready(function(){
         });
 
     }
+*/
