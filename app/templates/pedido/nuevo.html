@@ -25,11 +25,11 @@ $(document).ready(function(){
               var ListasClientes = result['clientes'];
               response($.map(ListasClientes, function (item) {
                 var valorCliente = document.getElementById('inpt-cliente').value;
-                if( isNaN(valorCliente) ){
-                    return {label: item.nombre};
-                }else{
-                    return {label: item.numerodocumento};
-                }
+                //if( isNaN(valorCliente) ){
+                //    return {label: item.nombre};
+                //}else{
+                return {label: item.numerodocumento};
+                //}
 
               }));
 

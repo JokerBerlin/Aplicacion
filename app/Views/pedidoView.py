@@ -42,7 +42,7 @@ def registrarPedido(request):
         # if dnis.isdigit() == False :
         #     dni = Cliente.objects.get(nombre=dnis).numerodocumento
 
-        oCliente = Cliente.objects.get(nombre=dnis)
+        oCliente = Cliente.objects.get(numerodocumento=dnis)
         fechaHoy=date.today()
         empleado = 1
         oPedido = Pedido(fecha=fechaHoy,estado=True,empleado_id=empleado,cliente_id=oCliente.id)
