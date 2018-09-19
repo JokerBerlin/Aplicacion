@@ -72,11 +72,39 @@ def registrarPedido(request):
         #return render(request, 'venta/prueba.html', {})
         #
 def ListarPedidos(request):
+    oProductos=[]
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
     else:
         oPedidos = Pedido.objects.filter(estado = True).order_by('-id')
-        return render(request, 'pedido/listar.html', {"oPedidos": oPedidos})
+        for oPedido in oPedidos:
+            #pedido = Pedido.objects.filter(id=o.pedido_id,estado=True)
+            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oPedido.id)
+            print(pedidoproductospresentacions)
+            for ope in pedidoproductospresentacions:
+                oNuevo={}
+                oNuevo['id']=oPedido.id
+                oNuevo['producto']=ope.productopresentacions.producto.nombre
+                print(oNuevo['producto'])
+                oProductos.append(oNuevo)
+
+        paginator = Paginator(oPedidos,2)
+
+        page = request.GET.get('page')
+        try:
+            pedidoPagina = paginator.page(page)
+        except PageNotAnInteger:
+            pedidoPagina = paginator.page(1)
+        except EmptyPage:
+            pedidoPagina = paginator.page(paginator.num_pages)
+
+        index = pedidoPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        return render(request, 'pedido/listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
         #return render(request, 'venta/prueba.html', {})
 
 def ResumenPedidos(request):
