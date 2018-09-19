@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from ferreteria import settings
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -78,14 +78,12 @@ def ListarPedidos(request):
     else:
         oPedidos = Pedido.objects.filter(estado = True).order_by('-id')
         for oPedido in oPedidos:
-            #pedido = Pedido.objects.filter(id=o.pedido_id,estado=True)
             pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oPedido.id)
             print(pedidoproductospresentacions)
             for ope in pedidoproductospresentacions:
                 oNuevo={}
                 oNuevo['id']=oPedido.id
                 oNuevo['producto']=ope.productopresentacions.producto.nombre
-                print(oNuevo['producto'])
                 oProductos.append(oNuevo)
 
         paginator = Paginator(oPedidos,2)
@@ -272,3 +270,12 @@ def editarPedido(request,pedido_id):
          form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
          form2= ProductopresentacionsForm(instance=oProductopresentacions)
         return render(request, 'Pedido/editar.html', {'form': form, 'form2': form2})
+
+
+def eliminar_identificador_pedido(request):
+    pk = request.POST.get('identificador_id')
+    identificador = Pedido.objects.get(pk=pk)
+    identificador.estado = 0
+    identificador.save()
+    response = {}
+    return JsonResponse(response)

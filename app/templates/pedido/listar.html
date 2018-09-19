@@ -1,5 +1,30 @@
 {% extends "base.html" %}
 {% block imports %}
+
+<script type="text/javascript">
+function eliminarIdentificador(identificadorId) {
+		var request = $.ajax({
+				type: "POST",
+				url: "{% url 'eliminar_pedido' %}",
+				data: {
+						"csrfmiddlewaretoken": "{{ csrf_token }}",
+						"identificador_id": identificadorId
+				},
+		});
+		request.done(function(response) {
+				alert("El pedido fue desactivado con exito");
+				$('#myModal').modal('toggle');
+				location.reload(true);
+				//$("#tabla" + identificadorId).remove();
+		});
+};
+	selPedido = function(idPedido, nombre){
+		document.getElementById('nombreCliente').innerHTML = nombre;
+		$("#eliminar").attr("onclick","eliminarIdentificador('"+idPedido+"')");
+	};
+</script>
+
+
 <style>
 ul.pagination {
     display: inline-block;
@@ -61,10 +86,41 @@ Listar pedido
 {% endblock %}
 
 {% block content %}
+
+<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Pedido</h5>
+
+				<script type="text/javascript">
+					var idPedido = document.getElementById('codigo').value;
+					var nombreCliente = document.getElementById('nombre').value;
+				</script>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<div class="modal-body">
+
+
+
+					<p>Estás a punto de desactivar el pedido de <label id="nombreCliente"></label> </p>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 	<div class="row">
         <div class="col-sm-12">
             <div class="white-box">
-                <h3 class="box-title">Lista de clientes</h3>
+                <h3 class="box-title">Lista de Pedidos</h3>
 				{% load widget_tweaks %}
 				{% csrf_token %}
 					<div class="form-group">
@@ -103,7 +159,8 @@ Listar pedido
 							<td>
 				    		<a href="/Pedido/detalle/{{oPedido.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
 				    		<a href="/Pedido/editar/{{oPedido.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
-				    		<a href="/Pedido/eliminar/{{oPedido.id}}/"><button type="button" class="btn btn-danger">Eliminar</button></a>
+								<a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oPedido.id }}" onclick="selPedido('{{oPedido.id}}','{{oPedido.cliente.nombre}}');">Eliminar</a>
+
 				    	</td>
 				    </tr>
 
