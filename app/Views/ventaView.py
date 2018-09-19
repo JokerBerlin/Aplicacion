@@ -466,3 +466,11 @@ def ListarVenta(request):
             return HttpResponse(json.dumps(jsonPedidos), content_type="application/json")
 
 """
+
+def eliminar_identificador_venta(request):
+    pk = request.POST.get('identificador_id')
+    identificador = Venta.objects.get(pk=pk)
+    identificador.estado = 0
+    identificador.save()
+    response = {}
+    return JsonResponse(response)

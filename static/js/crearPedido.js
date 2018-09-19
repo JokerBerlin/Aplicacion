@@ -178,7 +178,7 @@ $(document).ready(function(){
 
                 success: function (result) {
                 //     var id_venta = result["id_venta"];
-                     alert('Venta Registrada');
+                     alert('Pedido Registrada');
                      //location.reload(true);
                      document.location.href='/Pedido/listar/';
                 }
