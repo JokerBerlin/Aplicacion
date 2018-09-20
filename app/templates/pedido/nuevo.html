@@ -31,13 +31,9 @@ $(document).ready(function(){
               success: function (result) {
               var ListasClientes = result['clientes'];
               response($.map(ListasClientes, function (item) {
-                var valorCliente = document.getElementById('inpt-cliente').value;
-                //if( isNaN(valorCliente) ){
-                //    return {label: item.nombre};
-                //}else{
-                return {label: item.numerodocumento};
-                //}
-
+                  return {label: item.numerodocumento,
+                        nombreC: item.nombre};
+                console.log(item.nombre);
               }));
 
               }
@@ -45,8 +41,9 @@ $(document).ready(function(){
       },
       minLength: 1,
       select: function (event, ui) {
+          console.log(ui.item.nombreC );
+          $("#nombreCl").val(ui.item.nombreC);
           $('#inpt-producto').focus();
-          // de tu elemento
       }
 
   });
@@ -54,7 +51,20 @@ $(document).ready(function(){
 
 
     $(document).ready(function(){
-        $('cantidad').prop('disabled', true);
+        //$('cantidad').prop('disabled', true);
+        $( "#inpt-producto" ).click(function(){
+          //alert(document.getElementById("presentacion"));
+          if (document.getElementById("presentacion").length!=0 ) {
+            var pre = document.getElementById("presentacion");
+            pre.options.length = 0;
+            var valorRemove = document.getElementById("valor");
+            valorRemove.options.length = 0;
+          }
+          $('#presentacion').prop('disabled', 'disabled');
+          $('#cantidad').prop('disabled', 'disabled');
+          //$('#codigo').val('');
+          //$('#precio').val('');
+        });
         $( "#inpt-producto" ).autocomplete({
             source: function (request, response) {
 
@@ -77,7 +87,6 @@ $(document).ready(function(){
                         var valorRemove = document.getElementById("valor");
                         valorRemove.options.length = 0;
                       }
-
                       var ListasProductos = result['productos'];
                       var ListarPresentaciones = result['presentacion'];
 
@@ -91,7 +100,7 @@ $(document).ready(function(){
                               };
                           })
                         );
-
+                          //$('#presentacion');
                           var sel = document.getElementById("presentacion");
                           var sel2 = document.getElementById("valor");
                           for (var i in ListarPresentaciones) {
@@ -105,6 +114,7 @@ $(document).ready(function(){
                               sel2.add(option2);
 
                       }
+
                       var valor1= $("#valor option:selected").html();
                       var valor2= $("#valor").val();
 
@@ -124,10 +134,9 @@ $(document).ready(function(){
             minLength: 2,
             select: function (event, ui) {
                 $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
-                //$( "#precio" ).val( ui.item.precio);
-                //$( "#codigo" ).val( ui.item.codigo);
+                $('#presentacion').removeAttr('disabled');
+                $('#cantidad').removeAttr('disabled');
                 $('#presentacion').focus();
-                // de tu elemento
             }
 
 
@@ -158,30 +167,6 @@ $(document).ready(function() {
 
 </script>
 
- <style>
-    ul.ui-autocomplete {
-        z-index: 1100;
-    }
-    #content{
-        position: absolute;
-        min-height: 50%;
-        width: 80%;
-        top: 20%;
-        left: 5%;
-    }
-
-    .selected{
-        cursor: pointer;
-    }
-    .selected:hover{
-        background-color: #0585C0;
-        color: white;
-    }
-    .seleccionada{
-        background-color: #0585C0;
-        color: white;
-    }
-</style>
 {% endblock %}
 
 
@@ -203,16 +188,20 @@ Nuevo Pedido
 
                 <label for="id_nombre">Cliente:</label>
                 <br>
-                <input type="text" id="inpt-cliente" placeholder="DNI o Nombre Cliente..." name="cliente_buscado" class="form-control">
-                <br>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                    <input type="text" id="inpt-cliente" placeholder="Nr. Documento cliente..." name="cliente_buscado" class="form-control">
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                        <input type="text" id="nombreCl" name="nombreCl" class="form-control" disabled="disabled">
+                  </div>
+                </div>
                 <label for="id_nombre">Producto:</label>
                 <br>
                 <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
                 <br>
-
-                <br>
                 <label for="">Codigo presentacion:</label>
-                <select id="presentacion" class="form-control" name="seleccionar" >
+                <select id="presentacion" class="form-control" name="seleccionar" disabled="disabled" >
                 </select>
                 <select style="display:none" id="valor" class="form-control" name="valor">
                 </select>
@@ -226,7 +215,7 @@ Nuevo Pedido
                 <br>
                 <label for="id_nombre">Cantidad:</label>
                 <br>
-                <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
+                <input type="number" name="cantidad" id="cantidad" required="" class="form-control" disabled="disabled" >
                 <br>
                 <button id="bt_add" class="btn btn-success">Agregar</button>
                 <button id="bt_del" class="btn btn-warning">Eliminar</button>

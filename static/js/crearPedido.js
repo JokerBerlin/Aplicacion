@@ -1,7 +1,15 @@
 $(document).ready(function(){
         $('#id_Total').text("0.00");
         $('#bt_add').click(function(){
+
             agregar();
+
+
+        });
+        $('#bt_add').keypress(function(){
+            //agregar();
+            $('#inpt-producto').focus();
+
         });
         $('#bt_del').click(function(){
             eliminar(id_fila_selected);
@@ -20,13 +28,12 @@ $(document).ready(function(){
         });
 
     });
+
     function CalcularSubTotal(id,cantidad){
         SubTotal = $('#precioUnitario'+id).val()*cantidad;
         SubTotal = parseFloat(SubTotal).toFixed(2);
         $('#SubTotal'+id).text(SubTotal);
         RefrescarTotal();
-
-
         //console.log($(this));
     }
     function reset_values(){
@@ -65,6 +72,7 @@ $(document).ready(function(){
             RefrescarTotal();
             reset_values();
             reordenar();
+
         }
         else{
             switch(error) {
@@ -79,6 +87,8 @@ $(document).ready(function(){
 
             }
         }
+        $('#inpt-producto').focus();
+
     }
 
     function seleccionar(id_fila){
@@ -118,6 +128,7 @@ $(document).ready(function(){
             $(this).find('td').eq(0).text(num);
             num++;
         });
+
     }
 
     function RefrescarTotal(){
@@ -146,9 +157,13 @@ $(document).ready(function(){
         $("#tabla tbody tr").each(function (index) {
             $(this).children("td").each(function (index2) {
                 producto = [];
+                dato = index + 1;
+
                 switch (index2) {
+
                     case 1:
-                        cantidad = $("#cantidad"+index2).val();
+                        cantidad = $("#cantidad"+dato ).val();
+                        break;
 
                     case 2:
                         codigo = $(this).text();
@@ -157,6 +172,7 @@ $(document).ready(function(){
                         precioVenta = $(this).text();
                         break;
                 }
+
             });
             contador = 1;
             productos.push([cantidad,codigo,precioVenta]);
