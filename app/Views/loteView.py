@@ -17,34 +17,41 @@ from app.fomularios.productoForm import *
 @csrf_exempt
 def registrarLote(request):
     if request.method == 'POST':
-        Datos = json.loads(request.body)
-        print(Datos)
+            Datos = json.loads(request.body)
+            print(Datos)
         #Dato = json.loads(request.body)
         #Dato = request.POST
-        nombreProveedor = Datos['proveedor']
-        nombreRecibo= Datos['recibo']
+            nombreProveedor = Datos['oProveedor']
+            oProveedor = Proveedor.objects.get(nombre=nombreProveedor)
+            nombreRecibo= Datos['oRecibo']
+            oRecibo= Recibo.objects.get(nombre=nombreRecibo)
 
-        # if dnis.isdigit() == False :
-        #     dni = Cliente.objects.get(nombre=dnis).numerodocumento
-        oRecibo= Recibo.objects.get()
-        oRecibo.save()
-        oProveedor = Proveedor.objects.get(nombre=nombreProveedor)
-        oProveedor.save()
+            oLote= Lote(proveedor_id=oProveedor.id, recibo_id= oRecibo.id)
+            oLote.save()
 
+            oProductoAlmacens= Datos['oProductoAlmacen']
+            for oProductoAlmacen in oProductoAlmacens:
+                print(oProductoAlmacen)
+                cantidad= oProductoAlmacen[0]
 
-        Dato = Datos['productos']
-        oPedidoProductos = Dato
+                nombreAlmacen= oProductoAlmacen[1]
+                oAlmacen= Almacen.objects.get(nombre=nombreAlmacen)
 
+                nombreProducto=oProductoAlmacen[2]
+                oProducto= Producto.objects.get(nombre= nombreProducto)
 
-        for oPedidoProducto in oPedidoProductos:
-            oPedidoproductospresentacions = Pedidoproductospresentacions()
-            print(oPedidoProducto[1])
-            oPedidoproductospresentacions.valor = oPedidoProducto[2]
-            oPedidoproductospresentacions.cantidad = oPedidoProducto[0]
-            oPedidoproductospresentacions.pedido = oPedido
-            oPedidoproductospresentacions.productopresentacions_id=oPedidoProducto[1]
-            oPedidoproductospresentacions.save()
-        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
+                oProducto_alma = Producto_almacens(cantidad=cantidad, cantidadinicial= cantidad, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
+                
+               # oProducto_almacens=Producto_almacens()
+               # oProducto_almacens.cantidad=oProductoAlmacen[0]
+               # oProducto_almacens.cantidadinicial= oProductoAlmacen[0]
+               # oProducto_almacens.almacen_id= oProductoAlmacen[1]
+               # oProducto_almacens.lote_id= oLote
+               # oProducto_almacens.producto_id= oProductoAlmacen[2]
+
+                oProducto_alma.save()
+
+            return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
         #datos_list = json.loads(datos[0])
 

@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 #}
 #
 DATABASES = {
-    'default': {
+       'default': {
         'ENGINE': 'mysql_cymysql',
         'NAME': 'admin_pedidos',
         'USER': 'admin_pedidos',

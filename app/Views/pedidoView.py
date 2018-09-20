@@ -35,6 +35,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def registrarPedido(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
+        print(Datos)
         #Dato = json.loads(request.body)
         #Dato = request.POST
         dnis = Datos['cliente']

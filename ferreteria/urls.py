@@ -34,6 +34,7 @@ from app.Views.proveedorView import *
 from app.Views.ventaView import *
 from app.Views.reciboView import *
 from app.Views.loteView import *
+from app.Views.almacenView import *
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
@@ -132,6 +133,8 @@ urlpatterns = [
     url(r'^lote/insertar/$', registrarLote),
 
     url(r'^proveedor/buscar/$', BuscarProveedor),
+
+    url(r'^almacen/buscar/$', BuscarAlmacen),
 
     url(r'^recibo/buscar/$', BuscarRecibo),
 #######################Ventas##############################

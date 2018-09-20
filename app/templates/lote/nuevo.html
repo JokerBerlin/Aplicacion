@@ -6,6 +6,39 @@
 
 $(document).ready(function(){
         $( "#inpt-proveedor" ).focus();
+        $( "#inpt-producto" ).autocomplete({
+        source: function (request, response) {
+
+          var datos = {nombreProducto: $("#inpt-producto").val()};
+          var sendData = JSON.stringify(datos);
+          $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "/producto/buscar/",
+              data: sendData,
+              contentType: "application/json; charset=utf-8",
+              async: false,
+              cache: false,
+              CrossDomain: true,
+              success: function (result) {
+              var ListasProductos = result['productos'];
+              response($.map(ListasProductos, function (item) {
+
+                  return {label:item.nombre,
+                        idproducto: item.id};
+
+              }));
+
+
+              }
+          });
+      },
+      minLength: 1,
+      select: function (event, ui) {
+
+      }
+  });
+
         $( "#inpt-proveedor" ).autocomplete({
         source: function (request, response) {
 
@@ -72,110 +105,47 @@ $(document).ready(function(){
         select: function (event, ui) {
             
 
+          $('#inpt-almacen').focus();
+      }
+
+  });
+
+        $( "#inpt-almacen" ).autocomplete({
+        source: function (request, response) {
+
+          var datos = {nombreAlmacen: $("#inpt-almacen").val()};
+          var sendData = JSON.stringify(datos);
+          $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "/almacen/buscar/",
+              data: sendData,
+              contentType: "application/json; charset=utf-8",
+              async: false,
+              cache: false,
+              CrossDomain: true,
+
+              success: function (result) {
+              var ListasAlmacen = result['almacenes'];
+              response($.map(ListasAlmacen, function (item) {
+                 var valorAlmacen = document.getElementById('inpt-almacen').value;
+                if( isNaN(valorAlmacen) ){
+                    return {label: item.nombre};
+                }
+                    }));
+                }
+            });
+        },
+        minLength: 1,
+        select: function (event, ui) {
+            
+
           $('#inpt-producto').focus();
       }
 
   });
-        $('cantidad').prop('disabled', true);
-        $( "#inpt-producto" ).autocomplete({
-            source: function (request, response) {
 
-                var datos = {nombreProducto: $("#inpt-producto").val()};
-                var sendData = JSON.stringify(datos);
-                $.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: "/productopre/buscar/",
-                    data: sendData,
-                    contentType: "application/json; charset=utf-8",
-                    async: false,
-                    cache: false,
-                    CrossDomain: true,
-
-                    success: function (result) {
-                      if (document.getElementById("presentacion").length!=0 ) {
-                        var pre = document.getElementById("presentacion");
-                        pre.options.length = 0;
-                        var valorRemove = document.getElementById("valor");
-                        valorRemove.options.length = 0;
-                      }
-
-                      var ListasProductos = result['productos'];
-                      var ListarPresentaciones = result['presentacion'];
-
-                      response($.map(ListasProductos, function (item) {
-                          return {
-                              label: item.nombre,
-                              idproducto: item.nombre,
-                              precio: item.valor,
-                              codigo: item.codigo,
-                              Id: item.id,
-                              };
-                          })
-                        );
-
-                          var sel = document.getElementById("presentacion");
-                          var sel2 = document.getElementById("valor");
-                          for (var i in ListarPresentaciones) {
-                              var option = document.createElement("option");
-                              option.value = ListarPresentaciones[i].id;
-                              option.text = ListarPresentaciones[i].nombre;
-                              sel.add(option);
-                              var option2 = document.createElement("option");
-                              option2.value = ListarPresentaciones[i].id;
-                              option2.text = ListarPresentaciones[i].valor;
-                              sel2.add(option2);
-
-                      }
-                      var valor1= $("#valor option:selected").html();
-                      var valor2= $("#valor").val();
-
-                      $( "#codigo" ).val( valor2);
-                      $( "#precio" ).val( valor1);
-
-
-
-                      }
-
-
-
-
-
-                  });
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
-                //$( "#precio" ).val( ui.item.precio);
-                //$( "#codigo" ).val( ui.item.codigo);
-                $('#presentacion').focus();
-                // de tu elemento
-            }
-
-
-        });
   });
-
-
-  $('select[name="seleccionar"]').on('change', function() {
-  $('select[name="valor"]').val(this.value);
-});
-
-$(document).ready(function() {
-  $('#presentacion').change(function(event) {
-      var cambiarSelect = $('#presentacion').val();
-      var valor = $('#valor').val(cambiarSelect);
-      $('#valor').change();
-      var valorTexto= $("#valor option:selected").html();
-      var valorId= $("#valor").val();
-
-      $( "#codigo" ).val( valorId);
-      $( "#precio" ).val( valorTexto);
-  });
-});
-
-
-
 
 
 </script>
@@ -208,7 +178,7 @@ $(document).ready(function() {
 
 
 {% block title %}
-Nuevo Pedido
+Nuevo Lote
 {% endblock %}
 
 {% block content %}
@@ -218,18 +188,22 @@ Nuevo Pedido
     <div class="row">
         <div class="col-sm-12">
             <div class="white-box">
-                <h3 class="box-title">Nuevo Pedido</h3>
+                <h3 class="box-title">Nuevo Lote</h3>
                 <!--<form method="post" enctype="multipart/form-data">
                   {% csrf_token %}-->
 
 
                 <label for="id_nombre">Proveedor:</label>
                 <br>
-                <input type="text" id="inpt-proveedor" placeholder="documente o Nombre Proveedor..." name="cliente_buscado" class="form-control">
+                <input type="text" id="inpt-proveedor" placeholder="documente o Nombre Proveedor..." name="inpt-proveedor" class="form-control">
                 <br>
                 <label for="id_nombre">Recibo:</label>
                 <br>
-                <input type="text" id="inpt-recibo" placeholder="Número Recibo..." name="cliente_buscado" class="form-control">
+                <input type="text" id="inpt-recibo" placeholder="Nombre Recibo..." name="inpt-recibo" class="form-control">
+                <br>
+                <label for="id_nombre">Almacen:</label>
+                <br>
+                <input type="text" id="inpt-almacen" placeholder="Nombre Almacen..." name="inpt-almacen" class="form-control">
                 <br>
                 <label for="id_nombre">Producto:</label>
                 <br>
@@ -237,21 +211,9 @@ Nuevo Pedido
                 <br>
 
                 <br>
-                <label for="">Presentacion:</label>
-                <select id="presentacion" class="form-control" name="seleccionar" >
-                </select>
-                <select style="display:none" id="valor" class="form-control" name="valor">
-                </select>
-                <br>
-                <label for="id_nombre">Código:</label>
-                <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
-                <br>
-                <label for="id_nombre">Precio:</label>
-                <br>
-                <input type="number" name="precio" id="precio" required="" class="form-control" disabled="disabled">
-                <br>
                 <label for="id_nombre">Cantidad:</label>
                 <br>
+
                 <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
                 <br>
                 <button id="bt_add" class="btn btn-success">Agregar</button>
@@ -266,10 +228,10 @@ Nuevo Pedido
                                 <tr>
                                     <td>Nº</td>
                                     <td>Cantidad</td>
-                                    <td>Cod. Producto</td>
-                                    <td>Nombre</td>
-                                    <td>Precio Unit.</td>
-                                    <td>Total</td>
+                                    <td>Proveedor</td>
+                                    <td>Recibo</td>
+                                    <td>Almacen</td>
+                                    <td>Producto</td>
                                 </tr>
                             </thead>
 
@@ -278,8 +240,6 @@ Nuevo Pedido
 
                             <br>
                         </div>
-                            PRECIO LOTE: S/. <label for="id_Total" id="id_Total" name="id_Total"></label>
-                            <br>
                             <br>
 
                         <button id="bt_GenerarVenta" class="btn btn-success">Generar Lote</button>

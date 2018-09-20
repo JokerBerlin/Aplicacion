@@ -13,7 +13,8 @@ from django.db import models
 class Almacen(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
-
+    def __str__(self):
+        return '%s' % self.nombre
 class Caja(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
@@ -126,7 +127,7 @@ class Producto_almacens(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)  # Field name made lowercase.
     almacen = models.ForeignKey(Almacen, on_delete=models.CASCADE)  # Field name made lowercase.
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE)  # Field name made lowercase.
-
+    
 class Producto_categorias(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)  # Field name made lowercase.
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)  # Field name made lowercase.

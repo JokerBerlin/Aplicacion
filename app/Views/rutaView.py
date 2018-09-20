@@ -86,7 +86,7 @@ def registrarRuta(request):
         #print(Datos)
 
         for oRutas in Datos['oRutas']:
-
+            print(oRutas)
             nombreCliente= oRutas[1]
             oCliente= Cliente.objects.filter(nombre=nombreCliente)
 
