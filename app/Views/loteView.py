@@ -29,6 +29,9 @@ def registrarLote(request):
             oLote= Lote(proveedor_id=oProveedor.id, recibo_id= oRecibo.id)
             oLote.save()
 
+            presentacion= Datos['oPresentacion']
+            oPresentacion = Presentacion.objects.get(id = presentacion )
+
             oProductoAlmacens= Datos['oProductoAlmacen']
             for oProductoAlmacen in oProductoAlmacens:
                 print(oProductoAlmacen)
@@ -41,15 +44,11 @@ def registrarLote(request):
                 oProducto= Producto.objects.get(nombre= nombreProducto)
 
                 oProducto_alma = Producto_almacens(cantidad=cantidad, cantidadinicial= cantidad, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
-                
-               # oProducto_almacens=Producto_almacens()
-               # oProducto_almacens.cantidad=oProductoAlmacen[0]
-               # oProducto_almacens.cantidadinicial= oProductoAlmacen[0]
-               # oProducto_almacens.almacen_id= oProductoAlmacen[1]
-               # oProducto_almacens.lote_id= oLote
-               # oProducto_almacens.producto_id= oProductoAlmacen[2]
-
                 oProducto_alma.save()
+
+                oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id)
+                oProductopresentacions.save()
+              
 
             return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 

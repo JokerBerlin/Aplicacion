@@ -101,33 +101,22 @@ DATABASES = {
         'HOST': '138.197.36.187',
         'PORT': '3306',
 
-    }
+  }
 }
 # instancia local Erland
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'pedidos',
-#         'USER': 'pedidos',
-#         'PASSWORD': 'pedidos',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-
-#     }
-# }
 
 #<<<<<<< HEAD
 #=======
 #DATABASES = {
  #     'default': {
-  #      'ENGINE': 'mysql_cymysql',
-   #     'NAME': 'aes_ferreteria',
-    #    'USER': 'root',
-     #   'PASSWORD': '1234',
-      #  'HOST': '127.0.0.1',
-       # 'PORT': '3306',
+ #       'ENGINE': 'mysql_cymysql',
+ #       'NAME': 'aes_ferreteria',
+ #       'USER': 'root',
+ #       'PASSWORD': '1234',
+ #       'HOST': '127.0.0.1',
+ #       'PORT': '3306',
 
-  #  }
+ #   }
 #}
 
 #>>>>>>> 0943ece4ceffe4c9d38d1363f473318ef87e887c

@@ -18,7 +18,7 @@ $(document).ready(function(){
     function reset_values(){
         //$('#inpt-proveedor').val('');
        // $('#inpt-recibo').val('');
-        $('#inpt-almacen').val('');
+       // $('#inpt-almacen').val('');
         $('#inpt-producto').val('');
         $('#cantidad').val('');
 
@@ -27,8 +27,6 @@ $(document).ready(function(){
     var id_fila_selected=[];
     function agregar(){
         cont++;
-        Proveedor = $('#inpt-proveedor').val();
-        Recibo = $('#inpt-recibo').val();
         Almacen = $('#inpt-almacen').val();
         Producto = $('#inpt-producto').val();
         cantidad = $('#cantidad').val();
@@ -38,23 +36,16 @@ $(document).ready(function(){
             error = 1;
         }
 
-        if (Proveedor==''){
+        if (Almacen==''){
             error = 2;
         }
-
-        if (Recibo==''){
-            error = 3;
-        }
-        if (Almacen==''){
-            error = 4;
-        }
         if (Producto==''){
-            error = 5;
+            error = 3;
         }
     
         if (error=="") {
             var fila=
-            '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td>'+cantidad+'</td><td>'+Proveedor+'</td><td>'+Recibo+'</td><td>'+Almacen+'</td><td>'+Producto+'</td></tr>';
+            '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td>'+cantidad+'</td><td>'+Almacen+'</td><td>'+Producto+'</td></tr>';
             $('#tabla').append(fila);
 
             reset_values();
@@ -139,10 +130,10 @@ $(document).ready(function(){
                     case 1:
                         cantidad = $(this).text();
                         break;
-                    case 4:
+                    case 2:
                         Almacen = $(this).text();
                         break;
-                    case 5:
+                    case 3:
                         Producto = $(this).text();
                         break;
 
@@ -153,8 +144,9 @@ $(document).ready(function(){
         });
         var oProveedor = document.getElementById("inpt-proveedor").value;
         var oRecibo = document.getElementById("inpt-recibo").value;
+        var oPresentacion = document.getElementById("presentacion").value;
         if (contador == 1) {
-            var datos = {oProductoAlmacen: oProductoAlmacen, oProveedor: oProveedor, oRecibo: oRecibo};
+            var datos = {oProductoAlmacen: oProductoAlmacen, oProveedor: oProveedor, oRecibo: oRecibo, oPresentacion: oPresentacion};
             var sendData = JSON.stringify(datos);
             $.ajax({
                 type: "POST",
