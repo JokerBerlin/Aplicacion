@@ -31,13 +31,9 @@ $(document).ready(function(){
               success: function (result) {
               var ListasClientes = result['clientes'];
               response($.map(ListasClientes, function (item) {
-                var valorCliente = document.getElementById('inpt-cliente').value;
-                //if( isNaN(valorCliente) ){
-                //    return {label: item.nombre};
-                //}else{
-                return {label: item.numerodocumento};
-                //}
-
+                  return {label: item.numerodocumento,
+                        nombreC: item.nombre};
+                console.log(item.nombre);
               }));
 
               }
@@ -45,8 +41,9 @@ $(document).ready(function(){
       },
       minLength: 1,
       select: function (event, ui) {
+          console.log(ui.item.nombreC );
+          $("#nombreCl").val(ui.item.nombreC);
           $('#inpt-producto').focus();
-          // de tu elemento
       }
 
   });
@@ -54,7 +51,7 @@ $(document).ready(function(){
 
 
     $(document).ready(function(){
-        $('cantidad').prop('disabled', true);
+        //$('cantidad').prop('disabled', true);
         $( "#inpt-producto" ).autocomplete({
             source: function (request, response) {
 
@@ -77,7 +74,6 @@ $(document).ready(function(){
                         var valorRemove = document.getElementById("valor");
                         valorRemove.options.length = 0;
                       }
-
                       var ListasProductos = result['productos'];
                       var ListarPresentaciones = result['presentacion'];
 
@@ -91,7 +87,7 @@ $(document).ready(function(){
                               };
                           })
                         );
-
+                          //$('#presentacion');
                           var sel = document.getElementById("presentacion");
                           var sel2 = document.getElementById("valor");
                           for (var i in ListarPresentaciones) {
@@ -105,6 +101,7 @@ $(document).ready(function(){
                               sel2.add(option2);
 
                       }
+
                       var valor1= $("#valor option:selected").html();
                       var valor2= $("#valor").val();
 
@@ -124,10 +121,9 @@ $(document).ready(function(){
             minLength: 2,
             select: function (event, ui) {
                 $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
-                //$( "#precio" ).val( ui.item.precio);
-                //$( "#codigo" ).val( ui.item.codigo);
+                $('#presentacion').removeAttr('disabled');
+                $('#cantidad').removeAttr('disabled');
                 $('#presentacion').focus();
-                // de tu elemento
             }
 
 
@@ -158,30 +154,6 @@ $(document).ready(function() {
 
 </script>
 
- <style>
-    ul.ui-autocomplete {
-        z-index: 1100;
-    }
-    #content{
-        position: absolute;
-        min-height: 50%;
-        width: 80%;
-        top: 20%;
-        left: 5%;
-    }
-
-    .selected{
-        cursor: pointer;
-    }
-    .selected:hover{
-        background-color: #0585C0;
-        color: white;
-    }
-    .seleccionada{
-        background-color: #0585C0;
-        color: white;
-    }
-</style>
 {% endblock %}
 
 
@@ -193,6 +165,37 @@ Nuevo Pedido
 
 <p id="demo"></p>
 
+<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registrar Cliente</h5>
+
+        <script type="text/javascript">
+          var idVenta = document.getElementById('codigo').value;
+          var nombreCliente = document.getElementById('nombre').value;
+        </script>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+
+
+          <p>Estás a punto de desactivar la venta de <label id="nombreCliente"></label> </p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <div class="row">
         <div class="col-sm-12">
             <div class="white-box">
@@ -200,37 +203,85 @@ Nuevo Pedido
                 <!--<form method="post" enctype="multipart/form-data">
                   {% csrf_token %}-->
 
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <label for="id_nombre">Cliente:</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <input type="text" id="inpt-cliente" placeholder="Nr. Documento cliente..." name="cliente_buscado" class="form-control">
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                        <input type="text" id="nombreCl" name="nombreCl" class="form-control" disabled="disabled">
+                  </div>
+                </div>
+                <br>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <label for="id_nombre">Producto:</label>
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <label for="">Codigo presentacion:</label>
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                      <label for="">Cantidad:</label>
+                  </div>
+                </div>
+                <br>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <select id="presentacion" class="form-control" name="seleccionar" disabled="disabled" >
+                    </select>
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <input type="number" name="cantidad" id="cantidad" required="" class="form-control" disabled="disabled" >
+                  </div>
+                </div>
 
-                <label for="id_nombre">Cliente:</label>
-                <br>
-                <input type="text" id="inpt-cliente" placeholder="DNI o Nombre Cliente..." name="cliente_buscado" class="form-control">
-                <br>
-                <label for="id_nombre">Producto:</label>
-                <br>
-                <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
                 <br>
 
-                <br>
-                <label for="">Codigo presentacion:</label>
-                <select id="presentacion" class="form-control" name="seleccionar" >
-                </select>
                 <select style="display:none" id="valor" class="form-control" name="valor">
                 </select>
                 <br>
-                <label for="id_nombre">Código:</label>
-                <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                    <label for="id_nombre">Código:</label>
+                  </div>
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                    <label for="id_nombre">Precio:</label>
+                  </div>
+                </div>
                 <br>
-                <label for="id_nombre">Precio:</label>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <input type="number" name="precio" id="precio" required="" class="form-control" disabled="disabled">
+                  </div>
+                </div>
                 <br>
-                <input type="number" name="precio" id="precio" required="" class="form-control" disabled="disabled">
                 <br>
-                <label for="id_nombre">Cantidad:</label>
                 <br>
-                <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
-                <br>
-                <button id="bt_add" class="btn btn-success">Agregar</button>
-                <button id="bt_del" class="btn btn-warning">Eliminar</button>
-                <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+                  </div>
+                </div>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-6 col-sm-6 col-md-6">
+
+                    <button id="bt_add" class="btn btn-success">Agregar</button>
+                    <button id="bt_del" class="btn btn-warning">Eliminar</button>
+                    <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
+                  </div>
+                </div>
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-12 col-sm-12 col-md-12">
 
                     <div class="row">
                         <div class="form-group">
@@ -259,7 +310,9 @@ Nuevo Pedido
                         <button id="bt_GenerarVenta" class="btn btn-success">Generar Venta</button>
                       <!--</form>-->
                     </div>
-
+                  </div>
+                </div>
+                
                     <div class="row">
                         <div class="form-group">
                             <div class="col-sm-8 col-md-8 col-lg-6">
