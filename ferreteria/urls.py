@@ -93,7 +93,7 @@ urlpatterns = [
     url(r'^Pedido/resumen/$', ResumenPedidos),
     url(r'^Pedido/detalle/(?P<pedido_id>\d+)/$', DetallePedido),
     url(r'^Pedido/editar/(?P<pedido_id>\d+)/$', editarPedido),
-    #url(r'^Pedido/eliminar/(?P<pedido_id>\d+)/$', eliminarPedido),
+    url(r'^Pedido/eliminar/$', eliminar_identificador_pedido,name="eliminar_pedido"),
     url(r'^Pedido/actualizar/$', IngresarPrecios),
     url(r'^Pedido/reporte/$', IngresarPrecios),
     url(r'^Pedido/buscar/$', IngresarPrecios),
@@ -147,6 +147,9 @@ urlpatterns = [
     url(r'^venta/filtras/', FiltrarVenta),
     url(r'^venta/filtrase/', guardar_cookies),
     url(r'^venta/filtrar/eliminar/', eliminar_cookies),
+
+    url(r'^venta/eliminar/', eliminar_identificador_venta,name="eliminar_venta"),
+
     #url(r'^venta/filtrase/', leer),
     #
     # url(r'^venta/filtrar/producto/(?P<producto_buscado>\w+)/cliente/(?P<cliente>\w+)/desde/(?P<inicio>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/hasta/(?P<fin>[0-9]{2}-?[0-9]{2}-?[0-9]{4})/', Fentas),

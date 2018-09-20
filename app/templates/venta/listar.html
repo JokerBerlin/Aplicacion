@@ -7,7 +7,26 @@ Ventas
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-
+function eliminarIdentificador(identificadorId) {
+		var request = $.ajax({
+				type: "POST",
+				url: "{% url 'eliminar_venta' %}",
+				data: {
+						"csrfmiddlewaretoken": "{{ csrf_token }}",
+						"identificador_id": identificadorId
+				},
+		});
+		request.done(function(response) {
+				alert("La venta fue desactivado con exito");
+				$('#myModal').modal('toggle');
+				location.reload(true);
+				//$("#tabla" + identificadorId).remove();
+		});
+};
+	selVenta = function(idVenta, nombre){
+		document.getElementById('nombreCliente').innerHTML = nombre;
+		$("#eliminar").attr("onclick","eliminarIdentificador('"+idVenta+"')");
+	};
 </script>
 {% endblock %}
 
@@ -17,6 +36,36 @@ Ventas
 
 {% block content %}
   <div class="row">
+
+    <div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-dialog" role="document">
+    		<div class="modal-content">
+    			<div class="modal-header">
+    				<h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Venta</h5>
+
+    				<script type="text/javascript">
+    					var idVenta = document.getElementById('codigo').value;
+    					var nombreCliente = document.getElementById('nombre').value;
+    				</script>
+    				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    					<span aria-hidden="true">&times;</span>
+    				</button>
+    			</div>
+
+    			<div class="modal-body">
+
+
+
+    					<p>Estás a punto de desactivar la venta de <label id="nombreCliente"></label> </p>
+
+    			</div>
+    			<div class="modal-footer">
+    				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    				<button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+    			</div>
+    		</div>
+    	</div>
+    </div>
 
         <div class="col-sm-12">
             <div class="white-box">
@@ -44,7 +93,7 @@ Ventas
 
               <br>
 
-              
+
               <div class="col-lg-12" style="margin-top:2px;">
 
               {% for i in tags %}
@@ -126,7 +175,7 @@ Ventas
                 <td>
                   <a href="/Venta/detalle/{{oVent.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
                   <a href="/Venta/editar/{{oVent.id}}/"><button type="button" class="btn btn-primary btn-edit">Editar</button></a>
-                  <a href="/Venta/eliminar/{{oVent.id}}/"><button type="button" class="btn btn-danger btn-delete">Eliminar</button></a>
+                  <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oVenta.id }}" onclick="selVenta('{{oVent.id}}','{{oVent.cliente.nombre}}');">Eliminar</a>
                 </td>
               </tr>
             {% endfor %}

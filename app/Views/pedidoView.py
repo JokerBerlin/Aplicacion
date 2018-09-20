@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from ferreteria import settings
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -43,7 +43,7 @@ def registrarPedido(request):
         # if dnis.isdigit() == False :
         #     dni = Cliente.objects.get(nombre=dnis).numerodocumento
 
-        oCliente = Cliente.objects.get(nombre=dnis)
+        oCliente = Cliente.objects.get(numerodocumento=dnis)
         fechaHoy=date.today()
         empleado = 1
         oPedido = Pedido(fecha=fechaHoy,estado=True,empleado_id=empleado,cliente_id=oCliente.id)
@@ -73,11 +73,37 @@ def registrarPedido(request):
         #return render(request, 'venta/prueba.html', {})
         #
 def ListarPedidos(request):
+    oProductos=[]
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
     else:
         oPedidos = Pedido.objects.filter(estado = True).order_by('-id')
-        return render(request, 'pedido/listar.html', {"oPedidos": oPedidos})
+        for oPedido in oPedidos:
+            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oPedido.id)
+            print(pedidoproductospresentacions)
+            for ope in pedidoproductospresentacions:
+                oNuevo={}
+                oNuevo['id']=oPedido.id
+                oNuevo['producto']=ope.productopresentacions.producto.nombre
+                oProductos.append(oNuevo)
+
+        paginator = Paginator(oPedidos,2)
+
+        page = request.GET.get('page')
+        try:
+            pedidoPagina = paginator.page(page)
+        except PageNotAnInteger:
+            pedidoPagina = paginator.page(1)
+        except EmptyPage:
+            pedidoPagina = paginator.page(paginator.num_pages)
+
+        index = pedidoPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        return render(request, 'pedido/listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
         #return render(request, 'venta/prueba.html', {})
 
 def ResumenPedidos(request):
@@ -245,3 +271,12 @@ def editarPedido(request,pedido_id):
          form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
          form2= ProductopresentacionsForm(instance=oProductopresentacions)
         return render(request, 'Pedido/editar.html', {'form': form, 'form2': form2})
+
+
+def eliminar_identificador_pedido(request):
+    pk = request.POST.get('identificador_id')
+    identificador = Pedido.objects.get(pk=pk)
+    identificador.estado = 0
+    identificador.save()
+    response = {}
+    return JsonResponse(response)
