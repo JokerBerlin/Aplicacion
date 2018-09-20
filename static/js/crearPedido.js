@@ -3,6 +3,17 @@ $(document).ready(function(){
         $('#bt_add').click(function(){
 
             agregar();
+            if (document.getElementById("presentacion").length!=0 ) {
+              var pre = document.getElementById("presentacion");
+              pre.options.length = 0;
+              var valorRemove = document.getElementById("valor");
+              valorRemove.options.length = 0;
+            }
+            $('#presentacion').prop('disabled', 'disabled');
+            $('#cantidad').prop('disabled', 'disabled');
+
+            $('#inpt-producto').focus();
+
 
 
         });
@@ -63,7 +74,8 @@ $(document).ready(function(){
         }
         if (error=="") {
             SubTotal = parseFloat(precio*cantidad).toFixed(2);
-            var fila='<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td><input type="number" name="cantidad'+cont+'" id="cantidad'+cont+'" required="" class="form-control" value="'+cantidad+'"></td><td>'+codigo+'</td><td>'+Producto+'</td><td><input type="number" name="precioUnitario'+cont+'" id="precioUnitario'+cont+'" required="" class="form-control" value="'+precio+'" onchange="CalcularSubTotal('+cont+','+cantidad+')" ></td></td><td><label id="SubTotal'+cont+'" name="SubTotal'+cont+'">'+SubTotal+'</label></td></tr>';
+            valor = cont - 1;
+            var fila='<tr class="selected" id="fila'+valor+'" onclick="seleccionar(this.id);"><td>'+valor+'</td><td><input type="number" name="cantidad'+valor+'" id="cantidad'+valor+'" required="" class="form-control" value="'+cantidad+'"></td><td>'+codigo+'</td><td>'+Producto+'</td><td><input type="number" name="precioUnitario'+valor+'" id="precioUnitario'+valor+'" required="" class="form-control" value="'+precio+'" onchange="CalcularSubTotal('+cont+','+cantidad+')" ></td></td><td><label id="SubTotal'+valor+'" name="SubTotal'+valor+'">'+SubTotal+'</label></td></tr>';
             $('#tabla').append(fila);
 
             TotalVenta =  parseFloat(Math.round((TotalVenta + (precio*cantidad)) * 100) / 100).toFixed(2);
@@ -87,7 +99,17 @@ $(document).ready(function(){
 
             }
         }
-        $('#inpt-producto').focus();
+        // $('#inpt-producto').focus(function(){
+        //   if (document.getElementById("presentacion").length!=0 ) {
+        //     var pre = document.getElementById("presentacion");
+        //     pre.options.length = 0;
+        //     var valorRemove = document.getElementById("valor");
+        //     valorRemove.options.length = 0;
+        //   }
+        //   $('#presentacion').prop('disabled', 'disabled');
+        //   $('#cantidad').prop('disabled', 'disabled');
+        //
+        // });
 
     }
 
@@ -157,12 +179,12 @@ $(document).ready(function(){
         $("#tabla tbody tr").each(function (index) {
             $(this).children("td").each(function (index2) {
                 producto = [];
-                dato = index + 1;
+
 
                 switch (index2) {
 
                     case 1:
-                        cantidad = $("#cantidad"+dato ).val();
+                        cantidad = $("#cantidad"+index ).val();
                         break;
 
                     case 2:

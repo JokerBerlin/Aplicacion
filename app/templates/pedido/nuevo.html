@@ -52,19 +52,6 @@ $(document).ready(function(){
 
     $(document).ready(function(){
         //$('cantidad').prop('disabled', true);
-        $( "#inpt-producto" ).click(function(){
-          //alert(document.getElementById("presentacion"));
-          if (document.getElementById("presentacion").length!=0 ) {
-            var pre = document.getElementById("presentacion");
-            pre.options.length = 0;
-            var valorRemove = document.getElementById("valor");
-            valorRemove.options.length = 0;
-          }
-          $('#presentacion').prop('disabled', 'disabled');
-          $('#cantidad').prop('disabled', 'disabled');
-          //$('#codigo').val('');
-          //$('#precio').val('');
-        });
         $( "#inpt-producto" ).autocomplete({
             source: function (request, response) {
 
