@@ -57,7 +57,7 @@ urlpatterns = [
     url(r'^Caja/movimiento/$', registrarOperacion),
 
     ################## Venta #######################
-    url(r'^Venta/nuevo/$', registrarPedido),
+    url(r'^Venta/nuevo/$', registrarVenta),
     url(r'^venta/insertar/$', registrarPedido),
 
     ################## Producto #######################

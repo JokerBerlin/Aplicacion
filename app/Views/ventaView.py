@@ -474,3 +474,23 @@ def eliminar_identificador_venta(request):
     identificador.save()
     response = {}
     return JsonResponse(response)
+
+def registrarVenta(request):
+    if request.method == 'POST':
+        oPedido = Pedido.objects.get(pk=request.POST['pedido'])
+        oPedidoproductospresentacion = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
+        monto = 0.0
+        for item in oPedidoproductospresentacion:
+            producto = item.productopresentacions.producto
+            producto.cantidad -= item.cantidad
+            monto += item.valor
+
+        oVenta = Venta()
+        oVenta = monto
+        oVenta.nrecibo = request.POST['nrecibo']
+        oVenta.estado = True
+        oVenta.pedido_id = request.POST['pedido']
+        oVenta.cliente_id = oPedido.cliente_id
+
+
+    return render(request, 'venta/nuevo.html', {})
