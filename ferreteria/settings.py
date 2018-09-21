@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 
 #    }
 #}
-# nube
+nube
 DATABASES = {
        'default': {
         'ENGINE': 'mysql_cymysql',
@@ -104,6 +104,16 @@ DATABASES = {
   }
 }
 # instancia local Erland
+# DATABASES = {
+#        'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'pedidos',
+#         'USER': 'pedidos',
+#         'PASSWORD': 'pedidos',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#   }
+# }
 
 #<<<<<<< HEAD
 #=======
