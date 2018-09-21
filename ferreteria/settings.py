@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 
 #    }
 #}
-nube
+# nube
 DATABASES = {
        'default': {
         'ENGINE': 'mysql_cymysql',
