@@ -179,12 +179,12 @@ $(document).ready(function(){
         $("#tabla tbody tr").each(function (index) {
             $(this).children("td").each(function (index2) {
                 producto = [];
-
+                dato = index + 1;
 
                 switch (index2) {
 
                     case 1:
-                        cantidad = $("#cantidad"+index ).val();
+                        cantidad = $("#cantidad"+dato ).val();
                         break;
 
                     case 2:
