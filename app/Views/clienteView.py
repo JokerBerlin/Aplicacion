@@ -38,7 +38,7 @@ def buscarCliente(request):
             try:
                 oClientes = Cliente.objects.filter(nombre__icontains=nombreCliente,estado = 1)|Cliente.objects.filter(numerodocumento__icontains=nombreCliente,estado = 1)
                 for oCliente in oClientes:
-                    
+
                     jsonCliente = {}
                     jsonCliente["id"] = oCliente.id
                     jsonCliente["direccion"] = oCliente.direccion
@@ -112,6 +112,19 @@ def editarCliente(request,cliente_id):
         form = ClienteForm(request.POST or None, instance=oCliente)
         print(form)
         return render(request, 'cliente/editar.html', {'form': form, 'oCliente':oCliente})
+
+@csrf_exempt
+def registrarCliente(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        oCliente = Cliente()
+        oCliente.nombre = Datos['nombre']
+        oCliente.direccion = Datos['direccion']
+        oCliente.longitud = Datos['longitud']
+        oCliente.latitud = Datos['latitud']
+        oCliente.numerodocumento = Datos['documento']
+        oCliente.save()
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
 def nuevoCliente(request):
     if request.method == 'POST':

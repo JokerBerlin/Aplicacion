@@ -78,6 +78,8 @@ urlpatterns = [
 
     ################## Cliente #######################
     url(r'^Cliente/nuevo/$', nuevoCliente),
+    url(r'^Cliente/Registrar/$', registrarCliente),
+
     url(r'^Cliente/detalle/(?P<cliente_id>\d+)/$', detalleCliente),
     url(r'^Cliente/editar/(?P<cliente_id>\d+)/$', editarCliente),
     url(r'^Cliente/listar/$', listarCliente, name="listar_cliente"),
