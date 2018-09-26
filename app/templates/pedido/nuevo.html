@@ -307,8 +307,21 @@ Nuevo Pedido
                         success: function (result) {
                         //     var id_venta = result["id_venta"];
                              alert('El cliente se registro con exito');
+                             var numDocumento = document.getElementById("id_numerodocumento").value;
+                             var nuevaBusqueda = document.getElementById("inpt-cliente");
+                             nuevaBusqueda.value = numDocumento;
+                             var nombre = document.getElementById("id_nombre").value;
+                             var nuevaBusqueda = document.getElementById("nombreCl");
+                             nombreCl.value = nombre;
+
                              $('#myModal').modal('toggle');
+                             $('#id_nombre').val('');
+                             $('#id_direccion').val('');
+                             $('#id_longitud').val('');
+                             $('#id_latitud').val('');
+                             $('#id_numerodocumento').val('');
                              //location.reload(true);
+                             $('#inpt-producto').focus();
                         }
                     });
                   }
