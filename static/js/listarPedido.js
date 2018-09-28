@@ -28,7 +28,7 @@ $(document).ready(function(){
       $.ajax({
           type: "POST",
           dataType: "json",
-          url: "/pedido/filtrase/",
+          url: "/venta/filtrase/",
           data: sendData,
           contentType: "application/json; charset=utf-8",
           async: false,
@@ -49,7 +49,7 @@ $(document).ready(function(){
       $.ajax({
           type: "POST",
           dataType: "json",
-          url: "/pedido/filtrase/",
+          url: "/venta/filtrase/",
           data: sendData,
           contentType: "application/json; charset=utf-8",
           async: false,
@@ -107,7 +107,7 @@ $(document).ready(function(){
           $.ajax({
               type: "POST",
               dataType: "json",
-              url: "/pedido/filtrase/",
+              url: "/venta/filtrase/",
               data: sendData,
               contentType: "application/json; charset=utf-8",
               async: false,
@@ -168,7 +168,7 @@ $(document).ready(function(){
           $.ajax({
               type: "POST",
               dataType: "json",
-              url: "/pedido/filtrase/",
+              url: "/venta/filtrase/",
               data: sendData,
               contentType: "application/json; charset=utf-8",
               async: false,

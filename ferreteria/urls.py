@@ -149,6 +149,7 @@ urlpatterns = [
     url(r'^venta/filtras/', FiltrarVenta),
     url(r'^venta/filtrase/', guardar_cookies),
     url(r'^venta/filtrar/eliminar/', eliminar_cookies),
+    url(r'^Pedido/filtrar/', FiltrarPedido),
 
     url(r'^venta/eliminar/', eliminar_identificador_venta,name="eliminar_venta"),
 
