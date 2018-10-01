@@ -150,6 +150,7 @@ def BuscarProductoPresentacion (request):
 
             jsonProductos["productos"] = []
             jsonProductos["presentacion"]=[]
+            jsonProductos["precios"]=[]
 
             for oProducto in oProductos:
                 jsonProducto = {}
@@ -174,7 +175,16 @@ def BuscarProductoPresentacion (request):
                     jsonPresentacion["nombre"] = oPresentacion.presentacion.nombre
                     jsonPresentacion["valor"] = oPresentacion.valor
                     jsonProductos["presentacion"].append(jsonPresentacion)
+                    oPrecios = Productopresentacionsprecios.objects.filter(productopresentacions=oPresentacion.id)
+                    for oPrecio in oPrecios:
+                        jsonPrecio={}
+                        jsonPrecio["id"] = oPrecio.id
+                        jsonPrecio["preId"] = oPresentacion.id
+                        jsonPrecio["nombre"]=oPrecio.precio.nombre
+                        jsonPrecio["valor"]=oPrecio.valor
+                        jsonProductos["precios"].append(jsonPrecio)
                 print(jsonProductos)
+
 
             return HttpResponse(json.dumps(jsonProductos), content_type="application/json")
 

@@ -76,7 +76,7 @@ $(document).ready(function(){
                       }
                       var ListasProductos = result['productos'];
                       var ListarPresentaciones = result['presentacion'];
-
+                      var ListarPrecios = result['precios'];
                       response($.map(ListasProductos, function (item) {
                           return {
                               label: item.nombre,
@@ -118,7 +118,7 @@ $(document).ready(function(){
 
                   });
             },
-            minLength: 2,
+            minLength: 3,
             select: function (event, ui) {
                 $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
                 $('#presentacion').removeAttr('disabled');
