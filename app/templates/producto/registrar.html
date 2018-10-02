@@ -26,7 +26,6 @@ Registrar Nuevo Producto
 				    </br>
 					<label for="">Unidad Principal</label></br>
 				    <select class="form-control" id="cmbPresentacionPrincipal" name="cmbPresentacionPrincipal" required="">
-				    	<option value=""> </option>
                         {% for presentacion in presentaciones %}
                             <option value="{{presentacion.id}}">
                             {{presentacion.nombre}}

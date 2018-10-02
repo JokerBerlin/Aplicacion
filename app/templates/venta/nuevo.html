@@ -34,7 +34,7 @@ $(document).ready(function(){
                 }
             });
         },
-        minLength: 1,
+        minLength: 2,
         select: function (event, ui) {
             $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
             $( "#precio" ).val( ui.item.precio);
@@ -95,15 +95,32 @@ Nueva Venta
                 <label for="id_nombre">Código:</label>
                 <br>
                 <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
-                <br>
-                <!--<label for="id_nombre">Precio:</label>
-                <br>
-                <input type="number" name="precio" id="precio" required="" class="form-control">
-                <br>-->
+                <br>    
                 <label for="id_nombre">Cantidad:</label>
                 <br>
                 <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
                 <br>
+                
+                <label for="">Tipo presentacion</label></br>
+                <select class="form-control" id="cmbPresentacion" name="cmbPresentacion" required="">
+                    {% for presentacion in presentaciones %}
+                        <option value="{{presentacion.id}}">
+                        {{presentacion.nombre}}
+                        </option>
+                    {% endfor %}
+                </select>
+                <br>
+
+                <label for="">Tipo precio</label></br>
+                <select class="form-control" id="cmbPrecio" name="cmbPrecio" required="">
+                    {% for precio in precios %}
+                        <option value="{{precio.id}}">
+                        {{precio.nombre}}
+                        </option>
+                    {% endfor %}
+                </select>
+                <br>
+
                 <button id="bt_add" class="btn btn-default">Agregar</button>
                 <button id="bt_del" class="btn btn-default">Eliminar</button>
                 <button id="bt_delall" class="btn btn-default">Eliminar todo</button>
@@ -118,9 +135,11 @@ Nueva Venta
                                   <td>Cantidad</td>
                                   <td>Cod. Producto</td>
                                   <td>Nombre</td>
+                                  <td>Tipo Precio</td>
+                                  <td>Presentacion</td>                              
                                   <td>Precio Unit.</td>
                                   <td>Total</td>
-                              </tr>
+                                  </tr>
                             </thead>
                             </table>
 

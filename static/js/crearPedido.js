@@ -4,7 +4,7 @@ $(document).ready(function(){
 
             agregar();
             if (document.getElementById("presentacion").length!=0 ) {
-              var pre = document.getElementById("presentacion");
+              var pre = document.getElementById("cmbPresentacion");
               pre.options.length = 0;
               var valorRemove = document.getElementById("valor");
               valorRemove.options.length = 0;

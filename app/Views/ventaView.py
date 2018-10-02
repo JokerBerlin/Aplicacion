@@ -20,12 +20,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.core import serializers
 
-def nuevoVenta(request):
-    if request.method == 'GET':
-        Datos = request.POST
-        return render(request, 'venta/nuevo.html', {})
-        nombre = Datos()
-
 def ListarVentas(request):
     oProductos=[]
     if request.method == 'POST':
@@ -491,6 +485,13 @@ def registrarVenta(request):
         oVenta.estado = True
         oVenta.pedido_id = request.POST['pedido']
         oVenta.cliente_id = oPedido.cliente_id
+        
+    oPresentaciones = Presentacion.objects.filter(estado=True)
+    oPrecios = Precio.objects.filter(estado=True)
 
+    context = {
+        'presentaciones': oPresentaciones,
+        'precios': oPrecios 
+    }
 
-    return render(request, 'venta/nuevo.html', {})
+    return render(request, 'venta/nuevo.html', context)

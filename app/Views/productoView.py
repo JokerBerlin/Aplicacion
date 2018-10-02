@@ -87,7 +87,14 @@ def registrarProducto(request):
         form = ProductoForm()
         oPrecios = Precio.objects.filter(estado=True)
         oPresentaciones = Presentacion.objects.filter(estado=True)
-    return render(request, 'producto/registrar.html', {'form': form,'precios':oPrecios,'presentaciones':oPresentaciones})
+    
+    context = {
+        'form': form,
+        'precios':oPrecios,
+        'presentaciones':oPresentaciones
+    }
+    
+    return render(request, 'producto/registrar.html', context)
 
 @csrf_exempt
 def BuscarProducto(request):
@@ -303,7 +310,7 @@ def editarProducto(request,producto_id):
     else:
         form= ProductoForm(instance=oProducto)
         ctx = {'form':form, 'oProducto': oProducto}
-    return render(request, 'Producto/editar.html',ctx)
+    return render(request, 'producto/editar.html',ctx)
 
 def eliminar_identificador_producto(request):
     pk = request.POST.get('identificador_id')
