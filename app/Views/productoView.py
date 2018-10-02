@@ -63,15 +63,22 @@ def registrarProducto(request):
             form.save()
             oProducto = form
             oPresentacion = Presentacion.objects.get(id = int(Datos['cmbPresentacionPrincipal']))
-            print(oPresentacion.id)
-            print(oProducto.id)
             #Productopresentacions.add(oPresentacion)
             oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id,valor=Datos['valor'],unidadprincipal=True)
             oProductopresentacions.save()
             oProductopresentacions = Productopresentacions.objects.get(producto=oProducto.id, presentacion=oPresentacion.id)
-            oPrecios = Precio.objects.get(id=1,estado=1)
-            oProductoPresentacionsprecios = Productopresentacionsprecios(valor=Datos['valor'],precio_id=oPrecios.id,productopresentacions_id=oProductopresentacions.id)
-            oProductoPresentacionsprecios.save()
+            
+            oPrecios = Precio.objects.filter(estado=True)
+
+            for oPrecio in oPrecios:
+                idPrecio = str(oPrecio.id)
+                oProductoPresentacionsprecios = Productopresentacionsprecios(
+                    valor=Datos[idPrecio],
+                    precio=oPrecio,
+                    productopresentacions_id=oProductopresentacions.id
+                )
+                oProductoPresentacionsprecios.save()
+            
             return redirect('listar_producto')
         else:
             return render(request, 'producto/listar.html')
