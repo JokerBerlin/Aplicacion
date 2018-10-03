@@ -27,5 +27,5 @@ class ProductoForm(ModelForm):
             'imagen': forms.FileInput(),
             'url': forms.TextInput(attrs={'class': 'form-control-p'}),
             'valor': forms.NumberInput(attrs={'class': 'form-control-p'}),
-            
+            'presentacions': forms.Select(attrs={'class': 'form-control-p'})            
         }
