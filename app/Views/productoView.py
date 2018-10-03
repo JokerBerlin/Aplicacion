@@ -106,7 +106,7 @@ def BuscarProducto(request):
 
         if usuario==True:
             nombreProducto = Datos["nombreProducto"]
-            oProductos = Producto.objects.filter(nombre__icontains=nombreProducto,estado = True)
+            oProductos = Producto.objects.filter(nombre__icontains=nombreProducto, estado=True)
             jsonProductos = {}
             jsonProductos["productos"] = []
             for oProducto in oProductos:
@@ -115,13 +115,12 @@ def BuscarProducto(request):
                 jsonProducto["nombre"] = oProducto.nombre
                 jsonProducto["codigo"] = oProducto.codigo
                 jsonProducto["valor"] = oProducto.valor
-                print ("------------------")
-                print (oProducto.imagen)
-                print ("------------------")
+
                 if oProducto.imagen=="":
                     jsonProducto["imagen"] = "/imagen/default.jpg"
                 else:
                     jsonProducto["imagen"] = oProducto.imagen.url
+                    
                 jsonProductos["productos"].append(jsonProducto)
 
             return HttpResponse(json.dumps(jsonProductos), content_type="application/json")

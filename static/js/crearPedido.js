@@ -75,7 +75,16 @@ $(document).ready(function(){
         if (error=="") {
             SubTotal = parseFloat(precio*cantidad).toFixed(2);
             valor = cont - 1;
-            var fila='<tr class="selected" id="fila'+valor+'" onclick="seleccionar(this.id);"><td>'+valor+'</td><td><input type="number" name="cantidad'+valor+'" id="cantidad'+valor+'" required="" class="form-control" value="'+cantidad+'"></td><td>'+codigo+'</td><td>'+Producto+'</td><td><input type="number" name="precioUnitario'+valor+'" id="precioUnitario'+valor+'" required="" class="form-control" value="'+precio+'" onchange="CalcularSubTotal('+cont+','+cantidad+')" ></td></td><td><label id="SubTotal'+valor+'" name="SubTotal'+valor+'">'+SubTotal+'</label></td></tr>';
+            var fila='<tr class="selected" id="fila' + valor +
+                     '" onclick="seleccionar(this.id);"><td>' + valor +
+                     '</td><td><input type="number" name="cantidad' + valor +
+                     '" id="cantidad' + valor +
+                     '" required="" class="form-control" value="' + cantidad +
+                     '"></td><td>' + codigo +
+                     '</td><td>' + Producto +
+                     '</td><td>' + precio +
+                     '</td></td><td><label id="SubTotal' + valor +
+                     '" name="SubTotal'+valor+'">'+SubTotal+'</label></td></tr>';
             $('#tabla').append(fila);
 
             TotalVenta =  parseFloat(Math.round((TotalVenta + (precio*cantidad)) * 100) / 100).toFixed(2);

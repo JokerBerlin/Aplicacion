@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block imports %}
-<script type="text/javascript" src="/static/js/crearPedido.js"></script>
+<script type="text/javascript" src="/static/js/crearVenta.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $( "#inpt-producto" ).focus();
@@ -10,6 +10,7 @@ $(document).ready(function(){
 
             var datos = {nombreProducto: $("#inpt-producto").val()};
             var sendData = JSON.stringify(datos);
+            
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -104,7 +105,7 @@ Nueva Venta
                 <label for="">Tipo presentacion</label></br>
                 <select class="form-control" id="cmbPresentacion" name="cmbPresentacion" required="">
                     {% for presentacion in presentaciones %}
-                        <option value="{{presentacion.id}}">
+                        <option value="{{ presentacion.nombre }}">
                         {{presentacion.nombre}}
                         </option>
                     {% endfor %}
@@ -114,7 +115,7 @@ Nueva Venta
                 <label for="">Tipo precio</label></br>
                 <select class="form-control" id="cmbPrecio" name="cmbPrecio" required="">
                     {% for precio in precios %}
-                        <option value="{{precio.id}}">
+                        <option value="{{precio.nombre}}">
                         {{precio.nombre}}
                         </option>
                     {% endfor %}
