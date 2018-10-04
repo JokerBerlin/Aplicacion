@@ -10,8 +10,6 @@ $(document).ready(function(){
 
             var datos = {
                 nombreProducto: $("#inpt-producto").val(),
-                presentacion: document.getElementById("cmbPresentacion").value,
-                precioId: document.getElementById("cmbPrecio").value
             };
             var sendData = JSON.stringify(datos);
             
@@ -31,7 +29,6 @@ $(document).ready(function(){
                     return {
                         label: item.nombre,
                         idproducto: item.nombre,
-                        precio: item.precio,
                         codigo: item.codigo,
                         Id: item.id
                         };
@@ -54,6 +51,28 @@ $(document).ready(function(){
 
     });
 });
+
+window.onload = function() {
+    var cmbPresentacion = document.getElementById('cmbPresentacion');
+    console.log(cmbPresentacion.value);
+    cmbPresentacion.addEventListener('change', function() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/producto-pre-venta/buscar/",
+            data: {
+                'presentacion': this.value,
+                'producto': document.getElementById('inpt-producto').value,
+                'precioTipo': document.getElementById('cmbPrecio').value,
+            },
+            async: false,
+            success: function(data) {
+                console.log(data);
+            }
+            
+        });
+    });
+}
 
 </script>
 
@@ -124,6 +143,11 @@ Nueva Venta
                         </option>
                     {% endfor %}
                 </select>
+                <br>
+                    
+                <label for="valorPrecio">Valor Precio:</label>
+                <br>
+                <input type="number" name="valorPrecio" id="valorPrecio" required="" class="form-control" disabled>
                 <br>
 
                 <button id="bt_add" class="btn btn-default">Agregar</button>

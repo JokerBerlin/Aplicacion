@@ -126,6 +126,7 @@ urlpatterns = [
 
     url(r'^producto/buscar/$', BuscarProducto),
     url(r'^productopre/buscar/$', BuscarProductoPresentacion),
+    url(r'^producto-pre-venta/buscar/$', BuscarProductoPresentacionVenta),
     url(r'^producto/presentacion/listar/$', ListarPresentacionesProducto),
     url(r'^producto/presentacion/cantidad/$', CantidadPresentacionesProducto),
 

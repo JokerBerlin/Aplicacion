@@ -146,6 +146,26 @@ def BuscarProducto(request):
 
 
 @csrf_exempt
+def BuscarProductoPresentacionVenta(request):
+    if request.method == 'POST':
+        presentacion = request.POST['presentacion']
+        producto = request.POST['producto']
+        precio = request.POST['precioTipo']
+
+        oProducto = Producto.objects.get(nombre=producto)
+        oPresentacion = Presentacion.objects.get(nombre=presentacion)
+        oPrecio = Precio.objects.get(pk=precio)
+
+        oProductoPres = Productopresentacions.objects.get(producto=oProducto, presentacion=oPresentacion)
+        oProductoPresPrecio = Productopresentacionsprecios.objects.get(precio=oPrecio, productopresentacions=oProductoPres)
+
+        jsonResultado = {}
+        jsonProducto["precio"] = oProductoPresPrecio.valor
+
+    return HttpResponse(json.dumps(jsonResultado), content_type='application/json')
+
+
+@csrf_exempt
 def BuscarProductoPresentacion (request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
