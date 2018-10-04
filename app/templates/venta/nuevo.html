@@ -8,7 +8,11 @@ $(document).ready(function(){
     $( "#inpt-producto" ).autocomplete({
         source: function (request, response) {
 
-            var datos = {nombreProducto: $("#inpt-producto").val()};
+            var datos = {
+                nombreProducto: $("#inpt-producto").val(),
+                presentacion: document.getElementById("cmbPresentacion").value,
+                precioId: document.getElementById("cmbPrecio").value
+            };
             var sendData = JSON.stringify(datos);
             
             $.ajax({
@@ -115,7 +119,7 @@ Nueva Venta
                 <label for="">Tipo precio</label></br>
                 <select class="form-control" id="cmbPrecio" name="cmbPrecio" required="">
                     {% for precio in precios %}
-                        <option value="{{precio.nombre}}">
+                        <option value="{{precio.id}}">
                         {{precio.nombre}}
                         </option>
                     {% endfor %}
