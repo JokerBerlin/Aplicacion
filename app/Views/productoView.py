@@ -160,7 +160,7 @@ def BuscarProductoPresentacionVenta(request):
         oProductoPresPrecio = Productopresentacionsprecios.objects.get(precio=oPrecio, productopresentacions=oProductoPres)
 
         jsonResultado = {}
-        jsonProducto["precio"] = oProductoPresPrecio.valor
+        jsonResultado["precio"] = oProductoPresPrecio.valor
 
     return HttpResponse(json.dumps(jsonResultado), content_type='application/json')
 

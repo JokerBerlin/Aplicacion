@@ -54,24 +54,38 @@ $(document).ready(function(){
 
 window.onload = function() {
     var cmbPresentacion = document.getElementById('cmbPresentacion');
-    console.log(cmbPresentacion.value);
-    cmbPresentacion.addEventListener('change', function() {
+    var cmbPrecio = document.getElementById('cmbPrecio');
+    var producto = document.getElementById('inpt-producto');
+    
+    cmbPresentacion.addEventListener('change', precioPresentacion);
+    cmbPrecio.addEventListener('change', precioPresentacion);
+    producto.addEventListener('change', precioPresentacion);
+}
+
+var precioPresentacion = function() {
         $.ajax({
             type: "POST",
             dataType: "json",
             url: "/producto-pre-venta/buscar/",
             data: {
-                'presentacion': this.value,
+                'presentacion': document.getElementById('cmbPresentacion').value,
                 'producto': document.getElementById('inpt-producto').value,
                 'precioTipo': document.getElementById('cmbPrecio').value,
             },
             async: false,
             success: function(data) {
-                console.log(data);
+                var precio = document.getElementById('valorPrecio');
+                if (data.precio == ''){
+                    precio.value = '';
+                } else {
+                    precio.value = data.precio;
+                }                
+            },
+            error: function(jqxhr, status, exception) {
+                alert('Exception:', exception);
             }
             
         });
-    });
 }
 
 </script>
@@ -179,7 +193,7 @@ Nueva Venta
                       <br>
                       <br>
 
-                    <button id="bt_GenerarVenta" class="btn btn-success">Generar Pedido</button>
+                    <button id="bt_GenerarVenta" class="btn btn-success">Generar Venta</button>
                     </div>
 
                     <div class="row">

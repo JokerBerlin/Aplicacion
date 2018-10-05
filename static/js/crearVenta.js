@@ -1,41 +1,24 @@
 $(document).ready(function(){
     $('#id_Total').text("0.00");
     $('#bt_add').click(function(){
-
         agregar();
-        if (document.getElementById("presentacion").length!=0 ) {
-          var pre = document.getElementById("cmbPresentacion");
-          pre.options.length = 0;
-          var valorRemove = document.getElementById("valor");
-          valorRemove.options.length = 0;
-        }
-        $('#presentacion').prop('disabled', 'disabled');
-        $('#cantidad').prop('disabled', 'disabled');
-
         $('#inpt-producto').focus();
-
-
-
     });
+
     $('#bt_add').keypress(function(){
-        //agregar();
         $('#inpt-producto').focus();
-
     });
+
     $('#bt_del').click(function(){
         eliminar(id_fila_selected);
     });
+
     $('#bt_delall').click(function(){
         eliminarTodasFilas();
     });
 
     $('#bt_GenerarVenta').click(function(){
         GenerarVenta();
-    });
-    $("#precioUnitario").change(function(){
-            //alert($(this).val());
-            //alert("hola");
-            //$('#valor2').val($(this).val());
     });
 
 });
@@ -52,7 +35,7 @@ function reset_values(){
     $('#codigo').val('');
     $('#precio').val('');
     $('#cantidad').val('');
-
+    $('#valorPrecio').val('');
 }
 
 var TotalVenta=0;
@@ -62,10 +45,11 @@ function agregar(){
     cont++;
     Producto = $('#inpt-producto').val();
     codigo = $('#codigo').val();
-    precio = $('#precio').val();
+    precio = $('#valorPrecio').val();
     cantidad = $('#cantidad').val();
     presentacion = $('#cmbPresentacion').val();
-    precioTipo = $('#cmbPrecio').val();
+    precioTipo = $('#cmbPrecio option:selected').text();
+
     error = "";
     if (Producto==''){
         error = 1;
@@ -78,25 +62,25 @@ function agregar(){
         SubTotal = parseFloat(precio*cantidad).toFixed(2);
         valor = cont - 1;
         var fila='<tr class="selected" id="fila' + valor + '" onclick="seleccionar(this.id);">' +
-                 '<td>' + valor + '</td>' + 
+                 '<td>' + valor + '</td>' +
                  '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td>' +
                  '<td>' + codigo + '</td>' +
                  '<td>' + Producto + '</td>' + 
                  '<td>' + precioTipo+'</td>' +
                  '<td>' + presentacion + '</td>' +
-                 '<td><input type="number" name="precioUnitario' + valor + '" id="precioUnitario' + valor + '" required="" class="form-control" value="' + precio + '" onchange="CalcularSubTotal('+cont+','+cantidad+')" ></td>' +
+                 '<td id="precioUnitario"'+ valor + '>' + precio + '</td>' +
                  '<td><label id="SubTotal' + valor + '" name="SubTotal' + valor + '">' + SubTotal + '</label></td>' +
                  '</tr>';
                  
         $('#tabla').append(fila);
 
         TotalVenta =  parseFloat(Math.round((TotalVenta + (precio*cantidad)) * 100) / 100).toFixed(2);
+        console.log(TotalVenta);
 
         //$('#id_Total').text("S/. "+TotalVenta);
         RefrescarTotal();
         reset_values();
         reordenar();
-
     }
     else{
         switch(error) {
@@ -168,7 +152,7 @@ function reordenar(){
 function RefrescarTotal(){
     Total=0;
     $('#tabla tbody tr').each(function(){
-        valor = $(this).find('td').eq(5).children('label').text();
+        valor = $(this).find('td').eq(7).children('label').text();
         //console.log(valor);
         Total = Total + parseFloat(valor);
         $('#id_Total').text(Total);
@@ -181,7 +165,6 @@ $('#id_Total').text("0.00");
 $('#tabla tbody tr').each(function(){
         $(this).remove();
     });
-
 }
 
 function GenerarVenta(){
