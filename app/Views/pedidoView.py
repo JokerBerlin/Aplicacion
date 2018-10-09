@@ -454,7 +454,7 @@ def FiltrarPedido(request):
         oVenta = Pedido.objects.filter(estado = True).order_by('-id')
         for o in oVenta:
             #pedido = Pedido.objects.filter(id=o.pedido_id,estado=True)
-            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=o.id)
+            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=o.id)
             for ope in pedidoproductospresentacions:
                 oNuevo={}
                 oNuevo['id']=o.id
