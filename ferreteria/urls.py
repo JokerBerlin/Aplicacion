@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^Caja/movimiento/$', registrarOperacion),
 
     ################## Venta #######################
+    #vista nueva venta
     url(r'^Venta/nuevo/$', registrarVenta),
     url(r'^venta/insertar/$', registrarPedido),
 
@@ -151,6 +152,7 @@ urlpatterns = [
     url(r'^venta/filtrase/', guardar_cookies),
     url(r'^venta/filtrar/eliminar/', eliminar_cookies),
     url(r'^Pedido/filtrar/', FiltrarPedido),
+    url(r'^venta/nuevo/', nuevaVenta),
 
     url(r'^venta/eliminar/', eliminar_identificador_venta,name="eliminar_venta"),
 

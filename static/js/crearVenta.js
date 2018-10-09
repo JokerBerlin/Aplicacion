@@ -169,12 +169,11 @@ $('#tabla tbody tr').each(function(){
 
 function GenerarVenta(){
     var num=1;
-    productos = {};
+    productos = [];
     contador = 0;
 
     $("#tabla tbody tr").each(function (index) {
         $(this).children("td").each(function (index2) {
-            producto = {};
             switch (index2) {
                 case 1:
                     cantidad = $("#cantidad"+index ).val();
@@ -194,15 +193,24 @@ function GenerarVenta(){
         productos.push([cantidad,codigo,precioVenta]);
     });
 
-    console.log(productos);
-    var cliente = document.getElementById("inpt-cliente").value;
+    var cliente = '';
     if (contador == 1) {
-        var datos = {productos: productos,cliente:cliente};
-        var sendData = JSON.stringify(datos);
+        var datos = {
+            productos: productos,
+            cliente: cliente
+        };
+
+        console.log(datos.productos[0][0]);
+        console.log(datos.productos[0][1]);
+        console.log(datos.productos[0][2]);
+        console.log(datos.cliente);
+        
+        sendData = JSON.stringify(datos);
+
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: "/venta/insertar/",
+            url: "/venta/nuevo/",
             data: sendData,
             contentType: "application/json; charset=utf-8",
             async: false,
@@ -211,9 +219,9 @@ function GenerarVenta(){
 
             success: function (result) {
             //     var id_venta = result["id_venta"];
-                 alert('Pedido Registrado');
+                 alert('Nueva venta registrada');
                  //location.reload(true);
-                 document.location.href='/Pedido/listar/';
+                 document.location.href='/Venta/listar/';
             }
         });
     }else{
