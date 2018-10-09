@@ -495,3 +495,16 @@ def registrarVenta(request):
     }
 
     return render(request, 'venta/nuevo.html', context)
+
+@csrf_exempt
+def nuevaVenta(request):
+    if request.method == 'POST':
+        datos = json.loads(request.body)
+        # print datos
+        # productos = request.POST.get('productos', False)
+        # cliente = request.POST.get('productos', False)
+
+        # print(productos)
+        # print(cliente)
+
+    return datos

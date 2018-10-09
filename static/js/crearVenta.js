@@ -36,6 +36,8 @@ function reset_values(){
     $('#precio').val('');
     $('#cantidad').val('');
     $('#valorPrecio').val('');
+    $('cmbPresentacion').val('');
+    $('#cmbPrecio').val('');
 }
 
 var TotalVenta=0;
@@ -75,7 +77,6 @@ function agregar(){
         $('#tabla').append(fila);
 
         TotalVenta =  parseFloat(Math.round((TotalVenta + (precio*cantidad)) * 100) / 100).toFixed(2);
-        console.log(TotalVenta);
 
         //$('#id_Total').text("S/. "+TotalVenta);
         RefrescarTotal();
@@ -92,7 +93,6 @@ function agregar(){
             alert("Ingrese una cantidad");
             $( "#cantidad" ).focus();
             break;
-
         }
     }
     // $('#inpt-producto').focus(function(){
@@ -171,13 +171,10 @@ function GenerarVenta(){
     var num=1;
     productos = [];
     contador = 0;
+
     $("#tabla tbody tr").each(function (index) {
         $(this).children("td").each(function (index2) {
-            producto = [];
-            //dato = index;
-            console.log(index);
             switch (index2) {
-
                 case 1:
                     cantidad = $("#cantidad"+index ).val();
                     break;
@@ -185,7 +182,8 @@ function GenerarVenta(){
                 case 2:
                     codigo = $(this).text();
                     break;
-                case 5:
+
+                case 7:
                     precioVenta = $(this).text();
                     break;
             }
@@ -194,15 +192,25 @@ function GenerarVenta(){
         contador = 1;
         productos.push([cantidad,codigo,precioVenta]);
     });
-    console.log(productos);
-    var cliente = document.getElementById("inpt-cliente").value;
+
+    var cliente = '';
     if (contador == 1) {
-        var datos = {productos: productos,cliente:cliente};
-        var sendData = JSON.stringify(datos);
+        var datos = {
+            productos: productos,
+            cliente: cliente
+        };
+
+        console.log(datos.productos[0][0]);
+        console.log(datos.productos[0][1]);
+        console.log(datos.productos[0][2]);
+        console.log(datos.cliente);
+        
+        sendData = JSON.stringify(datos);
+
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: "/venta/insertar/",
+            url: "/venta/nuevo/",
             data: sendData,
             contentType: "application/json; charset=utf-8",
             async: false,
@@ -211,9 +219,9 @@ function GenerarVenta(){
 
             success: function (result) {
             //     var id_venta = result["id_venta"];
-                 alert('Pedido Registrado');
+                 alert('Nueva venta registrada');
                  //location.reload(true);
-                 document.location.href='/Pedido/listar/';
+                 document.location.href='/Venta/listar/';
             }
         });
     }else{
