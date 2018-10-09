@@ -58,7 +58,10 @@ urlpatterns = [
 
     ################## Venta #######################
     url(r'^Venta/nuevo/$', registrarVenta),
-    url(r'^venta/insertar/$', registrarPedido),
+    #url(r'^venta/insertar/$', registrarPedido),
+    url(r'^Pedido/nuevo/$', registrarPedido),
+    #url(r'^venta/insertar/$', registrarPedido),
+    url(r'^Pedido/registrar/$', insertarPedido),
 
     ################## Producto #######################
     url(r'^Producto/listar/$', ListarProductos, name='listar_producto'),

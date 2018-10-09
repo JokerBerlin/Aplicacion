@@ -32,7 +32,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 #   servicio de busqueda de usuario para la app movil
 ###########################################################
 @csrf_exempt
-def registrarPedido(request):
+def insertarPedido(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
         print(Datos)
@@ -53,14 +53,21 @@ def registrarPedido(request):
         Dato = Datos['productos']
         oPedidoProductos = Dato
         #oPedidoProductos = json.dumps(Datos)
-
+        print(oPedidoProductos)
         for oPedidoProducto in oPedidoProductos:
-            oPedidoproductospresentacions = Pedidoproductospresentacions()
             print(oPedidoProducto[1])
-            oPedidoproductospresentacions.valor = oPedidoProducto[2]
+            oProducto = Producto.objects.get(codigo=oPedidoProducto[1])
+            print(oProducto.id)
+            print(oPedidoProducto[3])
+            oPresentacion = Presentacion.objects.get(nombre=oPedidoProducto[3])
+            print(oPresentacion.id)
+            oProductoPresentacions = Productopresentacions.objects.get(producto_id=oProducto.id,presentacion_id=oPresentacion.id)
+            print(oProductoPresentacions.id)
+            oPedidoproductospresentacions = Pedidoproductospresentacions()
+            oPedidoproductospresentacions.valor = oPedidoProducto[4]
             oPedidoproductospresentacions.cantidad = oPedidoProducto[0]
             oPedidoproductospresentacions.pedido = oPedido
-            oPedidoproductospresentacions.productopresentacions_id=oPedidoProducto[1]
+            oPedidoproductospresentacions.productopresentacions_id=oProductoPresentacions.id
             oPedidoproductospresentacions.save()
         return HttpResponse(json.dumps({'exito':1,"idPedido": oPedido.id}), content_type="application/json")
 
@@ -70,8 +77,40 @@ def registrarPedido(request):
     else:
 
         return render(request, 'pedido/nuevo.html', {})
-        #return render(request, 'venta/prueba.html', {})
+        return render(request, 'venta/prueba.html', {})
+
+
+def registrarPedido(request):
+    # if request.method == 'POST':
+        # oPedido = Pedido.objects.get(pk=request.POST['pedido'])
+        # oPedidoproductospresentacion = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
+        # monto = 0.0
+        # for item in oPedidoproductospresentacion:
+        #     producto = item.productopresentacions.producto
+        #     producto.cantidad -= item.cantidad
+        #     monto += item.valor
         #
+        # oVenta = Venta()
+        # oVenta = monto
+        # oVenta.nrecibo = request.POST['nrecibo']
+        # oVenta.estado = True
+        # oVenta.pedido_id = request.POST['pedido']
+        # oVenta.cliente_id = oPedido.cliente_id
+
+    oPresentaciones = Presentacion.objects.filter(estado=True)
+    oPrecios = Precio.objects.filter(estado=True)
+
+    context = {
+        'presentaciones': oPresentaciones,
+        'precios': oPrecios
+    }
+
+    return render(request, 'Pedido/nuevo.html', context)
+
+
+
+
+
 def ListarPedidos(request):
     oProductos=[]
     if request.method == 'POST':

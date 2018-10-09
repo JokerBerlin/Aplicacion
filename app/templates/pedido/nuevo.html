@@ -2,9 +2,9 @@
 {% block imports %}
 <script type="text/javascript" src="/static/js/crearPedido.js"></script>
 <link href="/static/css/styleAutocomplete.css" rel="stylesheet">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
 
 
 <script type="text/javascript">
@@ -49,107 +49,91 @@ $(document).ready(function(){
   });
 });
 
+$(document).ready(function(){
+    $( "#inpt-producto" ).focus();
+    $('cantidad').prop('disabled', true);
+    $( "#inpt-producto" ).autocomplete({
+        source: function (request, response) {
 
-    $(document).ready(function(){
-        //$('cantidad').prop('disabled', true);
-        $( "#inpt-producto" ).autocomplete({
-            source: function (request, response) {
+            var datos = {
+                nombreProducto: $("#inpt-producto").val(),
+            };
+            var sendData = JSON.stringify(datos);
 
-                var datos = {nombreProducto: $("#inpt-producto").val()};
-                var sendData = JSON.stringify(datos);
-                $.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: "/productopre/buscar/",
-                    data: sendData,
-                    contentType: "application/json; charset=utf-8",
-                    async: false,
-                    cache: false,
-                    CrossDomain: true,
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/producto/buscar/",
+                data: sendData,
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                cache: false,
+                CrossDomain: true,
 
-                    success: function (result) {
-                      if (document.getElementById("presentacion").length!=0 ) {
-                        var pre = document.getElementById("presentacion");
-                        pre.options.length = 0;
-                        var valorRemove = document.getElementById("valor");
-                        valorRemove.options.length = 0;
-                      }
-                      var ListasProductos = result['productos'];
-                      var ListarPresentaciones = result['presentacion'];
-                      var ListarPrecios = result['precios'];
-                      response($.map(ListasProductos, function (item) {
-                          return {
-                              label: item.nombre,
-                              idproducto: item.nombre,
-                              precio: item.valor,
-                              codigo: item.codigo,
-                              Id: item.id,
-                              };
-                          })
-                        );
-                          //$('#presentacion');
-                          var sel = document.getElementById("presentacion");
-                          var sel2 = document.getElementById("valor");
-                          for (var i in ListarPresentaciones) {
-                              var option = document.createElement("option");
-                              option.value = ListarPresentaciones[i].id;
-                              option.text = ListarPresentaciones[i].nombre;
-                              sel.add(option);
-                              var option2 = document.createElement("option");
-                              option2.value = ListarPresentaciones[i].id;
-                              option2.text = ListarPresentaciones[i].valor;
-                              sel2.add(option2);
+                success: function (result) {
+                var ListasProductos = result['productos'];
+                response($.map(ListasProductos, function (item) {
+                    return {
+                        label: item.nombre,
+                        idproducto: item.nombre,
+                        codigo: item.codigo,
+                        Id: item.id
+                        };
+                    }));
+                }
+            });
+        },
+        minLength: 2,
+        select: function (event, ui) {
+            $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
+            $( "#precio" ).val( ui.item.precio);
+            $( "#codigo" ).val( ui.item.codigo);
 
-                      }
-
-                      var valor1= $("#valor option:selected").html();
-                      var valor2= $("#valor").val();
-
-                      $( "#codigo" ).val( valor2);
-                      $( "#precio" ).val( valor1);
+            $( "#cantidad" ).focus();
+            $( "#cantidad" ).focus();
+            var iDPro = ui.item.Id;
+            //agregar();
+        }
 
 
+    });
+});
 
-                      }
+window.onload = function() {
+    var cmbPresentacion = document.getElementById('cmbPresentacion');
+    var cmbPrecio = document.getElementById('cmbPrecio');
+    var producto = document.getElementById('inpt-producto');
 
+    cmbPresentacion.addEventListener('change', precioPresentacion);
+    cmbPrecio.addEventListener('change', precioPresentacion);
+    producto.addEventListener('change', precioPresentacion);
+}
 
-
-
-
-                  });
+var precioPresentacion = function() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/producto-pre-venta/buscar/",
+            data: {
+                'presentacion': document.getElementById('cmbPresentacion').value,
+                'producto': document.getElementById('inpt-producto').value,
+                'precioTipo': document.getElementById('cmbPrecio').value,
             },
-            minLength: 3,
-            select: function (event, ui) {
-                $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
-                $('#presentacion').removeAttr('disabled');
-                $('#cantidad').removeAttr('disabled');
-                $('#presentacion').focus();
+            async: false,
+            success: function(data) {
+                var precio = document.getElementById('valorPrecio');
+                if (data.precio == ''){
+                    precio.value = '';
+                } else {
+                    precio.value = data.precio;
+                }
+            },
+            error: function(jqxhr, status, exception) {
+                alert('Exception:', exception);
             }
 
-
         });
-  });
-
-
-  $('select[name="seleccionar"]').on('change', function() {
-  $('select[name="valor"]').val(this.value);
-});
-
-$(document).ready(function() {
-  $('#presentacion').change(function(event) {
-      var cambiarSelect = $('#presentacion').val();
-      var valor = $('#valor').val(cambiarSelect);
-      $('#valor').change();
-      var valorTexto= $("#valor option:selected").html();
-      var valorId= $("#valor").val();
-
-      $( "#codigo" ).val( valorId);
-      $( "#precio" ).val( valorTexto);
-  });
-});
-
-
-
+}
 
 
 </script>
@@ -358,76 +342,65 @@ Nuevo Pedido
                 <!--<form method="post" enctype="multipart/form-data">
                   {% csrf_token %}-->
 
+
                 <div class="col-lg-12" style="margin-top:2px;">
                   <div class="col-xs-4 col-sm-4 col-md-4">
                     <label for="id_nombre">Cliente:</label>
-                    <a data-target="#myModal" role="button" data-toggle="modal" style="color:green"><span class="fa fa-plus fa-2x"></span></a>
-                  </div>
-                </div>
-                <br>
-                <div class="col-lg-12" style="margin-top:2px;">
-                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <a data-target="#myModal" role="button" data-toggle="modal" style="color:green"><span class="fa fa-plus fa-1x"></span></a>
                     <input type="number" id="inpt-cliente" placeholder="Nr. Documento cliente..." name="cliente_buscado" class="form-control">
                   </div>
                   <div class="col-xs-4 col-sm-4 col-md-4">
+                      <label for="id_nombreCliente">Nombre Cliente:</label>
                         <input type="text" id="nombreCl" name="nombreCl" class="form-control" disabled="disabled">
                   </div>
-                </div>
-                <br>
-                <div class="col-lg-12" style="margin-top:2px;">
                   <div class="col-xs-4 col-sm-4 col-md-4">
                     <label for="id_nombre">Producto:</label>
-                  </div>
-                  <div class="col-xs-4 col-sm-4 col-md-4">
-                    <label for="">Codigo presentacion:</label>
-                  </div>
-                  <div class="col-xs-4 col-sm-4 col-md-4">
-                      <label for="">Cantidad:</label>
-                  </div>
-                </div>
-                <br>
-                <div class="col-lg-12" style="margin-top:2px;">
-                  <div class="col-xs-4 col-sm-4 col-md-4">
                     <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
                   </div>
-                  <div class="col-xs-4 col-sm-4 col-md-4">
-                    <select id="presentacion" class="form-control" name="seleccionar" disabled="disabled" >
-                    </select>
-                  </div>
-                  <div class="col-xs-4 col-sm-4 col-md-4">
-                    <input type="number" name="cantidad" id="cantidad" required="" class="form-control" disabled="disabled" >
-                  </div>
                 </div>
+                  <!--<select id="presentacion" class="form-control" name="seleccionar" disabled="disabled" >
+                    </select>-->
+                    <div class="col-lg-12" style="margin-top:2px;">
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+                        <label for="id_nombre">Código:</label>
+                        <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
+                      </div>
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+                        <label for="">Cantidad:</label></br>
+                        <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
+                      </div>
 
-                <br>
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+                        <label for="">Tipo presentacion</label></br>
+                        <select class="form-control" id="cmbPresentacion" name="cmbPresentacion" required="">
+                            {% for presentacion in presentaciones %}
+                                <option value="{{ presentacion.nombre }}">
+                                {{presentacion.nombre}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-12" style="margin-top:2px;">
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+                        <label for="">Tipo precio</label></br>
+                        <select class="form-control" id="cmbPrecio" name="cmbPrecio" required="">
+                            {% for precio in precios %}
+                                <option value="{{precio.id}}">
+                                {{precio.nombre}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+                        <label for="valorPrecio">Valor Precio:</label>
+                        <input type="number" name="valorPrecio" id="valorPrecio" required="" class="form-control" disabled>
+                      </div>
+                    </div>
 
-                <select style="display:none" id="valor" class="form-control" name="valor">
-                </select>
+                <!--<select style="display:none" id="valor" class="form-control" name="valor">
+                </select>-->
                 <br>
-                <div class="col-lg-12" style="margin-top:2px;">
-                  <div class="col-xs-6 col-sm-6 col-md-6">
-                    <label for="id_nombre">Código:</label>
-                  </div>
-                  <div class="col-xs-6 col-sm-6 col-md-6">
-                    <label for="id_nombre">Precio:</label>
-                  </div>
-                </div>
-                <br>
-                <div class="col-lg-12" style="margin-top:2px;">
-                  <div class="col-xs-4 col-sm-4 col-md-4">
-                    <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
-                  </div>
-                  <div class="col-xs-4 col-sm-4 col-md-4">
-                    <input type="number" name="precio" id="precio" required="" class="form-control" disabled="disabled">
-                  </div>
-                </div>
-                <br>
-                <br>
-                <br>
-                <div class="col-lg-12" style="margin-top:2px;">
-                  <div class="col-xs-6 col-sm-6 col-md-6">
-                  </div>
-                </div>
                 <div class="col-lg-12" style="margin-top:2px;">
                   <div class="col-xs-6 col-sm-6 col-md-6">
 
@@ -445,12 +418,14 @@ Nuevo Pedido
                             <table id="tabla" name="tablacontenido" class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <td>Nº</td>
-                                    <td>Cantidad</td>
-                                    <td>Cod. Producto</td>
-                                    <td>Nombre</td>
-                                    <td>Precio Unit.</td>
-                                    <td>Total</td>
+                                  <td>Nº</td>
+                                  <td>Cantidad</td>
+                                  <td>Cod. Producto</td>
+                                  <td>Nombre</td>
+                                  <td>Tipo Precio</td>
+                                  <td>Presentacion</td>
+                                  <td>Precio Unit.</td>
+                                  <td>Total</td>
                                 </tr>
                             </thead>
 
