@@ -67,7 +67,7 @@ def registrarProducto(request):
             oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id,valor=Datos['valor'],unidadprincipal=True)
             oProductopresentacions.save()
             oProductopresentacions = Productopresentacions.objects.get(producto=oProducto.id, presentacion=oPresentacion.id)
-            
+
             oPrecios = Precio.objects.filter(estado=True)
 
             for oPrecio in oPrecios:
@@ -78,7 +78,7 @@ def registrarProducto(request):
                     productopresentacions_id=oProductopresentacions.id
                 )
                 oProductoPresentacionsprecios.save()
-            
+
             return redirect('listar_producto')
         else:
             return render(request, 'producto/listar.html')
@@ -87,13 +87,13 @@ def registrarProducto(request):
         form = ProductoForm()
         oPrecios = Precio.objects.filter(estado=True)
         oPresentaciones = Presentacion.objects.filter(estado=True)
-    
+
     context = {
         'form': form,
         'precios':oPrecios,
         'presentaciones':oPresentaciones
     }
-    
+
     return render(request, 'producto/registrar.html', context)
 
 @csrf_exempt
@@ -120,7 +120,7 @@ def BuscarProducto(request):
                     jsonProducto["imagen"] = "/imagen/default.jpg"
                 else:
                     jsonProducto["imagen"] = oProducto.imagen.url
-                    
+
                 jsonProductos["productos"].append(jsonProducto)
 
             return HttpResponse(json.dumps(jsonProductos), content_type="application/json")
