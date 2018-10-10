@@ -126,6 +126,16 @@ Nueva Venta
         <div class="col-sm-12">
             <div class="white-box">
                 <h3 class="box-title">Nueva Venta</h3>
+
+                <label for="">Pedido</label></br>
+                <select class="form-control" id="cmbPresentacion" name="cmbPresentacion" required="">
+                    {% for pedido in pedidos %}
+                        <option value="{{ presentacion.nombre }}">
+                        {{pedido}}
+                        </option>
+                    {% endfor %}
+                </select>
+                <br>
                 <label for="id_nombre">Producto:</label>
                 <br>
                 <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">

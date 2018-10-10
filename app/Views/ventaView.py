@@ -488,10 +488,12 @@ def registrarVenta(request):
         
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
+    oPedidos = Pedido.objects.filter(estado=2)
 
     context = {
         'presentaciones': oPresentaciones,
-        'precios': oPrecios 
+        'precios': oPrecios,
+        'pedidos': oPedidos
     }
 
     return render(request, 'venta/nuevo.html', context)
