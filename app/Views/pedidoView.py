@@ -476,5 +476,18 @@ def FiltrarPedido(request):
 
     return render(request, 'pedido/listar.html', {"oPedidos": ventaPagina,"oProductos":oProductos,"page_range": page_range,"tags":tags,})
 
+@csrf_exempt
 def pedidoVenta(request):
-    pass
+    if request.method == 'POST':
+        dato = json.loads(request.body)
+        pk = dato['cmbPedido']
+        
+        pedido = Pedido.objects.get(pk = pk)
+        jsonPedidos = {}
+        jsonPedidos.pk = pedido.pk
+        jsonPedidos.fecha = pedido.fecha
+        jsonPedidos.estado = pedido.estado
+        jsonPedidos.empleado = pedido.empleado
+        jsonPedidos.cliente = pedido.cliente
+
+    return HttpResponse(json.dumps(jsonPedidos), content_type="application/json")

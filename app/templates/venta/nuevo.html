@@ -128,9 +128,12 @@ Nueva Venta
                 <h3 class="box-title">Nueva Venta</h3>
 
                 <label for="">Pedido</label></br>
-                <select class="form-control" id="cmbPresentacion" name="cmbPresentacion" required="">
+                <select class="form-control" id="cmbPedido" name="cmbPedido" required="">
+                        <option value="">
+                            --Elige un pedido--
+                        </option>
                     {% for pedido in pedidos %}
-                        <option value="{{ presentacion.nombre }}">
+                        <option value="{{ pedido.pk }}">
                         {{pedido}}
                         </option>
                     {% endfor %}

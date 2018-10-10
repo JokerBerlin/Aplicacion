@@ -124,8 +124,8 @@ urlpatterns = [
     url(r'^pedido/listar/$', ListarPedido),
     url(r'^pedido/detalle/$', DetallePedidoMovil),
     url(r'^pedido/editar/$', DetallePedidoMovil),
-
     url(r'^pago/nuevo/$', IngresarPrecios),
+    url(r'^pedido/venta/$', pedidoVenta),
 
 
     url(r'^producto/buscar/$', BuscarProducto),
