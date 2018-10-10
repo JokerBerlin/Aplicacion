@@ -170,6 +170,8 @@ $(document).ready(function(){
                 success: function (result) {
                 //     var id_venta = result["id_venta"];
                      alert('Lote Registrado');
+                     document.location.href='/Producto/listar/';
+
                      //location.reload(true);
                      //document.location.href='/Pedido/listar/';
                 }
