@@ -24,6 +24,18 @@ def nuevoLote(request):
     return render(request, 'lote/nuevo.html', context)
 
 @csrf_exempt
+def registrarProveedor(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        oProveedor = Proveedor()
+        oProveedor.nombre = Datos['nombre']
+        oProveedor.direccion = Datos['direccion']
+        oProveedor.documento = Datos['documento']
+        oProveedor.save()
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
+
+
+@csrf_exempt
 def registrarLote(request):
     if request.method == 'POST':
             Datos = json.loads(request.body)

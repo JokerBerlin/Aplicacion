@@ -270,6 +270,8 @@ def FiltrarVenta(request):
 
     if "cliente_busca" in request.COOKIES:
         dni = request.COOKIES["cliente_busca"]
+        if dni.isdigit() == False :
+            dni = Cliente.objects.get(nombre=dni).numerodocumento
         print(request.COOKIES["cliente_busca"])
     else:
         dni = ''
@@ -308,8 +310,6 @@ def FiltrarVenta(request):
         objetotag={}
         objetotag['dni']=dni
         tags.append(objetotag)
-        if dni.isdigit() == False :
-            dni = Cliente.objects.get(nombre=dni).numerodocumento
 
         if producto != '':
             cliente = Cliente.objects.get(numerodocumento=dni)
@@ -485,7 +485,7 @@ def registrarVenta(request):
         oVenta.estado = True
         oVenta.pedido_id = request.POST['pedido']
         oVenta.cliente_id = oPedido.cliente_id
-        
+
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
     oPedidos = Pedido.objects.filter(estado=2)

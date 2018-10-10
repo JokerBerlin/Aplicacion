@@ -140,6 +140,7 @@ urlpatterns = [
     url(r'^lote/insertar/$', registrarLote),
 
     url(r'^proveedor/buscar/$', BuscarProveedor),
+    url(r'^Proveedor/Registrar/$', registrarProveedor),
 
     url(r'^almacen/buscar/$', BuscarAlmacen),
 

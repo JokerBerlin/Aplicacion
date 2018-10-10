@@ -328,6 +328,10 @@ def FiltrarPedido(request):
 
     if "cliente_busca" in request.COOKIES:
         dni = request.COOKIES["cliente_busca"]
+        
+        if dni.isdigit() == False :
+            dni = Cliente.objects.get(nombre=dni).numerodocumento
+        print(dni.isdigit())
         print(request.COOKIES["cliente_busca"])
     else:
         dni = ''
@@ -366,8 +370,7 @@ def FiltrarPedido(request):
         objetotag={}
         objetotag['dni']=dni
         tags.append(objetotag)
-        if dni.isdigit() == False :
-            dni = Cliente.objects.get(nombre=dni).numerodocumento
+
 
         if producto != '':
             cliente = Cliente.objects.get(numerodocumento=dni)
