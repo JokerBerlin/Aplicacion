@@ -108,9 +108,6 @@ def registrarPedido(request):
     return render(request, 'pedido/nuevo.html', context)
 
 
-
-
-
 def ListarPedidos(request):
     oProductos=[]
     if request.method == 'POST':
@@ -481,3 +478,6 @@ def FiltrarPedido(request):
     page_range = paginator.page_range[start_index:end_index]
 
     return render(request, 'pedido/listar.html', {"oPedidos": ventaPagina,"oProductos":oProductos,"page_range": page_range,"tags":tags,})
+
+def pedidoVenta(request):
+    pass
