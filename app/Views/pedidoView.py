@@ -105,7 +105,7 @@ def registrarPedido(request):
         'precios': oPrecios
     }
 
-    return render(request, 'Pedido/nuevo.html', context)
+    return render(request, 'pedido/nuevo.html', context)
 
 
 

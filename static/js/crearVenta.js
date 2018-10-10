@@ -168,7 +168,7 @@ $('#tabla tbody tr').each(function(){
 }
 
 function GenerarVenta(){
-    var num=1;
+    var num = 1;
     productos = [];
     contador = 0;
 
@@ -193,7 +193,7 @@ function GenerarVenta(){
         productos.push([cantidad,codigo,precioVenta]);
     });
 
-    var cliente = '';
+    var cliente = '00000000';
     if (contador == 1) {
         var datos = {
             productos: productos,
@@ -221,7 +221,7 @@ function GenerarVenta(){
             //     var id_venta = result["id_venta"];
                  alert('Nueva venta registrada');
                  //location.reload(true);
-                 document.location.href='/Venta/listar/';
+                 document.location.href='/venta/listar/';
             }
         });
     }else{

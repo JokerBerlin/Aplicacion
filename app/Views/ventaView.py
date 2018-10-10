@@ -500,11 +500,17 @@ def registrarVenta(request):
 def nuevaVenta(request):
     if request.method == 'POST':
         datos = json.loads(request.body)
-        # print datos
-        # productos = request.POST.get('productos', False)
-        # cliente = request.POST.get('productos', False)
+        print(datos)
 
-        # print(productos)
-        # print(cliente)
+        dni = datos['cliente']
+        print(dni)
 
-    return datos
+        oPedidoProductos = datos['productos']
+        print(oPedidoProductos)
+
+        for oPedidoProducto in oPedidoProductos:
+            print(oPedidoProducto)
+
+
+
+    return HttpResponse(json.dumps({'exito': 1}), content_type='application/json')
