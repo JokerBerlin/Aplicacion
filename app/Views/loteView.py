@@ -32,31 +32,35 @@ def registrarLote(request):
         #Dato = request.POST
             nombreProveedor = Datos['oProveedor']
             oProveedor = Proveedor.objects.get(nombre=nombreProveedor)
+            print(oProveedor.nombre)
             nombreRecibo= Datos['oRecibo']
             oRecibo= Recibo.objects.get(nombre=nombreRecibo)
-
+            print(oRecibo.nombre)
             oLote= Lote(proveedor_id=oProveedor.id, recibo_id= oRecibo.id)
             oLote.save()
-
-            presentacion= Datos['oPresentacion']
-            oPresentacion = Presentacion.objects.get(id = presentacion )
 
             oProductoAlmacens= Datos['oProductoAlmacen']
             for oProductoAlmacen in oProductoAlmacens:
                 print(oProductoAlmacen)
-                cantidad= oProductoAlmacen[0]
+                cantidad= float(oProductoAlmacen[0])
 
                 nombreAlmacen= oProductoAlmacen[1]
                 oAlmacen= Almacen.objects.get(nombre=nombreAlmacen)
-
                 nombreProducto=oProductoAlmacen[2]
                 oProducto= Producto.objects.get(nombre= nombreProducto)
+                oAlmacenese = Producto_almacens.objects.filter(producto_id=oProducto.id).exists()
+                print(oAlmacenese)
+                if oAlmacenese == True:
+                    oUltimoP=Producto_almacens.objects.filter(producto_id=oProducto).latest('id')
+                    cantidadIni = float(oUltimoP.cantidad)
 
-                oProducto_alma = Producto_almacens(cantidad=cantidad, cantidadinicial= cantidad, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
-                oProducto_alma.save()
-
-                oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id)
-                oProductopresentacions.save()
+                    cantidadNueva = cantidadIni + cantidad
+                    oProducto_alma = Producto_almacens(cantidad=cantidadNueva, cantidadinicial= cantidadIni, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
+                    oProducto_alma.save()
+                else:
+                    #oUltimoP=Producto_almacens.objects.filter(producto_id=oProducto).latest('id')
+                    oProducto_alma = Producto_almacens(cantidad=cantidad, cantidadinicial= 0, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
+                    oProducto_alma.save()
 
 
             return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
