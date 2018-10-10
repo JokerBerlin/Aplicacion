@@ -213,7 +213,7 @@ Nuevo Lote
 
             <div class="col-lg-12" style="margin-top:2px;">
               <div class="col-xs-6 col-sm-6 col-md-6">
-                <label for="id_numerodocumento">Numerodocumento:</label><br>
+                <label for="numdocumento">Numero documento:</label><br>
               </div>
             </div>
             <div class="col-lg-12" style="margin-top:2px;">
@@ -227,6 +227,7 @@ Nuevo Lote
                     var nombre = document.getElementById("id_nombre").value;
                     var direccion = document.getElementById("id_direccion").value;
                     var documento = document.getElementById("id_numerodocumento").value;
+                    console.log(documento);
                     var datos = {nombre: nombre,direccion:direccion,documento:documento};
                     var sendData = JSON.stringify(datos);
                     $.ajax({

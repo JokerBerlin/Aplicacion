@@ -30,7 +30,7 @@ def registrarProveedor(request):
         oProveedor = Proveedor()
         oProveedor.nombre = Datos['nombre']
         oProveedor.direccion = Datos['direccion']
-        oProveedor.numerodocumento = Datos['documento']
+        oProveedor.documento = Datos['documento']
         oProveedor.save()
         return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
