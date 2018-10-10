@@ -492,12 +492,8 @@ def registrarVenta(request):
 
     context = {
         'presentaciones': oPresentaciones,
-<<<<<<< HEAD
-        'precios': oPrecios
-=======
         'precios': oPrecios,
         'pedidos': oPedidos
->>>>>>> 6141070cf90e85b5c4ef2a28f6dc7b96eca3e863
     }
 
     return render(request, 'venta/nuevo.html', context)

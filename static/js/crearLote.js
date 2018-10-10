@@ -1,6 +1,10 @@
 $(document).ready(function(){
         $('#bt_add').click(function(){
             agregar();
+            $('#inpt-producto').focus();
+        });
+        $('#bt_add').keypress(function(){
+            $('#inpt-producto').focus();
         });
         $('#bt_del').click(function(){
             eliminar(id_fila_selected);
