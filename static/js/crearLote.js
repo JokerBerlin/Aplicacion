@@ -27,7 +27,9 @@ $(document).ready(function(){
     var id_fila_selected=[];
     function agregar(){
         cont++;
-        Almacen = $('#inpt-almacen').val();
+        var combo = document.getElementById("cmbAlmacen");
+        Almacen = combo.options[combo.selectedIndex].text;
+        //Almacen = document.getElementById("cmbAlmacen").value;
         Producto = $('#inpt-producto').val();
         cantidad = $('#cantidad').val();
 
@@ -42,10 +44,11 @@ $(document).ready(function(){
         if (Producto==''){
             error = 3;
         }
-    
+
         if (error=="") {
+            valor = cont - 1;
             var fila=
-            '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td>'+cantidad+'</td><td>'+Almacen+'</td><td>'+Producto+'</td></tr>';
+            '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td><td>'+Almacen+'</td><td>'+Producto+'</td></tr>';
             $('#tabla').append(fila);
 
             reset_values();
@@ -126,9 +129,11 @@ $(document).ready(function(){
         $("#tabla tbody tr").each(function (index) {
             $(this).children("td").each(function (index2) {
                 lotes = [];
+                cont= index -1;
+                console.log(index);
                 switch (index2) {
                     case 1:
-                        cantidad = $(this).text();
+                        cantidad = $("#cantidad"+index ).val();
                         break;
                     case 2:
                         Almacen = $(this).text();
@@ -142,11 +147,15 @@ $(document).ready(function(){
             contador = 1;
             oProductoAlmacen.push([cantidad,Almacen, Producto]);
         });
+        console.log(oProductoAlmacen);
         var oProveedor = document.getElementById("inpt-proveedor").value;
-        var oRecibo = document.getElementById("inpt-recibo").value;
-        var oPresentacion = document.getElementById("presentacion").value;
+        console.log(oProveedor);
+        var comboRecibo = document.getElementById("cmbRecibo");
+        var oRecibo = comboRecibo.options[comboRecibo.selectedIndex].text;
+        console.log(oRecibo);
+        //var oPresentacion = document.getElementById("presentacion").value;
         if (contador == 1) {
-            var datos = {oProductoAlmacen: oProductoAlmacen, oProveedor: oProveedor, oRecibo: oRecibo, oPresentacion: oPresentacion};
+            var datos = {oProductoAlmacen: oProductoAlmacen, oProveedor: oProveedor, oRecibo: oRecibo};
             var sendData = JSON.stringify(datos);
             $.ajax({
                 type: "POST",

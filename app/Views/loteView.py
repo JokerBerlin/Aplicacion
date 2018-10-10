@@ -14,6 +14,15 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.productoForm import *
 
+def nuevoLote(request):
+    oRecibos = Recibo.objects.filter(estado=True)
+    oAlmacens = Almacen.objects.filter(estado=True)
+    context ={
+        'recibos':oRecibos,
+        'almacens': oAlmacens,
+    }
+    return render(request, 'lote/nuevo.html', context)
+
 @csrf_exempt
 def registrarLote(request):
     if request.method == 'POST':
@@ -48,7 +57,7 @@ def registrarLote(request):
 
                 oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id)
                 oProductopresentacions.save()
-              
+
 
             return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
@@ -56,5 +65,10 @@ def registrarLote(request):
 
         #return render(request, '/pedido/listar.html')
     else:
-
-        return render(request, 'lote/nuevo.html', {})
+        oRecibos = Recibo.objects.filter(estado=True)
+        oAlmacens = Almacen.objects.filter(estado=True)
+        context ={
+            'recibos':oRecibos,
+            'almacens': oAlmacens,
+        }
+        return render(request, 'lote/nuevo.html', context)

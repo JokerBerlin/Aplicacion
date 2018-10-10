@@ -22,12 +22,12 @@ $(document).ready(function(){
                     CrossDomain: true,
 
                     success: function (result) {
-                      if (document.getElementById("presentacion").length!=0 ) {
-                        var pre = document.getElementById("presentacion");
-                        pre.options.length = 0;
-                        var valorRemove = document.getElementById("valor");
-                        valorRemove.options.length = 0;
-                      }
+                      // if (document.getElementById("presentacion").length!=0 ) {
+                      //   var pre = document.getElementById("presentacion");
+                      //   pre.options.length = 0;
+                      //   var valorRemove = document.getElementById("valor");
+                      //   valorRemove.options.length = 0;
+                      // }
 
                       var ListasProductos = result['productos'];
                       var ListarPresentaciones = result['presentacion'];
@@ -43,28 +43,28 @@ $(document).ready(function(){
                           })
                         );
 
-                          var sel = document.getElementById("presentacion");
-                          var sel2 = document.getElementById("valor");
-                          for (var i in ListarPresentaciones) {
-                              var option = document.createElement("option");
-                              option.value = ListarPresentaciones[i].id;
-                              option.text = ListarPresentaciones[i].nombre;
-                              sel.add(option);
-                              var option2 = document.createElement("option");
-                              option2.value = ListarPresentaciones[i].id;
-                              option2.text = ListarPresentaciones[i].valor;
-                              sel2.add(option2);
+                          // var sel = document.getElementById("presentacion");
+                          // var sel2 = document.getElementById("valor");
+                          // for (var i in ListarPresentaciones) {
+                          //     var option = document.createElement("option");
+                          //     option.value = ListarPresentaciones[i].id;
+                          //     option.text = ListarPresentaciones[i].nombre;
+                          //     sel.add(option);
+                          //     var option2 = document.createElement("option");
+                          //     option2.value = ListarPresentaciones[i].id;
+                          //     option2.text = ListarPresentaciones[i].valor;
+                          //     sel2.add(option2);
 
                       }
-                      var valor1= $("#valor option:selected").html();
-                      var valor2= $("#valor").val();
+                      // var valor1= $("#valor option:selected").html();
+                      // var valor2= $("#valor").val();
+                      //
+                      // $( "#codigo" ).val( valor2);
+                      // $( "#precio" ).val( valor1);
 
-                      $( "#codigo" ).val( valor2);
-                      $( "#precio" ).val( valor1);
 
 
 
-                      }
 
 
 
@@ -77,31 +77,31 @@ $(document).ready(function(){
                 $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
                 //$( "#precio" ).val( ui.item.precio);
                 //$( "#codigo" ).val( ui.item.codigo);
-                $('#presentacion').focus();
+                $('#cantidad').focus();
                 // de tu elemento
             }
 
 
         });
- 
 
 
-  $('select[name="seleccionar"]').on('change', function() {
-  $('select[name="valor"]').val(this.value);
-});
 
-$(document).ready(function() {
-  $('#presentacion').change(function(event) {
-      var cambiarSelect = $('#presentacion').val();
-      var valor = $('#valor').val(cambiarSelect);
-      $('#valor').change();
-      var valorTexto= $("#valor option:selected").html();
-      var valorId= $("#valor").val();
+//   $('select[name="seleccionar"]').on('change', function() {
+//   $('select[name="valor"]').val(this.value);
 
-      $( "#codigo" ).val( valorId);
-      $( "#precio" ).val( valorTexto);
-  });
-});
+
+// $(document).ready(function() {
+//   $('#presentacion').change(function(event) {
+//       var cambiarSelect = $('#presentacion').val();
+//       var valor = $('#valor').val(cambiarSelect);
+//       $('#valor').change();
+//       var valorTexto= $("#valor option:selected").html();
+//       var valorId= $("#valor").val();
+//
+//       $( "#codigo" ).val( valorId);
+//       $( "#precio" ).val( valorTexto);
+//   });
+// });
 
 
         $( "#inpt-proveedor" ).autocomplete({
@@ -136,76 +136,7 @@ $(document).ready(function() {
         select: function (event, ui) {
 
 
-          $('#inpt-recibo').focus();
-      }
-
-  });
-        $( "#inpt-recibo" ).autocomplete({
-        source: function (request, response) {
-
-          var datos = {nombreRecibo: $("#inpt-recibo").val()};
-          var sendData = JSON.stringify(datos);
-          $.ajax({
-              type: "POST",
-              dataType: "json",
-              url: "/recibo/buscar/",
-              data: sendData,
-              contentType: "application/json; charset=utf-8",
-              async: false,
-              cache: false,
-              CrossDomain: true,
-
-              success: function (result) {
-              var ListasRecibos = result['recibos'];
-              response($.map(ListasRecibos, function (item) {
-                 var valorRecibo = document.getElementById('inpt-recibo').value;
-                if( isNaN(valorRecibo) ){
-                    return {label: item.nombre};
-                }
-                    }));
-                }
-            });
-        },
-        minLength: 1,
-        select: function (event, ui) {
-
-
-          $('#inpt-almacen').focus();
-      }
-
-  });
-
-        $( "#inpt-almacen" ).autocomplete({
-        source: function (request, response) {
-
-          var datos = {nombreAlmacen: $("#inpt-almacen").val()};
-          var sendData = JSON.stringify(datos);
-          $.ajax({
-              type: "POST",
-              dataType: "json",
-              url: "/almacen/buscar/",
-              data: sendData,
-              contentType: "application/json; charset=utf-8",
-              async: false,
-              cache: false,
-              CrossDomain: true,
-
-              success: function (result) {
-              var ListasAlmacen = result['almacenes'];
-              response($.map(ListasAlmacen, function (item) {
-                 var valorAlmacen = document.getElementById('inpt-almacen').value;
-                if( isNaN(valorAlmacen) ){
-                    return {label: item.nombre};
-                }
-                    }));
-                }
-            });
-        },
-        minLength: 1,
-        select: function (event, ui) {
-            
-
-          $('#inpt-producto').focus();
+          //$('#inpt-recibo').focus();
       }
 
   });
@@ -260,26 +191,35 @@ Nuevo Lote
 
                 <label for="id_nombre">Proveedor:</label>
                 <br>
-                <input type="text" id="inpt-proveedor" placeholder="documente o Nombre Proveedor..." name="inpt-proveedor" class="form-control">
+                <input type="text" id="inpt-proveedor" placeholder="Documento o Nombre Proveedor..." name="inpt-proveedor" class="form-control">
                 <br>
-                <label for="id_nombre">Recibo:</label>
+                <label for="id_nombre">Tipo de Recibo:</label>
                 <br>
-                <input type="text" id="inpt-recibo" placeholder="Nombre Recibo..." name="inpt-recibo" class="form-control">
+                <select class="form-control" id="cmbRecibo" name="cmbRecibo">
+                  {% for recibo in recibos %}
+                      <option value="{{ recibo.id }}">
+                      {{recibo.nombre}}
+                      </option>
+                  {% endfor %}
+                </select>
                 <br>
                 <label for="id_nombre">Almacen:</label>
                 <br>
-                <input type="text" id="inpt-almacen" placeholder="Nombre Almacen..." name="inpt-almacen" class="form-control">
+                <select class="form-control" id="cmbAlmacen" name="cmbAlmacen">
+                  {% for almacen in almacens %}
+                      <option value="{{ almacen.id }}">
+                      {{almacen.nombre}}
+                      </option>
+                  {% endfor %}
+                </select>
                 <br>
                 <label for="id_nombre">Producto:</label>
                 <br>
                 <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
                 <br>
-                <label for="">Presentacion:</label>
-                <select id="presentacion" class="form-control" name="seleccionar" >
                 </select>
                 <select style="display:none" id="valor" class="form-control" name="valor">
                 </select>
-                <br>
                 <br>
                 <label for="id_nombre">Cantidad:</label>
                 <br>
