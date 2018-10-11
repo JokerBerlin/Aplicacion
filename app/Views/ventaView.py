@@ -469,50 +469,36 @@ def eliminar_identificador_venta(request):
     response = {}
     return JsonResponse(response)
 
-def registrarVenta(request):
+def listarPedidosVenta(request):
+    oProductos=[]
     if request.method == 'POST':
-        oPedido = Pedido.objects.get(pk=request.POST['pedido'])
-        oPedidoproductospresentacion = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
-        monto = 0.0
-        for item in oPedidoproductospresentacion:
-            producto = item.productopresentacions.producto
-            producto.cantidad -= item.cantidad
-            monto += item.valor
+        return render(request, 'venta/pedido-listar.html')
+    else:
+        oPedidos = Pedido.objects.filter(estado = 2).order_by('-id')
+        for oPedido in oPedidos:
+            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oPedido.id)
+            print(pedidoproductospresentacions)
+            for ope in pedidoproductospresentacions:
+                oNuevo={}
+                oNuevo['id']=oPedido.id
+                oNuevo['producto']=ope.productopresentacions.producto.nombre
+                oProductos.append(oNuevo)
 
-        oVenta = Venta()
-        oVenta = monto
-        oVenta.nrecibo = request.POST['nrecibo']
-        oVenta.estado = True
-        oVenta.pedido_id = request.POST['pedido']
-        oVenta.cliente_id = oPedido.cliente_id
+        paginator = Paginator(oPedidos,2)
 
-    oPresentaciones = Presentacion.objects.filter(estado=True)
-    oPrecios = Precio.objects.filter(estado=True)
-    oPedidos = Pedido.objects.filter(estado=2)
+        page = request.GET.get('page')
+        try:
+            pedidoPagina = paginator.page(page)
+        except PageNotAnInteger:
+            pedidoPagina = paginator.page(1)
+        except EmptyPage:
+            pedidoPagina = paginator.page(paginator.num_pages)
 
-    context = {
-        'presentaciones': oPresentaciones,
-        'precios': oPrecios,
-        'pedidos': oPedidos
-    }
+        index = pedidoPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
 
-    return render(request, 'venta/nuevo.html', context)
-
-@csrf_exempt
-def nuevaVenta(request):
-    if request.method == 'POST':
-        datos = json.loads(request.body)
-        print(datos)
-
-        dni = datos['cliente']
-        print(dni)
-
-        oPedidoProductos = datos['productos']
-        print(oPedidoProductos)
-
-        for oPedidoProducto in oPedidoProductos:
-            print(oPedidoProducto)
-
-
-
-    return HttpResponse(json.dumps({'exito': 1}), content_type='application/json')
+        return render(request, 'venta/pedido-listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
+        
