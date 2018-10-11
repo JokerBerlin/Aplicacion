@@ -63,7 +63,6 @@ def registrarProducto(request):
             form.save()
             oProducto = form
             oPresentacion = Presentacion.objects.get(id = int(Datos['cmbPresentacionPrincipal']))
-            #Productopresentacions.add(oPresentacion)
             oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id,valor=Datos['valor'],unidadprincipal=True)
             oProductopresentacions.save()
             oProductopresentacions = Productopresentacions.objects.get(producto=oProducto.id, presentacion=oPresentacion.id)

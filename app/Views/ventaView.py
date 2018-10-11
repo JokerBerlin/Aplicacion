@@ -518,6 +518,8 @@ def ventaNuevo(request):
 
 @csrf_exempt
 #Caso en el que se crea una venta sin pasar antes por pedidos y almacen
+#falta hacer el descuento a almacen
+#falta poner nrecibo a venta
 def insertarVenta(request):
     if request.method == 'POST':
         datos = json.loads(request.body)
