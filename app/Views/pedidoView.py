@@ -308,11 +308,43 @@ def editarPedido(request,pedido_id):
         print(cliente)
         empleado = oPedido.empleado.nombre
         print(empleado)
+        fecha = oPedido.fecha
         oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
         print(oPedidoproductospresentacions)
+        cantidadPedido = []
+        cont = 0
+        for oPedido in oPedidoproductospresentacions:
+            oNuevo = {}
+            oNuevo['id']=oPedido.id
+            oNuevo['cantidad']=float(oPedido.cantidad)
+            oNuevo['contador']=cont
+            oNuevo['valor']=float(oPedido.valor)
+            oNuevo['total']=float(oPedido.cantidad)*float(oPedido.valor)
+            cantidadPedido.append(oNuevo)
+            cont = cont + 1
         #form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
         #form2= ProductopresentacionsForm(instance=oProductopresentacions)
-        return render(request, 'Pedido/editar.html', {'cliente': cliente, 'empleado': empleado, 'pedidoproductospresentacions':oPedidoproductospresentacions})
+        return render(request, 'Pedido/editar.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido})
+
+@csrf_exempt
+def modificarPedido(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        print(Datos)
+        dato = Datos['productos']
+        idPedido = Datos['pedido']
+        print(idPedido)
+        for oPedidoProducto in dato:
+
+            id=int(oPedidoProducto[0])
+            oPedidoproductospresentacions = Pedidoproductospresentacions.objects.get(id=id)
+            #cantidad = float(oPedidoProducto[1])
+            oPedidoproductospresentacions.cantidad = oPedidoProducto[1]
+            oPedidoproductospresentacions.save()
+        oPedido = Pedido.objects.get(id=idPedido)
+        oPedido.estado = 2
+        oPedido.save()
+    return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
 
 def eliminar_identificador_pedido(request):
