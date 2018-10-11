@@ -2,9 +2,9 @@
 {% block imports %}
 <script type="text/javascript" src="/static/js/crearPedido.js"></script>
 <link href="/static/css/styleAutocomplete.css" rel="stylesheet">
-<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 
 <script type="text/javascript">
@@ -361,15 +361,18 @@ Nuevo Pedido
                     </select>-->
                     <div class="col-lg-12" style="margin-top:2px;">
                       <div class="col-xs-4 col-sm-4 col-md-4">
+                        <br>
                         <label for="id_nombre">Código:</label>
                         <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
                       </div>
                       <div class="col-xs-4 col-sm-4 col-md-4">
+                        <br>
                         <label for="">Cantidad:</label></br>
                         <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
                       </div>
 
                       <div class="col-xs-4 col-sm-4 col-md-4">
+                        <br>
                         <label for="">Tipo presentacion</label></br>
                         <select class="form-control" id="cmbPresentacion" name="cmbPresentacion" required="">
                             {% for presentacion in presentaciones %}
@@ -382,6 +385,7 @@ Nuevo Pedido
                     </div>
                     <div class="col-lg-12" style="margin-top:2px;">
                       <div class="col-xs-4 col-sm-4 col-md-4">
+                        <br>
                         <label for="">Tipo precio</label></br>
                         <select class="form-control" id="cmbPrecio" name="cmbPrecio" required="">
                             {% for precio in precios %}
@@ -391,6 +395,7 @@ Nuevo Pedido
                             {% endfor %}
                         </select>
                       </div>
+                      <br>
                       <div class="col-xs-4 col-sm-4 col-md-4">
                         <label for="valorPrecio">Valor Precio:</label>
                         <input type="number" name="valorPrecio" id="valorPrecio" required="" class="form-control" disabled>
@@ -402,12 +407,15 @@ Nuevo Pedido
                 <br>
                 <div class="col-lg-12" style="margin-top:2px;">
                   <div class="col-xs-6 col-sm-6 col-md-6">
-
+                    <br>
                     <button id="bt_add" class="btn btn-success">Agregar</button>
                     <button id="bt_del" class="btn btn-warning">Eliminar</button>
                     <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
+                    <br>
+                    <br>
                   </div>
                 </div>
+
                 <div class="col-lg-12" style="margin-top:2px;">
                   <div class="col-xs-12 col-sm-12 col-md-12">
 

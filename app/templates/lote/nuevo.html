@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block imports %}
 <script type="text/javascript" src="/static/js/crearLote.js"></script>
+<link href="/static/css/styleAutocomplete.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
 //filtro de clientes por dni o numero documento ajax
 
@@ -285,48 +289,57 @@ Nuevo Lote
                 <!--<form method="post" enctype="multipart/form-data">
                   {% csrf_token %}-->
 
+                  <div class="col-lg-12" style="margin-top:2px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                      <label for="id_nombre">Proveedor:</label>
+                      <a data-target="#myModal" role="button" data-toggle="modal" style="color:green"><span class="fa fa-plus fa-1x"></span></a>
+                      <input type="text" id="inpt-proveedor" placeholder="Documento o Nombre Proveedor..." name="inpt-proveedor" class="form-control">
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                      <label for="id_nombre">Tipo de Recibo:</label>
+                      <select class="form-control" id="cmbRecibo" name="cmbRecibo">
+                        {% for recibo in recibos %}
+                            <option value="{{ recibo.id }}">
+                            {{recibo.nombre}}
+                            </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                      <label for="id_nombre">Almacen:</label>
+                      <select class="form-control" id="cmbAlmacen" name="cmbAlmacen">
+                        {% for almacen in almacens %}
+                            <option value="{{ almacen.id }}">
+                            {{almacen.nombre}}
+                            </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-12" style="margin-top:2px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                      <br>
+                      <label for="id_nombre">Producto:</label>
+                      <a role="button" data-toggle="modal" style="color:green" href="/Producto/nuevo/"><span class="fa fa-plus fa-1x"></span></a>
+                      <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45" placeholder="Nombre del producto ...">
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                      <br>
+                      <label for="id_nombre">Cantidad:</label>
+                      <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
+                    </div>
+                  </div>
 
-                <label for="id_nombre">Proveedor:</label>
-                <a data-target="#myModal" role="button" data-toggle="modal" style="color:green"><span class="fa fa-plus fa-1x"></span></a>
-                <br>
-                <input type="text" id="inpt-proveedor" placeholder="Documento o Nombre Proveedor..." name="inpt-proveedor" class="form-control">
-                <br>
-                <label for="id_nombre">Tipo de Recibo:</label>
-                <br>
-                <select class="form-control" id="cmbRecibo" name="cmbRecibo">
-                  {% for recibo in recibos %}
-                      <option value="{{ recibo.id }}">
-                      {{recibo.nombre}}
-                      </option>
-                  {% endfor %}
-                </select>
-                <br>
-                <label for="id_nombre">Almacen:</label>
-                <br>
-                <select class="form-control" id="cmbAlmacen" name="cmbAlmacen">
-                  {% for almacen in almacens %}
-                      <option value="{{ almacen.id }}">
-                      {{almacen.nombre}}
-                      </option>
-                  {% endfor %}
-                </select>
-                <br>
-                <label for="id_nombre">Producto:</label>
-                <br>
-                <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
-                <br>
-                </select>
-                <select style="display:none" id="valor" class="form-control" name="valor">
-                </select>
-                <br>
-                <label for="id_nombre">Cantidad:</label>
-                <br>
-
-                <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
-                <br>
-                <button id="bt_add" class="btn btn-success">Agregar</button>
-                <button id="bt_del" class="btn btn-warning">Eliminar</button>
-                <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
+                  <div class="col-lg-12" style="margin-top:2px;">
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                      <br>
+                      <button id="bt_add" class="btn btn-success">Agregar</button>
+                      <button id="bt_del" class="btn btn-warning">Eliminar</button>
+                      <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
+                      <br>
+                      <br>
+                    </div>
+                  </div>
 
                     <div class="row">
                         <div class="form-group">
