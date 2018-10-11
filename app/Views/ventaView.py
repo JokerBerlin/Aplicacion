@@ -515,3 +515,48 @@ def ventaNuevo(request):
     }	
     
     return render(request, 'venta/nuevo.html', context)
+
+@csrf_exempt
+#Caso en el que se crea una venta sin pasar antes por pedidos y almacen
+def insertarVenta(request):
+    if request.method == 'POST':
+        datos = json.loads(request.body)
+
+        dni_cliente = datos['cliente']
+
+        #Se genera el pedido con un estado 3
+        #Se necesita hacer el descuento en almacen
+        oCliente = Cliente.objects.get(numerodocumento=dni_cliente)
+        empleado = 1
+        oPedido = Pedido(estado=3, empleado_id=empleado, cliente=oCliente)
+        oPedido.save()
+        oVenta = Venta(pedido=oPedido, cliente=oCliente)
+        monto_venta = 0.00
+
+        productos = datos['productos']
+        print(productos)
+        for producto in productos:
+            monto_venta += round(float(producto[0]) * float(producto[4]), 2)
+            oProducto = Producto.objects.get(codigo=producto[1])
+            print(oProducto.nombre)
+            oPresentacion = Presentacion.objects.get(nombre=producto[3])
+            print(oPresentacion.nombre)
+            oProductoPresentacions = Productopresentacions.objects.get(producto=oProducto, presentacion=oPresentacion)
+            oPedidoproductospresentacions = Pedidoproductospresentacions(
+                valor = producto[4],
+                cantidad = producto[0],
+                pedido = oPedido,
+                productopresentacions = oProductoPresentacions
+            )
+            oPedidoproductospresentacions.save()
+        
+        oVenta.monto = monto_venta
+        oVenta.save()
+
+        return HttpResponse(json.dumps({'exito': 1, "idPedido": oPedido.id}), content_type="application/json")
+
+    else:
+        return render(request, 'venta/nuevo')
+
+
+    return datos
