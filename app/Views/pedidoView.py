@@ -285,28 +285,34 @@ def ListarPedido(request):
             return HttpResponse(json.dumps(jsonPedidos), content_type="application/json")
 
 def editarPedido(request,pedido_id):
-        oPedidoproductospresentacions= Pedidoproductospresentacions.objects.get(pedido=pedido_id)
-        oProductopresentacions= Productopresentacions.objects.get(producto=oPedidoproductospresentacions.productopresentacions.producto.id)
-        if request.method == 'POST':
-                form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
-                form2=Productopresentacions()
-                if form.is_valid():
-                    edit_ped=form.save(commit=False)
-                    edit_pre=form2.save(commit=False)
-                    form.save_m2m()
-                    form2.save_m2m()
-                    edit_ped.status=True
-                    edit_pre.status=True
-                    edit_ped.save()
-                    edit_pre.save()
+    #oProductopresentacions= Productopresentacions.objects.filter(producto_in=oPedidoproductospresentacions.productopresentacions.producto.id)
+    if request.method == 'POST':
+        # form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
+        # form2=Productopresentacions()
+        # if form.is_valid():
+        #     edit_ped=form.save(commit=False)
+        #     edit_pre=form2.save(commit=False)
+        #     form.save_m2m()
+        #     form2.save_m2m()
+        #     edit_ped.status=True
+        #     edit_pre.status=True
+        #     edit_ped.save()
+        #     edit_pre.save()
 
-                return redirect('/Pedido/listar/')
+        return redirect('/Pedido/listar/')
 
 
-        else:
-         form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
-         form2= ProductopresentacionsForm(instance=oProductopresentacions)
-        return render(request, 'Pedido/editar.html', {'form': form, 'form2': form2})
+    else:
+        oPedido = Pedido.objects.get(id=pedido_id)
+        cliente = oPedido.cliente.nombre
+        print(cliente)
+        empleado = oPedido.empleado.nombre
+        print(empleado)
+        oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
+        print(oPedidoproductospresentacions)
+        #form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
+        #form2= ProductopresentacionsForm(instance=oProductopresentacions)
+        return render(request, 'Pedido/editar.html', {'cliente': cliente, 'empleado': empleado, 'pedidoproductospresentacions':oPedidoproductospresentacions})
 
 
 def eliminar_identificador_pedido(request):
@@ -328,7 +334,7 @@ def FiltrarPedido(request):
 
     if "cliente_busca" in request.COOKIES:
         dni = request.COOKIES["cliente_busca"]
-        
+
         if dni.isdigit() == False :
             dni = Cliente.objects.get(nombre=dni).numerodocumento
         print(dni.isdigit())
@@ -484,7 +490,7 @@ def pedidoVenta(request):
     if request.method == 'POST':
         dato = json.loads(request.body)
         pk = dato['cmbPedido']
-        
+
         pedido = Pedido.objects.get(pk = pk)
         jsonPedidos = {}
         jsonPedidos.pk = pedido.pk
