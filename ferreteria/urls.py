@@ -60,6 +60,7 @@ urlpatterns = [
     #vista nueva venta
     url(r'^Venta/pendiente/$', listarPedidosVenta),
     url(r'^Venta/nuevo/$', ventaNuevo),
+    url(r'^Venta/registrar/$', insertarVenta),
     url(r'^Pedido/nuevo/$', registrarPedido),
     #url(r'^venta/insertar/$', registrarPedido),
     url(r'^Pedido/registrar/$', insertarPedido),

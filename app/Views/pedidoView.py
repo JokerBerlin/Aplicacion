@@ -46,7 +46,7 @@ def insertarPedido(request):
         oCliente = Cliente.objects.get(numerodocumento=dnis)
         fechaHoy=date.today()
         empleado = 1
-        oPedido = Pedido(fecha=fechaHoy,estado=True,empleado_id=empleado,cliente_id=oCliente.id)
+        oPedido = Pedido(fecha=fechaHoy,estado=1,empleado_id=empleado,cliente_id=oCliente.id)
         oPedido.save()
 
         #Datos = request.POST.getlist('datos')

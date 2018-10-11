@@ -21,6 +21,10 @@ $(document).ready(function(){
         GenerarVenta();
     });
 
+    $('#bt_nuevaVenta').click(function() {
+        nuevaVenta();
+    })
+
 });
 
 function CalcularSubTotal(id,cantidad){
@@ -216,6 +220,70 @@ function GenerarVenta(){
         alert("No registró ningún producto");
     }
 }
+
 function imprimir_venta(id_venta){
     window.open('/venta/imprimir/'+id_venta+'/', '_blank');
+}
+
+function nuevaVenta() {
+    var num=1;
+    productos = [];
+    contador = 0;
+    $("#tabla tbody tr").each(function (index) {
+        $(this).children("td").each(function (index2) {
+            producto = [];
+            //dato = index;
+            console.log(index);
+            switch (index2) {
+                case 1:
+                    cantidad = $("#cantidad"+index ).val();
+                    break;
+
+                case 2:
+                    codigo = $(this).text();
+                    break;
+                case 4:
+                    tipoPrecio = $(this).text();
+                    break;
+                case 5:
+                    presentacion = $(this).text();
+                    break;
+                case 6:
+                    precioUnitario = $(this).text();
+                    break;
+            }
+
+        });
+        contador = 1;
+        productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
+    });
+    console.log(productos);
+    var cliente = document.getElementById("inpt-cliente").value;
+    if (contador == 1) {
+        var datos = {
+            productos: productos,
+            cliente: cliente
+        };
+        
+        var sendData = JSON.stringify(datos);
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/Venta/registrar/",
+            data: sendData,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            cache: false,
+            CrossDomain: true,
+
+            success: function (result) {
+            //     var id_venta = result["id_venta"];
+                 alert('Pedido Registrado');
+                 //location.reload(true);
+                 document.location.href='/Pedido/listar/';
+            }
+        });
+    }else{
+        alert("No registró ningún producto");
+    }
 }
