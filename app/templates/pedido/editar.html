@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block imports %}
-
+<script type="text/javascript" src="/static/js/editarPedido.js"></script>
 
 {% endblock %}
 
@@ -15,10 +15,8 @@ Editar pedido
             <div class="white-box">
                 <h3 class="box-title">Editar Pedido</h3>
 
-                  <label class="control-label col-sm-3" for="inputSuccess3">Numero de pedido:
-                        </label>
-                        <input class="form-control" type="text" id="pedido_id" value="{{ pedidoId }}" disabled>
 
+                    <input class="form-control" type="hidden" id="pedido_id" value="{{ pedidoId }}" disabled>
                    <label class="control-label col-sm-3" for="inputSuccess3">Nombre cliente:
                            </label>
                     <input class="form-control" type="text" name="" value="{{ cliente }}" disabled>
@@ -55,7 +53,7 @@ Editar pedido
                                       {% if pedido.id == cant.id %}
                                       <tr>
                                         <td>{{pedido.id}}</td>
-                                        <td><input type="text" class="form-control" id="cantidad{{cant.contador}}" value="{{ cant.cantidad }}">
+                                        <td><input type="number" class="form-control" id="cantidad{{cant.contador}}" value="{{ cant.cantidad }}">
                                       </td>
                                         <td>{{pedido.productopresentacions.producto.codigo}}</td>
                                         <td>{{pedido.productopresentacions.producto.nombre}}</td>
@@ -72,73 +70,13 @@ Editar pedido
                                 </tbody>
 
                                 </table>
-                                <script type="text/javascript">
-                                  $(document).ready(function() {
-                                    $("#generarAlmacen").click(function() {
-                                      var num=1;
-                                      productos = [];
-                                      contador = 0;
-                                      $('#tabla tbody tr').each(function (index) {
-                                        // productosPedido = [];
-                                        // var id = $(this).find("td").eq(0).html();
-                                        // var cantidad = $(this).find("td").eq(1).html();
-                                        // console.log(codigo);
-                                        $(this).children("td").each(function (index2) {
-                                            producto = [];
-                                            //dato = index;
-                                            console.log(index);
-                                            switch (index2) {
-                                                case 0:
-                                                    id = $(this).text();
-                                                case 1:
-                                                    cantidad = $("#cantidad"+index ).val();
-
-                                                    if (cantidad.indexOf(',')==true) {
-                                                      cantidad=cantidad.replace(",",".");
-                                                    }
-                                                    break;
-                                            }
-
-                                        });
-                                        contador = 1;
-                                        productos.push([id,cantidad]);
-                                        });
-                                        console.log(productos);
-                                        if (contador == 1) {
-                                            var pedido = document.getElementById("pedido_id").value;
-                                            console.log(pedido);
-                                            var datos = {productos: productos,pedido:pedido};
-                                            var sendData = JSON.stringify(datos);
-                                            $.ajax({
-                                                type: "POST",
-                                                dataType: "json",
-                                                url: "/Pedido/modificar/",
-                                                data: sendData,
-                                                contentType: "application/json; charset=utf-8",
-                                                async: false,
-                                                cache: false,
-                                                CrossDomain: true,
-
-                                                success: function (result) {
-                                                //     var id_venta = result["id_venta"];
-                                                     alert('Pedido modificado');
-                                                     //location.reload(true);
-                                                     document.location.href='/Pedido/listar/';
-                                                }
-                                            });
-                                        }else{
-                                            alert("No registró ningún producto");
-                                        }
-                                    });
-                                  });
-                                </script>
                                 <br>
                             </div>
                                 TOTAL: S/. <label for="id_Total" id="id_Total" name="id_Total"></label>
                                 <br>
                                 <br>
 
-                            <button id="generarAlmacen" >Generar Venta</button>
+                            <button id="generarAlmacen" class="btn btn-primary">Generar Pedido Almacen</button>
                           <!--</form>-->
                         </div>
                       </div>

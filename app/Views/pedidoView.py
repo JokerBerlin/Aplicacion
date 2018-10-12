@@ -316,7 +316,8 @@ def editarPedido(request,pedido_id):
         for oPedido in oPedidoproductospresentacions:
             oNuevo = {}
             oNuevo['id']=oPedido.id
-            oNuevo['cantidad']=float(oPedido.cantidad)
+            c = oPedido.cantidad
+            oNuevo['cantidad']=str(c).replace(",", ".")
             oNuevo['contador']=cont
             oNuevo['valor']=float(oPedido.valor)
             oNuevo['total']=float(oPedido.cantidad)*float(oPedido.valor)
@@ -338,7 +339,7 @@ def modificarPedido(request):
 
             id=int(oPedidoProducto[0])
             oPedidoproductospresentacions = Pedidoproductospresentacions.objects.get(id=id)
-            #cantidad = float(oPedidoProducto[1])
+            #cantidad = (oPedidoProducto[1])
             oPedidoproductospresentacions.cantidad = oPedidoProducto[1]
             oPedidoproductospresentacions.save()
         oPedido = Pedido.objects.get(id=idPedido)

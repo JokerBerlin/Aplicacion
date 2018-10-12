@@ -33,6 +33,23 @@ def ListarProductos(request):
         return render(request, 'Producto/listar.html')
     else:
         oProductos = Producto.objects.filter(estado = True).order_by('-id')
+        precios=[]
+        #for oProducto in oProductos:
+        for oProducto in oProductos:
+            nuevo={}
+            try:
+                oUltimoP=Producto_almacens.objects.filter(producto_id=oProducto).latest('id')
+                print(oUltimoP)
+                nuevo['id'] = oProducto.id
+                nuevo['cantidad'] = oUltimoP.cantidad
+            except Exception as e:
+                print(e)
+                nuevo['id'] = oProducto.id
+                nuevo['cantidad'] = 0
+            precios.append(nuevo)
+        #nuevo={}
+        print(precios)
+
         paginator = Paginator(oProductos,2)
 
         page = request.GET.get('page')
@@ -49,7 +66,7 @@ def ListarProductos(request):
         end_index = index + 5 if index <= max_index - 5 else max_index
         page_range = paginator.page_range[start_index:end_index]
 
-        return render(request, 'producto/listar.html', {"oProductos": productoPagina,"page_range": page_range})
+        return render(request, 'producto/listar.html', {'precios':precios,"oProductos": productoPagina,"page_range": page_range})
 
 
 def registrarProducto(request):
