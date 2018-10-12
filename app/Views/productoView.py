@@ -68,6 +68,56 @@ def ListarProductos(request):
 
         return render(request, 'producto/listar.html', {'precios':precios,"oProductos": productoPagina,"page_range": page_range})
 
+@csrf_exempt
+def registrarPresentacion(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        print(Datos)
+        Dato = Datos['presentaciones']
+        oPrecios = Datos['precios']
+        oPresentaciones = Dato
+        for oPresentacion in oPresentaciones:
+            oProducto = Producto.objects.get(nombre=oPresentacion[0])
+            #oPresentacion = Presentacion.objects.get(id=oPresentacion[1])
+            oProductoPresentacions = Productopresentacions()
+            oProductoPresentacions.producto_id = oProducto.id
+            oProductoPresentacions.presentacion_id = oPresentacion[1]
+            oProductoPresentacions.valor = oPresentacion[2]
+            oProductoPresentacions.unidadprincipal = 0
+            oProductoPresentacions.save()
+            oProductoPresentacions = Productopresentacions.objects.get(producto_id=oProducto.id,presentacion_id = oPresentacion[1])
+            cont = 1
+            for oPrecio in oPrecios:
+                oProductoPresentacionsprecios = Productopresentacionsprecios()
+                oProductoPresentacionsprecios.valor = oPrecio[0]
+                oProductoPresentacionsprecios.precio_id = cont
+                oProductoPresentacionsprecios.productopresentacions_id = oProductoPresentacions.id
+                oProductoPresentacionsprecios.save()
+                cont = cont + 1
+
+
+
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
+
+    else:
+        oUltimoP=Producto.objects.all().latest('id')
+        print(oUltimoP.nombre)
+        oPrecios = Precio.objects.filter(estado=True)
+        oPresentacions = Presentacion.objects.all()
+        oProPre = Productopresentacions.objects.get(producto_id=oUltimoP.id)
+        oPresent = Presentacion.objects.get(id=oProPre.presentacion_id)
+        print(oProPre.presentacion_id)
+        presentaciones=[]
+        for oPresentacion in oPresentacions:
+            nuevo={}
+            if(oPresent.id != oPresentacion.id):
+                nuevo['id']=oPresentacion.id
+                nuevo['nombre']=oPresentacion.nombre
+                presentaciones.append(nuevo)
+
+        print(presentaciones)
+
+        return render(request,'producto/agregarPresentacion.html',{'precios':oPrecios,'producto':oUltimoP,'presentaciones':presentaciones})
 
 @csrf_exempt
 def insertarProducto(request):
