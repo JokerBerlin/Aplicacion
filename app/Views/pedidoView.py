@@ -324,7 +324,7 @@ def editarPedido(request,pedido_id):
             cont = cont + 1
         #form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
         #form2= ProductopresentacionsForm(instance=oProductopresentacions)
-        return render(request, 'Pedido/editar.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido})
+        return render(request, 'pedido/editar.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido})
 
 @csrf_exempt
 def modificarPedido(request):
