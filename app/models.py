@@ -111,7 +111,6 @@ class Presentacion(models.Model):
 class Producto(models.Model):
     nombre = models.CharField(max_length=45)
     codigo = models.CharField(max_length=45, blank=True, null=True)
-    cantidad = models.FloatField(default=0,blank=True, null=True)
     imagen = models.ImageField(upload_to='', blank=True, null=True)#upload_to='%Y/%m/%d',
     url = models.CharField(max_length=100, blank=True, null=True)
     valor = models.FloatField(default=1,blank=True)
