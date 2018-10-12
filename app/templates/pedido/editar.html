@@ -92,10 +92,14 @@ Editar pedido
                                                     id = $(this).text();
                                                 case 1:
                                                     cantidad = $("#cantidad"+index ).val();
+<<<<<<< HEAD
                                                     if (cantidad.indexOf(',')==true) {
                                                       cantidad=cantidad.replace(",",".");
                                                     }
 
+=======
+                                                    cantidad = parseFloat(cantidad);
+>>>>>>> 667e09eae4527edbdd1540551028fcc1284f6f7c
                                                     break;
                                             }
 
