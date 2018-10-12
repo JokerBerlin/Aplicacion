@@ -86,11 +86,14 @@ def registrarPresentacion(request):
             oProductoPresentacions.unidadprincipal = 0
             oProductoPresentacions.save()
             oProductoPresentacions = Productopresentacions.objects.get(producto_id=oProducto.id,presentacion_id = oPresentacion[1])
-            cont = 1
-            for oPrecio in oPrecios:
+            #cont = 1
+            precios = Precio.objects.all()
+            for oPrecio in precios:
                 oProductoPresentacionsprecios = Productopresentacionsprecios()
-                oProductoPresentacionsprecios.valor = oPrecio[0]
-                oProductoPresentacionsprecios.precio_id = cont
+                cont = oPrecio.id - 1
+                for precio in oPrecios:
+                    oProductoPresentacionsprecios.valor = precio[cont]
+                oProductoPresentacionsprecios.precio_id = oPrecio.id
                 oProductoPresentacionsprecios.productopresentacions_id = oProductoPresentacions.id
                 oProductoPresentacionsprecios.save()
                 cont = cont + 1
