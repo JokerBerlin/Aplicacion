@@ -69,11 +69,21 @@ def ListarProductos(request):
         return render(request, 'producto/listar.html', {'precios':precios,"oProductos": productoPagina,"page_range": page_range})
 
 
+@csrf_exempt
+def insertarProducto(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        print(Datos)
+
+    return HttpResponse(json.dumps({'exito':1,"idPedido": oPedido.id}), content_type="application/json")
+
+
 def registrarProducto(request):
     if request.method == 'POST':
         Datos = request.POST
+        print(Datos)
         form = ProductoForm(request.POST, request.FILES)
-
+        print(form)
         if form.is_valid():
 
             form = form.save(commit=False)
