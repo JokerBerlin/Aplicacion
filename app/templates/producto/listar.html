@@ -202,7 +202,14 @@ Lista de productos
               <td><img src="/media/{{oProducto.imagen}}" height="100" width="100" alt="" /></td>
 				    	<td>{{oProducto.nombre}}</td>
 				    	<td>{{oProducto.codigo}}</td>
-				    	<td>{{oProducto.cantidad}}</td>
+              <td>
+              {% for precio in precios  %}
+                {% if oProducto.id == precio.id  %}
+                  {{precio.cantidad}}
+                {% endif %}
+              {% endfor %}
+              </td>
+
 				    	<td>
 				    		<a href="/Producto/detalle/{{oProducto.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
 				    		<a href="/Producto/editar/{{oProducto.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
