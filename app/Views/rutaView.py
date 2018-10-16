@@ -98,7 +98,6 @@ def registrarRuta(request):
 
         return HttpResponse(json.dumps({'exito':1, 'idRuta':oRuta.id}), content_type="application/json")
     else:
-
         return render(request, 'ruta/nuevo.html', {})
 
 def editarRuta(request,ruta_id):

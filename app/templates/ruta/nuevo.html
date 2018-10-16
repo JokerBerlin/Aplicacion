@@ -6,7 +6,6 @@ $(document).ready(function(){
     $( "#id_nombre" ).focus();
     $( "#id_cliente" ).autocomplete({
         source: function (request, response) {
-
             var datos = {nombreCliente: $("#id_cliente").val()};
             var sendData = JSON.stringify(datos);
             $.ajax({
@@ -42,90 +41,92 @@ $(document).ready(function(){
       
 
     var divMapa = document.getElementById('mapa');
-                            navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
+    navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
 
-                            function fn_mal(){}
-                            function fn_ok(rta){
+    function fn_mal(){}
+    function fn_ok(rta){
 
-                                var lat = rta.coords.latitude;
-                                var lon = rta.coords.longitude;
+        var lat = rta.coords.latitude;
+        var lon = rta.coords.longitude;
 
-                                var gLatLon= new google.maps.LatLng(lat, lon); //guardamos las coordenadas en un objeto de google, el LatLng es propio de google.
-                                var objConfig={
-                                    zoom:17,
-                                    center: gLatLon //donde debe estar el mapa centrado cuando se rederice.
-                                }
+        var gLatLon= new google.maps.LatLng(lat, lon); //guardamos las coordenadas en un objeto de google, el LatLng es propio de google.
+        var objConfig={
+            zoom:17,
+            center: gLatLon //donde debe estar el mapa centrado cuando se rederice.
+        }
 
-                                var gMapa= new google.maps.Map(divMapa, objConfig); //indica a donde se va renderizar nuestro mapa y el segundo dato es una configuración del mapa.
-                                objConfigMarker={
-                                position:gLatLon,
-                                map:gMapa,
-                                draggable: true,
-                                title:"Nuesta ubicación"
-                                }
+        var gMapa= new google.maps.Map(divMapa, objConfig); //indica a donde se va renderizar nuestro mapa y el segundo dato es una configuración del mapa.
+        
+        objConfigMarker={
+        position:gLatLon,
+        map:gMapa,
+        draggable: true,
+        title:"Nuesta ubicación"
+        }
 
-                                var gMarker = new google.maps.Marker(objConfigMarker);
-                                    //gMarker.setIcon('icon_usuario.gif');
+        var gMarker = new google.maps.Marker(objConfigMarker);
+            //gMarker.setIcon('icon_usuario.gif');
 
-                                var gCoder = new google.maps.Geocoder();
+        var gCoder = new google.maps.Geocoder();
 
-                                var objInformacion={
-                                    address: ui.item.direccion
-                                }
+        var objInformacion={
+            address: ui.item.direccion
+        }
 
-                                gCoder.geocode(objInformacion, fn_coder);
+        gCoder.geocode(objInformacion, fn_coder);
 
-                                function fn_coder(datos){
-                                    var coordenadas = datos[0].geometry.location; //obj LatLong
+        function fn_coder(datos){
+            var coordenadas = datos[0].geometry.location; //obj LatLong
 
-                                    var config = {
-                                        map: gMapa,
-                                        position: coordenadas,
-                                        title: ''
-                                    }
-                                    var gMarkerDV=new google.maps.Marker(config)
-                                        //gMarkerDV.setIcon('icon_edificio.png')
+            var config = {
+                map: gMapa,
+                position: coordenadas,
+                title: ''
+            }
+            var gMarkerDV=new google.maps.Marker(config)
+                //gMarkerDV.setIcon('icon_edificio.png')
 
-                                    var objHTML={
-                                        content: '<div style= "height: 150px; width: 300px"><h2>Cliente:</h2><h3>Direccion: {{oCliente.direccion}}</h3></div>'
-                                    }
-                                    var gIW = new google.maps.InfoWindow(objHTML);
+            var objHTML={
+                content: '<div style= "height: 150px; width: 300px"><h2>Cliente:</h2><h3>Direccion: {{oCliente.direccion}}</h3></div>'
+            }
 
-                                    google.maps.event.addListener(gMarkerDV, 'click', function(){
-                                        gIW.open(gMapa, gMarkerDV);
+            var gIW = new google.maps.InfoWindow(objHTML);
 
-                                    });
+            google.maps.event.addListener(gMarkerDV, 'click', function(){
+                gIW.open(gMapa, gMarkerDV);
 
-                                        var objConfigDR = { //objeto de configuración directions render.
-                                            map: gMapa,
-                                            suppressMarkers: true
-                                        }
-                                    
-                                        var objConfigDS= {
-                                            origin: gLatLon, //LatLong 
-                                            destination:objInformacion.address,
-                                            travelMode: google.maps.TravelMode.WALKING //se puede variar segun tipo de movil a usar
-                                        
-                                        }
-                                    
-                                        var ds= new google.maps.DirectionsService();
-                                        //obtener coordenadas
-                                        var dr = new google.maps.DirectionsRenderer(objConfigDR);
-                                        //traduce coordenadas a la ruta visible
+            });
 
-                                            ds.route(objConfigDS, fnRutear );
+            var objConfigDR = { //objeto de configuración directions render.
+                map: gMapa,
+                suppressMarkers: true
+            }
+        
+            var objConfigDS= {
+                origin: gLatLon, //LatLong 
+                destination:objInformacion.address,
+                travelMode: google.maps.TravelMode.WALKING //se puede variar segun tipo de movil a usar
+            
+            }
+        
+            var ds= new google.maps.DirectionsService();
+            //obtener coordenadas
+            var dr = new google.maps.DirectionsRenderer(objConfigDR);
+            //traduce coordenadas a la ruta visible
 
-                                        function fnRutear(resultados, status){
-                                            //mostrar la linea entre A y B
-                                            if(status=='OK'){
-                                                dr.setDirections(resultados);
-                                            }else{
-                                                alert('Error'+status);
-                                            }
-                                        }
-                                }
-                            }
-                              }
+                ds.route(objConfigDS, fnRutear );
+
+            function fnRutear(resultados, status){
+                //mostrar la linea entre A y B
+                if(status=='OK'){
+                    dr.setDirections(resultados);
+                }else{
+                    alert('Error'+status);
+                }
+            }
+        }
+    }
+        }
 
 
     });
