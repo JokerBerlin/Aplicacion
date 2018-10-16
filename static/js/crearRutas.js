@@ -17,9 +17,11 @@ $(document).ready(function(){
     });
 
     function reset_values(){
-        $('#id_nombre').val('');
+        // $('#id_nombre').val('');
         $('#id_cliente').val('');
-      //  $('#direccion').val('');
+        $('#latitud').val('');
+        $('#longitud').val('');
+
     }
 
     var cont=0;
@@ -28,15 +30,23 @@ $(document).ready(function(){
         cont++;
         Nombre = $('#id_nombre').val();
         Cliente = $('#id_cliente').val();
-      //  direccion = $('#direccion').val();
+        Latitud = $('#latitud').val();
+        Longitud = $('#longitud').val();
+
         error = "";
         if (Cliente==''){
             error = 1;
         }
 
         if (error=="") {
-            var fila=
-            '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td>'+Nombre+'</td><td>'+Cliente+'</td></tr>';
+            var fila = 
+                    '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);">' +
+                    '<td>'+cont+'</td>' +
+                    '<td>'+Nombre+'</td>' +
+                    '<td>'+Cliente+'</td>' +
+                    '<td>'+Latitud+'</td>' +
+                    '<td>'+Longitud+'</td>' +                    
+                    '</tr>';
             $('#tabla').append(fila);
 
             reset_values();
@@ -182,7 +192,7 @@ $(document).ready(function(){
         //console.log(cliente)
         if (contador == 1) {
             var datos = {oRutas: oRutas};
-            var sendData = JSON.stringify(datos); 
+            var sendData = JSON.stringify(datos);
             $.ajax({
                 type: "POST",
                 dataType: "json",

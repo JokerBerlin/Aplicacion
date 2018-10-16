@@ -29,7 +29,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def buscarCliente(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
-        # usuario= BuscarUsuario(Datos["idUsuario"])
         usuario=True
         if usuario==True:
             nombreCliente = Datos["nombreCliente"]
@@ -37,15 +36,16 @@ def buscarCliente(request):
             jsonfinal["clientes"] = []
             try:
                 oClientes = Cliente.objects.filter(nombre__icontains=nombreCliente,estado = 1)|Cliente.objects.filter(numerodocumento__icontains=nombreCliente,estado = 1)
+                
                 for oCliente in oClientes:
-
                     jsonCliente = {}
                     jsonCliente["id"] = oCliente.id
                     jsonCliente["direccion"] = oCliente.direccion
                     jsonCliente["nombre"] = oCliente.nombre
                     jsonCliente["numerodocumento"] = oCliente.numerodocumento
+                    jsonCliente["longitud"] = oCliente.longitud
+                    jsonCliente["latitud"] = oCliente.latitud
                     jsonfinal["clientes"].append(jsonCliente)
-
                 return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
             except Exception as e:
                 return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
@@ -59,10 +59,8 @@ def estadoCliente(request):
     pk = request.POST.get('identificador_id')
     id = Cliente.objects.get(id=pk).update(estado=0)
 
-    #oCliente = Cliente.objects.filter(id=cliente_id).update(estado=0)
     response = {}
     return JsonResponse(response)
-    #return redirect('/Cliente/listar/')
 
 @csrf_exempt
 def detalleClienteWS(request):
