@@ -68,12 +68,75 @@ def ListarProductos(request):
 
         return render(request, 'producto/listar.html', {'precios':precios,"oProductos": productoPagina,"page_range": page_range})
 
+@csrf_exempt
+def registrarPresentacion(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        print(Datos)
+        Dato = Datos['presentaciones']
+        oPrecios = Datos['precios']
+        oPresentaciones = Dato
+        for oPresentacion in oPresentaciones:
+            oProducto = Producto.objects.get(nombre=oPresentacion[0])
+            #oPresentacion = Presentacion.objects.get(id=oPresentacion[1])
+            oProductoPresentacions = Productopresentacions()
+            oProductoPresentacions.producto_id = oProducto.id
+            oProductoPresentacions.presentacion_id = oPresentacion[1]
+            oProductoPresentacions.valor = oPresentacion[2]
+            oProductoPresentacions.unidadprincipal = 0
+            oProductoPresentacions.save()
+            oProductoPresentacions = Productopresentacions.objects.get(producto_id=oProducto.id,presentacion_id = oPresentacion[1])
+            #cont = 1
+            precios = Precio.objects.all()
+            for oPrecio in precios:
+                oProductoPresentacionsprecios = Productopresentacionsprecios()
+                cont = oPrecio.id - 1
+                for precio in oPrecios:
+                    oProductoPresentacionsprecios.valor = precio[cont]
+                oProductoPresentacionsprecios.precio_id = oPrecio.id
+                oProductoPresentacionsprecios.productopresentacions_id = oProductoPresentacions.id
+                oProductoPresentacionsprecios.save()
+                cont = cont + 1
+
+
+
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
+
+    else:
+        oUltimoP=Producto.objects.all().latest('id')
+        print(oUltimoP.nombre)
+        oPrecios = Precio.objects.filter(estado=True)
+        oPresentacions = Presentacion.objects.all()
+        oProPre = Productopresentacions.objects.get(producto_id=oUltimoP.id)
+        oPresent = Presentacion.objects.get(id=oProPre.presentacion_id)
+        print(oProPre.presentacion_id)
+        presentaciones=[]
+        for oPresentacion in oPresentacions:
+            nuevo={}
+            if(oPresent.id != oPresentacion.id):
+                nuevo['id']=oPresentacion.id
+                nuevo['nombre']=oPresentacion.nombre
+                presentaciones.append(nuevo)
+
+        print(presentaciones)
+
+        return render(request,'producto/agregarPresentacion.html',{'precios':oPrecios,'producto':oUltimoP,'presentaciones':presentaciones})
+
+@csrf_exempt
+def insertarProducto(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        print(Datos)
+
+    return HttpResponse(json.dumps({'exito':1,"idPedido": oPedido.id}), content_type="application/json")
+
 
 def registrarProducto(request):
     if request.method == 'POST':
         Datos = request.POST
+        print(Datos)
         form = ProductoForm(request.POST, request.FILES)
-
+        print(form)
         if form.is_valid():
 
             form = form.save(commit=False)

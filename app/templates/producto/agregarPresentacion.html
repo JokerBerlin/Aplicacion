@@ -12,6 +12,9 @@ Registrar Nuevo Producto
         <div class="col-sm-12">
             <div class="white-box">
                 <h3 class="box-title">Formulario de registro de Producto</h3>
+                <button class="btn btn-success" data-toggle="modal" data-target="#agrearPresentacion">Agregar Contenido</button>
+
+
 <div class="modal fade" id="agrearPresentacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	Tabla de contenidos
 			      <div class="modal-dialog">
@@ -22,26 +25,70 @@ Registrar Nuevo Producto
 			          </div>
 			          <div class="modal-body">
 			          Producto:</br>
-					    <input type="number" name="idProducto" id="idProducto" required class="form-control" value="{{presentacion.id}}">
+					    <input type="text" name="idProducto" id="productoId" required class="form-control" value="{{producto.nombre}}">
 			            Presentación</br>
 			            <form action="/Presentacion/registrar/" method="post" enctype="multipart/form-data">
 						{% csrf_token %}
 					    <select class="form-control" id="cmbPresentacion" required>
-					    	<option value=""> </option>
+					    	<!--<option value=""> </option>-->
 	                        {% for presentacion in presentaciones %}
 	                            <option value="{{presentacion.id}}">
 	                            {{presentacion.nombre}}
 	                            </option>
 	                        {% endfor %}
 	                        </select>
-	                    Cantidad de Presentación</br>
+	                    Valor de Presentación</br>
 					    <input type="number" name="cantPresentacion" id="cantPresentacion" required class="form-control">
 					    {% for precio in precios%}
 						Precio - {{ precio.nombre }}</br>
 					    <input type="number" name="{{precio.id}}Precio" id="{{precio.id}}Precio" required class="form-control">
 					    {% endfor %}</br>
 			          </div>
+                <div class="modal-footer">
+                  <button id="registrarPresentacion" type="button" class="btn btn-primary" onclick="">Registrar</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <script type="text/javascript">
+                    $(document).ready(function(){
+                      $('#registrarPresentacion').click(function(){
+                        presentaciones = []
+                        precios = []
+                        var producto = document.getElementById("productoId").value;
+                        var presentacion = document.getElementById("cmbPresentacion").value;
+                        var valor = document.getElementById("cantPresentacion").value;
+                        var precio1 = document.getElementById("1Precio").value;
+                        var precio2 = document.getElementById("2Precio").value;
+                        var precio3 = document.getElementById("3Precio").value;
+                        presentaciones.push([producto,presentacion,valor]);
+                        precios.push([precio1,precio2,precio3]);
+                        var datos = {
+                              presentaciones: presentaciones,
+                              precios: precios
+                          };
+
+                          var sendData = JSON.stringify(datos);
+                          $.ajax({
+                              type: "POST",
+                              dataType: "json",
+                              url: "/Presentacion/nuevo/",
+                              data: sendData,
+                              contentType: "application/json; charset=utf-8",
+                              async: false,
+                              cache: false,
+                              CrossDomain: true,
+
+                              success: function (result) {
+                              //     var id_venta = result["id_venta"];
+                                   alert('Pedido Registrado');
+                                   //location.reload(true);
+                                   //document.location.href='/Pedido/listar/';
+                              }
+                          });
+
+                      });
+                    });
+                  </script>
+                </div>
 			</div>
 	    </div>
-    </div>  
+    </div>
 {% endblock %}
