@@ -12,7 +12,8 @@ Registrar Nuevo Producto
         <div class="col-sm-12">
             <div class="white-box">
                 <h3 class="box-title">Formulario de registro de Producto</h3>
-                <button class="btn btn-success" data-toggle="modal" data-target="#agrearPresentacion">Agregar Contenido</button>
+                <button class="btn btn-success" data-toggle="modal" data-target="#agrearPresentacion">Agregar Presentacion</button>
+                <button class="btn btn-primary" id="listaProducto">Listar productos</button>
 
 
 <div class="modal fade" id="agrearPresentacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -46,7 +47,7 @@ Registrar Nuevo Producto
 			          </div>
                 <div class="modal-footer">
                   <button id="registrarPresentacion" type="button" class="btn btn-primary" onclick="">Registrar</button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-secondary" id="productoListar" data-dismiss="modal">Listar Productos</button>
                   <script type="text/javascript">
                     $(document).ready(function(){
                       $('#registrarPresentacion').click(function(){
@@ -78,12 +79,24 @@ Registrar Nuevo Producto
 
                               success: function (result) {
                               //     var id_venta = result["id_venta"];
-                                   alert('Pedido Registrado');
+                                  var sel = document.getElementById("cmbPresentacion");
+                                  sel.remove(sel.SelectedIndex);
+                                  $(' #cantPresentacion ').val("");
+                                  $(' #1Precio ').val("");
+                                  $(' #2Precio ').val("");
+                                  $(' #3Precio ').val("");
+                                  alert('Presentacion de producto Registrado');
                                    //location.reload(true);
                                    //document.location.href='/Pedido/listar/';
                               }
                           });
 
+                      });
+                      $('#productoListar').click(function(){
+                        document.location.href='/Producto/listar/';
+                      });
+                      $('#listaProducto').click(function(){
+                        document.location.href='/Producto/listar/';
                       });
                     });
                   </script>

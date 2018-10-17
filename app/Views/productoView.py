@@ -158,7 +158,7 @@ def registrarProducto(request):
                 )
                 oProductoPresentacionsprecios.save()
 
-            return redirect('listar_producto')
+            return redirect('/Presentacion/nuevo/')
         else:
             return render(request, 'producto/listar.html')
 
