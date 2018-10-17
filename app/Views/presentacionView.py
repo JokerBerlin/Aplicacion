@@ -49,10 +49,10 @@ def presentacion_detalle(request,producto_id):
 
 def getPresentaciones(request):
     if request.method == 'GET':
-        try:            
+        try:
             jsonfinal = {}
             jsonfinal["presentaciones"] = []
-            oPresentacion = Presentacion.objects.filter(estado = True).order_by('nombre')     
+            oPresentacion = Presentacion.objects.filter(estado = True).order_by('nombre')
             for presentacion in oPresentacion:
                 presentacionjson = {}
                 presentacionjson["id"] = presentacion.id

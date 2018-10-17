@@ -82,7 +82,7 @@ def registrarPresentacion(request):
             oProductoPresentacions = Productopresentacions()
             oProductoPresentacions.producto_id = oProducto.id
             oProductoPresentacions.presentacion_id = oPresentacion[1]
-            oProductoPresentacions.valor = oPresentacion[2]
+            oProductoPresentacions.valor = 1/float(oPresentacion[2])
             oProductoPresentacions.unidadprincipal = 0
             oProductoPresentacions.save()
             oProductoPresentacions = Productopresentacions.objects.get(producto_id=oProducto.id,presentacion_id = oPresentacion[1])
