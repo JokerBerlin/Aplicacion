@@ -52,97 +52,132 @@ $(document).ready(function(){
             $('#latitud').val(latCliente);
             $('#longitud').val(longCliente);
 
-            var divMapa = document.getElementById('mapa');
-            navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
+            // var divMapa = document.getElementById('mapa');
+            // navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
 
-            function fn_mal(){}
-            function fn_ok(rta){
+    //         function fn_mal(){}
+    //         function fn_ok(rta){
 
-                var lat = rta.coords.latitude;
-                var lon = rta.coords.longitude;
+    //             var lat = rta.coords.latitude;
+    //             var lon = rta.coords.longitude;
 
-                var gLatLon= new google.maps.LatLng(lat, lon); //guardamos las coordenadas en un objeto de google, el LatLng es propio de google.
-                var objConfig={
-                    zoom:17,
-                    center: gLatLon //donde debe estar el mapa centrado cuando se rederice.
-                }
+    //             var gLatLon= new google.maps.LatLng(lat, lon); //guardamos las coordenadas en un objeto de google, el LatLng es propio de google.
+    //             var objConfig={
+    //                 zoom:17,
+    //                 center: gLatLon //donde debe estar el mapa centrado cuando se rederice.
+    //             }
 
-                var gMapa= new google.maps.Map(divMapa, objConfig); //indica a donde se va renderizar nuestro mapa y el segundo dato es una configuración del mapa.
+    //             var gMapa= new google.maps.Map(divMapa, objConfig); //indica a donde se va renderizar nuestro mapa y el segundo dato es una configuración del mapa.
                 
-                objConfigMarker={
-                position:gLatLon,
-                map:gMapa,
-                draggable: true,
-                title:"Nuesta ubicación"
-                }
+    //             objConfigMarker={
+    //             position:gLatLon,
+    //             map:gMapa,
+    //             draggable: true,
+    //             title:"Nuesta ubicación"
+    //             }
 
-                var gMarker = new google.maps.Marker(objConfigMarker);
-                    //gMarker.setIcon('icon_usuario.gif');
+    //             var gMarker = new google.maps.Marker(objConfigMarker);
+    //                 //gMarker.setIcon('icon_usuario.gif');
 
-                var gCoder = new google.maps.Geocoder();
+    //             var gCoder = new google.maps.Geocoder();
 
-                var objInformacion={
-                    address: ui.item.direccion
-                }
+    //             var objInformacion={
+    //                 address: ui.item.direccion
+    //             }
 
-                gCoder.geocode(objInformacion, fn_coder);
+    //             gCoder.geocode(objInformacion, fn_coder);
 
-                function fn_coder(datos){
-                    var coordenadas = datos[0].geometry.location; //obj LatLong
+    //             function fn_coder(datos){
+    //                 var coordenadas = datos[0].geometry.location; //obj LatLong
 
-                    var config = {
-                        map: gMapa,
-                        position: coordenadas,
-                        title: ''
-                    }
-                    var gMarkerDV=new google.maps.Marker(config)
-                        //gMarkerDV.setIcon('icon_edificio.png')
+    //                 var config = {
+    //                     map: gMapa,
+    //                     position: coordenadas,
+    //                     title: ''
+    //                 }
+    //                 var gMarkerDV=new google.maps.Marker(config)
+    //                     //gMarkerDV.setIcon('icon_edificio.png')
 
-                    var objHTML={
-                        content: '<div style= "height: 150px; width: 300px"><h2>Cliente:</h2><h3>Direccion: {{oCliente.direccion}}</h3></div>'
-                    }
+    //                 var objHTML={
+    //                     content: '<div style= "height: 150px; width: 300px"><h2>Cliente:</h2><h3>Direccion: {{oCliente.direccion}}</h3></div>'
+    //                 }
 
-                    var gIW = new google.maps.InfoWindow(objHTML);
+    //                 var gIW = new google.maps.InfoWindow(objHTML);
 
-                    google.maps.event.addListener(gMarkerDV, 'click', function(){
-                        gIW.open(gMapa, gMarkerDV);
-                    });
+    //                 google.maps.event.addListener(gMarkerDV, 'click', function(){
+    //                     gIW.open(gMapa, gMarkerDV);
+    //                 });
 
-                    var objConfigDR = { //objeto de configuración directions render.
-                        map: gMapa,
-                        suppressMarkers: true
-                    }
+    //                 var objConfigDR = { //objeto de configuración directions render.
+    //                     map: gMapa,
+    //                     suppressMarkers: true
+    //                 }
                 
-                    var objConfigDS= {
-                        origin: gLatLon, //LatLong 
-                        destination:objInformacion.address,
-                        travelMode: google.maps.TravelMode.WALKING //se puede variar segun tipo de movil a usar                    
-                    }
+    //                 var objConfigDS= {
+    //                     origin: gLatLon, //LatLong 
+    //                     destination:objInformacion.address,
+    //                     travelMode: google.maps.TravelMode.WALKING //se puede variar segun tipo de movil a usar                    
+    //                 }
                 
-                    var ds= new google.maps.DirectionsService();
-                    //obtener coordenadas
-                    var dr = new google.maps.DirectionsRenderer(objConfigDR);
-                    //traduce coordenadas a la ruta visible
+    //                 var ds= new google.maps.DirectionsService();
+    //                 //obtener coordenadas
+    //                 var dr = new google.maps.DirectionsRenderer(objConfigDR);
+    //                 //traduce coordenadas a la ruta visible
 
-                        ds.route(objConfigDS, fnRutear );
+    //                     ds.route(objConfigDS, fnRutear );
 
-                    function fnRutear(resultados, status){
-                        //mostrar la linea entre A y B
-                        if(status=='OK'){
-                            dr.setDirections(resultados);
-                        }else{
-                            alert('Error'+status);
-                        }
-                    }
-        }
-    }
+    //                 function fnRutear(resultados, status){
+    //                     //mostrar la linea entre A y B
+    //                     if(status=='OK'){
+    //                         dr.setDirections(resultados);
+    //                     }else{
+    //                         alert('Error'+status);
+    //                     }
+    //                 }
+    //     }
+    // }
+        
         }
 
 
     });
+
+    
+    
+
+
 });
 
+function initMap() {
 
+    var coordActuales = [];
+
+    navigator.geolocation.getCurrentPosition(exito, error);
+
+    function exito(rta) {
+        coordActuales.push(rta.coords.latitude);
+        coordActuales.push(rta.coords.longitude);
+        console.log(coordActuales[0]);
+        console.log(coordActuales[1]);
+    }
+    
+    function error() {}
+
+    var latLngActuales = new google.maps.LatLng(
+        coordActuales[0], 
+        coordActuales[1]
+    )
+
+    var divMapa = document.getElementById('mapa');
+    
+    var configMapa = {
+        zoom: 8,
+        center: latLngActuales
+    }
+
+    var mapa = new google.maps.Map(divMapa, configMapa);
+        
+}
 
 </script>
 
@@ -251,7 +286,7 @@ Nueva Ruta
                 
                         <br>
                         <script async defer
-                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=fn_coder">
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=initMap">
                         </script>
 
             </div>
