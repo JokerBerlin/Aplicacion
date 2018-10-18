@@ -366,6 +366,84 @@ def editarPedido(request,pedido_id):
         return render(request, 'pedido/editar.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido})
 
 @csrf_exempt
+def pedidoVenta(request,pedido_id):
+    #oProductopresentacions= Productopresentacions.objects.filter(producto_in=oPedidoproductospresentacions.productopresentacions.producto.id)
+    if request.method == 'POST':
+
+        Datos = json.loads(request.body)
+        cliente = Datos['cliente']
+        nroRecibo = Datos['nroRecibo']
+        total = Datos['total']
+
+        print(cliente)
+        print(nroRecibo)
+        print(total)
+
+        oCliente = Cliente.objects.get(nombre=cliente)
+        oPedido = Pedido.objects.get(id=pedido_id)
+        oVenta = Venta()
+        oVenta.monto = total
+        oVenta.nroRecibo = nroRecibo
+        oVenta.estado = True
+        oVenta.cliente_id = oCliente.id
+        oVenta.pedido_id = oPedido.id
+        oVenta.save()
+        oPedido.estado = 3
+        oPedido.save()
+        oCobro = Cobro()
+        oCobro.estado=True
+        oCobro.monto=total
+        oCobro.recibo_id=1
+        oCobro.venta_id=oVenta.id
+        oCobro.save()
+        # for oPedidoProducto in dato:
+        #
+        #     id=int(oPedidoProducto[0])
+        #     oPedidoproductospresentacions = Pedidoproductospresentacions.objects.get(id=id)
+        #     #cantidad = (oPedidoProducto[1])
+        #     oPedidoproductospresentacions.cantidad = oPedidoProducto[1]
+        #     oPedidoproductospresentacions.save()
+        #     #oPedidoproductospresentacions = Pedidoproductospresentacions.objects.get(id=id)
+        #
+        #     oProductoPresentacions = Productopresentacions.objects.get(id=oPedidoproductospresentacions.productopresentacions_id)
+        #     oUltimoP=Producto_almacens.objects.filter(producto_id=oProductoPresentacions.producto_id).latest('id')
+        #     dato = float(oPedidoProducto[1]) * oProductoPresentacions.valor
+        #     cantidadPedido = oUltimoP.cantidad - dato
+        #     oProducto_alma = Producto_almacens(cantidad=cantidadPedido, cantidadinicial= oUltimoP.cantidad, almacen_id=oUltimoP.almacen_id, lote_id= oUltimoP.lote_id, producto_id= oUltimoP.producto_id)
+        #     oProducto_alma.save()
+        # oPedido = Pedido.objects.get(id=idPedido)
+        # oPedido.estado = 2
+        # oPedido.save()
+
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
+
+    else:
+        oPedido = Pedido.objects.get(id=pedido_id)
+        cliente = oPedido.cliente.nombre
+        print(cliente)
+        empleado = oPedido.empleado.nombre
+        print(empleado)
+        fecha = oPedido.fecha
+        oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
+        print(oPedidoproductospresentacions)
+        cantidadPedido = []
+        cont = 0
+        for oPedido in oPedidoproductospresentacions:
+            oNuevo = {}
+            oNuevo['id']=oPedido.id
+            c = oPedido.cantidad
+            oNuevo['cantidad']=str(c).replace(",", ".")
+            oNuevo['contador']=cont
+            oNuevo['valor']=float(oPedido.valor)
+            oNuevo['total']=float(oPedido.cantidad)*float(oPedido.valor)
+            cantidadPedido.append(oNuevo)
+            cont = cont + 1
+        #form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
+        #form2= ProductopresentacionsForm(instance=oProductopresentacions)
+        return render(request, 'venta/mostrarPedido.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido})
+
+
+@csrf_exempt
 def modificarPedido(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
@@ -736,7 +814,7 @@ def EstadoPedido(request,estado_id):
 
 
 @csrf_exempt
-def pedidoVenta(request):
+def ventaPedido(request):
     if request.method == 'POST':
         dato = json.loads(request.body)
         pk = dato['cmbPedido']
