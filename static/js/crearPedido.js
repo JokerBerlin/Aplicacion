@@ -161,6 +161,7 @@ $('#tabla tbody tr').each(function(){
     });
 }
 
+// GENERA UN NUEVO PEDIDO
 function GenerarVenta(){
     var num=1;
     productos = [];
@@ -225,6 +226,8 @@ function imprimir_venta(id_venta){
     window.open('/venta/imprimir/'+id_venta+'/', '_blank');
 }
 
+
+// FUNCION QUE GENERA UNA NUEVA VENTA
 function nuevaVenta() {
     var num=1;
     productos = [];
@@ -278,9 +281,9 @@ function nuevaVenta() {
 
             success: function (result) {
             //     var id_venta = result["id_venta"];
-                 alert('Pedido Registrado');
+                 alert('Venta Registrada');
                  //location.reload(true);
-                 document.location.href='/Pedido/listar/';
+                 document.location.href='/Venta/listar/';
             }
         });
     }else{

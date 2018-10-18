@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
         $('#bt_add').click(function(){
-
             agregar();
         });
         $('#bt_del').click(function(){
@@ -43,6 +42,12 @@ function agregar(){
     if (error=="") {
         var latLng = [Latitud, Longitud];
         coordenadas.push(latLng);
+
+        var pos = {lat: Latitud, lng: Longitud};
+        var config = {position: pos};
+
+        addMarker(config);
+        
         
         var fila = 
                 '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);">' +
