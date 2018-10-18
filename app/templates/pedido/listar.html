@@ -195,6 +195,7 @@ Listar pedido
 	                            <th>Cliente</th>
 	                            <th>Dirección</th>
 															<th>Empleado</th>
+															<th>Estado</th>
 															<th>Producto</th>
 															<th>Opciones</th>
 	                        </tr>
@@ -206,6 +207,7 @@ Listar pedido
 				    	<td>{{oPedido.cliente.nombre}}</td>
 				    	<td>{{oPedido.cliente.direccion}}</td>
 							<td>{{oPedido.empleado.nombre}}</td>
+							<td>{{oPedido.estado}}</td>
 							<td>
 								{% for oNue in oProductos %}
 									{% if oPedido.id == oNue.id %}
