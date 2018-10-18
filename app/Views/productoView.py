@@ -407,7 +407,11 @@ def editarProducto(request,producto_id):
             return redirect('/Producto/listar/')
     else:
         form= ProductoForm(instance=oProducto)
+        oProductoPresentacions = Productopresentacions.objects.filter(producto_id=oProducto.id)
+        oProductoPresentacionsprecios = Productopresentacionsprecios.objects.filter(Productopresentacions_id__in=[p.id for p in oProductoPresentacions])
         ctx = {'form':form, 'oProducto': oProducto}
+
+
     return render(request, 'producto/editar.html',ctx)
 
 def eliminar_identificador_producto(request):
