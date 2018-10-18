@@ -174,6 +174,8 @@ def ListarEstadoPedidos(request,estado_id):
         estadoPedido = int(estado_id)
         if estadoPedido==1:
             return render(request, 'pedido/almacen.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
+        if estadoPedido==2:
+            return render(request, 'pedido/ventaPendiente.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
         else:
             return render(request, 'pedido/listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
 
@@ -562,9 +564,10 @@ def FiltrarPedido(request):
 
     return render(request, 'pedido/listar.html', {"oPedidos": ventaPagina,"oProductos":oProductos,"page_range": page_range,"tags":tags,})
 
-def FiltrarEstadoPedido(request,estado_id):
+def EstadoPedido(request,estado_id):
     oProductos=[]
     oVentas=[]
+    estadoPedido=int(estado_id)
     if "producto_busca" in request.COOKIES:
         producto = request.COOKIES["producto_busca"]
         print(request.COOKIES["producto_busca"])
@@ -601,7 +604,7 @@ def FiltrarEstadoPedido(request,estado_id):
         producto = Producto.objects.get(nombre=producto).id
         presentacion = Productopresentacions.objects.filter(producto=producto)
         pedidoproductopresentacion = Pedidoproductospresentacions.objects.filter(productopresentacions_id__in=[p.id for p in presentacion])
-        pedido = Pedido.objects.filter(estado=estado_id,id__in=[s.pedido_id for s in pedidoproductopresentacion]).order_by("-id")
+        pedido = Pedido.objects.filter(estado=estadoPedido,id__in=[s.pedido_id for s in pedidoproductopresentacion]).order_by("-id")
         venta = pedido
         productonombre = Producto.objects.get(id=producto).nombre
         for v in venta:
@@ -619,12 +622,12 @@ def FiltrarEstadoPedido(request,estado_id):
 
         if producto != '':
             cliente = Cliente.objects.get(numerodocumento=dni)
-            venta = Pedido.objects.filter(estado=estado_id,id__in=[p.id for p in oVentas],cliente_id=cliente.id).order_by('-id')
+            venta = Pedido.objects.filter(estado=estadoPedido,id__in=[p.id for p in oVentas],cliente_id=cliente.id).order_by('-id')
 
         else:
             oProductos=[]
             cliente = Cliente.objects.get(numerodocumento=dni)
-            venta = Pedido.objects.filter(estado=estado_id,cliente_id=cliente.id).order_by('-id')
+            venta = Pedido.objects.filter(estado=estadoPedido,cliente_id=cliente.id).order_by('-id')
             for oVenta in venta:
                 #pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
                 pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oVenta.id)
@@ -642,10 +645,10 @@ def FiltrarEstadoPedido(request,estado_id):
         fecha1=datetime.strftime(datetime.strptime(fecha_inicio,'%d-%m-%Y'),'%Y-%m-%d')
         fecha2=datetime.strftime(datetime.strptime(fecha_fin,'%d-%m-%Y'),'%Y-%m-%d')
         if producto !='' or dni!='':
-            venta = Pedido.objects.filter(estado=estado_id,id__in=[p.id for p in oVentas],fecha__range=[fecha1,fecha2]).order_by('-id')
+            venta = Pedido.objects.filter(estado=estadoPedido,id__in=[p.id for p in oVentas],fecha__range=[fecha1,fecha2]).order_by('-id')
         else:
             oProductos = []
-            venta = Pedido.objects.filter(estado=estado_id,fecha__range=[fecha1,fecha2]).order_by('-id')
+            venta = Pedido.objects.filter(estado=estadoPedido,fecha__range=[fecha1,fecha2]).order_by('-id')
             for oVenta in venta:
                 #pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
                 pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oVenta.id)
@@ -662,10 +665,10 @@ def FiltrarEstadoPedido(request,estado_id):
         fecha1=datetime.strftime(datetime.strptime(fecha_inicio,'%d-%m-%Y'),'%Y-%m-%d')
         fecha2=date.today()
         if producto !='' or dni!='':
-            venta = Pedido.objects.filter(estado=estado_id,id__in=[p.id for p in oVentas],fecha__range=[fecha1,fecha2]).order_by('-id')
+            venta = Pedido.objects.filter(estado=estadoPedido,id__in=[p.id for p in oVentas],fecha__range=[fecha1,fecha2]).order_by('-id')
         else:
             oProductos=[]
-            venta = Pedido.objects.filter(estado=estado_id,fecha__range=[fecha1,fecha2]).order_by('-id')[:50]
+            venta = Pedido.objects.filter(estado=estadoPedido,fecha__range=[fecha1,fecha2]).order_by('-id')[:50]
             for oVenta in venta:
                 #pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
                 pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oVenta.id)
@@ -681,10 +684,10 @@ def FiltrarEstadoPedido(request,estado_id):
         tags.append(objetotag);
         fecha2=datetime.strftime(datetime.strptime(fecha_fin,'%d-%m-%Y'),'%Y-%m-%d')
         if producto !='' or dni!='':
-            venta = Pedido.objects.filter(estado=estado_id,id__in=[p.id for p in oVentas],fecha__lte=fecha2).order_by('-id')
+            venta = Pedido.objects.filter(estado=estadoPedido,id__in=[p.id for p in oVentas],fecha__lte=fecha2).order_by('-id')
         else:
             oProductos=[]
-            venta = Pedido.objects.filter(estado=estado_id,fecha__lte=fecha2).order_by('-id')
+            venta = Pedido.objects.filter(estado=estadoPedido,fecha__lte=fecha2).order_by('-id')
             for oVenta in venta:
                 #pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
                 pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oVenta.id)
@@ -696,7 +699,7 @@ def FiltrarEstadoPedido(request,estado_id):
             oVentas = venta
 
     if producto=='' and dni=='' and fecha_inicio=='' and fecha_fin=='':
-        oVenta = Pedido.objects.filter(estado = estado_id).order_by('-id')
+        oVenta = Pedido.objects.filter(estado = estadoPedido).order_by('-id')
         for o in oVenta:
             #pedido = Pedido.objects.filter(id=o.pedido_id,estado=True)
             pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=o.id)
@@ -722,7 +725,14 @@ def FiltrarEstadoPedido(request,estado_id):
     end_index = index + 5 if index <= max_index - 5 else max_index
     page_range = paginator.page_range[start_index:end_index]
 
-    return render(request, 'pedido/listar.html', {"oPedidos": ventaPagina,"oProductos":oProductos,"page_range": page_range,"tags":tags,})
+
+    print(estadoPedido)
+    if estadoPedido==1:
+        return render(request, 'pedido/almacen.html', {"oPedidos": ventaPagina,"oProductos":oProductos,"page_range": page_range,"tags":tags,})
+    elif estadoPedido==2:
+        return render(request, 'pedido/ventaPendiente.html', {"oPedidos": ventaPagina,"oProductos":oProductos,"page_range": page_range,"tags":tags,})
+    else:
+        return render(request, 'pedido/nuevo.html')
 
 
 @csrf_exempt
