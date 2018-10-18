@@ -142,41 +142,41 @@ $(document).ready(function(){
 
     });
 
-    
-    
-
-
 });
+
 
 function initMap() {
 
-    var coordActuales = [];
+navigator.geolocation.getCurrentPosition(exito, error);
 
-    navigator.geolocation.getCurrentPosition(exito, error);
+function exito(rta) {
+    var latActual = rta.coords.latitude;
+    var lngActual = rta.coords.longitude;
 
-    function exito(rta) {
-        coordActuales.push(rta.coords.latitude);
-        coordActuales.push(rta.coords.longitude);
-        console.log(coordActuales[0]);
-        console.log(coordActuales[1]);
-    }
-    
-    function error() {}
-
-    var latLngActuales = new google.maps.LatLng(
-        coordActuales[0], 
-        coordActuales[1]
-    )
+    var latLngActuales = new google.maps.LatLng(latActual, lngActual);
 
     var divMapa = document.getElementById('mapa');
-    
+
     var configMapa = {
-        zoom: 8,
+        zoom: 15,
         center: latLngActuales
     }
 
     var mapa = new google.maps.Map(divMapa, configMapa);
-        
+
+    var marker = new google.maps.Marker({
+        position: latLngActuales, 
+        map: mapa,
+        draggable: true,
+    })
+}
+
+function error() {}
+
+var posicion = new google.maps.LatLng(-13.137653937128228, -74,22426723862304);
+
+var marker = new google.maps.Marker({position: posicion, map: mapa})
+
 }
 
 </script>
