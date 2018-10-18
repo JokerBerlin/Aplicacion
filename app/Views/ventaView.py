@@ -43,7 +43,7 @@ def ListarVentas(request):
         page_range = paginator.page_range[start_index:end_index]
 
         for o in oVenta:
-            pedido = Pedido.objects.filter(id=o.pedido_id,estado=True)
+            pedido = Pedido.objects.filter(id=o.pedido_id,estado=3)
             pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
             for ope in pedidoproductospresentacions:
                 oNuevo={}
