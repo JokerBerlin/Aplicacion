@@ -40,6 +40,7 @@ function agregar(){
     }
 
     if (error=="") {
+        // se crea el JSON latLng que contiene las coordenadas de los clientes
         var latLng = [Latitud, Longitud];
         coordenadas.push(latLng);
 

@@ -150,7 +150,7 @@ function addMarker(config) {
   var marker = new google.maps.Marker({
     position: config.position,
     map: mapa,
-    draggable: true
+    draggable: false
   });
 }
 
@@ -173,8 +173,12 @@ function initMap() {
         position: pos
       };
 
-      addMarker(config);
-
+      var marker = new google.maps.Marker({
+          position: config.position,
+          map: mapa,
+          draggable: true
+      })
+      
       mapa.setCenter(pos);
 
     }, function() {
