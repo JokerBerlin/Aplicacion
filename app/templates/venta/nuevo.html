@@ -129,6 +129,11 @@ var precioPresentacion = function() {
             },
             error: function(jqxhr, status, exception) {
                 alert('Exception:', exception);
+                $('#inpt-producto').val('');
+                $('#codigo').val('');
+                $('#valorPrecio').val('');
+                $('#cmbPresentacion').val('');
+                $('#cmbPrecio').val('');
             }
 
         });

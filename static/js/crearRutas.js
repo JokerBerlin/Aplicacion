@@ -43,7 +43,7 @@ function agregar(){
         var latLng = [Latitud, Longitud];
         coordenadas.push(latLng);
 
-        var pos = {lat: Latitud, lng: Longitud};
+        var pos = {lat: parseFloat(Latitud), lng: parseFloat(Longitud)};
         var config = {position: pos};
 
         addMarker(config);
