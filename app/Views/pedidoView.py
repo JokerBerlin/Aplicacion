@@ -77,8 +77,7 @@ def insertarPedido(request):
     else:
 
         return render(request, 'pedido/nuevo.html', {})
-        return render(request, 'venta/prueba.html', {})
-
+        #return render(request, 'venta/prueba.html', {})
 
 def registrarPedido(request):
     # if request.method == 'POST':
@@ -141,6 +140,40 @@ def ListarPedidos(request):
 
         return render(request, 'pedido/listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
         #return render(request, 'venta/prueba.html', {})
+
+def ListarEstadoPedidos(request,estado_id):
+    oProductos=[]
+    if request.method == 'POST':
+        return render(request, 'pedido/listar.html')
+    else:
+        oPedidos = Pedido.objects.filter(estado=estado_id).order_by('-id')
+        for oPedido in oPedidos:
+            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oPedido.id)
+            print(pedidoproductospresentacions)
+            for ope in pedidoproductospresentacions:
+                oNuevo={}
+                oNuevo['id']=oPedido.id
+                oNuevo['producto']=ope.productopresentacions.producto.nombre
+                oProductos.append(oNuevo)
+
+        paginator = Paginator(oPedidos,10)
+
+        page = request.GET.get('page')
+        try:
+            pedidoPagina = paginator.page(page)
+        except PageNotAnInteger:
+            pedidoPagina = paginator.page(1)
+        except EmptyPage:
+            pedidoPagina = paginator.page(paginator.num_pages)
+
+        index = pedidoPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        return render(request, 'pedido/listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
+
 
 def ResumenPedidos(request):
     if request.method == 'POST':

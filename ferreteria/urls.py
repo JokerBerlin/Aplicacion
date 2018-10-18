@@ -58,7 +58,6 @@ urlpatterns = [
 
     ################## Venta #######################
     #vista nueva venta
-    url(r'^Venta/pendiente/$', listarPedidosVenta),
     url(r'^Venta/nuevo/$', ventaNuevo),
     url(r'^Venta/registrar/$', insertarVenta),
     url(r'^Pedido/nuevo/$', registrarPedido),
@@ -98,6 +97,7 @@ urlpatterns = [
 
     url(r'^Pedido/nuevo/$', registrarPedido),
     url(r'^Pedido/listar/$', ListarPedidos),
+    url(r'^Pedido/listar/(?P<estado_id>\d+)/$', ListarEstadoPedidos),
     url(r'^Pedido/modificar/$', modificarPedido),
 
     url(r'^Pedido/resumen/$', ResumenPedidos),

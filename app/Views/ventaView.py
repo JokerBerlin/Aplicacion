@@ -470,40 +470,6 @@ def eliminar_identificador_venta(request):
     response = {}
     return JsonResponse(response)
 
-def listarPedidosVenta(request):
-    oProductos=[]
-    if request.method == 'POST':
-        return render(request, 'venta/pedido-listar.html')
-    else:
-        oPedidos = Pedido.objects.filter(estado = 2).order_by('-id')
-        for oPedido in oPedidos:
-            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oPedido.id)
-            print(pedidoproductospresentacions)
-            for ope in pedidoproductospresentacions:
-                oNuevo={}
-                oNuevo['id']=oPedido.id
-                oNuevo['producto']=ope.productopresentacions.producto.nombre
-                oProductos.append(oNuevo)
-
-        paginator = Paginator(oPedidos,2)
-
-        page = request.GET.get('page')
-        try:
-            pedidoPagina = paginator.page(page)
-        except PageNotAnInteger:
-            pedidoPagina = paginator.page(1)
-        except EmptyPage:
-            pedidoPagina = paginator.page(paginator.num_pages)
-
-        index = pedidoPagina.number - 1
-        max_index = len(paginator.page_range)
-        start_index = index - 5 if index >= 5 else 0
-        end_index = index + 5 if index <= max_index - 5 else max_index
-        page_range = paginator.page_range[start_index:end_index]
-
-        return render(request, 'venta/pedido-listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
-
-
 def ventaNuevo(request):
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
