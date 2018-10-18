@@ -103,6 +103,9 @@ urlpatterns = [
     url(r'^Pedido/resumen/$', ResumenPedidos),
     url(r'^Pedido/detalle/(?P<pedido_id>\d+)/$', DetallePedido),
     url(r'^Pedido/editar/(?P<pedido_id>\d+)/$', editarPedido),
+    url(r'^Pedido/venta/(?P<pedido_id>\d+)/$', pedidoVenta),
+    url(r'^Pedido/venta/', pedidoVenta),
+
     url(r'^Pedido/eliminar/$', eliminar_identificador_pedido,name="eliminar_pedido"),
     url(r'^Pedido/actualizar/$', IngresarPrecios),
     url(r'^Pedido/reporte/$', IngresarPrecios),
