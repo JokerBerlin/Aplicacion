@@ -289,6 +289,7 @@ def FiltrarVenta(request):
 
     tags=[]
     #
+
     if producto != '':
         objetotag={}
         objetotag['producto']=producto
@@ -296,7 +297,7 @@ def FiltrarVenta(request):
         producto = Producto.objects.get(nombre=producto).id
         presentacion = Productopresentacions.objects.filter(producto=producto)
         pedidoproductopresentacion = Pedidoproductospresentacions.objects.filter(productopresentacions_id__in=[p.id for p in presentacion])
-        pedido = Pedido.objects.filter(estado=True,id__in=[s.pedido_id for s in pedidoproductopresentacion])
+        pedido = Pedido.objects.filter(estado=3,id__in=[s.pedido_id for s in pedidoproductopresentacion])
         venta = Venta.objects.filter(estado=True,pedido_id__in=[p.id for p in pedido]).order_by("-id")
         productonombre = Producto.objects.get(id=producto).nombre
         for v in venta:
@@ -320,7 +321,7 @@ def FiltrarVenta(request):
             cliente = Cliente.objects.get(numerodocumento=dni)
             venta = Venta.objects.filter(estado=True,cliente_id=cliente.id).order_by('-id')
             for oVenta in venta:
-                pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
+                pedido = Pedido.objects.filter(estado=3,id=oVenta.pedido_id)
                 pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
                 for oPedidopedidoproductopresentacion in pedidoproductospresentacions:
                     oNuevo={}
@@ -341,7 +342,7 @@ def FiltrarVenta(request):
             oProductos = []
             venta = Venta.objects.filter(estado=True,fecha__range=[fecha1,fecha2]).order_by('-id')
             for oVenta in venta:
-                pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
+                pedido = Pedido.objects.filter(estado=3,id=oVenta.pedido_id)
                 pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
                 for oPedidopedidoproductopresentacion in pedidoproductospresentacions:
                     oNuevo={}
@@ -361,7 +362,7 @@ def FiltrarVenta(request):
             oProductos=[]
             venta = Venta.objects.filter(estado=True,fecha__range=[fecha1,fecha2]).order_by('-id')[:50]
             for oVenta in venta:
-                pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
+                pedido = Pedido.objects.filter(estado=3,id=oVenta.pedido_id)
                 pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
                 for oPedidopedidoproductopresentacion in pedidoproductospresentacions:
                     oNuevo={}
@@ -380,7 +381,7 @@ def FiltrarVenta(request):
             oProductos=[]
             venta = Venta.objects.filter(estado=True,fecha__lte=fecha2).order_by('-id')[:50]
             for oVenta in venta:
-                pedido = Pedido.objects.filter(estado=True,id=oVenta.pedido_id)
+                pedido = Pedido.objects.filter(estado=3,id=oVenta.pedido_id)
                 pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
                 for oPedidopedidoproductopresentacion in pedidoproductospresentacions:
                     oNuevo={}
@@ -392,7 +393,7 @@ def FiltrarVenta(request):
     if producto=='' and dni=='' and fecha_inicio=='' and fecha_fin=='':
         oVenta = Venta.objects.filter(estado = True).order_by('-id')
         for o in oVenta:
-            pedido = Pedido.objects.filter(id=o.pedido_id,estado=True)
+            pedido = Pedido.objects.filter(id=o.pedido_id,estado=3)
             pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
             for ope in pedidoproductospresentacions:
                 oNuevo={}
@@ -469,51 +470,17 @@ def eliminar_identificador_venta(request):
     response = {}
     return JsonResponse(response)
 
-def listarPedidosVenta(request):
-    oProductos=[]
-    if request.method == 'POST':
-        return render(request, 'venta/pedido-listar.html')
-    else:
-        oPedidos = Pedido.objects.filter(estado = 2).order_by('-id')
-        for oPedido in oPedidos:
-            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oPedido.id)
-            print(pedidoproductospresentacions)
-            for ope in pedidoproductospresentacions:
-                oNuevo={}
-                oNuevo['id']=oPedido.id
-                oNuevo['producto']=ope.productopresentacions.producto.nombre
-                oProductos.append(oNuevo)
+def ventaNuevo(request):
+    oPresentaciones = Presentacion.objects.filter(estado=True)
+    oPrecios = Precio.objects.filter(estado=True)
+    oPedidos = Pedido.objects.filter(estado=2)
 
-        paginator = Paginator(oPedidos,2)
+    context = {
+        'presentaciones': oPresentaciones,
+        'precios': oPrecios,
+        'pedidos': oPedidos
+    }
 
-        page = request.GET.get('page')
-        try:
-            pedidoPagina = paginator.page(page)
-        except PageNotAnInteger:
-            pedidoPagina = paginator.page(1)
-        except EmptyPage:
-            pedidoPagina = paginator.page(paginator.num_pages)
-
-        index = pedidoPagina.number - 1
-        max_index = len(paginator.page_range)
-        start_index = index - 5 if index >= 5 else 0
-        end_index = index + 5 if index <= max_index - 5 else max_index
-        page_range = paginator.page_range[start_index:end_index]
-
-        return render(request, 'venta/pedido-listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
-        
-
-def ventaNuevo(request):    	
-    oPresentaciones = Presentacion.objects.filter(estado=True)	
-    oPrecios = Precio.objects.filter(estado=True)	
-    oPedidos = Pedido.objects.filter(estado=2)	
-    
-    context = {	
-        'presentaciones': oPresentaciones,	
-        'precios': oPrecios,	
-        'pedidos': oPedidos	
-    }	
-    
     return render(request, 'venta/nuevo.html', context)
 
 @csrf_exempt
@@ -551,7 +518,7 @@ def insertarVenta(request):
                 productopresentacions = oProductoPresentacions
             )
             oPedidoproductospresentacions.save()
-        
+
         oVenta.monto = monto_venta
         oVenta.save()
 
