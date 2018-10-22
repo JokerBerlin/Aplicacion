@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% block imports %}
+Ventas
+<script type="text/javascript" src="/static/js/listarVenta.js"></script>
+<link href="/static/css/styleAutocomplete.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+function eliminarIdentificador(identificadorId) {
+		var request = $.ajax({
+				type: "POST",
+				url: "{% url 'eliminar_venta' %}",
+				data: {
+						"csrfmiddlewaretoken": "{{ csrf_token }}",
+						"identificador_id": identificadorId
+				},
+		});
+		request.done(function(response) {
+				alert("La venta fue desactivado con exito");
+				$('#myModal').modal('toggle');
+				location.reload(true);
+				//$("#tabla" + identificadorId).remove();
+		});
+};
+	selVenta = function(idVenta, nombre){
+		document.getElementById('nombreCliente').innerHTML = nombre;
+		$("#eliminar").attr("onclick","eliminarIdentificador('"+idVenta+"')");
+	};
+</script>
+{% endblock %}
+
+{% block title %}
+Ventas
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+
+    <div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    	<div class="modal-dialog" role="document">
+    		<div class="modal-content">
+    			<div class="modal-header">
+    				<h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Venta</h5>
+
+    				<script type="text/javascript">
+    					var idVenta = document.getElementById('codigo').value;
+    					var nombreCliente = document.getElementById('nombre').value;
+    				</script>
+    				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    					<span aria-hidden="true">&times;</span>
+    				</button>
+    			</div>
+
+    			<div class="modal-body">
+
+
+
+    					<p>Estás a punto de desactivar la venta de <label id="nombreCliente"></label> </p>
+
+    			</div>
+    			<div class="modal-footer">
+    				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    				<button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+
+        <div class="col-sm-12">
+            <div class="white-box">
+              <form class="" action="/venta/filtras/" method="post">
+                {% csrf_token %}
+                <div class="col-lg-12" style="margin-top:2px;">
+                  <div class="col-xs-2 col-sm-2 col-md-2">
+                      <input type="text" id="inpt-producto"  placeholder="Producto..." name="producto_buscado" class="form-control">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 col-md-2">
+                        <input type="text" id="inpt-cliente" placeholder="DNI o Nombre Cliente..." name="cliente_buscado" class="form-control">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 col-md-2 ">
+                      <input type="text" class="form-control" id="desde" placeholder="Fecha inicio..." name="desde" autocomplete="off">
+                  </div>
+                  <div class="col-xs-2 col-sm-2 col-md-2 ">
+                      <input type="text" class="form-control" id="hasta" placeholder="Fecha final..." name="hasta" autocomplete="off">
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-4 ">
+                      <button id="btn_bsc" class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
+                  </div>
+                </div>
+              </form>
+                <!--</form>-->
+
+              <br>
+
+
+              <div class="col-lg-12" style="margin-top:2px;">
+
+              {% for i in tags %}
+              {% if i.producto %}
+                <div id="producto" class="btn btn-danger">
+                  <span id="productoNuevo">{{i.producto}}</span>
+                    <button id="close" type="button" class="close" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+              {% endif %}
+              {% if i.dni %}
+              <div id="cliente" class="btn btn-danger">
+                <span id="productoNuevo">{{i.dni}}</span>
+                  <button id="close2" type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              {% endif %}
+              {% if i.fecha_inicio %}
+              <div id="inicio" class="btn btn-danger">
+                <span id="productoNuevo">{{i.fecha_inicio}}</span>
+                  <button id="close3" type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              {% endif %}
+              {% if i.fecha_fin %}
+              <div id="fin" class="btn btn-danger">
+                <span id="productoNuevo">{{i.fecha_fin}}</span>
+                  <button id="close4" type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+              <br>
+
+
+              <br>
+                <h3 class="box-title">Lista de Ventas</h3>
+        {% load widget_tweaks %}
+        {% csrf_token %}
+          <div class="form-group">
+          <table id="tVentas"  class="table">
+            <thead>
+              <tr>
+                  <th>#id</th>
+                  <th>Fecha</th>
+                  <th>Monto</th>
+                  <th>nPedido</th>
+                  <th>Cliente</th>
+                  <th>Pedidoid</th>
+                  <th>Producto</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for oVent in oVenta %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{oVent.fecha}}</td>
+                <td>{{oVent.monto}}</td>
+                <td>{{oVent.nrecibo}}</td>
+                <td>{{oVent.cliente.nombre }}</td>
+                <td>{{oVent.pedido.id }}</td>
+                <td>
+                  {% for oNue in oProductos %}
+                    {% if oVent.id == oNue.id %}
+                        <table id="tProductos" class="table">
+                          <tr>
+                            {{ oNue.producto }}
+                          </tr>
+                        </table>
+
+                    {% endif %}
+                  {% endfor %}
+                </td>
+                <td>
+                  <a href="/Venta/anular/{{oVent.id}}/"><button type="button" class="btn btn-info">Anular</button> </a>
+                  <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oVenta.id }}" onclick="selVenta('{{oVent.id}}','{{oVent.cliente.nombre}}');">Eliminar</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <br>
+
+        <div class="center">
+          <ul class="pagination">
+            {% if oVenta.has_previous %}
+                      <li><a href="?page={{oVenta.previous_page_number}}"><<</a></li>
+                  {% endif %}
+
+
+                {% for pg in page_range %}
+                    {% if oVenta.number == pg %}
+                        <li><a class="active" href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
+                    {% else %}
+                        <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                  {% if oVenta.has_next %}
+                      <li><a href="?page={{oVenta.next_page_number}}">>></a></li>
+                  {% endif %}
+          </ul>
+        </div>
+
+
+
+        <br>
+        <a href="/venta/nuevo/"><button type="button" class="btn btn-success">Nueva Venta</button> </a>
+
+      </div>
+      </div>
+    </div>
+
+
+
+{% endblock %}
