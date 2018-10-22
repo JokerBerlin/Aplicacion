@@ -241,7 +241,6 @@ function nuevaVenta() {
                 case 1:
                     cantidad = $("#cantidad"+index ).val();
                     break;
-
                 case 2:
                     codigo = $(this).text();
                     break;
