@@ -507,7 +507,6 @@ def insertarVenta(request):
         for producto in productos:
             monto_venta += round(float(producto[0]) * float(producto[4]), 2)
             oProducto = Producto.objects.get(codigo=producto[1])
-            print(oProducto.nombre)
             oPresentacion = Presentacion.objects.get(nombre=producto[3])
             print(oPresentacion.nombre)
             oProductoPresentacions = Productopresentacions.objects.get(producto=oProducto, presentacion=oPresentacion)
@@ -518,7 +517,23 @@ def insertarVenta(request):
                 productopresentacions = oProductoPresentacions
             )
             oPedidoproductospresentacions.save()
-
+            
+            oUltimoP = Producto_almacens.objects.filter(producto = oProducto).latest('id')
+            cantidad_dscto_almacen = float(producto[0]) * oProductoPresentacions.valor
+            cantidad_sobrante_almacen = oUltimoP - cantidad_dscto_almacen
+            
+            nuevoCantidadProductoAlmacen = Producto_almacens(
+                cantidad=cantidad_sobrante_almacen,
+                cantidadinicial=oUltimoP.cantidad,
+                almacen_id=oUltimoP.almacen_id,
+                lote_id=oUltimoP.lote_id,
+                producto_id=oUltimoP.producto_id
+            )
+            nuevoCantidadProductoAlmacen.save()
+        
+        oRecibo = Recibo()
+        oRecibo.save()
+        oVenta.nrecibo = oRecibo.pk
         oVenta.monto = monto_venta
         oVenta.save()
 
