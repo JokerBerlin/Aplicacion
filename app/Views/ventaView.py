@@ -470,6 +470,27 @@ def eliminar_identificador_venta(request):
     oPedido.save()
     identificador.estado = 0
     identificador.save()
+
+    oPedProdPres = Pedidoproductospresentacions.objects.filter(pedido=oPedido)
+    for oPedProdPre in oPedPres:
+        cantidad = oPedProdPre.cantidad
+        oProdPresentacions = oPedProdPre.productopresentacions
+        oProducto = oProductoPresentacions.producto
+        # almacen
+        oAlmacen = 1
+        fraccion = oProdPresentacions.valor
+        prodAlmacen = Producto_almacens.objects.filter(producto=oProducto, almacen_id=oAlmacen).latest('pk')
+        cantidadAntesAnulacion = prodAlmacen.cantidad
+        cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
+        prodAlmacenNuevo = Producto_almacens(
+            cantidad=cantidadDespuesAnulacion,
+            cantidadinicial=cantidadAntesAnulacion,
+            almacen=prodAlmacen.almacen,
+            lote=prodAlmacen.lote,
+            producto=prodAlmacen.producto
+        )
+        prodAlmacenNuevo.save()
+        
     response = {}
     return JsonResponse(response)
 
@@ -488,8 +509,6 @@ def ventaNuevo(request):
 
 @csrf_exempt
 #Caso en el que se crea una venta sin pasar antes por pedidos y almacen
-#falta hacer el descuento a almacen
-#falta poner nrecibo a venta
 def insertarVenta(request):
     if request.method == 'POST':
         datos = json.loads(request.body)
@@ -509,6 +528,7 @@ def insertarVenta(request):
         print(productos)
         for producto in productos:
             monto_venta += round(float(producto[0]) * float(producto[4]), 2)
+            print(monto_venta)
             oProducto = Producto.objects.get(codigo=producto[1])
             oPresentacion = Presentacion.objects.get(nombre=producto[3])
             print(oPresentacion.nombre)
@@ -523,7 +543,7 @@ def insertarVenta(request):
             
             oUltimoP = Producto_almacens.objects.filter(producto = oProducto).latest('id')
             cantidad_dscto_almacen = float(producto[0]) * oProductoPresentacions.valor
-            cantidad_sobrante_almacen = oUltimoP - cantidad_dscto_almacen
+            cantidad_sobrante_almacen = oUltimoP.cantidad - cantidad_dscto_almacen
             
             nuevoCantidadProductoAlmacen = Producto_almacens(
                 cantidad=cantidad_sobrante_almacen,
