@@ -548,6 +548,7 @@ def insertarVenta(request):
 
     return datos
 
+<<<<<<< HEAD
 def anularVenta(request):
     oProductos=[]
     if request.method == 'POST':
@@ -589,3 +590,17 @@ def anularVenta(request):
 
     context = {}
     return render(request, 'venta/anular.html', context)
+=======
+@csrf_exempt
+def anularVenta(request, venta_id):
+
+    oVenta = Venta.objects.get(id=venta_id)
+    oPedido = Pedido.objects.get(id=oVenta.pedido_id)
+    oPedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id=oPedido.id )
+    #oPedidopresentacions = Pedidopresentacions.objects.filter(id__in=[p.productopresentacions_id for p in oProductopresentacions])
+    print(oPedidoproductospresentacions)
+
+
+
+    return HttpResponse(json.dumps({'exito': 1}), content_type="application/json")
+>>>>>>> c498e06f06a7b8af94b87c1264f269abf5ff9f93

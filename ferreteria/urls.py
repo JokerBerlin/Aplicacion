@@ -156,6 +156,7 @@ urlpatterns = [
 
     #url(r'^venta/nuevo/$', registrarPedido),
     url(r'^Venta/listar/$', ListarVentas, name="venta_listar"),
+    url(r'^Venta/anular/(?P<venta_id>\d+)/$', anularVenta),
 
     #filtros de Ventas
     #url(r'^venta/filtrar/', filtrarVentas, name="filtrar_ventas"),
