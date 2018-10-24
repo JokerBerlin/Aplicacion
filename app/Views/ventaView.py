@@ -465,6 +465,9 @@ def ListarVenta(request):
 def eliminar_identificador_venta(request):
     pk = request.POST.get('identificador_id')
     identificador = Venta.objects.get(pk=pk)
+    oPedido = identificador.pedido
+    oPedido.estado = 0
+    oPedido.save()
     identificador.estado = 0
     identificador.save()
     response = {}
@@ -544,3 +547,45 @@ def insertarVenta(request):
 
 
     return datos
+
+def anularVenta(request):
+    oProductos=[]
+    if request.method == 'POST':
+        return render(request, 'venta/anular.html')
+    else:
+        oVenta = Venta.objects.filter(estado = True).order_by('-id')
+        paginator = Paginator(oVenta, 5)
+
+        page = request.GET.get('page')
+        try:
+            ventaPagina = paginator.page(page)
+        except PageNotAnInteger:
+            ventaPagina = paginator.page(1)
+        except EmptyPage:
+            ventaPagina = paginator.page(paginator.num_pages)
+
+        index = ventaPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        for o in oVenta:
+            pedido = Pedido.objects.filter(id=o.pedido_id,estado=3)
+            pedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido_id__in=[p.id for p in pedido])
+            for ope in pedidoproductospresentacions:
+                oNuevo={}
+                oNuevo['id']=o.id
+                oNuevo['producto']=ope.productopresentacions.producto.nombre
+                oProductos.append(oNuevo)
+
+        context = {
+            "oVenta": ventaPagina,
+            "oProductos":oProductos,
+            "page_range": page_range
+        }
+
+        return render(request, 'venta/anular.html', context)
+
+    context = {}
+    return render(request, 'venta/anular.html', context)

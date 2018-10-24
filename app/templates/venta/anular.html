@@ -23,10 +23,11 @@ function eliminarIdentificador(identificadorId) {
 				//$("#tabla" + identificadorId).remove();
 		});
 };
-	selVenta = function(idVenta, nombre){
-		document.getElementById('nombreCliente').innerHTML = nombre;
-		$("#eliminar").attr("onclick","eliminarIdentificador('"+idVenta+"')");
-	};
+
+var selVenta = function(idVenta, nombre){
+    document.getElementById('nombreCliente').innerHTML = nombre;
+    $("#eliminar").attr("onclick","eliminarIdentificador('"+idVenta+"')");
+};
 </script>
 {% endblock %}
 
@@ -174,7 +175,7 @@ Ventas
                 </td>
                 <td>
                   <a href="/Venta/detalle/{{oVent.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
-                  <a href="/Venta/editar/{{oVent.id}}/"><button type="button" class="btn btn-primary btn-edit">Editar</button></a>
+                  <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oVenta.id }}" onclick="selVenta('{{oVent.id}}','{{oVent.cliente.nombre}}');">Eliminar</a>
                 </td>
               </tr>
             {% endfor %}
