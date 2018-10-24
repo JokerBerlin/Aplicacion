@@ -74,25 +74,29 @@ def registrarPresentacion(request):
         Datos = json.loads(request.body)
         print(Datos)
         Dato = Datos['presentaciones']
-        oPrecios = Datos['precios']
+        print(Dato)
+        #oPrecios = Datos['precios']
         oPresentaciones = Dato
+        producto = Datos['producto']
         for oPresentacion in oPresentaciones:
-            oProducto = Producto.objects.get(nombre=oPresentacion[0])
+            oProducto = Producto.objects.get(nombre=producto)
             #oPresentacion = Presentacion.objects.get(id=oPresentacion[1])
             oProductoPresentacions = Productopresentacions()
+            oPre = Presentacion.objects.get(nombre=oPresentacion[0])
             oProductoPresentacions.producto_id = oProducto.id
-            oProductoPresentacions.presentacion_id = oPresentacion[1]
-            oProductoPresentacions.valor = 1/float(oPresentacion[2])
+            oProductoPresentacions.presentacion_id = oPre.id
+            oProductoPresentacions.valor = 1/float(oPresentacion[1])
             oProductoPresentacions.unidadprincipal = 0
             oProductoPresentacions.save()
-            oProductoPresentacions = Productopresentacions.objects.get(producto_id=oProducto.id,presentacion_id = oPresentacion[1])
+            oProductoPresentacions = Productopresentacions.objects.get(producto_id=oProducto.id,presentacion_id = oPre.id)
             #cont = 1
-            precios = Precio.objects.all()
-            for oPrecio in precios:
+            oPrecios = Precio.objects.filter(estado=1)
+            cont = 2
+            for oPrecio in oPrecios:
                 oProductoPresentacionsprecios = Productopresentacionsprecios()
-                cont = oPrecio.id - 1
-                for precio in oPrecios:
-                    oProductoPresentacionsprecios.valor = precio[cont]
+
+
+                oProductoPresentacionsprecios.valor = oPresentacion[cont]
                 oProductoPresentacionsprecios.precio_id = oPrecio.id
                 oProductoPresentacionsprecios.productopresentacions_id = oProductoPresentacions.id
                 oProductoPresentacionsprecios.save()
@@ -100,7 +104,7 @@ def registrarPresentacion(request):
 
 
 
-        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
+        return HttpResponseRedirect('/Producto/listar/')
 
     else:
         oUltimoP=Producto.objects.all().latest('id')
