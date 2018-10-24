@@ -84,7 +84,7 @@ function agregar(){
         //$('#id_Total').text("S/. "+TotalVenta);
         RefrescarTotal();
         reset_values();
-        reordenar();
+        //reordenar();
     }
     else{
         switch(error) {
@@ -131,7 +131,7 @@ function eliminar(id_fila){
         RefrescarTotal();
         $('#'+id_fila[i]).remove();
     }
-    reordenar();
+    //reordenar();
 }
 
 function reordenar(){
@@ -172,9 +172,12 @@ function GenerarVenta(){
             //dato = index;
             console.log(index);
             switch (index2) {
-
+                case 0:
+                    numero = $(this).text();
+                    numero = parseInt(numero);
+                    console.log("esto"+numero);
                 case 1:
-                    cantidad = $("#cantidad"+index ).val();
+                    cantidad = $("#cantidad"+numero ).val();
                     break;
 
                 case 2:
@@ -266,7 +269,7 @@ function nuevaVenta() {
             productos: productos,
             cliente: cliente
         };
-        
+
         var sendData = JSON.stringify(datos);
         $.ajax({
             type: "POST",
