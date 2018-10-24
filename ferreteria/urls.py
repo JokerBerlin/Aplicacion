@@ -166,6 +166,7 @@ urlpatterns = [
     url(r'^Pedido/filtrar/', FiltrarPedido),
     url(r'^Pedido/estado/(?P<estado_id>\d+)/$', EstadoPedido),
     url(r'^venta/eliminar/', eliminar_identificador_venta,name="eliminar_venta"),
+    url(r'^venta/anular/', anularVenta),
 
     #url(r'^venta/filtrase/', leer),
     #
@@ -195,7 +196,7 @@ urlpatterns = [
 
 #######################Información y Reportes##############################
 
-    #url(r'^Reporte/almacen/$', reporteAlmacen),
+    url(r'^Reporte/almacen/$', reporteAlmacen),
     #url(r'^Reporte/caja/$', reporteCaja),
     #url(r'^Reporte/ventas/$', reporteVentas),
 

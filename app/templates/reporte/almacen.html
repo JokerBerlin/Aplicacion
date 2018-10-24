@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block imports %}
+<!-- ALGO -->
+{% endblock %}
+
+
+{% block title %}
+Reporte de almacen
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Reporte almacen</h1>
+    <div class="card mb-3">
+        <div class="card-header" id="saldoActual">
+            <i class="fas fa-chart-area"></i>
+        </div>
+        <div class="card-body">
+            <canvas id="MyChart" width="100%" height="30"></canvas>
+        </div>
+        <div class="card-footer small text-muted">Actualizado ayer a las 11:59 PM</div>
+    </div>
+
+
+</div>
+{% endblock %}
+
+<script>
+
+window.onload = function() {
+  var fechas = [];
+  var saldos = [];
+  var ctx = document.getElementById("MyChart");
+  $.ajax({
+    method: 'GET',
+    url: '/Deposito/operaciones/listar-chart/',
+    success: function(data) {
+      data.forEach(element => {
+        fechas.push(moment(element.fields.fecha).format('DD/MM/YYYY'));
+        saldos.push(element.fields.saldo_final);
+      });
+
+      // SALDO ACTUAL---------------------------------------------------------------------
+      const lastIdx = data.length - 1;
+      $('#saldoActual')[0].innerText = 'Saldo actual: ' + data[lastIdx].fields.saldo_final;
+      // ---------------------------------------------------------------------------------
+
+      var respuesta = [];
+      var labels = [];
+
+      fechas.forEach(function(element, index, array) {
+          res = arrTiempoAFecha(element);
+          respuesta.push(res);
+      });
+
+      respuesta.forEach(function(element, index, array) {
+          año = element[0];
+          mes = fecha(element[1]) + ' ';
+          dia = element[2] + ' ';
+          // label = dia + 'de ' + mes + 'del ' + año;
+          label=año;
+          labels.push(label);
+      });
+
+      var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Saldo',
+                data: saldos,
+                borderColor: 'rgb(28, 106, 216)',
+                backgroundColor: 'rgba(28, 106, 216, 0.8)',
+                borderWidth: 1
+            }],
+        },
+        options: {
+            title: {
+              display: true,
+              text: 'Saldo reciente',
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: false,
+            },
+            hover: {
+              mode: 'nearest',
+              intersect: true,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+      });
+    },
+  error: function(error_data) {
+      console.log("error");
+      console.log(error_data)
+  }
+});
+
+}
+
+</script>

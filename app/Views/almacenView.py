@@ -12,7 +12,6 @@ from app.views import *
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-
 @csrf_exempt
 def BuscarAlmacen(request):
     if request.method == 'POST':
@@ -37,3 +36,7 @@ def BuscarAlmacen(request):
                	return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
             except Exception as e:
               return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
+
+def reporteAlmacen(request):
+    context = {}
+    return render(request, 'reporte/almacen.html', context)
