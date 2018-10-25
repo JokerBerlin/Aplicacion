@@ -462,6 +462,40 @@ def ListarVenta(request):
 
 """
 
+def eliminar_identificador_venta(request):
+    pk = request.POST.get('identificador_id')
+    print(pk)
+    identificador = Venta.objects.get(pk=pk)
+    oPedido = identificador.pedido
+    oPedido.estado = 0
+    oPedido.save()
+    print(oPedido)
+    identificador.estado = 0
+    identificador.save()
+
+    oPedProdPres = Pedidoproductospresentacions.objects.filter(pedido=oPedido)
+    for oPedProdPre in oPedProdPres:
+        cantidad = oPedProdPre.cantidad
+        oProdPresentacions = oPedProdPre.productopresentacions
+        oProducto = oProdPresentacions.producto
+        # almacen
+        oAlmacen = 1
+        fraccion = oProdPresentacions.valor
+        prodAlmacen = Producto_almacens.objects.filter(producto=oProducto, almacen_id=oAlmacen).latest('pk')
+        cantidadAntesAnulacion = prodAlmacen.cantidad
+        cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
+        prodAlmacenNuevo = Producto_almacens(
+            cantidad=cantidadDespuesAnulacion,
+            cantidadinicial=cantidadAntesAnulacion,
+            almacen=prodAlmacen.almacen,
+            lote=prodAlmacen.lote,
+            producto=prodAlmacen.producto
+        )
+        prodAlmacenNuevo.save()
+
+    response = {}
+    return JsonResponse(response)
+
 def ventaNuevo(request):
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
@@ -510,11 +544,11 @@ def insertarVenta(request):
                 productopresentacions = oProductoPresentacions
             )
             oPedidoproductospresentacions.save()
-            
+
             oUltimoP = Producto_almacens.objects.filter(producto = oProducto).latest('id')
             cantidad_dscto_almacen = float(producto[0]) * oProductoPresentacions.valor
             cantidad_sobrante_almacen = oUltimoP.cantidad - cantidad_dscto_almacen
-            
+
             nuevoCantidadProductoAlmacen = Producto_almacens(
                 cantidad=cantidad_sobrante_almacen,
                 cantidadinicial=oUltimoP.cantidad,
@@ -617,3 +651,21 @@ def eliminar_identificador_venta(request):
         
     response = {}
     return JsonResponse(response)
+    
+def DetalleVenta(request,venta_id):
+    if request.method == 'GET':
+        oVenta = Venta.objects.get(id=venta_id)
+        oPedido = Pedido.objects.get(id = oVenta.pedido_id)
+        oPedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
+        oProductos = []
+        for oPedidoproductospresentacion in oPedidoproductospresentacions:
+            oProducto = {}
+            oProducto["nombreProducto"] = oPedidoproductospresentacion.productopresentacions.producto.nombre
+            oProducto["nombrePresentacion"] = oPedidoproductospresentacion.productopresentacions.presentacion.nombre
+            oProducto["cantidad"] = oPedidoproductospresentacion.cantidad
+            oProductos.append(oProducto)
+            print(oProductos)
+        return render(request, 'pedido/detalle.html', {"oCliente": oPedido.cliente, "oProductos": oProductos})
+    else:
+        oPedidos = Pedido.objects.filter(estado = True)
+        return render(request, 'pedido/listar.html',{"oPedidos": oPedidos})
