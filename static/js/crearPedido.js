@@ -1,11 +1,16 @@
 $(document).ready(function(){
     $('#id_Total').text("0.00");
-    $('#bt_add').click(function(){
-        agregar();
+    $('#bt_addVenta').click(function(){
+        if(document.getElementById('codigo') === '' || document.getElementById('valorPrecio') === '') {
+            reset_values();
+            document.getElementById('inpt-producto').focus();
+        } else {
+            agregar();
+        }
         $('#inpt-producto').focus();
     });
 
-    $('#bt_add').keypress(function(){
+    $('#bt_addVenta').keypress(function(){
         $('#inpt-producto').focus();
     });
 
@@ -99,8 +104,6 @@ function agregar(){
 
         }
     }
-
-
 }
 
 function seleccionar(id_fila){
@@ -264,10 +267,14 @@ function nuevaVenta() {
     });
     console.log(productos);
     var cliente = document.getElementById("inpt-cliente").value;
+    var tipoRecibo = $('#cmbTipoRecibo').val();
+    var nrecibo = $('#nroRecibo').val();
     if (contador == 1) {
         var datos = {
             productos: productos,
-            cliente: cliente
+            cliente: cliente,
+            nrecibo: nrecibo,
+            tipoRecibo: tipoRecibo,
         };
 
         var sendData = JSON.stringify(datos);

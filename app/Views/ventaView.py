@@ -500,11 +500,13 @@ def ventaNuevo(request):
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
     oPedidos = Pedido.objects.filter(estado=2)
+    oRecibos = Recibo.objects.filter(estado=True)
 
     context = {
         'presentaciones': oPresentaciones,
         'precios': oPrecios,
-        'pedidos': oPedidos
+        'pedidos': oPedidos,
+        'recibos': oRecibos
     }
 
     return render(request, 'venta/nuevo.html', context)
@@ -514,26 +516,26 @@ def ventaNuevo(request):
 def insertarVenta(request):
     if request.method == 'POST':
         datos = json.loads(request.body)
-
+        print(datos)
         dni_cliente = datos['cliente']
-
+        nroRecibo = datos['nrecibo']
+        tipoRecibo = datos['tipoRecibo']
+        
         #Se genera el pedido con un estado 3
-        #Se necesita hacer el descuento en almacen
+        #Se hace el descuento de producto en producto_almacen
         oCliente = Cliente.objects.get(numerodocumento=dni_cliente)
         empleado = 1
         oPedido = Pedido(estado=3, empleado_id=empleado, cliente=oCliente)
         oPedido.save()
-        oVenta = Venta(pedido=oPedido, cliente=oCliente)
+        oVenta = Venta(pedido=oPedido, cliente=oCliente, nrecibo=nroRecibo)
         monto_venta = 0.00
 
         productos = datos['productos']
         print(productos)
         for producto in productos:
             monto_venta += round(float(producto[0]) * float(producto[4]), 2)
-            print(monto_venta)
             oProducto = Producto.objects.get(codigo=producto[1])
             oPresentacion = Presentacion.objects.get(nombre=producto[3])
-            print(oPresentacion.nombre)
             oProductoPresentacions = Productopresentacions.objects.get(producto=oProducto, presentacion=oPresentacion)
             oPedidoproductospresentacions = Pedidoproductospresentacions(
                 valor = producto[4],
@@ -555,20 +557,23 @@ def insertarVenta(request):
                 producto_id=oUltimoP.producto_id
             )
             nuevoCantidadProductoAlmacen.save()
-
-        oRecibo = Recibo()
-        oRecibo.save()
-        oVenta.nrecibo = oRecibo.pk
+        
         oVenta.monto = monto_venta
         oVenta.save()
+
+        oCobro = Cobro(
+            monto=monto_venta,
+            estado=True,
+            recibo_id=tipoRecibo,
+            venta=oVenta
+        )
+        oCobro.save()
 
         return HttpResponse(json.dumps({'exito': 1, "idPedido": oPedido.id}), content_type="application/json")
 
     else:
         return render(request, 'venta/nuevo')
 
-
-    return datos
 
 def anularVenta(request):
     oProductos=[]
@@ -612,6 +617,41 @@ def anularVenta(request):
     context = {}
     return render(request, 'venta/anular.html', context)
 
+def eliminar_identificador_venta(request):
+    pk = request.POST.get('identificador_id')
+    identificador = Venta.objects.get(pk=pk)
+    oPedido = identificador.pedido
+    oPedido.estado = 0
+    oPedido.save()
+    identificador.estado = 0
+    identificador.save()
+    oCobro = Cobro.objects.get(venta=identificador)
+    oCobro.estado=False
+    oCobro.save()
+
+    oPedProdPres = Pedidoproductospresentacions.objects.filter(pedido=oPedido)
+    for oPedProdPre in oPedProdPres:
+        cantidad = oPedProdPre.cantidad
+        oProdPresentacions = oPedProdPre.productopresentacions
+        oProducto = oProdPresentacions.producto
+        # almacen
+        oAlmacen = 1
+        fraccion = oProdPresentacions.valor
+        prodAlmacen = Producto_almacens.objects.filter(producto=oProducto, almacen_id=oAlmacen).latest('pk')
+        cantidadAntesAnulacion = prodAlmacen.cantidad
+        cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
+        prodAlmacenNuevo = Producto_almacens(
+            cantidad=cantidadDespuesAnulacion,
+            cantidadinicial=cantidadAntesAnulacion,
+            almacen=prodAlmacen.almacen,
+            lote=prodAlmacen.lote,
+            producto=prodAlmacen.producto
+        )
+        prodAlmacenNuevo.save()
+        
+    response = {}
+    return JsonResponse(response)
+    
 def DetalleVenta(request,venta_id):
     if request.method == 'GET':
         oVenta = Venta.objects.get(id=venta_id)
