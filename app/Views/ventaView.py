@@ -462,40 +462,6 @@ def ListarVenta(request):
 
 """
 
-def eliminar_identificador_venta(request):
-    pk = request.POST.get('identificador_id')
-    print(pk)
-    identificador = Venta.objects.get(pk=pk)
-    oPedido = identificador.pedido
-    oPedido.estado = 0
-    oPedido.save()
-    print(oPedido)
-    identificador.estado = 0
-    identificador.save()
-
-    oPedProdPres = Pedidoproductospresentacions.objects.filter(pedido=oPedido)
-    for oPedProdPre in oPedProdPres:
-        cantidad = oPedProdPre.cantidad
-        oProdPresentacions = oPedProdPre.productopresentacions
-        oProducto = oProdPresentacions.producto
-        # almacen
-        oAlmacen = 1
-        fraccion = oProdPresentacions.valor
-        prodAlmacen = Producto_almacens.objects.filter(producto=oProducto, almacen_id=oAlmacen).latest('pk')
-        cantidadAntesAnulacion = prodAlmacen.cantidad
-        cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
-        prodAlmacenNuevo = Producto_almacens(
-            cantidad=cantidadDespuesAnulacion,
-            cantidadinicial=cantidadAntesAnulacion,
-            almacen=prodAlmacen.almacen,
-            lote=prodAlmacen.lote,
-            producto=prodAlmacen.producto
-        )
-        prodAlmacenNuevo.save()
-        
-    response = {}
-    return JsonResponse(response)
-
 def ventaNuevo(request):
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
@@ -518,7 +484,7 @@ def insertarVenta(request):
         dni_cliente = datos['cliente']
 
         #Se genera el pedido con un estado 3
-        #Se necesita hacer el descuento en almacen
+        #Se hace el descuento de producto en producto_almacen
         oCliente = Cliente.objects.get(numerodocumento=dni_cliente)
         empleado = 1
         oPedido = Pedido(estado=3, empleado_id=empleado, cliente=oCliente)
@@ -530,10 +496,8 @@ def insertarVenta(request):
         print(productos)
         for producto in productos:
             monto_venta += round(float(producto[0]) * float(producto[4]), 2)
-            print(monto_venta)
             oProducto = Producto.objects.get(codigo=producto[1])
             oPresentacion = Presentacion.objects.get(nombre=producto[3])
-            print(oPresentacion.nombre)
             oProductoPresentacions = Productopresentacions.objects.get(producto=oProducto, presentacion=oPresentacion)
             oPedidoproductospresentacions = Pedidoproductospresentacions(
                 valor = producto[4],
@@ -561,6 +525,14 @@ def insertarVenta(request):
         oVenta.nrecibo = oRecibo.pk
         oVenta.monto = monto_venta
         oVenta.save()
+
+        oCobro = Cobro(
+            monto=monto_venta,
+            estado=True,
+            recibo_id=oVenta.nrecibo,
+            venta=oVenta
+        )
+        oCobro.save()
 
         return HttpResponse(json.dumps({'exito': 1, "idPedido": oPedido.id}), content_type="application/json")
 
@@ -611,3 +583,38 @@ def anularVenta(request):
 
     context = {}
     return render(request, 'venta/anular.html', context)
+
+def eliminar_identificador_venta(request):
+    pk = request.POST.get('identificador_id')
+    identificador = Venta.objects.get(pk=pk)
+    oPedido = identificador.pedido
+    oPedido.estado = 0
+    oPedido.save()
+    identificador.estado = 0
+    identificador.save()
+    oCobro = Cobro.objects.get(venta=identificador, recibo_id=identificador.nrecibo)
+    oCobro.estado=False
+    oCobro.save()
+
+    oPedProdPres = Pedidoproductospresentacions.objects.filter(pedido=oPedido)
+    for oPedProdPre in oPedProdPres:
+        cantidad = oPedProdPre.cantidad
+        oProdPresentacions = oPedProdPre.productopresentacions
+        oProducto = oProdPresentacions.producto
+        # almacen
+        oAlmacen = 1
+        fraccion = oProdPresentacions.valor
+        prodAlmacen = Producto_almacens.objects.filter(producto=oProducto, almacen_id=oAlmacen).latest('pk')
+        cantidadAntesAnulacion = prodAlmacen.cantidad
+        cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
+        prodAlmacenNuevo = Producto_almacens(
+            cantidad=cantidadDespuesAnulacion,
+            cantidadinicial=cantidadAntesAnulacion,
+            almacen=prodAlmacen.almacen,
+            lote=prodAlmacen.lote,
+            producto=prodAlmacen.producto
+        )
+        prodAlmacenNuevo.save()
+        
+    response = {}
+    return JsonResponse(response)
