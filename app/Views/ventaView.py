@@ -492,7 +492,7 @@ def eliminar_identificador_venta(request):
             producto=prodAlmacen.producto
         )
         prodAlmacenNuevo.save()
-        
+
     response = {}
     return JsonResponse(response)
 
@@ -542,11 +542,11 @@ def insertarVenta(request):
                 productopresentacions = oProductoPresentacions
             )
             oPedidoproductospresentacions.save()
-            
+
             oUltimoP = Producto_almacens.objects.filter(producto = oProducto).latest('id')
             cantidad_dscto_almacen = float(producto[0]) * oProductoPresentacions.valor
             cantidad_sobrante_almacen = oUltimoP.cantidad - cantidad_dscto_almacen
-            
+
             nuevoCantidadProductoAlmacen = Producto_almacens(
                 cantidad=cantidad_sobrante_almacen,
                 cantidadinicial=oUltimoP.cantidad,
@@ -555,7 +555,7 @@ def insertarVenta(request):
                 producto_id=oUltimoP.producto_id
             )
             nuevoCantidadProductoAlmacen.save()
-        
+
         oRecibo = Recibo()
         oRecibo.save()
         oVenta.nrecibo = oRecibo.pk
@@ -611,3 +611,21 @@ def anularVenta(request):
 
     context = {}
     return render(request, 'venta/anular.html', context)
+
+def DetalleVenta(request,venta_id):
+    if request.method == 'GET':
+        oVenta = Venta.objects.get(id=venta_id)
+        oPedido = Pedido.objects.get(id = oVenta.pedido_id)
+        oPedidoproductospresentacions = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
+        oProductos = []
+        for oPedidoproductospresentacion in oPedidoproductospresentacions:
+            oProducto = {}
+            oProducto["nombreProducto"] = oPedidoproductospresentacion.productopresentacions.producto.nombre
+            oProducto["nombrePresentacion"] = oPedidoproductospresentacion.productopresentacions.presentacion.nombre
+            oProducto["cantidad"] = oPedidoproductospresentacion.cantidad
+            oProductos.append(oProducto)
+            print(oProductos)
+        return render(request, 'pedido/detalle.html', {"oCliente": oPedido.cliente, "oProductos": oProductos})
+    else:
+        oPedidos = Pedido.objects.filter(estado = True)
+        return render(request, 'pedido/listar.html',{"oPedidos": oPedidos})
