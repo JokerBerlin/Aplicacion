@@ -29,6 +29,17 @@ Editar pedido
                     </label>
                     <input class="form-control" type="text" name="" value="{{ empleado }}" disabled>
                     <br>
+                    <label class="control-label col-sm-3" for="inputSuccess3">Tipo de recibo:
+                    </label>
+                    <select class="form-control" id="cmbRecibo" required>
+      					    	<!--<option value=""> </option>-->
+      	                        {% for oRecibo in oRecibos %}
+      	                            <option value="{{oRecibo.id}}">
+      	                            {{oRecibo.nombre}}
+      	                            </option>
+      	                        {% endfor %}
+      	            </select>
+                    <br>
                     <label class="control-label col-sm-3" for="inputSuccess3">Numero de recibo:
                     </label>
                     <input class="form-control" id="nroRecibo" type="text" name="" value="" required >

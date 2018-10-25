@@ -1,6 +1,7 @@
 $(document).ready(function() {
   $('#id_Total').text("0.00");
   window.onload = function(){
+    $("#cmbRecibo").focus();
     var Total = 0;
     $("#tabla tbody tr").each(function (index) {
 
@@ -31,8 +32,10 @@ $(document).ready(function() {
     var pedido = document.getElementById("pedido_id").value;
     var cliente = document.getElementById("inpt-cliente").value;
     var total = document.getElementById("id_Total").innerHTML;
-    var nroRecibo = document.getElementById("nroRecibo").value;
-    var datos = {cliente:cliente,total:total,nroRecibo:nroRecibo};
+    var tipoRecibo = document.getElementById("cmbRecibo").value;
+    var numeroRecibo = document.getElementById("nroRecibo").value;
+
+    var datos = {cliente:cliente,total:total,tipoRecibo:tipoRecibo,numeroRecibo:numeroRecibo};
     var sendData = JSON.stringify(datos);
     $.ajax({
         type: "POST",
