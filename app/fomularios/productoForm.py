@@ -7,14 +7,13 @@ from app.models import *
 class ProductoForm(ModelForm):
     class Meta:
         model = Producto
-        exclude={'estado', 'presentacions'}
+        exclude={'estado', 'presentacions','valor'}
 
         labels = {
             'nombre': 'Nombre producto',
             'codigo': 'Codigo de producto',
             'imagen': 'Imagen',
             'url': 'Url',
-            'valor': 'Valor',
         }
 
         widgets = {
@@ -23,5 +22,4 @@ class ProductoForm(ModelForm):
             'codigo': forms.NumberInput(attrs={'class': 'form-control-p'}),
             'imagen': forms.FileInput(),
             'url': forms.TextInput(attrs={'class': 'form-control-p'}),
-            'valor': forms.NumberInput(attrs={'class': 'form-control-p'})            
         }

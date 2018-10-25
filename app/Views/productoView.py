@@ -104,7 +104,7 @@ def registrarPresentacion(request):
 
 
 
-        return HttpResponseRedirect('/Producto/listar/')
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
     else:
         oUltimoP=Producto.objects.all().latest('id')
@@ -142,12 +142,12 @@ def registrarProducto(request):
         form = ProductoForm(request.POST, request.FILES)
         print(form)
         if form.is_valid():
-
+            form.valor = 1
             form = form.save(commit=False)
             form.save()
             oProducto = form
             oPresentacion = Presentacion.objects.get(id = int(Datos['cmbPresentacionPrincipal']))
-            oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id,valor=Datos['valor'],unidadprincipal=True)
+            oProductopresentacions= Productopresentacions(producto_id=oProducto.id, presentacion_id=oPresentacion.id,valor=1,unidadprincipal=True)
             oProductopresentacions.save()
             oProductopresentacions = Productopresentacions.objects.get(producto=oProducto.id, presentacion=oPresentacion.id)
 
@@ -412,8 +412,23 @@ def editarProducto(request,producto_id):
     else:
         form= ProductoForm(instance=oProducto)
         oProductoPresentacions = Productopresentacions.objects.filter(producto_id=oProducto.id)
-        oProductoPresentacionsprecios = Productopresentacionsprecios.objects.filter(Productopresentacions_id__in=[p.id for p in oProductoPresentacions])
-        ctx = {'form':form, 'oProducto': oProducto}
+        productos = []
+        for oProductoPresentacion in oProductoPresentacions:
+            nuevo = {}
+            nuevo['presentacion']=oProductoPresentacion.presentacion.nombre
+            nuevo['valor']=int(1/oProductoPresentacion.valor)
+            oProductoPresentacionsprecios = Productopresentacionsprecios.objects.filter(productopresentacions_id=oProductoPresentacion.id)
+            cont = 1
+            for oProductoPresentacionsprecio in oProductoPresentacionsprecios:
+                c = oProductoPresentacionsprecio.valor
+                valorPrecio = str(c).replace(",", ".")
+                nuevo["precio"+str(cont)]= valorPrecio
+                cont = cont + 1
+            productos.append(nuevo)
+
+        print(productos)
+
+        ctx = {'form':form, 'oProducto': oProducto,'productos':productos}
 
 
     return render(request, 'producto/editar.html',ctx)

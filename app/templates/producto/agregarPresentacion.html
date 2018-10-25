@@ -70,7 +70,7 @@ Registrar Nuevo Producto
 
                   <div class="row">
                       <div class="form-group">
-                          <label ><center>Concepto Operación</center></label>
+                          <label ><center>Presentación de Productos</center></label>
                           <table id="tabla" name="tablacontenido" class="table table-bordered">
                           <thead>
                               <tr>
@@ -88,11 +88,9 @@ Registrar Nuevo Producto
 
                           <br>
                       </div>
-                          TOTAL: S/. <label for="id_Total" id="id_Total" name="id_Total"></label>
-                          <br>
                           <br>
 
-                      <button id="bt_GenerarVenta" class="btn btn-success">Realizar Pedido</button>
+
                     <!--</form>-->
                   </div>
                 </div>
@@ -114,52 +112,11 @@ Registrar Nuevo Producto
                   </div>
 			          </div>
                 <div class="modal-footer">
-                  <button id="registrarPresentacion" type="button" class="btn btn-primary" onclick="">Registrar</button>
+                  <button id="bt_GenerarVenta" class="btn btn-success">Registrar presentaciones</button>
                   <button type="button" class="btn btn-secondary" id="productoListar" data-dismiss="modal">Listar Productos</button>
                   <script type="text/javascript">
                     $(document).ready(function(){
-                      $('#registrarPresentacion').click(function(){
-                        presentaciones = []
-                        precios = []
-                        var producto = document.getElementById("productoId").value;
-                        var presentacion = document.getElementById("cmbPresentacion").value;
-                        var valor = document.getElementById("cantPresentacion").value;
-                        var precio1 = document.getElementById("1Precio").value;
-                        var precio2 = document.getElementById("2Precio").value;
-                        var precio3 = document.getElementById("3Precio").value;
-                        presentaciones.push([producto,presentacion,valor]);
-                        precios.push([precio1,precio2,precio3]);
-                        var datos = {
-                              presentaciones: presentaciones,
-                              precios: precios
-                          };
 
-                          var sendData = JSON.stringify(datos);
-                          $.ajax({
-                              type: "POST",
-                              dataType: "json",
-                              url: "/Presentacion/nuevo/",
-                              data: sendData,
-                              contentType: "application/json; charset=utf-8",
-                              async: false,
-                              cache: false,
-                              CrossDomain: true,
-
-                              success: function (result) {
-                              //     var id_venta = result["id_venta"];
-                                  var sel = document.getElementById("cmbPresentacion");
-                                  sel.remove(sel.SelectedIndex);
-                                  $(' #cantPresentacion ').val("");
-                                  $(' #1Precio ').val("");
-                                  $(' #2Precio ').val("");
-                                  $(' #3Precio ').val("");
-                                  alert('Presentacion de producto Registrado');
-                                   //location.reload(true);
-                                   //document.location.href='/Pedido/listar/';
-                              }
-                          });
-
-                      });
                       $('#productoListar').click(function(){
                         document.location.href='/Producto/listar/';
                       });

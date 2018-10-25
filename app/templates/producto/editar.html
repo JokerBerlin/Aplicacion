@@ -12,29 +12,108 @@ Editar Producto {{oProducto.nombre}}
 {% endblock %}
 
 {% block content %}
-	<div class="row">
-        <div class="col-sm-12">
-            <div class="white-box">
-                <h3 class="box-title">Editar producto {{oProducto.nombre}}</h3>
+<div class="row">
+      <div class="col-xs-12 col-sm-12">
+          <div class="white-box">
+              <h3 class="box-title">Editar producto {{oProducto.nombre}}</h3>
                 <form action="." method="post" enctype="multipart/form-data">
-						{% csrf_token %}
-				
-				<ul>
-   
-				{% load widget_tweaks %}
-				{% csrf_token %}
-					<div class="form-group">
-				    {% for field in form %}
-							{{ field.errors }}
-							{{ field.label_tag }}</br>
-							{{ field|add_class:"form-control" }}
-				    {% endfor %}
+									{% csrf_token %}
+									<ul>
+									{% load widget_tweaks %}
+									{% csrf_token %}
+									<div class="form-group">
+											{% for field in form %}
+											<div class="col-xs-4 col-sm-4 col-md-4">
+													{{ field.errors }}
+													{{ field.label_tag }}</br>
+													{{ field|add_class:"form-control" }}
+											</div>
+											{% endfor %}<br>
+											<br>
+				              <div class="col-lg-12" style="margin-top:2px;">
+				                <div class="col-xs-6 col-sm-6 col-md-6">
+				                  <br>
+				                  <button id="bt_add" class="btn btn-success">Agregar</button>
+				                  <button id="bt_del" class="btn btn-warning">Eliminar</button>
+				                  <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
+				                  <br>
+				                  <br>
+				                </div>
+				              </div>
+											<br>
+											<div class="col-lg-12" style="margin-top:2px;">
+				                <div class="col-xs-12 col-sm-12 col-md-12">
 
-			   		<br>
-					<button class="btn btn-success" data-toggle="modal" data-target="">Actualizar</button>
-				</ul>
-				</form>
-	    	</div>
-	    </div>
+				                  <div class="row">
+				                      <div class="form-group">
+				                          <label ><center>Presentación de Productos</center></label>
+				                          <table id="tabla" name="tablacontenido" class="table table-bordered">
+				                          <thead>
+				                              <tr>
+				                                <td>Nº</td>
+				                                <td>Presentación</td>
+				                                <td>Cantidad pre. prin.</td>
+				                                <td>Precio 1</td>
+				                                <td>Precio 2</td>
+				                                <td>Precio 3</td>
+				                              </tr>
+				                          </thead>
+																	<tbody>
+
+																			{% for producto in productos %}
+																				<tr>
+																						<td>{{forloop.counter}}</td>
+																						<td>{{producto.presentacion}}</td>
+																						<td>{{producto.valor}}</td>
+																						<td><input class="form-control" type="number" name="" value="{{producto.precio1}}"></td>
+																						<td><input class="form-control" type="number" name="" value="{{producto.precio2}}"></td>
+																						<td><input class="form-control" type="number" name="" value="{{producto.precio3}}"></td>
+																				</tr>
+																			{% endfor %}
+
+
+																	</tbody>
+
+				                          </table>
+
+				                          <br>
+				                      </div>
+				                          TOTAL: S/. <label for="id_Total" id="id_Total" name="id_Total"></label>
+				                          <br>
+				                          <br>
+
+				                      <button id="bt_GenerarVenta" class="btn btn-success">Realizar Pedido</button>
+				                    <!--</form>-->
+				                  </div>
+				                </div>
+				              </div>
+
+				                  <div class="row">
+				                      <div class="form-group">
+				                          <div class="col-sm-8 col-md-8 col-lg-6">
+				                              <div id="tabs" style="display:none;">
+				                                  <table id="listaProducto"></table>
+				                                  <div id="pagerlistaProducto"  style="text-align: center;"></div>
+				                              </div>
+				                          </div>
+
+				                          <div class="col-sm-2 col-md-2 col-lg-4">
+
+				                          </div>
+				                      </div>
+				                  </div>
+											<div class="col-xs-12 col-sm-12 col-md-12">
+												<button class="btn btn-success">Actualizar</button>
+											</div>
+
+					    	</div>
+
+								</ul>
+
+							</form>
+	    		</div>
+
     </div>
+
+</div>
 {% endblock %}
