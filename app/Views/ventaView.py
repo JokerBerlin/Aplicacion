@@ -466,11 +466,13 @@ def ventaNuevo(request):
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
     oPedidos = Pedido.objects.filter(estado=2)
+    oRecibos = Recibo.objects.filter(estado=True)
 
     context = {
         'presentaciones': oPresentaciones,
         'precios': oPrecios,
-        'pedidos': oPedidos
+        'pedidos': oPedidos,
+        'recibos': oRecibos
     }
 
     return render(request, 'venta/nuevo.html', context)
@@ -480,16 +482,18 @@ def ventaNuevo(request):
 def insertarVenta(request):
     if request.method == 'POST':
         datos = json.loads(request.body)
-
+        print(datos)
         dni_cliente = datos['cliente']
-
+        nroRecibo = datos['nrecibo']
+        tipoRecibo = datos['tipoRecibo']
+        
         #Se genera el pedido con un estado 3
         #Se hace el descuento de producto en producto_almacen
         oCliente = Cliente.objects.get(numerodocumento=dni_cliente)
         empleado = 1
         oPedido = Pedido(estado=3, empleado_id=empleado, cliente=oCliente)
         oPedido.save()
-        oVenta = Venta(pedido=oPedido, cliente=oCliente)
+        oVenta = Venta(pedido=oPedido, cliente=oCliente, nrecibo=nroRecibo)
         monto_venta = 0.00
 
         productos = datos['productos']
@@ -520,16 +524,13 @@ def insertarVenta(request):
             )
             nuevoCantidadProductoAlmacen.save()
         
-        oRecibo = Recibo()
-        oRecibo.save()
-        oVenta.nrecibo = oRecibo.pk
         oVenta.monto = monto_venta
         oVenta.save()
 
         oCobro = Cobro(
             monto=monto_venta,
             estado=True,
-            recibo_id=oVenta.nrecibo,
+            recibo_id=tipoRecibo,
             venta=oVenta
         )
         oCobro.save()
@@ -539,8 +540,6 @@ def insertarVenta(request):
     else:
         return render(request, 'venta/nuevo')
 
-
-    return datos
 
 def anularVenta(request):
     oProductos=[]

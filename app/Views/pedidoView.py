@@ -372,18 +372,15 @@ def pedidoVenta(request,pedido_id):
 
         Datos = json.loads(request.body)
         cliente = Datos['cliente']
-        nroRecibo = Datos['nroRecibo']
+        tipoRecibo = Datos['tipoRecibo']
+        numeroRecibo = Datos['numeroRecibo']
         total = Datos['total']
-
-        print(cliente)
-        print(nroRecibo)
-        print(total)
 
         oCliente = Cliente.objects.get(nombre=cliente)
         oPedido = Pedido.objects.get(id=pedido_id)
         oVenta = Venta()
         oVenta.monto = total
-        oVenta.nroRecibo = nroRecibo
+        oVenta.nrecibo = numeroRecibo
         oVenta.estado = True
         oVenta.cliente_id = oCliente.id
         oVenta.pedido_id = oPedido.id
@@ -393,39 +390,18 @@ def pedidoVenta(request,pedido_id):
         oCobro = Cobro()
         oCobro.estado=True
         oCobro.monto=total
-        oCobro.recibo_id=1
+        oCobro.recibo_id=tipoRecibo
         oCobro.venta_id=oVenta.id
         oCobro.save()
-        # for oPedidoProducto in dato:
-        #
-        #     id=int(oPedidoProducto[0])
-        #     oPedidoproductospresentacions = Pedidoproductospresentacions.objects.get(id=id)
-        #     #cantidad = (oPedidoProducto[1])
-        #     oPedidoproductospresentacions.cantidad = oPedidoProducto[1]
-        #     oPedidoproductospresentacions.save()
-        #     #oPedidoproductospresentacions = Pedidoproductospresentacions.objects.get(id=id)
-        #
-        #     oProductoPresentacions = Productopresentacions.objects.get(id=oPedidoproductospresentacions.productopresentacions_id)
-        #     oUltimoP=Producto_almacens.objects.filter(producto_id=oProductoPresentacions.producto_id).latest('id')
-        #     dato = float(oPedidoProducto[1]) * oProductoPresentacions.valor
-        #     cantidadPedido = oUltimoP.cantidad - dato
-        #     oProducto_alma = Producto_almacens(cantidad=cantidadPedido, cantidadinicial= oUltimoP.cantidad, almacen_id=oUltimoP.almacen_id, lote_id= oUltimoP.lote_id, producto_id= oUltimoP.producto_id)
-        #     oProducto_alma.save()
-        # oPedido = Pedido.objects.get(id=idPedido)
-        # oPedido.estado = 2
-        # oPedido.save()
-
         return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
     else:
         oPedido = Pedido.objects.get(id=pedido_id)
+        oRecibos = Recibo.objects.filter(estado=True)
         cliente = oPedido.cliente.nombre
-        print(cliente)
         empleado = oPedido.empleado.nombre
-        print(empleado)
         fecha = oPedido.fecha
         oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
-        print(oPedidoproductospresentacions)
         cantidadPedido = []
         cont = 0
         for oPedido in oPedidoproductospresentacions:
@@ -440,7 +416,7 @@ def pedidoVenta(request,pedido_id):
             cont = cont + 1
         #form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
         #form2= ProductopresentacionsForm(instance=oProductopresentacions)
-        return render(request, 'venta/mostrarPedido.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido})
+        return render(request, 'venta/mostrarPedido.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos})
 
 
 @csrf_exempt
