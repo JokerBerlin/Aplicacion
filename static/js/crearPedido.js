@@ -1,11 +1,16 @@
 $(document).ready(function(){
     $('#id_Total').text("0.00");
-    $('#bt_add').click(function(){
-        agregar();
+    $('#bt_addVenta').click(function(){
+        if(document.getElementById('codigo') === '' || document.getElementById('valorPrecio') === '') {
+            reset_values();
+            document.getElementById('inpt-producto').focus();
+        } else {
+            agregar();
+        }
         $('#inpt-producto').focus();
     });
 
-    $('#bt_add').keypress(function(){
+    $('#bt_addVenta').keypress(function(){
         $('#inpt-producto').focus();
     });
 
@@ -99,8 +104,6 @@ function agregar(){
 
         }
     }
-
-
 }
 
 function seleccionar(id_fila){
