@@ -464,18 +464,20 @@ def ListarVenta(request):
 
 def eliminar_identificador_venta(request):
     pk = request.POST.get('identificador_id')
+    print(pk)
     identificador = Venta.objects.get(pk=pk)
     oPedido = identificador.pedido
     oPedido.estado = 0
     oPedido.save()
+    print(oPedido)
     identificador.estado = 0
     identificador.save()
 
     oPedProdPres = Pedidoproductospresentacions.objects.filter(pedido=oPedido)
-    for oPedProdPre in oPedPres:
+    for oPedProdPre in oPedProdPres:
         cantidad = oPedProdPre.cantidad
         oProdPresentacions = oPedProdPre.productopresentacions
-        oProducto = oProductoPresentacions.producto
+        oProducto = oProdPresentacions.producto
         # almacen
         oAlmacen = 1
         fraccion = oProdPresentacions.valor
