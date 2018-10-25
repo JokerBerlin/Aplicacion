@@ -625,7 +625,7 @@ def eliminar_identificador_venta(request):
     oPedido.save()
     identificador.estado = 0
     identificador.save()
-    oCobro = Cobro.objects.get(venta=identificador, recibo_id=identificador.nrecibo)
+    oCobro = Cobro.objects.get(venta=identificador)
     oCobro.estado=False
     oCobro.save()
 
