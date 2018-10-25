@@ -43,7 +43,10 @@ def registrarLote(request):
         #Dato = json.loads(request.body)
         #Dato = request.POST
             nombreProveedor = Datos['oProveedor']
-            oProveedor = Proveedor.objects.get(nombre=nombreProveedor)
+            if nombreProveedor.isdigit() == False :
+                nombreProveedor = Proveedor.objects.get(nombre=nombreProveedor).documento
+
+            oProveedor = Proveedor.objects.get(documento=nombreProveedor)
             print(oProveedor.nombre)
             nombreRecibo= Datos['oRecibo']
             oRecibo= Recibo.objects.get(nombre=nombreRecibo)

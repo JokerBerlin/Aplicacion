@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script type="text/javascript">
 //filtro de clientes por dni o numero documento ajax
 
@@ -127,18 +128,16 @@ $(document).ready(function(){
               var ListasProveedores = result['proveedores'];
               response($.map(ListasProveedores, function (item) {
                  var valorProveedor = document.getElementById('inpt-proveedor').value;
-                if( isNaN(valorProveedor) ){
-                    return {label: item.nombre};
-                }else{
-                    return {label: item.documento};
-                }
+                 return {label: item.documento,
+                       nombreP: item.nombre};
                     }));
                 }
             });
         },
-        minLength: 1,
+        minLength: 2,
         select: function (event, ui) {
-
+          $("#inpt-nombreProveedor").val(ui.item.nombreP);
+          $('#cmbRecibo').focus();
 
           //$('#inpt-recibo').focus();
       }
@@ -147,33 +146,7 @@ $(document).ready(function(){
 
   });
 
-
 </script>
-
- <style>
-    ul.ui-autocomplete {
-        z-index: 1100;
-    }
-    #content{
-        position: absolute;
-        min-height: 50%;
-        width: 80%;
-        top: 20%;
-        left: 5%;
-    }
-
-    .selected{
-        cursor: pointer;
-    }
-    .selected:hover{
-        background-color: #0585C0;
-        color: white;
-    }
-    .seleccionada{
-        background-color: #0585C0;
-        color: white;
-    }
-</style>
 {% endblock %}
 
 
@@ -293,7 +266,11 @@ Nuevo Lote
                     <div class="col-xs-4 col-sm-4 col-md-4">
                       <label for="id_nombre">Proveedor:</label>
                       <a data-target="#myModal" role="button" data-toggle="modal" style="color:green"><span class="fa fa-plus fa-1x"></span></a>
-                      <input type="text" id="inpt-proveedor" placeholder="Documento o Nombre Proveedor..." name="inpt-proveedor" class="form-control">
+                      <input type="text" id="inpt-proveedor" placeholder="Número Documento De Proveedor..." name="inpt-proveedor" class="form-control">
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                      <label for="id_nombre">Nombre:</label>
+                      <input type="text" id="inpt-nombreProveedor" name="inpt-nombreProveedor" class="form-control" disabled>
                     </div>
                     <div class="col-xs-4 col-sm-4 col-md-4">
                       <label for="id_nombre">Tipo de Recibo:</label>
@@ -305,7 +282,11 @@ Nuevo Lote
                         {% endfor %}
                       </select>
                     </div>
+
+                  </div>
+                  <div class="col-lg-12" style="margin-top:2px;">
                     <div class="col-xs-4 col-sm-4 col-md-4">
+                      <br>
                       <label for="id_nombre">Almacen:</label>
                       <select class="form-control" id="cmbAlmacen" name="cmbAlmacen">
                         {% for almacen in almacens %}
@@ -315,8 +296,6 @@ Nuevo Lote
                         {% endfor %}
                       </select>
                     </div>
-                  </div>
-                  <div class="col-lg-12" style="margin-top:2px;">
                     <div class="col-xs-4 col-sm-4 col-md-4">
                       <br>
                       <label for="id_nombre">Producto:</label>
