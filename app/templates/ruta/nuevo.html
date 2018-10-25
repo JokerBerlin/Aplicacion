@@ -145,6 +145,8 @@ $(document).ready(function(){
 });
 
 var mapa, infoWindow;
+var markers = [];
+var coordenadas = new Array();
 
 function addMarker(config) {
   var marker = new google.maps.Marker({
@@ -152,6 +154,7 @@ function addMarker(config) {
     map: mapa,
     draggable: false
   });
+  markers.push(marker)
 }
 
 function initMap() {
@@ -178,9 +181,22 @@ function initMap() {
           map: mapa,
           draggable: true
       })
+      coordenadas.push(pos)
+      markers.push(marker);
       
       mapa.setCenter(pos);
 
+
+    // Array de Path
+    var path = new google.maps.MVCArray();
+
+    // Inicializacion de Direction Service
+    var ds = new google.maps.DirectionsService();
+
+    // Cambiando el color de la ruta
+    var poly = new google.maps.Polyline({ map: map, strokeColor: '#4986E7'});
+
+    
     }, function() {
       handleLocationError(true, infoWindow, mapa.getCenter());
     });

@@ -15,14 +15,12 @@ $(document).ready(function(){
         });
 });
 
-var coordenadas = [];
 
 function reset_values(){
     // $('#id_nombre').val('');
     $('#id_cliente').val('');
     $('#latitud').val('');
     $('#longitud').val('');
-
 }
 
 var cont=0;
@@ -42,13 +40,13 @@ function agregar(){
     if (error=="") {
         // se crea el JSON latLng que contiene las coordenadas de los clientes
         var latLng = [Latitud, Longitud];
-        coordenadas.push(latLng);
-
-        var pos = {lat: parseFloat(Latitud), lng: parseFloat(Longitud)};
-        var config = {position: pos};
-
-        addMarker(config);
         
+        var pos = {lat: parseFloat(Latitud), lng: parseFloat(Longitud)};
+        coordenadas.push(pos);
+
+        var config = {position: pos};
+        
+        addMarker(config);        
         
         var fila = 
                 '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);">' +
@@ -59,6 +57,27 @@ function agregar(){
                 '<td>'+Longitud+'</td>' +                    
                 '</tr>';
         $('#tabla').append(fila);
+
+        // for (let index = 0; index < coordenadas.length; index++) {
+        //     if ((index + 1) < coordenadas.length) {
+        //         var src = coordenadas[index];
+        //         var des = coordenadas[index + 1];
+
+        //         path.push(src);
+        //         poly.setPath(path);
+        //         ds.route({
+        //             origin: src,
+        //             destination: des,
+        //             travelMode: google.maps.DirectionsTravelMode.DRIVING
+        //         }, function(result, status){
+        //             if (status == google.maps.DirectionsStatus.OK){
+        //                 for (let i = 0, len = result.routes[0].overview_path.length; i < len; i++) {
+        //                     path.push(result.routes[0].overview_path[i]);
+        //                 }
+        //             }
+        //         })
+        //     }           
+        // }
 
         reset_values();
         reordenar();
