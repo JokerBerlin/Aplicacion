@@ -1,4 +1,7 @@
 $(document).ready(function(){
+        $( "#cmbAlmacen" ).blur(function() {
+          $('#inpt-producto').focus();
+        });
         $('#bt_add').click(function(){
             agregar();
             $('#inpt-producto').focus();
