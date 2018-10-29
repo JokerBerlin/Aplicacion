@@ -3,7 +3,7 @@
 {% extends "base.html" %}
 
 {% block imports %}
-
+  <script type="text/javascript" src="/static/js/editarPedido.js"></script>
 
 {% endblock %}
 
@@ -12,6 +12,33 @@ Editar Producto {{oProducto.nombre}}
 {% endblock %}
 
 {% block content %}
+
+<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Eliminar Presentación</h5>
+
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<div class="modal-body">
+
+
+
+					<p>Estás a punto de eliminar la presentación <label id="nombrePresentacion"></label> </p>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<a id="eliminarPresentacionProd" type="button" class="btn btn-primary" href="">Eliminar</a>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="row">
       <div class="col-xs-12 col-sm-12">
           <div class="white-box">
@@ -56,6 +83,7 @@ Editar Producto {{oProducto.nombre}}
 				                                <td>Precio 1</td>
 				                                <td>Precio 2</td>
 				                                <td>Precio 3</td>
+                                        <td>Opciones</td>
 				                              </tr>
 				                          </thead>
 																	<tbody>
@@ -81,7 +109,10 @@ Editar Producto {{oProducto.nombre}}
 																						<td><input class="form-control" type="number" name="" value="{{producto.precio1}}"></td>
 																						<td><input class="form-control" type="number" name="" value="{{producto.precio2}}"></td>
 																						<td><input class="form-control" type="number" name="" value="{{producto.precio3}}"></td>
-																				</tr>
+                                            <td><input type="button" class="btn btn-sucess" name="editarPresentacion" id="editarPresentacion" value="Editar">
+                                                <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="" onclick="EliminarPresentacionProducto('{{ producto.presentacion }}','{{ producto.productoId }}','{{ producto.presentacionId }}');">Eliminar</a></td>
+
+                                        </tr>
 																				{% endif %}
 																			{% endfor %}
 

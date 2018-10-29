@@ -35,11 +35,13 @@ def registrarPresentacionProducto(request):
             oProductoPresentacionsprecios.save()
         return HttpResponseRedirect('/Presentacion/Listar/'+Datos['idProducto']+'/')
 
-def eliminarPresentacionProducto(request,presentacion_id,producto_id):
-    oPresentacion = Presentacion.objects.get(id=presentacion_id)
-    oProducto = Producto.objects.get(id=producto_id)
-    oProducto.presentacions.remove(oPresentacion)
-    return HttpResponseRedirect('/Presentacion/Listar/'+producto_id+'/')
+def eliminarPresentacionProducto(request, presentacion_id,producto_id):
+    #oPresentacion = Presentacion.objects.get(id=presentacion_id)
+    #oProducto = Producto.objects.get(id=producto_id)
+    #oProducto.presentacions.remove(oPresentacion)
+    oProductopresentacion = Productopresentacions.objects.get(id=presentacion_id)
+    oProductopresentacion.delete()
+    return HttpResponseRedirect('/Producto/editar/'+producto_id+'/')
 
 def presentacion_detalle(request,producto_id):
     oProducto = Producto.objects.get(id=producto_id)
