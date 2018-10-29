@@ -40,7 +40,12 @@ def eliminarPresentacionProducto(request, presentacion_id,producto_id):
     #oProducto = Producto.objects.get(id=producto_id)
     #oProducto.presentacions.remove(oPresentacion)
     oProductopresentacion = Productopresentacions.objects.get(id=presentacion_id)
+    oProductoPresentacionPrecios = Productopresentacionsprecios.objects.filter(productopresentacions_id=oProductopresentacion.id)
+    for oProductoPresentacionPrecio in oProductoPresentacionPrecios:
+        oPresentacionPrecios = Productopresentacionsprecios.objects.get(id=oProductoPresentacionPrecio.id)
+        oPresentacionPrecios.delete()
     oProductopresentacion.delete()
+
     return HttpResponseRedirect('/Producto/editar/'+producto_id+'/')
 
 def presentacion_detalle(request,producto_id):

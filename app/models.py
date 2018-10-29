@@ -148,7 +148,7 @@ class Pedidoproductospresentacions(models.Model):
     valor                 = models.FloatField(blank=True, null=True)
     cantidad              = models.FloatField(blank=True,default=0)
     pedido                = models.ForeignKey(Pedido, on_delete=models.CASCADE)  # Field name made lowercase.
-    productopresentacions = models.ForeignKey('Productopresentacions', on_delete=models.CASCADE)  # Field name made lowercase.
+    productopresentacions = models.ForeignKey('Productopresentacions', on_delete=models.PROTECT)  # Field name made lowercase.
     class Meta:
         managed = False
         db_table = 'app_pedido_productos_presentacions'
@@ -157,7 +157,7 @@ class Pedidoproductospresentacions(models.Model):
 
 class Productopresentacionsprecios(models.Model):
     precio                = models.ForeignKey(Precio, on_delete=models.CASCADE)  # Field name made lowercase.
-    productopresentacions = models.ForeignKey('Productopresentacions', on_delete=models.CASCADE)  # Field name made lowercase.
+    productopresentacions = models.ForeignKey('Productopresentacions', on_delete=models.PROTECT)  # Field name made lowercase.
     valor                 = models.FloatField(blank=True,default=0)
     class Meta:
         managed = False
