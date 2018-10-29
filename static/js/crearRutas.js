@@ -42,7 +42,6 @@ function agregar(){
         var latLng = [Latitud, Longitud];
         
         var pos = {lat: parseFloat(Latitud), lng: parseFloat(Longitud)};
-        coordenadas.push(pos);
 
         var config = {position: pos};
         
@@ -57,32 +56,41 @@ function agregar(){
                 '<td>'+Longitud+'</td>' +                    
                 '</tr>';
         $('#tabla').append(fila);
+        
+        var coordenadas = Array();
+        
+        for (let i = 0; i < markers.length; i++) {
+            const marker = markers[i];
+            const coord = {lat: marker.position.lat(), lng: marker.position.lng()};
+            coordenadas.push(coord);
+            console.log(coordenadas)
+        }
+        
+        var waypts = [];
+        for (let index = 1; index < coordenadas.length - 1; index++) {
+            waypts.push({
+                location: new google.maps.LatLng(coordenadas[index].lat, coordenadas[index].lng),
+                stopover: true
+            })
+        }
 
-        // for (let index = 0; index < coordenadas.length; index++) {
-        //     if ((index + 1) < coordenadas.length) {
-        //         var src = coordenadas[index];
-        //         var des = coordenadas[index + 1];
-
-        //         path.push(src);
-        //         poly.setPath(path);
-        //         ds.route({
-        //             origin: src,
-        //             destination: des,
-        //             travelMode: google.maps.DirectionsTravelMode.DRIVING
-        //         }, function(result, status){
-        //             if (status == google.maps.DirectionsStatus.OK){
-        //                 for (let i = 0, len = result.routes[0].overview_path.length; i < len; i++) {
-        //                     path.push(result.routes[0].overview_path[i]);
-        //                 }
-        //             }
-        //         })
-        //     }           
-        // }
+        ds.route({
+            origin: coordenadas[0],
+            destination: new google.maps.LatLng(coordenadas[coordenadas.length - 1].lat,coordenadas[coordenadas.length - 1].lng ),
+            waypoints: waypts,
+            optimizeWaypoints: false,
+            travelMode: 'DRIVING',
+        }, function(response, status) {
+            if (status === 'OK') {
+                dr.setDirections(response);
+            } else {
+                alert('Error ' + status);
+            }
+        })
 
         reset_values();
         reordenar();
-    }
-    else{
+    } else {
         switch(error) {
         case 1:
             alert("Seleccione un Nombre válido!");

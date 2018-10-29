@@ -144,9 +144,8 @@ $(document).ready(function(){
 
 });
 
-var mapa, infoWindow;
+var mapa, infoWindow, ds, dr;
 var markers = [];
-var coordenadas = new Array();
 
 function addMarker(config) {
   var marker = new google.maps.Marker({
@@ -158,7 +157,10 @@ function addMarker(config) {
 }
 
 function initMap() {
-  mapa = new google.maps.Map(document.getElementById('mapa'), {
+    ds = new google.maps.DirectionsService();
+    dr = new google.maps.DirectionsRenderer();
+    mapa = new google.maps.Map(document.getElementById('mapa'), {
+
     center: {lat: -13.1587800, lng: -74.2232100},
     zoom: 17
   });
@@ -181,20 +183,11 @@ function initMap() {
           map: mapa,
           draggable: true
       })
-      coordenadas.push(pos)
       markers.push(marker);
       
       mapa.setCenter(pos);
 
 
-    // Array de Path
-    var path = new google.maps.MVCArray();
-
-    // Inicializacion de Direction Service
-    var ds = new google.maps.DirectionsService();
-
-    // Cambiando el color de la ruta
-    var poly = new google.maps.Polyline({ map: map, strokeColor: '#4986E7'});
 
     
     }, function() {
@@ -253,7 +246,7 @@ Nueva Ruta
             <div class="white-box">
                 <h3 class="box-title">Nueva Ruta</h3>
 
-            <form action="." method="post" enctype="multipart/form-data">
+            <form action="." method="POST" enctype="multipart/form-data">
                  {% csrf_token %}
                  <ul>
                     <label for="id_nombre">Nombre:</label>
@@ -273,8 +266,8 @@ Nueva Ruta
                     <input type="number" name="precio" id="longitud" required="" class="form-control" disabled>
                     <br>
 
-                    <button id="bt_add" class="btn btn-success">Agregar</button>
-                    <button id="bt_del" class="btn btn-warning">Eliminar</button>
+                    <a id="bt_add" class="btn btn-success" href=# >Agregar</a>
+                    <a id="bt_del" class="btn btn-warning" href=# >Eliminar</a>
                     <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
             
                     <div class="row">
@@ -286,7 +279,6 @@ Nueva Ruta
                                     <td>Nº</td>
                                     <td>Nombre</td>
                                     <td>Cliente</td>
-                                    <!--<td>Dirección</td>-->
                                     <td>Longitud</td>
                                     <td>Latitud</td>
 

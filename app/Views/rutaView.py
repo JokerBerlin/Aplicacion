@@ -82,8 +82,8 @@ def detalleRuta(request,ruta_id):
 @csrf_exempt
 def registrarRuta(request):
     if request.method == 'POST':
-        Datos = json.loads(request.body)
-        #print(Datos)
+        Datos = request.POST
+        print(Datos)
 
         for oRutas in Datos['oRutas']:
             print(oRutas)
