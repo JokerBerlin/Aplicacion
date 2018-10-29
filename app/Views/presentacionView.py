@@ -39,12 +39,17 @@ def eliminarPresentacionProducto(request, presentacion_id,producto_id):
     #oPresentacion = Presentacion.objects.get(id=presentacion_id)
     #oProducto = Producto.objects.get(id=producto_id)
     #oProducto.presentacions.remove(oPresentacion)
-    oProductopresentacion = Productopresentacions.objects.get(id=presentacion_id)
-    oProductoPresentacionPrecios = Productopresentacionsprecios.objects.filter(productopresentacions_id=oProductopresentacion.id)
-    for oProductoPresentacionPrecio in oProductoPresentacionPrecios:
-        oPresentacionPrecios = Productopresentacionsprecios.objects.get(id=oProductoPresentacionPrecio.id)
-        oPresentacionPrecios.delete()
-    oProductopresentacion.delete()
+    try:
+        oProductopresentacion = Productopresentacions.objects.get(id=presentacion_id)
+        # oProductoPresentacionPrecios = Productopresentacionsprecios.objects.filter(productopresentacions_id=oProductopresentacion.id)
+        # for oProductoPresentacionPrecio in oProductoPresentacionPrecios:
+        #     oPresentacionPrecios = Productopresentacionsprecios.objects.get(id=oProductoPresentacionPrecio.id)
+        #     oPresentacionPrecios.delete()
+        oProductopresentacion.delete()
+
+    except Exception as e:
+        print('No se puede eliminar el producto')
+        return HttpResponseRedirect('/Producto/editar/'+producto_id+'/')
 
     return HttpResponseRedirect('/Producto/editar/'+producto_id+'/')
 
