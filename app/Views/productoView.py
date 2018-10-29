@@ -413,8 +413,11 @@ def editarProducto(request,producto_id):
         form= ProductoForm(instance=oProducto)
         oProductoPresentacions = Productopresentacions.objects.filter(producto_id=oProducto.id)
         productos = []
+
         for oProductoPresentacion in oProductoPresentacions:
             nuevo = {}
+            nuevo['productoId'] = producto_id
+            nuevo['presentacionId']=oProductoPresentacion.id
             nuevo['presentacion']=oProductoPresentacion.presentacion.nombre
             nuevo['valor']=int(1/oProductoPresentacion.valor)
             oProductoPresentacionsprecios = Productopresentacionsprecios.objects.filter(productopresentacions_id=oProductoPresentacion.id)
@@ -425,6 +428,7 @@ def editarProducto(request,producto_id):
                 nuevo["precio"+str(cont)]= valorPrecio
                 cont = cont + 1
             productos.append(nuevo)
+
 
         print(productos)
 

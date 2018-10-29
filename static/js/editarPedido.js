@@ -17,7 +17,7 @@ $(document).ready(function() {
                   id = $(this).text();
               case 1:
                   cantidad = $("#cantidad"+index ).val();
-                  // 
+                  //
                   // if (cantidad.indexOf(',')==true) {
                   //   cantidad=cantidad.replace(",",".");
                   // }
@@ -56,4 +56,13 @@ $(document).ready(function() {
           alert("No registró ningún producto");
       }
   });
+
+
+
 });
+
+function EliminarPresentacionProducto(presentacion,productoId, presentacionId){
+    console.log(presentacion);
+    document.getElementById('nombrePresentacion').innerHTML = presentacion;
+    $("#eliminarPresentacionProd").attr("href","/Presentacion/eliminar/"+presentacionId+"/"+productoId+"/");
+}
