@@ -413,7 +413,19 @@ def editarProducto(request,producto_id):
         form= ProductoForm(instance=oProducto)
         oProductoPresentacions = Productopresentacions.objects.filter(producto_id=oProducto.id)
         productos = []
-
+        presentaciones = []
+        oPresentaciones = Presentacion.objects.all()
+        Productopresentaciones = Productopresentacions.objects.filter(producto_id=oProducto.id,unidadprincipal=1)
+        nombrePresentacionPrincipal = ''
+        for presentacion in Productopresentaciones:
+            nombrePresentacionPrincipal = presentacion.presentacion.nombre
+        for oPresentacion in oPresentaciones:
+            if oPresentacion.nombre != nombrePresentacionPrincipal:
+                nuevoP={}
+                nuevoP['id']=oPresentacion.id
+                nuevoP['nombre']=oPresentacion.nombre
+                presentaciones.append(nuevoP)
+        precios = Precio.objects.filter(estado=True)
         for oProductoPresentacion in oProductoPresentacions:
             nuevo = {}
             nuevo['productoId'] = producto_id
@@ -432,7 +444,7 @@ def editarProducto(request,producto_id):
 
         print(productos)
 
-        ctx = {'form':form, 'oProducto': oProducto,'productos':productos}
+        ctx = {'form':form, 'oProducto': oProducto,'productos':productos, 'presentaciones':presentaciones,'precios':precios,'productoId':producto_id,}
 
 
     return render(request, 'producto/editar.html',ctx)
