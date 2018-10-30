@@ -40,3 +40,28 @@ def BuscarAlmacen(request):
 def reporteAlmacen(request):
     context = {}
     return render(request, 'reporte/almacen.html', context)
+
+
+# Servicio para el ranking de productos mas vendidos
+# Sujeto a un datatable dentro de la vista de reporte almacen
+def tiempoProductoAlmacen(request):
+    productos = Producto.objects.all()
+    jsonfinal = {}
+    jsonfinal['salidasProductos']
+    for producto in productos:
+        prodAlmacens = Producto_almacens.objects.filter(producto=producto)
+        jsonProductosSalidas = {}
+
+        cantidadProductosSalida = 0
+        for prodAlmacen in prodAlmacens:
+            cantSalida = prodAlmacen.cantidad - prodAlmacen.cantidadinicial
+            if cantSalida < 0:
+                cantidadProductosSalida += 0
+            else:
+                cantidadProductosSalida += cantSalida
+        jsonProductosSalidas['producto'] = producto.nombre
+        jsonProductosSalidas['cantidadSalidas'] = cantidadProductosSalida
+
+        jsonfinal['salidasProductos'].append(jsonProductosSalidas)
+    
+    return HttpResponse(json.dumps(jsonfinal), content_type="application/json")

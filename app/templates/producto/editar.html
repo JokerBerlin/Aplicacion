@@ -63,8 +63,11 @@ Editar Producto {{oProducto.nombre}}
 											</div>
 											{% endfor %}
                       <div class="col-xs-12 col-sm-12 col-md-12">
-												<button class="btn btn-success">Actualizar</button>
+                        <br>
+                        <button class="btn btn-success">Actualizar</button>
 											</div>
+                      <br>
+                      <br>
                       </form><br>
                       <div class="col-xs-4 col-sm-4 col-md-4">
                       <label for="">Presentaciones</label>
@@ -82,30 +85,24 @@ Editar Producto {{oProducto.nombre}}
                         <label for="">Cantidad de presentacion en unidad principal:</label>
 					                 <input type="number" name="cantPresentacion" id="cantPresentacion" required class="form-control">
                       </div>
+
+                      {% for precio in precios%}
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+
+                        <label for="">Precio - {{ precio.nombre }}: </label>
+                      <input type="number" name="{{precio.id}}Precio" id="{{precio.id}}Precio" required class="form-control">
                       </div>
-                      <div class="col-lg-12" style="margin-top:2px;">
+                      {% endfor %}
+                      <input type="text" style="visibility:hidden;" name="" id="productoId" value="{{productoId}}">
 
-
-				                  {% for precio in precios%}
-                          <div class="col-xs-4 col-sm-4 col-md-4">
-
-                            <label for="">Precio - {{ precio.nombre }}</label>
-            					    <input type="number" name="{{precio.id}}Precio" id="{{precio.id}}Precio" required class="form-control">
-                          </div>
-                          {% endfor %}
-                          <input type="text" style="visibility:hidden;" name="" id="productoId" value="{{productoId}}">
-
-                          <br>
-
-				              </div>
-                      <div class="col-lg-12" style="margin-top:2px;">
-				                <div class="col-xs-6 col-sm-6 col-md-6">
-				                  <br>
-				                  <button id="bt_add" class="btn btn-success">Agregar</button>
-				                  <br>
-				                  <br>
-				                </div>
-				              </div>
+                      <br>
+                      <div class="col-xs-6 col-sm-6 col-md-6">
+                        <br>
+                        <button id="bt_add" class="btn btn-success">Agregar</button>
+                        <br>
+                        <br>
+                      </div>
+                      </div>
 											<br>
 											<div class="col-lg-12" style="margin-top:2px;">
 				                <div class="col-xs-12 col-sm-12 col-md-12">
