@@ -68,11 +68,12 @@ urlpatterns = [
     url(r'^Producto/listar/$', ListarProductos, name='listar_producto'),
     url(r'^Producto/nuevo/$', registrarProducto),
     url(r'^Presentacion/nuevo/$', registrarPresentacion),
+    url(r'^Presentacion/editar/$', editarPresentacion),
     url(r'^Producto/detalle/(?P<producto_id>\d+)/$', detalleProducto),
     url(r'^Producto/editar/(?P<producto_id>\d+)/$', editarProducto),
     url(r'^Producto/eliminar/$', eliminar_identificador_producto,name='eliminar_producto'),
     url(r'^lote/nuevo/$', registrarLote),
-    
+
     ################## Catalogo #######################
     url(r'^Presentacion/Listar/(?P<producto_id>\d+)/$', presentacion_detalle),
     url(r'^Presentacion/registrar/$', registrarPresentacionProducto),
@@ -117,7 +118,7 @@ urlpatterns = [
     url(r'^Ruta/nuevo/$', registrarRuta),
     url(r'^Ruta/listar/$',listarRutas),
     url(r'^Ruta/detalle/(?P<ruta_id>\d+)/$', detalleRuta),
-    
+
     ################## APP Movil #######################
     url(r'^usuario/validar/$', validarUsuario),
     url(r'^usuario/ruta/$', rutaUsuario),

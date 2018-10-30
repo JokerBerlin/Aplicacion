@@ -3,7 +3,11 @@
 {% extends "base.html" %}
 
 {% block imports %}
-  <script type="text/javascript" src="/static/js/editarPedido.js"></script>
+  <script type="text/javascript" src="/static/js/editarPresentacion.js"></script>
+  <link href="/static/css/styleAutocomplete.css" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 {% endblock %}
 
@@ -43,30 +47,62 @@ Editar Producto {{oProducto.nombre}}
       <div class="col-xs-12 col-sm-12">
           <div class="white-box">
               <h3 class="box-title">Editar producto {{oProducto.nombre}}</h3>
-                <form action="." method="post" enctype="multipart/form-data">
-									{% csrf_token %}
-									<ul>
-									{% load widget_tweaks %}
-									{% csrf_token %}
+
 									<div class="form-group">
-											{% for field in form %}
+                    <div class="col-lg-12" style="margin-top:2px;">
+                      <form action="." method="post" enctype="multipart/form-data">
+      									{% csrf_token %}
+      									<ul>
+      									{% load widget_tweaks %}
+      									{% csrf_token %}
+                      {% for field in form %}
 											<div class="col-xs-4 col-sm-4 col-md-4">
 													{{ field.errors }}
 													{{ field.label_tag }}</br>
 													{{ field|add_class:"form-control" }}
 											</div>
-											{% endfor %}<br>
-											<br>
-				              <div class="col-lg-12" style="margin-top:2px;">
-				                <div class="col-xs-6 col-sm-6 col-md-6">
-				                  <br>
-				                  <button id="bt_add" class="btn btn-success">Agregar</button>
-				                  <button id="bt_del" class="btn btn-warning">Eliminar</button>
-				                  <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
-				                  <br>
-				                  <br>
-				                </div>
-				              </div>
+											{% endfor %}
+                      <div class="col-xs-12 col-sm-12 col-md-12">
+                        <br>
+                        <button class="btn btn-success">Actualizar</button>
+											</div>
+                      <br>
+                      <br>
+                      </form><br>
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+                      <label for="">Presentaciones</label>
+                        <select class="form-control" id="cmbPresentacion" required>
+                          <!--<option value=""> </option>-->
+                          {% for presentacion in presentaciones %}
+                              <option value="{{presentacion.id}}">
+                              {{presentacion.nombre}}
+                              </option>
+                          {% endfor %}
+                          </select>
+
+                      </div>
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+                        <label for="">Cantidad de presentacion en unidad principal:</label>
+					                 <input type="number" name="cantPresentacion" id="cantPresentacion" required class="form-control">
+                      </div>
+
+                      {% for precio in precios%}
+                      <div class="col-xs-4 col-sm-4 col-md-4">
+
+                        <label for="">Precio - {{ precio.nombre }}: </label>
+                      <input type="number" name="{{precio.id}}Precio" id="{{precio.id}}Precio" required class="form-control">
+                      </div>
+                      {% endfor %}
+                      <input type="text" style="visibility:hidden;" name="" id="productoId" value="{{productoId}}">
+
+                      <br>
+                      <div class="col-xs-6 col-sm-6 col-md-6">
+                        <br>
+                        <button id="bt_add" class="btn btn-success">Agregar</button>
+                        <br>
+                        <br>
+                      </div>
+                      </div>
 											<br>
 											<div class="col-lg-12" style="margin-top:2px;">
 				                <div class="col-xs-12 col-sm-12 col-md-12">
@@ -96,6 +132,7 @@ Editar Producto {{oProducto.nombre}}
 																						<td>{{producto.precio1}}</td>
 																						<td>{{producto.precio2}}</td>
 																						<td>{{producto.precio3}}</td>
+                                            <td></td>
 																				</tr>
 																				{% endif %}
 																			{% endfor %}
@@ -103,13 +140,13 @@ Editar Producto {{oProducto.nombre}}
 																				{% if producto.valor == 1 %}
 																				{% else %}
 																				<tr>
-																						<td>{{forloop.counter}}</td>
+																						<td>{{forloop.counter0}}</td>
 																						<td>{{producto.presentacion}}</td>
-																						<td>{{producto.valor}}</td>
-																						<td><input class="form-control" type="number" name="" value="{{producto.precio1}}"></td>
-																						<td><input class="form-control" type="number" name="" value="{{producto.precio2}}"></td>
-																						<td><input class="form-control" type="number" name="" value="{{producto.precio3}}"></td>
-                                            <td><input type="button" class="btn btn-sucess" name="editarPresentacion" id="editarPresentacion" value="Editar">
+																						<td><input class="form-control" id="valorPrecio{{forloop.counter0}}" type="number" name="" value="{{producto.valor}}" disabled ></td>
+																						<td><input class="form-control" id="Precio1{{forloop.counter0}}" type="number" name="" value="{{producto.precio1}}" disabled ></td>
+																						<td><input class="form-control" id="Precio2{{forloop.counter0}}" type="number" name="" value="{{producto.precio2}}" disabled ></td>
+																						<td><input class="form-control" id="Precio3{{forloop.counter0}}" type="number" name="" value="{{producto.precio3}}" disabled ></td>
+                                            <td><a role="button" class="btn btn-primary" id="editar{{forloop.counter0}}" onclick="EditarPresentacionProducto('{{ producto.precio1Id }}','{{ producto.precio2Id }}','{{ producto.precio3Id }}','{{ producto.presentacionId }}','{{ forloop.counter0}}');" >Editar</a>
                                                 <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="" onclick="EliminarPresentacionProducto('{{ producto.presentacion }}','{{ producto.productoId }}','{{ producto.presentacionId }}');">Eliminar</a></td>
 
                                         </tr>
@@ -147,15 +184,13 @@ Editar Producto {{oProducto.nombre}}
 				                          </div>
 				                      </div>
 				                  </div>
-											<div class="col-xs-12 col-sm-12 col-md-12">
-												<button class="btn btn-success">Actualizar</button>
-											</div>
+
 
 					    	</div>
 
 								</ul>
 
-							</form>
+
 	    		</div>
 
     </div>

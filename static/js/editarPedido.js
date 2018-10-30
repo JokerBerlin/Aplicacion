@@ -38,7 +38,7 @@ $(document).ready(function() {
           $.ajax({
               type: "POST",
               dataType: "json",
-              url: "/Pedido/modificar/",
+              url: ""/Presentacion/nuevo/"",
               data: sendData,
               contentType: "application/json; charset=utf-8",
               async: false,
@@ -60,9 +60,3 @@ $(document).ready(function() {
 
 
 });
-
-function EliminarPresentacionProducto(presentacion,productoId, presentacionId){
-    console.log(presentacion);
-    document.getElementById('nombrePresentacion').innerHTML = presentacion;
-    $("#eliminarPresentacionProd").attr("href","/Presentacion/eliminar/"+presentacionId+"/"+productoId+"/");
-}

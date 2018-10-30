@@ -73,3 +73,26 @@ def getPresentaciones(request):
             return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
         except:
             return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
+
+@csrf_exempt
+def editarPresentacion(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        print(Datos)
+
+        cantidad = 1/float(Datos['valorPrecio'])
+        oProductoPresentacion = Productopresentacions.objects.get(id=Datos['productoPresentacionId'])
+        oProductoPresentacion.valor = cantidad
+        oProductoPresentacion.save()
+
+        oPrecios = Precio.objects.filter(estado=True)
+        cont = 1
+        for precio in oPrecios:
+            idPrecio = "precio"+str(cont)+"Id"
+            oProductoPresentacionPrecio = Productopresentacionsprecios.objects.get(id=Datos[idPrecio])
+            valorPrecio = "precio"+str(cont)+"";
+            oProductoPresentacionPrecio.valor = float(Datos[valorPrecio])
+            oProductoPresentacionPrecio.save()
+            cont = cont + 1
+        
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
