@@ -200,6 +200,7 @@ urlpatterns = [
 #######################Información y Reportes##############################
 
     url(r'^Reporte/almacen/$', reporteAlmacen),
+    url(r'^Reporte/almacen/tiempo-producto/$', tiempoProductoAlmacen),
     #url(r'^Reporte/caja/$', reporteCaja),
     #url(r'^Reporte/ventas/$', reporteVentas),
 

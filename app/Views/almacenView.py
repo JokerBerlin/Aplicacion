@@ -46,12 +46,10 @@ def reporteAlmacen(request):
 # Sujeto a un datatable dentro de la vista de reporte almacen
 def tiempoProductoAlmacen(request):
     productos = Producto.objects.all()
-    jsonfinal = {}
-    jsonfinal['salidasProductos']
+    jsonfinal = []
     for producto in productos:
         prodAlmacens = Producto_almacens.objects.filter(producto=producto)
         jsonProductosSalidas = {}
-
         cantidadProductosSalida = 0
         for prodAlmacen in prodAlmacens:
             cantSalida = prodAlmacen.cantidad - prodAlmacen.cantidadinicial
@@ -59,9 +57,14 @@ def tiempoProductoAlmacen(request):
                 cantidadProductosSalida += 0
             else:
                 cantidadProductosSalida += cantSalida
+        
         jsonProductosSalidas['producto'] = producto.nombre
         jsonProductosSalidas['cantidadSalidas'] = cantidadProductosSalida
+        # print(jsonProductosSalidas)
 
-        jsonfinal['salidasProductos'].append(jsonProductosSalidas)
+        jsonfinal.append(jsonProductosSalidas)
+        print('fin for %s' % jsonfinal)
+    print('final %s' % jsonfinal)
     
     return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
+

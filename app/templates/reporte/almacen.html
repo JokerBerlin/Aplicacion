@@ -9,6 +9,10 @@ Reporte de almacen
 {% endblock %}
 
 {% block content %}
+
+<script src="/static/DataTables/datatables.min.js"></script>
+<link rel="stylesheet" href="/static/DataTables/datatables.min.css">
+
 <div class="container">
     <h1>Reporte almacen</h1>
     <div class="card mb-3">
@@ -21,88 +25,86 @@ Reporte de almacen
         <div class="card-footer small text-muted">Actualizado ayer a las 11:59 PM</div>
     </div>
 
+    <div class="car mb-3">
+        <div class="card-header">
+            <i class="fas fa-chart-area"></i>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nombre de producto</th>
+                            <th>Cantidad de salida</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Nombre de Producto</th>
+                            <th>Cantidad de salida</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
 
 </div>
-{% endblock %}
 
 <script>
+// const español = {
+//     "sProcessing":     "Procesando...",
+//     "sLengthMenu":     "Mostrar _MENU_ registros",
+//     "sZeroRecords":    "No se encontraron resultados",
+//     "sEmptyTable":     "Ningún dato disponible en esta tabla",
+//     "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+//     "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+//     "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+//     "sInfoPostFix":    "",
+//     "sSearch":         "Buscar:",
+//     "sUrl":            "",
+//     "sInfoThousands":  ",",
+//     "sLoadingRecords": "Cargando...",
+//     "oPaginate": {
+//         "sFirst":    "Primero",
+//         "sLast":     "Último",
+//         "sNext":     "Siguiente",
+//         "sPrevious": "Anterior"
+//     },
+//     "oAria": {
+//         "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+//         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+//     }
+//     }
 
-window.onload = function() {
-  var fechas = [];
-  var saldos = [];
-  var ctx = document.getElementById("MyChart");
-  $.ajax({
-    method: 'GET',
-    url: '/Deposito/operaciones/listar-chart/',
-    success: function(data) {
-      data.forEach(element => {
-        fechas.push(moment(element.fields.fecha).format('DD/MM/YYYY'));
-        saldos.push(element.fields.saldo_final);
-      });
+// $(document).ready(function() {
+//     datatableProductosSalida();
+// })
 
-      // SALDO ACTUAL---------------------------------------------------------------------
-      const lastIdx = data.length - 1;
-      $('#saldoActual')[0].innerText = 'Saldo actual: ' + data[lastIdx].fields.saldo_final;
-      // ---------------------------------------------------------------------------------
+// var jsonAjax;
 
-      var respuesta = [];
-      var labels = [];
-
-      fechas.forEach(function(element, index, array) {
-          res = arrTiempoAFecha(element);
-          respuesta.push(res);
-      });
-
-      respuesta.forEach(function(element, index, array) {
-          año = element[0];
-          mes = fecha(element[1]) + ' ';
-          dia = element[2] + ' ';
-          // label = dia + 'de ' + mes + 'del ' + año;
-          label=año;
-          labels.push(label);
-      });
-
-      var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Saldo',
-                data: saldos,
-                borderColor: 'rgb(28, 106, 216)',
-                backgroundColor: 'rgba(28, 106, 216, 0.8)',
-                borderWidth: 1
-            }],
-        },
-        options: {
-            title: {
-              display: true,
-              text: 'Saldo reciente',
-            },
-            tooltips: {
-              mode: 'index',
-              intersect: false,
-            },
-            hover: {
-              mode: 'nearest',
-              intersect: true,
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
-      });
-    },
-  error: function(error_data) {
-      console.log("error");
-      console.log(error_data)
-  }
-});
-
-}
-
+// var datatableProductosSalida = function() {
+//     var tabla = $('#dataTable').DataTable({
+//         "processing": true,
+//         "ajax": {
+//         method: "GET",
+//         url: "/Reporte/almacen/tiempo-producto/",
+//         dataSrc: "",
+//         success: function(data){
+//                 jsonAjax = data;
+//                 console.log(data[0]);
+//             }
+//         },
+//         "columns": [
+//             {data: "producto"},
+//             {data: "cantidadSalidas"}
+//         ],
+//         "language": español
+//     });
+// }
+    
 </script>
+    
+    
+{% endblock %}
