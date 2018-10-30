@@ -67,27 +67,45 @@ function agregar(){
         }
         
         var waypts = [];
-        for (let index = 1; index < coordenadas.length - 1; index++) {
-            waypts.push({
-                location: new google.maps.LatLng(coordenadas[index].lat, coordenadas[index].lng),
-                stopover: true
-            })
+        if (markers.length > 2){
+            for (let index = 1; index < markers.length - 1; index++) {
+                waypts.push({
+                    location: markers[index].position,
+                    stopover: true
+                })
+            }
+        } else {
+            waypts = []
         }
 
-        ds.route({
-            origin: coordenadas[0],
-            destination: new google.maps.LatLng(coordenadas[coordenadas.length - 1].lat,coordenadas[coordenadas.length - 1].lng ),
-            waypoints: waypts,
-            optimizeWaypoints: false,
-            travelMode: 'DRIVING',
-        }, function(response, status) {
-            if (status === 'OK') {
-                dr.setDirections(response);
-            } else {
-                alert('Error ' + status);
-            }
-        })
-
+        if (waypts.length > 0) {
+            ds.route({
+                origin: markers[0].position,
+                destination: markers[markers.length - 1].position,
+                waypoints: waypts,
+                optimizeWaypoints: false,
+                travelMode: 'DRIVING',
+            }, function(response, status) {
+                if (status === 'OK') {
+                    dr.setDirections(response);
+                } else {
+                    alert('Error ' + status);
+                }
+            })
+        } else {
+            ds.route({
+                origin: markers[0].position,
+                destination: markers[markers.length - 1].position,
+                optimizeWaypoints: false,
+                travelMode: 'DRIVING',
+            }, function(response, status){
+                if (status === 'OK') {
+                    dr.setDirections(response);
+                } else {
+                    alert('Error ' + status);
+                }
+            })
+        }
         reset_values();
         reordenar();
     } else {
@@ -150,64 +168,8 @@ $('#tabla tbody tr').each(function(){
     });
 
 }
-/*
-function rescatar(){
-var valor= document.getElementById("direccion");
-    console.log(valor.value);
-}
-
 
 function agregarRuta(){
-    var num=1;
-    Rutas = [];
-    contador = 0;
-    $("#tabla tbody tr").each(function (index) {
-        $(this).children("td").each(function (index2) {
-            rutas = [];
-            switch (index2) {
-                case 1:
-                    nombre = $(this).text();
-                    break;
-                case 2:
-                    cliente = $(this).text();
-                    break;
-                case 5:
-                    direccion = $(this).text();
-                    break;
-            }
-        });
-        contador = 1;
-        Rutas.push([nombre,cliente,direccion]);
-    });
-    //console.log(productos);
-    if (contador == 1) {
-        var datos = {Rutas: Rutass};
-        var sendData = JSON.stringify(datos); 
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: "/ruta/insertar/",                  
-            data: sendData,                   
-            contentType: "application/json; charset=utf-8",
-            async: false,
-            cache: false,                    
-            CrossDomain: true,
-
-            success: function (result) {
-                var id_ruta = result["id_ruta"];
-                alert('Ruta Registrada');
-                location.reload(true);
-            }
-        });
-    }else{
-        alert("No registró ninguna ruta");
-    }
-}
-**/
-
-
-function agregarRuta(){
-    var num=1;
     oRutas = [];
     contador = 0;
     $("#tabla tbody tr").each(function (index) {
@@ -226,6 +188,7 @@ function agregarRuta(){
         contador = 1;
         oRutas.push([Nombre,Cliente]);
     });
+    console.log(oRutas);
     //var cliente = document.getElementById("id_cliente").value;
     //console.log(cliente)
     if (contador == 1) {
@@ -241,10 +204,9 @@ function agregarRuta(){
             cache: false,                    
             CrossDomain: true,
 
-            success: function (result) {
-                
+            success: function (result) {                
                 alert('Ruta Registrada');
-                    document.location.href='/Ruta/listar/';
+                document.location.href = '/Ruta/listar/';
                 // location.reload(true);
             }
         });

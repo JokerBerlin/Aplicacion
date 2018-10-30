@@ -51,91 +51,6 @@ $(document).ready(function(){
 
             $('#latitud').val(latCliente);
             $('#longitud').val(longCliente);
-
-            // var divMapa = document.getElementById('mapa');
-            // navigator.geolocation.getCurrentPosition(fn_ok, fn_mal);
-
-    //         function fn_mal(){}
-    //         function fn_ok(rta){
-
-    //             var lat = rta.coords.latitude;
-    //             var lon = rta.coords.longitude;
-
-    //             var gLatLon= new google.maps.LatLng(lat, lon); //guardamos las coordenadas en un objeto de google, el LatLng es propio de google.
-    //             var objConfig={
-    //                 zoom:17,
-    //                 center: gLatLon //donde debe estar el mapa centrado cuando se rederice.
-    //             }
-
-    //             var gMapa= new google.maps.Map(divMapa, objConfig); //indica a donde se va renderizar nuestro mapa y el segundo dato es una configuración del mapa.
-                
-    //             objConfigMarker={
-    //             position:gLatLon,
-    //             map:gMapa,
-    //             draggable: true,
-    //             title:"Nuesta ubicación"
-    //             }
-
-    //             var gMarker = new google.maps.Marker(objConfigMarker);
-    //                 //gMarker.setIcon('icon_usuario.gif');
-
-    //             var gCoder = new google.maps.Geocoder();
-
-    //             var objInformacion={
-    //                 address: ui.item.direccion
-    //             }
-
-    //             gCoder.geocode(objInformacion, fn_coder);
-
-    //             function fn_coder(datos){
-    //                 var coordenadas = datos[0].geometry.location; //obj LatLong
-
-    //                 var config = {
-    //                     map: gMapa,
-    //                     position: coordenadas,
-    //                     title: ''
-    //                 }
-    //                 var gMarkerDV=new google.maps.Marker(config)
-    //                     //gMarkerDV.setIcon('icon_edificio.png')
-
-    //                 var objHTML={
-    //                     content: '<div style= "height: 150px; width: 300px"><h2>Cliente:</h2><h3>Direccion: {{oCliente.direccion}}</h3></div>'
-    //                 }
-
-    //                 var gIW = new google.maps.InfoWindow(objHTML);
-
-    //                 google.maps.event.addListener(gMarkerDV, 'click', function(){
-    //                     gIW.open(gMapa, gMarkerDV);
-    //                 });
-
-    //                 var objConfigDR = { //objeto de configuración directions render.
-    //                     map: gMapa,
-    //                     suppressMarkers: true
-    //                 }
-                
-    //                 var objConfigDS= {
-    //                     origin: gLatLon, //LatLong 
-    //                     destination:objInformacion.address,
-    //                     travelMode: google.maps.TravelMode.WALKING //se puede variar segun tipo de movil a usar                    
-    //                 }
-                
-    //                 var ds= new google.maps.DirectionsService();
-    //                 //obtener coordenadas
-    //                 var dr = new google.maps.DirectionsRenderer(objConfigDR);
-    //                 //traduce coordenadas a la ruta visible
-
-    //                     ds.route(objConfigDS, fnRutear );
-
-    //                 function fnRutear(resultados, status){
-    //                     //mostrar la linea entre A y B
-    //                     if(status=='OK'){
-    //                         dr.setDirections(resultados);
-    //                     }else{
-    //                         alert('Error'+status);
-    //                     }
-    //                 }
-    //     }
-    // }
         
         }
 
@@ -157,15 +72,16 @@ function addMarker(config) {
 }
 
 function initMap() {
-    ds = new google.maps.DirectionsService();
-    dr = new google.maps.DirectionsRenderer();
-    mapa = new google.maps.Map(document.getElementById('mapa'), {
-
+  mapa = new google.maps.Map(document.getElementById('mapa'), {
     center: {lat: -13.1587800, lng: -74.2232100},
     zoom: 17
   });
+
   infoWindow = new google.maps.InfoWindow;
 
+  ds = new google.maps.DirectionsService();
+  dr = new google.maps.DirectionsRenderer({map: mapa, suppressMarkers: true});
+  
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -246,15 +162,15 @@ Nueva Ruta
             <div class="white-box">
                 <h3 class="box-title">Nueva Ruta</h3>
 
-            <form action="." method="POST" enctype="multipart/form-data">
-                 {% csrf_token %}
+            <!-- <form action = '' method="POST" enctype="multipart/form-data">
+                 {% csrf_token %} -->
                  <ul>
                     <label for="id_nombre">Nombre:</label>
                     <br>
                     <input type="text" name="id_nombre" id="id_nombre" placeholder="Nombre Ruta..." required="" class="form-control" maxlength="45">
                     <label for="id_nombre">Cliente:</label>
                     <br>
-                    <input type="text" name="id_cliente" id="id_cliente" placeholder="Nombre Cliente..." required="" class="form-control" maxlength="45">
+                    <input type="text" name="id_cliente" id="id_cliente" placeholder="Nombre Cliente..." class="form-control" maxlength="45">
                 
                     <br>
                     <label for="latitud">Latitud:</label>
@@ -266,8 +182,8 @@ Nueva Ruta
                     <input type="number" name="precio" id="longitud" required="" class="form-control" disabled>
                     <br>
 
-                    <a id="bt_add" class="btn btn-success" href=# >Agregar</a>
-                    <a id="bt_del" class="btn btn-warning" href=# >Eliminar</a>
+                    <a id="bt_add" class="btn btn-success">Agregar</a>
+                    <a id="bt_del" class="btn btn-warning">Eliminar</a>
                     <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
             
                     <div class="row">
@@ -318,7 +234,7 @@ Nueva Ruta
 
             </div>
             </ul>
-        </form>
+        <!-- </form> -->
 
                       <br>
               </div>      
