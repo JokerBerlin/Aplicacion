@@ -640,11 +640,15 @@ def eliminar_identificador_venta(request):
         prodAlmacen = Producto_almacens.objects.filter(producto=oProducto, almacen_id=oAlmacen).latest('pk')
         cantidadAntesAnulacion = prodAlmacen.cantidad
         cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
+        
+        loteReversion = Lote(proveedor_id = 1, recibo_id = 1)
+        loteReversion.save()
+
         prodAlmacenNuevo = Producto_almacens(
             cantidad=cantidadDespuesAnulacion,
             cantidadinicial=cantidadAntesAnulacion,
             almacen=prodAlmacen.almacen,
-            lote=prodAlmacen.lote,
+            lote=loteReversion,
             producto=prodAlmacen.producto
         )
         prodAlmacenNuevo.save()

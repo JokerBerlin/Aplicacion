@@ -72,6 +72,7 @@ urlpatterns = [
     url(r'^Producto/editar/(?P<producto_id>\d+)/$', editarProducto),
     url(r'^Producto/eliminar/$', eliminar_identificador_producto,name='eliminar_producto'),
     url(r'^lote/nuevo/$', registrarLote),
+    
     ################## Catalogo #######################
     url(r'^Presentacion/Listar/(?P<producto_id>\d+)/$', presentacion_detalle),
     url(r'^Presentacion/registrar/$', registrarPresentacionProducto),
@@ -112,12 +113,12 @@ urlpatterns = [
     url(r'^Pedido/buscar/$', IngresarPrecios),
     url(r'^Pedido/imprimir/$', IngresarPrecios),
 
-        ################## RUTA #######################
+    ################## RUTA #######################
     url(r'^Ruta/nuevo/$', registrarRuta),
     url(r'^Ruta/listar/$',listarRutas),
     url(r'^Ruta/detalle/(?P<ruta_id>\d+)/$', detalleRuta),
+    
     ################## APP Movil #######################
-
     url(r'^usuario/validar/$', validarUsuario),
     url(r'^usuario/ruta/$', rutaUsuario),
 
