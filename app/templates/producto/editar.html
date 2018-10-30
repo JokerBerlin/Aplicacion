@@ -142,11 +142,11 @@ Editar Producto {{oProducto.nombre}}
 																				<tr>
 																						<td>{{forloop.counter0}}</td>
 																						<td>{{producto.presentacion}}</td>
-																						<td>{{producto.valor}}</td>
-																						<td><input class="form-control" type="number" name="" value="{{producto.precio1}}"></td>
-																						<td><input class="form-control" type="number" name="" value="{{producto.precio2}}"></td>
-																						<td><input class="form-control" type="number" name="" value="{{producto.precio3}}"></td>
-                                            <td><input type="button" class="btn btn-sucess" name="editarPresentacion" id="editarPresentacion" value="Editar">
+																						<td><input class="form-control" id="valorPrecio{{forloop.counter0}}" type="number" name="" value="{{producto.valor}}" disabled ></td>
+																						<td><input class="form-control" id="Precio1{{forloop.counter0}}" type="number" name="" value="{{producto.precio1}}" disabled ></td>
+																						<td><input class="form-control" id="Precio2{{forloop.counter0}}" type="number" name="" value="{{producto.precio2}}" disabled ></td>
+																						<td><input class="form-control" id="Precio3{{forloop.counter0}}" type="number" name="" value="{{producto.precio3}}" disabled ></td>
+                                            <td><a role="button" class="btn btn-primary" id="editar{{forloop.counter0}}" onclick="EditarPresentacionProducto('{{ producto.precio1Id }}','{{ producto.precio2Id }}','{{ producto.precio3Id }}','{{ producto.presentacionId }}','{{ forloop.counter0}}');" >Editar</a>
                                                 <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="" onclick="EliminarPresentacionProducto('{{ producto.presentacion }}','{{ producto.productoId }}','{{ producto.presentacionId }}');">Eliminar</a></td>
 
                                         </tr>

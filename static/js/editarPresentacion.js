@@ -35,9 +35,57 @@ $(document).ready(function(){
         }
     });
   });
+
+
 });
 function EliminarPresentacionProducto(presentacion,productoId, presentacionId){
     console.log(presentacion);
     document.getElementById('nombrePresentacion').innerHTML = presentacion;
     $("#eliminarPresentacionProd").attr("href","/Presentacion/eliminar/"+presentacionId+"/"+productoId+"/");
+}
+
+
+
+function EditarPresentacionProducto(precio1Id,precio2Id,precio3Id,productoPresentacionId,contador){
+  $('#editar'+contador+'').text('Actualizar');
+  $('#valorPrecio'+contador+'').prop('disabled', false);
+  $('#valorPrecio'+contador+'').focus();
+  $('#Precio1'+contador+'').prop('disabled', false);
+  $('#Precio2'+contador+'').prop('disabled', false);
+  $('#Precio3'+contador+'').prop('disabled', false);
+  $('#editar'+contador+'').attr("onclick","");
+  //$('#editar'+contador+'').attr("href","/Producto/listar/");
+  console.log(precio1Id+','+precio2Id+','+precio3Id+','+productoPresentacionId);
+  $('#editar'+contador+'').click(function(){
+    var tipo = $('#editar'+contador+'').text();
+    if (tipo == 'Actualizar'){
+      var productoId = $('#productoId').val();
+      var valorPrecio = $('#valorPrecio'+contador+'').val();
+      var precio1 = $('#Precio1'+contador+'').val();
+      var precio2 = $('#Precio2'+contador+'').val();
+      var precio3 = $('#Precio3'+contador+'').val();
+
+      var datos = {productoPresentacionId:productoPresentacionId,valorPrecio:valorPrecio, precio1Id:precio1Id,precio1:precio1,precio2Id:precio2Id,precio2:precio2,precio3Id:precio3Id,precio3:precio3};
+      console.log(datos);
+      var sendData = JSON.stringify(datos);
+
+      $.ajax({
+          type: "POST",
+          dataType: "json",
+          url: "/Presentacion/editar/",
+          data: sendData,
+          contentType: "application/json; charset=utf-8",
+          async: false,
+          cache: false,
+          CrossDomain: true,
+
+          success: function (result) {
+          //     svar id_venta = result["id_venta"];
+               alert('Pedido modificado');
+               //location.reload(true);
+               document.location.href='/Producto/editar/'+productoId+'/';
+          }
+      });
+    }
+  });
 }

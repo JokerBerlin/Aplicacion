@@ -437,12 +437,10 @@ def editarProducto(request,producto_id):
             for oProductoPresentacionsprecio in oProductoPresentacionsprecios:
                 c = oProductoPresentacionsprecio.valor
                 valorPrecio = str(c).replace(",", ".")
+                nuevo["precio"+str(cont)+"Id"]= oProductoPresentacionsprecio.id
                 nuevo["precio"+str(cont)]= valorPrecio
                 cont = cont + 1
             productos.append(nuevo)
-
-
-        print(productos)
 
         ctx = {'form':form, 'oProducto': oProducto,'productos':productos, 'presentaciones':presentaciones,'precios':precios,'productoId':producto_id,}
 
