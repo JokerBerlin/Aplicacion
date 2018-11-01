@@ -83,7 +83,7 @@ function agregar(){
                 origin: markers[0].position,
                 destination: markers[markers.length - 1].position,
                 waypoints: waypts,
-                optimizeWaypoints: false,
+                optimizeWaypoints: true,
                 travelMode: 'DRIVING',
             }, function(response, status) {
                 if (status === 'OK') {
@@ -96,7 +96,7 @@ function agregar(){
             ds.route({
                 origin: markers[0].position,
                 destination: markers[markers.length - 1].position,
-                optimizeWaypoints: false,
+                optimizeWaypoints: true,
                 travelMode: 'DRIVING',
             }, function(response, status){
                 if (status === 'OK') {

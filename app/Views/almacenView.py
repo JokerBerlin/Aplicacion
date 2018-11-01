@@ -44,7 +44,7 @@ def reporteAlmacen(request):
 
 # Servicio para el ranking de productos mas vendidos
 # Sujeto a un datatable dentro de la vista de reporte almacen
-def tiempoProductoAlmacen(request):
+def salidaProductoAlmacen(request):
     productos = Producto.objects.all()
     jsonfinal = []
     for producto in productos:
@@ -68,3 +68,22 @@ def tiempoProductoAlmacen(request):
     
     return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
 
+
+# Servicio para la cantidad de productos en almacen
+# Sujeto a la datatableCantidadProducto en la vista reporte almacen
+def cantidadProductoAlmacen(request):
+    productos = Producto.objects.all()
+    jsonfinal = []
+    for producto in productos:
+        jsonProductoCantidad = {}
+        try:
+            prodAlmacen = Producto_almacens.objects.filter(producto=producto).latest('pk')
+            jsonProductoCantidad['producto'] = producto.nombre
+            jsonProductoCantidad['cantidadProducto'] = prodAlmacen.cantidad
+        except:
+            jsonProductoCantidad['producto'] = producto.nombre
+            jsonProductoCantidad['cantidadProducto'] = 0.0
+            
+        jsonfinal.append(jsonProductoCantidad)
+            
+    return HttpResponse(json.dumps(jsonfinal), content_type="applicacion/json")
