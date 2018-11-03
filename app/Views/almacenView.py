@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from app.models import *
 from app.views import *
 from django.views.decorators.csrf import csrf_exempt
+
+from datetime import datetime as dt
 import json
 
 @csrf_exempt
@@ -49,6 +51,7 @@ def salidaProductoAlmacen(request):
     jsonfinal = []
     for producto in productos:
         prodAlmacens = Producto_almacens.objects.filter(producto=producto)
+        cantidadProducto = prodAlmacens.latest('pk').cantidad
         jsonProductosSalidas = {}
         cantidadProductosSalida = 0
         for prodAlmacen in prodAlmacens:
@@ -60,6 +63,7 @@ def salidaProductoAlmacen(request):
         
         jsonProductosSalidas['producto'] = producto.nombre
         jsonProductosSalidas['cantidadSalidas'] = cantidadProductosSalida
+        jsonProductosSalidas['cantidadActualProducto'] = cantidadProducto
         # print(jsonProductosSalidas)
 
         jsonfinal.append(jsonProductosSalidas)
@@ -76,14 +80,35 @@ def cantidadProductoAlmacen(request):
     jsonfinal = []
     for producto in productos:
         jsonProductoCantidad = {}
-        try:
-            prodAlmacen = Producto_almacens.objects.filter(producto=producto).latest('pk')
-            jsonProductoCantidad['producto'] = producto.nombre
-            jsonProductoCantidad['cantidadProducto'] = prodAlmacen.cantidad
-        except:
-            jsonProductoCantidad['producto'] = producto.nombre
-            jsonProductoCantidad['cantidadProducto'] = 0.0
-            
+        
+        prodAlmacen = Producto_almacens.objects.filter(producto=producto).latest('pk')
+        
+        jsonProductoCantidad['producto'] = producto.nombre
+        jsonProductoCantidad['cantidadProducto'] = prodAlmacen.cantidad
+        
         jsonfinal.append(jsonProductoCantidad)
+        
+    return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
+
+
+def tiempoPedidoAlmacen(request):
+    pedidos = Pedido.objects.all()
+    jsonfinal = []
+    hoy = dt.now()
+
+    for pedido in pedidos:
+        jsonTiempoPedido = {}
+        
+        if pedido.estado == 1 or pedido.estado == 2:
+            delta = hoy - pedido.fecha
             
-    return HttpResponse(json.dumps(jsonfinal), content_type="applicacion/json")
+            jsonTiempoPedido['pedidoId'] = pedido.pk
+            jsonTiempoPedido['cliente'] = pedido.cliente.nombre
+            jsonTiempoPedido['fechaPedido'] = str(pedido.fecha)
+            jsonTiempoPedido['delta'] = str(delta)
+
+            jsonfinal.append(jsonTiempoPedido)
+    
+    return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
+
+        

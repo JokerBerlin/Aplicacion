@@ -673,3 +673,6 @@ def DetalleVenta(request,venta_id):
     else:
         oPedidos = Pedido.objects.filter(estado = True)
         return render(request, 'pedido/listar.html',{"oPedidos": oPedidos})
+
+def reporteVentas(request):
+    return render(request, 'reporte/ventas.html')

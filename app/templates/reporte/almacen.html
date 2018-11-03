@@ -36,12 +36,14 @@ Reporte de almacen
                         <tr>
                             <th>Producto</th>
                             <th>Cantidad de salida</th>
+                            <th>Cantidad Existencias en almacen</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Producto</th>
                             <th>Cantidad de salida</th>
+                            <th>Cantidad Existencias en almacen</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -120,7 +122,8 @@ var obtenerData = function() {
             "data": data,
             "columns": [
                 {data: "producto"},
-                {data: "cantidadSalidas"}
+                {data: "cantidadSalidas"},
+                {data: "cantidadActualProducto"}
             ],
             "language": español
         });
