@@ -155,7 +155,7 @@ Ventas
             {% for oVent in oVenta %}
               <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{oVent.fecha}}</td>
+                <td>{{oVent.fecha|date:"d-m-Y P" }}</td>
                 <td>{{oVent.monto}}</td>
                 <td>{{oVent.nrecibo}}</td>
                 <td>{{oVent.cliente.nombre }}</td>
