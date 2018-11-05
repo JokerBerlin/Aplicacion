@@ -410,7 +410,7 @@ def editarProducto(request,producto_id):
 
             return redirect('/Producto/listar/')
     else:
-        form= ProductoForm(instance=oProducto)
+        forms= ProductoForm(instance=oProducto)
         oProductoPresentacions = Productopresentacions.objects.filter(producto_id=oProducto.id)
         productos = []
         presentaciones = []
@@ -442,7 +442,7 @@ def editarProducto(request,producto_id):
                 cont = cont + 1
             productos.append(nuevo)
 
-        ctx = {'form':form, 'oProducto': oProducto,'productos':productos, 'presentaciones':presentaciones,'precios':precios,'productoId':producto_id,}
+        ctx = {'forms':forms, 'oProducto': oProducto,'productos':productos, 'presentaciones':presentaciones,'precios':precios,'productoId':producto_id,}
 
 
     return render(request, 'producto/editar.html',ctx)

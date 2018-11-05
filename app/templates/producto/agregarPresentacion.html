@@ -19,13 +19,13 @@ Registrar Nuevo Producto
       <div class="col-sm-12">
           <div class="white-box">
               <h3 class="box-title">Formulario de registro de Producto</h3>
-              <button class="btn btn-success" data-toggle="modal" data-target="#agrearPresentacion">Agregar Presentacion</button>
-              <button class="btn btn-primary" id="listaProducto">Listar productos</button>
+              <a href="/Producto/editar/{{producto.id}}/" class="btn btn-success" type="button" name="button">Registrar presentaciones</a>
+              <a href="/Producto/listar/" class="btn btn-primary" id="listaProducto">Listar productos</a>
           </div>
       </div>
   </div>
 
-<div class="modal fade" id="agrearPresentacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="agrearPresentacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	Tabla de contenidos
 			      <div class="modal-dialog">
 			        <div class="modal-content">
@@ -37,10 +37,10 @@ Registrar Nuevo Producto
 			          Producto:</br>
 					    <input type="text" name="idProducto" id="productoId" required class="form-control" value="{{producto.nombre}}">
 			            Presentación</br>
-			            <!-- <form action="/Presentacion/registrar/" method="post" enctype="multipart/form-data">
-						{% csrf_token %} -->
+			             <form action="/Presentacion/registrar/" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
 					    <select class="form-control" id="cmbPresentacion" required>
-					    	<!--<option value=""> </option>-->
+					    	<option value=""> </option>
 	                        {% for presentacion in presentaciones %}
 	                            <option value="{{presentacion.id}}">
 	                            {{presentacion.nombre}}
@@ -91,7 +91,7 @@ Registrar Nuevo Producto
                           <br>
 
 
-                    <!--</form>-->
+                    </form>
                   </div>
                 </div>
               </div>
@@ -128,5 +128,5 @@ Registrar Nuevo Producto
                 </div>
 			</div>
 	    </div>
-    </div>
+    </div> -->
 {% endblock %}
