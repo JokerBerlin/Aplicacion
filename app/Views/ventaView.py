@@ -520,7 +520,7 @@ def insertarVenta(request):
         dni_cliente = datos['cliente']
         nroRecibo = datos['nrecibo']
         tipoRecibo = datos['tipoRecibo']
-        
+
         #Se genera el pedido con un estado 3
         #Se hace el descuento de producto en producto_almacen
         oCliente = Cliente.objects.get(numerodocumento=dni_cliente)
@@ -557,7 +557,7 @@ def insertarVenta(request):
                 producto_id=oUltimoP.producto_id
             )
             nuevoCantidadProductoAlmacen.save()
-        
+
         oVenta.monto = monto_venta
         oVenta.save()
 
@@ -640,7 +640,7 @@ def eliminar_identificador_venta(request):
         prodAlmacen = Producto_almacens.objects.filter(producto=oProducto, almacen_id=oAlmacen).latest('pk')
         cantidadAntesAnulacion = prodAlmacen.cantidad
         cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
-        
+
         loteReversion = Lote(proveedor_id = 1, recibo_id = 1)
         loteReversion.save()
 
@@ -652,10 +652,10 @@ def eliminar_identificador_venta(request):
             producto=prodAlmacen.producto
         )
         prodAlmacenNuevo.save()
-        
+
     response = {}
     return JsonResponse(response)
-    
+
 def DetalleVenta(request,venta_id):
     if request.method == 'GET':
         oVenta = Venta.objects.get(id=venta_id)

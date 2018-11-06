@@ -35,6 +35,7 @@ from app.Views.ventaView import *
 from app.Views.reciboView import *
 from app.Views.loteView import *
 from app.Views.almacenView import *
+from app.Views.cajaView import *
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
