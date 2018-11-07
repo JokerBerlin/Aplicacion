@@ -30,3 +30,8 @@ def registrarAperturacaja(request):
         oCajas = Caja.objects.filter(estado=1)
 
         return render(request,'caja/apertura.html',{'form': form,'cajas':oCajas,})
+
+def registrarOperacion(request):
+    oDetalletipooperacions = Detalletipooperacion.objects.filter(estado=1)
+    oCajas = Caja.objects.filter(estado=1)
+    return render(request,'caja/operacion.html',{'oDetalletipooperacions':oDetalletipooperacions,'oCajas':oCajas,})
