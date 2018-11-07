@@ -11,7 +11,18 @@ Reporte de almacen
 {% block content %}
 
 <script src="/static/DataTables/datatables.min.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script> -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+
 <link rel="stylesheet" href="/static/DataTables/datatables.min.css">
+
 
 <div class="container">
     <h1>Reporte almacen</h1>
@@ -106,6 +117,11 @@ const español = {
     "oAria": {
         "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
         "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    },
+    "buttons": {
+        "excel": "Exportar a Excel",
+        "pdf": "Exportar a pdf",
+        "print": "Imprimir"
     }
 }
 
@@ -118,6 +134,8 @@ var obtenerData = function() {
         success: function(data) {
             console.log(data);
             var tabla = $('#dataTableProductoCantidadSalida').DataTable({
+            dom: 'Bfrtip',
+            buttons: ['excel', 'pdf', 'print'],
             "processing": true,
             "data": data,
             "columns": [

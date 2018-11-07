@@ -23,7 +23,6 @@ from app.fomularios.aperturacajaForm import *
 
 @csrf_exempt
 def validarUsuario(request):
-   
 
     if request.method == 'POST':
         Datos = json.loads(request.body)
@@ -37,9 +36,12 @@ def validarUsuario(request):
             Latitud = Datos["coord"]["y"]
             try:
                 oEmpleado = Empleado.objects.get(imei=imei)
-                return HttpResponse(json.dumps({'exito':1,"nombre":oEmpleado.nombre,"idEmpleado":oEmpleado.id,"perfil":oEmpleado.perfil}), content_type="application/json")
+                jsonRespuesta = {'exito':1,"nombre":oEmpleado.nombre,"idEmpleado":oEmpleado.id,"perfil":oEmpleado.perfil}
+                print(jsonRespuesta)
+                return HttpResponse(json.dumps(jsonRespuesta), content_type="application/json")
             except Exception as e:
-                return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
+                jsonRespuesta = {'exito':0}
+                return HttpResponse(json.dumps(jsonRespuesta), content_type="application/json")
                 
 
         #except Exception as e:
