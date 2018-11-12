@@ -30,10 +30,21 @@ $(document).ready(function(){
 
               success: function (result) {
               var ListasClientes = result['clientes'];
+              console.log(ListasClientes);
+              if( Object.keys(ListasClientes).length === 0 ){
+                  var numeroNuevo = $('#inpt-cliente').val();
+                  var Cliente = new Object();
+                  Cliente.numerodocumento = "nuevo";
+                  Cliente.nombre = "nuevo";
+                  Cliente.direccion = numeroNuevo;
+                  console.log(Cliente);
+                  ListasClientes.push(Cliente);
+              }
               response($.map(ListasClientes, function (item) {
-                  return {label: item.numerodocumento,
-                        nombreC: item.nombre};
-                console.log(item.nombre);
+                    return {label: item.numerodocumento,
+                          nombreC: item.nombre,
+                          dniC: item.direccion,};
+
               }));
 
               }
@@ -41,9 +52,17 @@ $(document).ready(function(){
       },
       minLength: 1,
       select: function (event, ui) {
-          console.log(ui.item.nombreC );
-          $("#nombreCl").val(ui.item.nombreC);
-          $('#inpt-producto').focus();
+
+          if(ui.item.nombreC === "nuevo"){
+              console.log(ui.item.dniC);
+              $('#id_numerodocumento').val(ui.item.dniC);
+              $('#nuevoCliente').click();
+
+          } else{
+              $("#nombreCl").val(ui.item.nombreC);
+              $('#inpt-producto').focus();
+          }
+
       }
 
   });
@@ -95,6 +114,9 @@ $(document).ready(function(){
         }
 
 
+    });
+    $('#myModal').on('shown.bs.modal', function () {
+      $('#id_cliente').trigger('focus');
     });
 });
 
@@ -225,7 +247,7 @@ Nuevo Pedido
             <div class="col-xs-12 col-sm-12">
               <div class="col-lg-12" style="margin-top:2px;">
                 <div class="col-xs-6 col-sm-6 col-md-6">
-                  <label for="id_nombre">Nombre:</label><br>
+                  <label for="id_nombreEtiqueta">Nombre:</label><br>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6">
                   <label for="id_direccion">Direccion:</label><br>
@@ -344,8 +366,8 @@ Nuevo Pedido
                      <div class="panel-body">
                        <h4 class="box-title">Cliente</h4>
                        <div class="col-xs-6 col-sm-6 col-md-6">
-                         <label for="id_nombre">Cliente:</label>
-                         <a data-target="#myModal" role="button" data-toggle="modal" style="color:green"><span class="fa fa-plus fa-1x"></span></a>
+                         <label for="id_nombreDocuento">Cliente:</label>
+                         <a data-target="#myModal" role="button" id="nuevoCliente" data-toggle="modal" style="color:green"><span class="fa fa-plus fa-1x"></span></a>
                          <input type="number" id="inpt-cliente" placeholder="Nr. Documento cliente..." name="cliente_buscado" class="form-control">
                        </div>
                        <div class="col-xs-6 col-sm-6 col-md-6">
@@ -359,11 +381,11 @@ Nuevo Pedido
                      <div class="panel-body">
                        <h4 class="box-title">Producto</h4>
                        <div class="col-xs-4 col-sm-4 col-md-4">
-                         <label for="id_nombre">Producto:</label>
+                         <label for="id_nombreProducto">Producto:</label>
                          <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
-                         <label for="id_nombre">Código:</label>
+                         <label for="id_nombreCodigo">Código:</label>
                          <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
