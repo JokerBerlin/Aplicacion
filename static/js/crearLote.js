@@ -6,8 +6,10 @@ $(document).ready(function(){
             agregar();
             $('#inpt-producto').focus();
         });
-        $('#bt_add').keypress(function(){
-            $('#inpt-producto').focus();
+        $('#bt_add').keypress(function(e){
+            if(e.which == 13) {
+                $('#inpt-producto').focus();
+            }
         });
         $('#bt_del').click(function(){
             eliminar(id_fila_selected);
@@ -19,9 +21,9 @@ $(document).ready(function(){
         $('#bt_GenerarVenta').click(function(){
             GenerarLote();
         });
-        $('#inpt-producto').keyup(function(e){
+        $('#inpt-producto').keypress(function(e){
             if(e.keyCode == 13){
-              $('#cantidad').focus();
+               $('#cantidad').focus();
             }
 
         });
@@ -183,7 +185,7 @@ $(document).ready(function(){
                 success: function (result) {
                 //     var id_venta = result["id_venta"];
                      alert('Lote Registrado');
-                     document.location.href='/Producto/listar/';
+                     document.location.href='/Lote/listar/';
 
                      //location.reload(true);
                      //document.location.href='/Pedido/listar/';
