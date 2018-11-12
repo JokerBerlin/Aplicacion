@@ -30,7 +30,6 @@ $(document).ready(function(){
 
               success: function (result) {
               var ListasClientes = result['clientes'];
-              console.log(ListasClientes);
               if( Object.keys(ListasClientes).length === 0 ){
                   var numeroNuevo = $('#inpt-cliente').val();
                   var Cliente = new Object();
@@ -54,7 +53,6 @@ $(document).ready(function(){
       select: function (event, ui) {
 
           if(ui.item.nombreC === "nuevo"){
-              console.log(ui.item.dniC);
               $('#id_numerodocumento').val(ui.item.dniC);
               $('#nuevoCliente').click();
 
@@ -116,7 +114,6 @@ $(document).ready(function(){
 
     });
     $('#myModal').on('shown.bs.modal', function () {
-      console.log('hola');
       $('#id_nombre').trigger('focus');
     });
 });
