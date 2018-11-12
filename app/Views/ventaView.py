@@ -20,6 +20,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.core import serializers
 
+###reporteVentas
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+
 def ListarVentas(request):
     oProductos=[]
     if request.method == 'POST':
@@ -676,3 +681,28 @@ def DetalleVenta(request,venta_id):
 
 def reporteVentas(request):
     return render(request, 'reporte/ventas.html')
+
+def imprimir(request):
+    response = HttpResponse(content_type='aplication/pdf')
+    response['Content-Disposition'] = 'attachment; filename=Venta-report.pdf'
+
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+
+    #header
+    c.setLineWidth(.3)
+    c.setFont('Helvetica', 22)
+    c.drawString(30,750,'Venta')
+    c.setFont('Helvetica', 22)
+    c.drawString(30,735,'Reporte')
+
+    c.setFont('Helvetica-Bold', 12)
+    c.drawString(480,750,'01/01/16')
+    c.line(460,747,560,747)
+
+
+    c.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+    return response

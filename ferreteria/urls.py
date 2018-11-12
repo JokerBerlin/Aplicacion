@@ -117,7 +117,7 @@ urlpatterns = [
     url(r'^Pedido/reporte/$', IngresarPrecios),
     url(r'^Pedido/buscar/$', IngresarPrecios),
     url(r'^Pedido/imprimir/$', IngresarPrecios),
-
+    url(r'^imprimir/$', imprimir),
     ################## RUTA #######################
     url(r'^Ruta/nuevo/$', registrarRuta),
     url(r'^Ruta/listar/$',listarRutas),
