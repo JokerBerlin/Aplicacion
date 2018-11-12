@@ -49,6 +49,10 @@ function EditarProducto(){
   $('#actualizarProducto').prop('class', 'btn btn-primary');
 
   $('#id_nombre').prop('disabled', false);
+  $('#id_codigo').prop('disabled', false);
+  $('#id_imagen').prop('disabled', false);
+  $('#id_url').prop('disabled', false);
+
   temp=$("#id_nombre").val();
   $("#id_nombre").val('');
   $("#id_nombre").val(temp);
@@ -62,9 +66,6 @@ function EditarProducto(){
   var val = $('#id_nombre').val();
   val.focus();
   //$("#id_nombre").val($("#id_nombre").val());
-  $('#id_codigo').prop('disabled', false);
-  $('#id_imagen').prop('disabled', false);
-  $('#id_url').prop('disabled', false);
 
 }
 
