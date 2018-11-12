@@ -38,7 +38,7 @@ $(document).ready(function() {
           $.ajax({
               type: "POST",
               dataType: "json",
-              url: ""/Presentacion/nuevo/"",
+              url: "/Pedido/modificar/",
               data: sendData,
               contentType: "application/json; charset=utf-8",
               async: false,
@@ -49,7 +49,7 @@ $(document).ready(function() {
               //     var id_venta = result["id_venta"];
                    alert('Pedido modificado');
                    //location.reload(true);
-                   document.location.href='/Pedido/listar/';
+                   document.location.href='/Pedido/listar/1/';
               }
           });
       }else{
