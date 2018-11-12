@@ -175,7 +175,7 @@ Ventas
                 </td>
                 <td>
                   <a href="/Venta/detalle/{{oVent.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
-                  <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oVenta.id }}" onclick="selVenta('{{oVent.id}}','{{oVent.cliente.nombre}}');">Eliminar</a>
+                  <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oVenta.id }}" onclick="selVenta('{{oVent.id}}','{{oVent.cliente.nombre}}');">Anular venta</a>
                 </td>
               </tr>
             {% endfor %}
