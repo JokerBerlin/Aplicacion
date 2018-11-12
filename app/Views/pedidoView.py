@@ -249,7 +249,7 @@ def DetallePedido(request,pedido_id):
             oProducto["cantidad"] = oPedidoproductospresentacion.cantidad
             oProductos.append(oProducto)
             print(oProductos)
-        return render(request, 'pedido/detalle.html', {"oCliente": oPedido.cliente, "oProductos": oProductos})
+        return render(request, 'pedido/detalle.html', {"oCliente": oPedido.cliente, "oProductos": oProductos,"idPedido":idPedido})
     else:
         oPedidos = Pedido.objects.filter(estado = True)
         return render(request, 'pedido/listar.html',{"oPedidos": oPedidos})
