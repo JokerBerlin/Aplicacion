@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block imports %}
+Información de Lote
+{% endblock %}
+
+{% block title %}
+Información de Lote
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Datos de Lote</h3>
+			<div>
+				<table id="tCamiones"  class="table">
+					<tr>
+						<td>Nombre: </td>
+						<td>{{ oProveedor.nombre }}</td>
+					</tr>
+					<tr>
+						<td>Dirección: </td>
+						<td>{{ oProveedor.direccion }}</td>
+					</tr>
+					<tr>
+						<td>N° Documento: </td>
+						<td>{{ oProveedor.documento }}</td>
+					</tr>
+
+				</table>
+				<br>
+				<table id="tProductos"  class="table">
+					<thead>
+	                    <tr>
+	                        <th>#</th>
+                          <th>Imagen</th>
+	                        <th>Producto</th>
+	                        <th>Cantidad</th>
+	                        <th>Cantidad Inicial</th>
+                          <th>Almacen</th>
+	                	</tr>
+	                </thead>
+	                {% for oProducto in oProductos %}
+				    <tr>
+				    	<td>{{ forloop.counter }}</td>
+              <td><img src="/media/{{oProducto.imagen}}" height="100" width="100" alt="" /></td>
+				    	<td>{{oProducto.nombre}}</td>
+				    	<td>{{oProducto.cantidad}}</td>
+				    	<td>{{oProducto.cantidadInicial}}</td>
+              <td>{{oProducto.almacen}}</td>
+				    </tr>
+
+				    {% endfor %}
+				</table>
+
+			</div>
+			</div>
+
+	    </div>
+    </div>
+{% endblock %}

@@ -126,5 +126,16 @@ def listarLote(request):
         #return render(request, 'venta/prueba.html', {})
 
 def detalleLote(request, lote_id):
-    return render(request, 'lote/listar.html', {"oLotes": lotePagina,"oProductos":oProductos,"page_range": page_range})
-    
+    if request.method == 'GET':
+        oLote = Lote.objects.get(id=lote_id)
+        oProductoAlmacens = Producto_almacens.objects.filter(lote_id=oLote.id)
+        oProductos = []
+        for oProductoAlmacen in oProductoAlmacens:
+            oProducto = {}
+            oProducto["imagen"] = oProductoAlmacen.producto.imagen
+            oProducto["nombre"] = oProductoAlmacen.producto.nombre
+            oProducto["cantidad"] = oProductoAlmacen.cantidad
+            oProducto["cantidadInicial"] = oProductoAlmacen.cantidadinicial
+            oProducto["almacen"] = oProductoAlmacen.almacen.nombre
+            oProductos.append(oProducto)
+        return render(request, 'lote/detalle.html', {"oProveedor": oLote.proveedor,"oProductos":oProductos})
