@@ -408,7 +408,7 @@ def editarProducto(request,producto_id):
             edit_prod.status=True
             edit_prod.save()
 
-            return redirect('/Producto/listar/')
+            return redirect('/Producto/editar/'+producto_id+'/')
     else:
         forms= ProductoForm(instance=oProducto)
         oProductoPresentacions = Productopresentacions.objects.filter(producto_id=oProducto.id)

@@ -118,8 +118,8 @@ Editar Producto {{oProducto.nombre}}
   				<div class="panel-body">
 	                <h3 class="box-title">Editar producto {{oProducto.nombre}}</h3>
 
-					<!-- <form action="." method="post" enctype="multipart/form-data">
-						{% csrf_token %} -->
+					<form action="." method="post" enctype="multipart/form-data">
+						{% csrf_token %}
 						{% load widget_tweaks %}
 
 	                 	{% for field in forms %}
@@ -133,8 +133,9 @@ Editar Producto {{oProducto.nombre}}
 	                    <div class="col-xs-12 col-sm-12 col-md-12">
                           <br>
                           <!-- <button id="actualizarProducto" class="btn btn-success" onclick="EditarProducto();">Actualizar</button> -->
-	    				            <a id="actualizarProducto" role="button" class="btn btn-success" onclick="EditarProducto();">Actualizar</a>
-	                <!-- </form> -->
+	    				            <!-- <a id="actualizarProducto" type="submit" role="button" class="btn btn-success" onclick="EditarProducto();">Actualizar</a> -->
+                          <input id="actualizarProducto" class="btn btn-success" onclick="EditarProducto();" value="Actualizar">
+            </form>
                   </div>
               </div>
           </div>

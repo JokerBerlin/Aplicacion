@@ -45,8 +45,9 @@ function EliminarPresentacionProducto(presentacion,productoId, presentacionId){
 }
 
 function EditarProducto(){
-  $('#actualizarProducto').text('Guardar');
+  $('#actualizarProducto').prop('value', 'Guardar');
   $('#actualizarProducto').prop('class', 'btn btn-primary');
+  $('#actualizarProducto').prop('type', 'submit');
 
   $('#id_nombre').prop('disabled', false);
   $('#id_codigo').prop('disabled', false);
@@ -57,15 +58,8 @@ function EditarProducto(){
   $("#id_nombre").val('');
   $("#id_nombre").val(temp);
   $("#id_nombre").focus();
-  //var foco = $('#id_nombre').val().length;
-  // $('#id_nombre').keyup(function(e){
-  //         if($(this).val().length==$(this).attr('maxlength'))
-  //             $(this).next(':input').focus()
-  //     })
-  // }
-  var val = $('#id_nombre').val();
-  val.focus();
-  //$("#id_nombre").val($("#id_nombre").val());
+
+
 
 }
 
