@@ -111,29 +111,31 @@ Editar Producto {{oProducto.nombre}}
 <div class="row">
       <div class="col-xs-12 col-sm-12">
           <div class="white-box">
-            
+
             <div class="panel panel-info" style="border: 0.05px solid #ECECEC;">
 
 
   				<div class="panel-body">
 	                <h3 class="box-title">Editar producto {{oProducto.nombre}}</h3>
 
-					<form action="." method="post" enctype="multipart/form-data">
-						{% csrf_token %}
+					<!-- <form action="." method="post" enctype="multipart/form-data">
+						{% csrf_token %} -->
 						{% load widget_tweaks %}
 
 	                 	{% for field in forms %}
 							<div class="col-xs-4 col-sm-4 col-md-4">
 								{{ field.errors }}
 								{{ field.label_tag }}
-								{{ field|add_class:"form-control" }}
+								{{ field|add_class:"form-control"|attr:"disabled" }}
+
 							</div>
 						{% endfor %}
 	                    <div class="col-xs-12 col-sm-12 col-md-12">
                           <br>
-                          <button class="btn btn-success">Actualizar</button>
-	    				</div>
-	                </form>
+                          <!-- <button id="actualizarProducto" class="btn btn-success" onclick="EditarProducto();">Actualizar</button> -->
+	    				            <a id="actualizarProducto" role="button" class="btn btn-success" onclick="EditarProducto();">Actualizar</a>
+	                <!-- </form> -->
+                  </div>
               </div>
           </div>
 

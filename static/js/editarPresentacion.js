@@ -44,7 +44,29 @@ function EliminarPresentacionProducto(presentacion,productoId, presentacionId){
     $("#eliminarPresentacionProd").attr("href","/Presentacion/eliminar/"+presentacionId+"/"+productoId+"/");
 }
 
+function EditarProducto(){
+  $('#actualizarProducto').text('Guardar');
+  $('#actualizarProducto').prop('class', 'btn btn-primary');
 
+  $('#id_nombre').prop('disabled', false);
+  temp=$("#id_nombre").val();
+  $("#id_nombre").val('');
+  $("#id_nombre").val(temp);
+  $("#id_nombre").focus();
+  //var foco = $('#id_nombre').val().length;
+  // $('#id_nombre').keyup(function(e){
+  //         if($(this).val().length==$(this).attr('maxlength'))
+  //             $(this).next(':input').focus()
+  //     })
+  // }
+  var val = $('#id_nombre').val();
+  val.focus();
+  //$("#id_nombre").val($("#id_nombre").val());
+  $('#id_codigo').prop('disabled', false);
+  $('#id_imagen').prop('disabled', false);
+  $('#id_url').prop('disabled', false);
+
+}
 
 function EditarPresentacionProducto(precio1Id,precio2Id,precio3Id,productoPresentacionId,contador){
   $('#editar'+contador+'').text('Actualizar');

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block imports %}
+<link href="/static/css/styleAutocomplete.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+{% endblock %}
+
+{% block title %}
+Listar lote
+{% endblock %}
+
+{% block content %}
+<div class="row">
+      <div class="col-sm-12">
+          <div class="white-box">
+            <h3 class="box-title">Listado de lotes</h3>
+            <div class="form-group">
+            <table id="tPedidos"  class="table">
+              <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fecha</th>
+                                <th>Proveedor</th>
+                                <th>Recibo</th>
+                                <th>Producto</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+              {% for oLote in oLotes %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{oLote.fecha|date:"d-m-Y P" }}</td>
+                <td>{{oLote.proveedor.nombre}}</td>
+                <td>{{oLote.recibo.nombre}}</td>
+                <td>
+                  {% for oNue in oProductos %}
+                    {% if oLote.id == oNue.id %}
+                        <table id="tProductos" class="table">
+                          <tr>
+                            {{ oNue.producto }}
+                          </tr>
+                        </table>
+
+                    {% endif %}
+                  {% endfor %}
+                </td>
+
+                <td>
+                  <a href="/Lote/detalle/{{oLote.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
+
+                </td>
+              </tr>
+
+              {% endfor %}
+
+            </table>
+              <br>
+              <div class="center">
+                <ul class="pagination">
+                  {% if oLotes.has_previous %}
+                            <li><a href="?page={{oLotes.previous_page_number}}"><<</a></li>
+                        {% endif %}
+
+
+                      {% for pg in page_range %}
+                          {% if oLotes.number == pg %}
+                              <li><a class="active" href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
+                          {% else %}
+                              <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
+                          {% endif %}
+                      {% endfor %}
+
+                        {% if oLotes.has_next %}
+                            <li><a href="?page={{oLotes.next_page_number}}">>></a></li>
+                        {% endif %}
+                </ul>
+              </div>
+
+          </div>
+      </div>
+</div>
+
+{% endblock %}

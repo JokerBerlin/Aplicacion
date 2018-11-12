@@ -91,3 +91,40 @@ def registrarLote(request):
             'almacens': oAlmacens,
         }
         return render(request, 'lote/nuevo.html', context)
+
+def listarLote(request):
+    oProductos=[]
+    if request.method == 'POST':
+        return render(request, 'lote/listar.html')
+    else:
+        oLotes = Lote.objects.filter(estado=True).order_by('-id')
+        for oLote in oLotes:
+            oProductoAlmacens = Producto_almacens.objects.filter(lote_id=oLote.id)
+            for ope in oProductoAlmacens:
+                oNuevo={}
+                oNuevo['id']=oLote.id
+                oNuevo['producto']=ope.producto.nombre
+                oProductos.append(oNuevo)
+
+        paginator = Paginator(oLotes,10)
+
+        page = request.GET.get('page')
+        try:
+            lotePagina = paginator.page(page)
+        except PageNotAnInteger:
+            lotePagina = paginator.page(1)
+        except EmptyPage:
+            lotePagina = paginator.page(paginator.num_pages)
+
+        index = lotePagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        return render(request, 'lote/listar.html', {"oLotes": lotePagina,"oProductos":oProductos,"page_range": page_range})
+        #return render(request, 'venta/prueba.html', {})
+
+def detalleLote(request, lote_id):
+    return render(request, 'lote/listar.html', {"oLotes": lotePagina,"oProductos":oProductos,"page_range": page_range})
+    

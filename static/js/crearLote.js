@@ -19,6 +19,12 @@ $(document).ready(function(){
         $('#bt_GenerarVenta').click(function(){
             GenerarLote();
         });
+        $('#inpt-producto').keyup(function(e){
+            if(e.keyCode == 13){
+              $('#cantidad').focus();
+            }
+
+        });
 
     });
 
