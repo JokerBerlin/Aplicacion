@@ -67,9 +67,7 @@ def salidaProductoAlmacen(request):
         # print(jsonProductosSalidas)
 
         jsonfinal.append(jsonProductosSalidas)
-        print('fin for %s' % jsonfinal)
-    print('final %s' % jsonfinal)
-    
+
     return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
 
 
@@ -105,7 +103,7 @@ def tiempoPedidoAlmacen(request):
             jsonTiempoPedido['pedidoId'] = pedido.pk
             jsonTiempoPedido['cliente'] = pedido.cliente.nombre
             jsonTiempoPedido['fechaPedido'] = str(pedido.fecha)
-            jsonTiempoPedido['delta'] = str(delta)
+            jsonTiempoPedido['delta'] = str(delta.days)
 
             jsonfinal.append(jsonTiempoPedido)
     
