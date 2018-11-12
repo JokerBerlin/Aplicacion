@@ -39,7 +39,7 @@ class Cierrecaja(models.Model):
     aperturacaja = models.ForeignKey(Aperturacaja, on_delete=models.CASCADE)  # Field name made lowercase.
 
 class Cliente(models.Model):
-    nombre = models.CharField(max_length=45)
+    nombre = models.CharField(max_length=45,unique=True)
     direccion = models.CharField(max_length=45)
     longitud = models.CharField(max_length=25, blank=True, null=True)
     latitud = models.CharField(max_length=25, blank=True, null=True)
