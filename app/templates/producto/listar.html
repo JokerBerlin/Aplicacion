@@ -160,9 +160,9 @@ Lista de productos
               </td>
 
 				    	<td>
-				    		<a href="/Producto/detalle/{{oProducto.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
-				    		<a href="/Producto/editar/{{oProducto.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
-				    		<a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oProducto.id }}" onclick="selProducto('{{oProducto.id}}','{{oProducto.nombre}}');">Eliminar</a>
+				    		<a href="/Producto/detalle/{{oProducto.id}}/"><span class="fa fa-search fa-2x" style="color:purple;"></span></a>
+				    		<a href="/Producto/editar/{{oProducto.id}}/"><span class="fa fa-edit fa-2x"></span></a>
+				    		<a data-target="#myModal" role="button" data-toggle="modal" id="{{ oProducto.id }}" onclick="selProducto('{{oProducto.id}}','{{oProducto.nombre}}');"><span class="fa fa-trash fa-2x" style="color:red;"></span></a>
 
               </td>
 				    </tr>

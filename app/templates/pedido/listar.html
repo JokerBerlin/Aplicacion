@@ -167,9 +167,9 @@ Listar pedido
 							</td>
 
 							<td>
-				    		<a href="/Pedido/detalle/{{oPedido.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
-				    		<a href="/Pedido/editar/{{oPedido.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
-								<a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oPedido.id }}" onclick="selPedido('{{oPedido.id}}','{{oPedido.cliente.nombre}}');">Eliminar</a>
+				    		<a href="/Pedido/detalle/{{oPedido.id}}/"><span class="fa fa-search fa-2x" style="color:purple;"></span></a>
+				    		<a href="/Pedido/editar/{{oPedido.id}}/"><span class="fa fa-edit fa-2x"></span></a>
+								<a data-target="#myModal" role="button" data-toggle="modal" id="{{ oPedido.id }}" onclick="selPedido('{{oPedido.id}}','{{oPedido.cliente.nombre}}');"><span class="fa fa-trash fa-2x" style="color:red;"></span></a>
 
 				    	</td>
 				    </tr>
