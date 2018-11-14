@@ -1,18 +1,19 @@
 $(document).ready(function(){
 	CantidadPresentaciones =0;
+	$('#id_nombre').focus();
 });
 
 function AgregarUnidad(){
-	 
+
 }
 function ListarPrecios(){
 	alert(CantidadPresentaciones);
-	$.ajax({        
+	$.ajax({
         type: "GET",
             url: strRootUrl+"Precios/getPrecios/",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            success: function (response) {  
+            success: function (response) {
                 var oPrecios = response.precios;
                 for (var i = 0; i < oPrecios.length; i++) {
                 	alert(oPrecios[i].nombre);
@@ -26,7 +27,7 @@ function ListarPrecios(){
 
 function cantTipoPrecios(){
 	//alert(CantidadPresentaciones);
-	
+
 }
 function AgregarContenido(){
 	CantidadPresentaciones +=1;
@@ -41,12 +42,12 @@ function AgregarContenido(){
 	//var valPrecio2       = $("#3Precio").val();
 	campo = '</div>Tipo de Unidad</br><select class="form-control" id="cmbPresentacion'+CantidadPresentaciones+'" required="""></option><option value="'+cmbPresentacionId+'">'+cmbPresentacionVal+'</option></select>	<br /> Cantidad de Presenttación<input type="number" name="cantPresentacion'+CantidadPresentaciones+'" id="cantPresentacion'+CantidadPresentaciones+'" required="" class="form-control" value="'+cantPresentacion+'"></br>';
 
-	$.ajax({        
+	$.ajax({
         type: "GET",
             url: strRootUrl+"Precios/getPrecios/",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            success: function (response) {  
+            success: function (response) {
                 var oPrecios = response.precios;
                 htmlPrecios = "";
                 for (var i = 0; i < oPrecios.length; i++) {
@@ -63,6 +64,5 @@ function AgregarContenido(){
             alert('ERROR.... en ' + result.status + '... ' + result.statusText);
         }
     });
-	
+
 }
- 

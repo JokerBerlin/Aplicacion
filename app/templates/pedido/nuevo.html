@@ -75,7 +75,7 @@ $(document).ready(function(){
                 nombreProducto: $("#inpt-producto").val(),
             };
             var sendData = JSON.stringify(datos);
-
+            $( "#imagenProducto" ).attr("src", "" );
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -88,12 +88,25 @@ $(document).ready(function(){
 
                 success: function (result) {
                 var ListasProductos = result['productos'];
+                $("#imagenesProd").empty();
+                console.log(ListasProductos);
+                for (var i = 0; i < ListasProductos.length; i+=1) {
+                    var img = $('<img id="dynamic'+ListasProductos[i].id+'">'); //Equivalent: $(document.createElement('img'))
+                    var br = $('<br/>');
+                    img.attr('src', ListasProductos[i].imagen);
+                    img.attr('height', "100");
+                    img.attr('width', "100");
+
+                    img.appendTo('#imagenesProd');
+                    br.appendTo('#imagenesProd');
+                }
                 response($.map(ListasProductos, function (item) {
                     return {
                         label: item.nombre,
                         idproducto: item.nombre,
                         codigo: item.codigo,
-                        Id: item.id
+                        Id: item.id,
+                        imagen: item.imagen,
                         };
                     }));
                 }
@@ -104,7 +117,8 @@ $(document).ready(function(){
             $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
             $( "#precio" ).val( ui.item.precio);
             $( "#codigo" ).val( ui.item.codigo);
-
+            $("#imagenesProd").empty();
+            $( "#imagenProducto" ).attr("src", ui.item.imagen );
             $( "#cantidad" ).focus();
             $( "#cantidad" ).focus();
             var iDPro = ui.item.Id;
@@ -381,10 +395,15 @@ Nuevo Pedido
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="id_nombreProducto">Producto:</label>
                          <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
+
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="id_nombreCodigo">Código:</label>
                          <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
+                         <img src="" id="imagenProducto" height="100" width="100" alt="" />
+                         <div id="imagenesProd">
+
+                         </div>
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="">Cantidad:</label></br>

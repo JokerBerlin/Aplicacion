@@ -61,7 +61,14 @@ $(document).ready(function(){
       }
   });
 });
-
+function imprimirProducto(){
+  var objeto=document.getElementById('imprimirProductos');  //obtenemos el objeto a imprimir
+  var ventana=window.open('','_blank');  //abrimos una ventana vacía nueva
+  ventana.document.write(objeto.innerHTML);  //imprimimos el HTML del objeto en la nueva ventana
+  ventana.document.close();  //cerramos el documento
+  ventana.print();  //imprimimos la ventana
+  ventana.close();  //cerramos la ventana
+}
 </script>
 
 <script type="text/javascript">
@@ -121,7 +128,7 @@ Lista de productos
   </div>
 </div>
 
-	<div class="row">
+	<div class="row" >
         <div class="col-sm-12">
             <div class="white-box">
               <form action="" method="post" name="form_busca" class="form-inline mr-auto">
@@ -133,7 +140,7 @@ Lista de productos
                 <h3 class="box-title">Listado de productos</h3>
 				{% load widget_tweaks %}
 				{% csrf_token %}
-					<div class="form-group">
+					<div class="form-group" id="imprimirProductos">
 					<table id="tCamiones"  class="table">
 						<thead>
 	                        <tr>
@@ -198,4 +205,5 @@ Lista de productos
 			</div>
 	    </div>
     </div>
+  <button type="button" id="impPro" name="button" onclick="imprimirProducto();">Imprimir</button>
 {% endblock %}
