@@ -286,6 +286,7 @@ def InstarPedido(request):
 def ListarPedido(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
+        print(Datos)
         usuario=True
         # usuario= BuscarUsuario(Datos["idUsuario"])
         if usuario==True:
@@ -296,7 +297,7 @@ def ListarPedido(request):
             TotalPedidos = 0
 
             #oPedidos = Pedido.objects.filter(estado = True,fecha = fecha, empleado = idEmpleado)
-            oPedidos = Pedido.objects.filter(estado = True, empleado = idEmpleado)
+            oPedidos = Pedido.objects.filter(estado = 2, empleado = idEmpleado)
             for oPedido in oPedidos:
                 jsonPedido = {}
                 jsonPedido["idPedido"] = oPedido.id
@@ -319,6 +320,7 @@ def ListarPedido(request):
                 jsonPedido["TotalPedido"] = TotalPedido
 
                 jsonPedidos["pedidos"].append(jsonPedido)
+                print(jsonPedidos)
             jsonPedidos["TotalPedidos"] = TotalPedidos
             return HttpResponse(json.dumps(jsonPedidos), content_type="application/json")
 

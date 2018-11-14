@@ -19,6 +19,7 @@ from django.forms.models import model_to_dict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.core import serializers
+from django.db.models import Sum
 
 ###reporteVentas
 from io import BytesIO
@@ -622,6 +623,7 @@ def anularVenta(request):
     context = {}
     return render(request, 'venta/anular.html', context)
 
+
 def eliminar_identificador_venta(request):
     pk = request.POST.get('identificador_id')
     identificador = Venta.objects.get(pk=pk)
@@ -706,3 +708,20 @@ def imprimir(request):
     buffer.close()
     response.write(pdf)
     return response
+
+
+def empleadosVentas(request):
+    empleados = Empleado.objects.all()
+    jsonFinal = []
+
+    for empleado in empleados:
+        jsonEmpleadoVenta = {}
+        pedidos = Pedidos.objects.filter(empleado=empleado, estado = 3)
+        jsonempleadoVenta['empleadoId'] = empleado.id
+        for pedido in pedidos:
+            montoVentasEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
+
+
+
+
+    return HttpResponse(json.dumps(jsonFinal),content_type='aplication/json')

@@ -40,13 +40,14 @@ def rutaUsuario(request):
             jsonfinal["rutas"] = []
             for oVisita in oVisitas:
                 rutasJson = {}
-                rutasJson["x"]= oVisita.rutacliente.cliente.longitud
-                rutasJson["y"]= oVisita.rutacliente.cliente.latitud
+                rutasJson["x"]= oVisita.rutacliente.cliente.latitud
+                rutasJson["y"]= oVisita.rutacliente.cliente.longitud
                 rutasJson["activo"]= oVisita.activo
                 rutasJson["idCliente"]= oVisita.rutacliente.cliente.id
                 rutasJson["idVisita"]= oVisita.id
                 rutasJson["idPedido"]= 4
                 jsonfinal["rutas"].append(rutasJson)
+                print(jsonfinal)
             return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
 """
 def nuevaRuta(request):
