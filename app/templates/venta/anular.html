@@ -174,8 +174,8 @@ Ventas
                   {% endfor %}
                 </td>
                 <td>
-                  <a href="/Venta/detalle/{{oVent.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
-                  <a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oVenta.id }}" onclick="selVenta('{{oVent.id}}','{{oVent.cliente.nombre}}');">Anular venta</a>
+                  <a href="/Venta/detalle/{{oVent.id}}/"><span class="fa fa-search fa-2x" style="color:purple;"></span></a>
+                  <a data-target="#myModal" role="button" data-toggle="modal" id="{{ oVenta.id }}" onclick="selVenta('{{oVent.id}}','{{oVent.cliente.nombre}}');"><span class="fa fa-trash fa-2x" style="color:red;"></span></a>
                 </td>
               </tr>
             {% endfor %}

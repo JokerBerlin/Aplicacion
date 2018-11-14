@@ -50,7 +50,7 @@ def ListarProductos(request):
         #nuevo={}
         print(precios)
 
-        paginator = Paginator(oProductos,2)
+        paginator = Paginator(oProductos,10)
 
         page = request.GET.get('page')
         try:
@@ -201,10 +201,10 @@ def BuscarProducto(request):
                 jsonProducto["valor"] = oProducto.valor
 
                 if oProducto.imagen=="":
-                    jsonProducto["imagen"] = "/imagen/default.jpg"
+                    jsonProducto["imagen"] = "/media/yuca.jpg"
                 else:
                     jsonProducto["imagen"] = oProducto.imagen.url
-
+                print(jsonProducto["imagen"])
                 jsonProductos["productos"].append(jsonProducto)
 
             return HttpResponse(json.dumps(jsonProductos), content_type="application/json")
