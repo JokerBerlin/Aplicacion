@@ -25,6 +25,7 @@ $(document).ready(function(){
             //doc.body.removeChild(i);
             //$('#upload').trigger($('#id_nombre').focus(););
             window.frames['upload'].document.getElementById('id_nombre').focus();
+            window.frames['upload'].document.getElementById('itemsProducto').className = "collapse";
             //$('#id_nombre').trigger('focus');
         });
         $( "#inpt-producto" ).autocomplete({
