@@ -28,6 +28,11 @@ $(document).ready(function(){
             window.frames['upload'].document.getElementById('itemsProducto').className = "collapse";
             //$('#id_nombre').trigger('focus');
         });
+
+        $('#myModalProducto').on('hidden.bs.modal', function () {
+            $('#inpt-producto').focus();
+        });
+
         $( "#inpt-producto" ).autocomplete({
             source: function (request, response) {
 
