@@ -710,18 +710,37 @@ def imprimir(request):
     return response
 
 
-def empleadosVentas(request):
+def todosEmpleadosVentas(request):
     empleados = Empleado.objects.all()
     jsonFinal = []
+    mesActual = datetime.now().month
+    añoActual = datetime.now().year
 
     for empleado in empleados:
         jsonEmpleadoVenta = {}
-        pedidos = Pedidos.objects.filter(empleado=empleado, estado = 3)
-        jsonempleadoVenta['empleadoId'] = empleado.id
-        for pedido in pedidos:
-            montoVentasEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
+        jsonEmpleadoVenta['empleadoId'] = empleado.id
+        jsonEmpleadoVenta['empleadoNombre'] = empleado.nombre
+        montoFinal = 0.0
+        
+        pedidos = Pedido.objects.filter(empleado=empleado, estado = 3, fecha__month=mesActual, fecha__year=añoActual)
+        if pedidos:
+            for pedido in pedidos:
+                montoVentasEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
+                montoFinal += montoVentasEmpleado
+
+            jsonEmpleadoVenta['montoVenta'] = montoFinal
+        else:
+            jsonEmpleadoVenta['montoVenta'] = 0.0
+
+        jsonFinal.append(jsonEmpleadoVenta)
+
+    return JsonResponse(jsonFinal, safe=False)
+
+def empleadoVentas(request, id):
+    empleados = Empleado.objects.get(id=id)
+    jsonFinal[]
+    mesActual = datetime.now().month
+    añoActual = datetime.now().year
 
 
-
-
-    return HttpResponse(json.dumps(jsonFinal),content_type='aplication/json')
+    return JsonResponse(jsonFinal, safe=False)

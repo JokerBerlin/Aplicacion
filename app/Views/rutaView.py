@@ -47,7 +47,6 @@ def rutaUsuario(request):
                 rutasJson["idVisita"]= oVisita.id
                 rutasJson["idPedido"]= 4
                 jsonfinal["rutas"].append(rutasJson)
-                print(jsonfinal)
             return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
 """
 def nuevaRuta(request):

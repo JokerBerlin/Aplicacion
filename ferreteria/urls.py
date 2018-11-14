@@ -210,6 +210,8 @@ urlpatterns = [
     url(r'^Reporte/almacen/tiempo-pedido/$', tiempoPedidoAlmacen),
 
     url(r'^Reporte/caja/$', reporteCaja),
+
     url(r'^Reporte/ventas/$', reporteVentas),
+    url(r'^Reporte/venta/empleado/$', todosEmpleadosVentas),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
