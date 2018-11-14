@@ -67,6 +67,9 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+    $('#myModal').on('hidden.bs.modal', function () {
+        $('#inpt-cliente').focus();
+    });
     $('cantidad').prop('disabled', true);
     $( "#inpt-producto" ).autocomplete({
         source: function (request, response) {

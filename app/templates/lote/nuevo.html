@@ -14,6 +14,25 @@ $(document).ready(function(){
         $('#myModal').on('shown.bs.modal', function () {
             $('#id_nombre').trigger('focus');
         });
+        $('#myModalProducto').on('shown.bs.modal', function () {
+
+            //var iframe = document.getElementById("upload");
+            //var doc = iframe.contentDocument;
+            //var i = doc.createElement('input');
+            //i.style.display = 'none';
+            //doc.body.appendChild(i);
+            //i.focus();
+            //doc.body.removeChild(i);
+            //$('#upload').trigger($('#id_nombre').focus(););
+            window.frames['upload'].document.getElementById('id_nombre').focus();
+            window.frames['upload'].document.getElementById('itemsProducto').className = "collapse";
+            //$('#id_nombre').trigger('focus');
+        });
+
+        $('#myModalProducto').on('hidden.bs.modal', function () {
+            $('#inpt-producto').focus();
+        });
+
         $( "#inpt-producto" ).autocomplete({
             source: function (request, response) {
 
@@ -288,7 +307,7 @@ Nuevo Lote
       </div>
 
       <div class="modal-body">
-        <iframe src="/Producto/nuevo/" width="870" height="500"></iframe>
+        <iframe src="/Producto/nuevo/" name="upload" id="upload" width="870" height="500"></iframe>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
