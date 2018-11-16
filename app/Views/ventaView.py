@@ -721,7 +721,7 @@ def todosEmpleadosVentas(request):
         jsonEmpleadoVenta['empleadoId'] = empleado.id
         jsonEmpleadoVenta['empleadoNombre'] = empleado.nombre
         montoFinal = 0.0
-        
+
         pedidos = Pedido.objects.filter(empleado=empleado, estado = 3, fecha__month=mesActual, fecha__year=añoActual)
         if pedidos:
             for pedido in pedidos:
@@ -738,7 +738,7 @@ def todosEmpleadosVentas(request):
 
 def empleadoVentas(request, id):
     empleados = Empleado.objects.get(id=id)
-    jsonFinal[]
+    jsonFinal = []
     mesActual = datetime.now().month
     añoActual = datetime.now().year
 

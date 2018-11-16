@@ -10,7 +10,10 @@
 <script type="text/javascript">
 
 //filtro de clientes por dni o numero documento ajax
-
+function seleccionarProducto(){
+    alert("hola mundo");
+    $("#imagenesProd").empty();
+}
 $(document).ready(function(){
   $( "#inpt-cliente" ).focus();
   $( "#inpt-cliente" ).autocomplete({
@@ -96,16 +99,37 @@ $(document).ready(function(){
                 for (var i = 0; i < ListasProductos.length; i+=1) {
                     var img = $('<img id="dynamic'+ListasProductos[i].id+'">'); //Equivalent: $(document.createElement('img'))
                     var br = $('<br/>');
-                    img.attr('src', ListasProductos[i].imagen);
-                    img.attr('height', "100");
-                    img.attr('width', "100");
+                    var panelBody = $(' <div id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
+                    var cierreBody = $('</div>');
+                    var panelBody2 = $('<div id="dynamicPanel'+ListasProductos[i].id+'" class="panel-body">');
+                    panelBody.appendTo('#imagenesProd');
+                    var labelP = $('<label for="male">  '+ListasProductos[i].nombre+'</label>');
+                    var labelP2 = $('<label for="male1">'+ListasProductos[i].codigo+'</label>');
+                    var pre = $('<pre>'+ListasProductos[i].codigo+'</pre>');
+                    //panelBody2.appendTo('#imagenesProd');
+                    panelBody2.appendTo("#dynamicPanelPrincipal"+ListasProductos[i].id+"");
 
-                    img.appendTo('#imagenesProd');
-                    br.appendTo('#imagenesProd');
+                    img.attr('src', ListasProductos[i].imagen);
+                    img.attr('onclick', "seleccionarProducto()");
+                    img.attr('height', "50");
+                    img.attr('width', "50");
+                    img.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
+                    labelP.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
+                    //br.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
+                    //labelP2.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
+
+                    //var panBo = document.getElementById("dynamicPanelPrincipal"+ListasProductos[i].id+"");
+                    //panBo.appendTo("#dynamicPanelPrincipal"+ListasProductos[i].id+"");
+
+                    console.log("#dynamicPanel'"+ListasProductos[i].id+"");
+                    //br.appendTo('#imagenesProd')
+
+                    //cierreBody.appendTo('#imagenesProd');
+                    //cierreBody.appendTo('#imagenesProd');
+
                 }
                 response($.map(ListasProductos, function (item) {
                     return {
-                        label: item.nombre,
                         idproducto: item.nombre,
                         codigo: item.codigo,
                         Id: item.id,
@@ -397,16 +421,16 @@ Nuevo Pedido
                        <h4 class="box-title">Producto</h4>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="id_nombreProducto">Producto:</label>
-                         <input type="text" name="inpt-producto" id="inpt-producto" required="" class="form-control" maxlength="45">
-
-                       </div>
-                       <div class="col-xs-4 col-sm-4 col-md-4">
-                         <label for="id_nombreCodigo">Código:</label>
-                         <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
+                         <input type="text" name="inpt-producto" id="inpt-producto" autocomplete="off" required="" class="form-control" maxlength="45">
                          <img src="" id="imagenProducto" height="100" width="100" alt="" />
                          <div id="imagenesProd">
 
                          </div>
+                       </div>
+                       <div class="col-xs-4 col-sm-4 col-md-4">
+                         <label for="id_nombreCodigo">Código:</label>
+                         <input type="text" name="codigo" id="codigo" required="" class="form-control" disabled="disabled">
+
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="">Cantidad:</label></br>

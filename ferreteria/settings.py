@@ -81,10 +81,6 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 # nube
-<<<<<<< HEAD
-=======
-
->>>>>>> 7ea76c1e4611db43fabeafa0e0ac74f1da80a99b
 # DATABASES = {
 #        'default': {
 #         'ENGINE': 'mysql_cymysql',
@@ -98,18 +94,16 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 # }
 
 # instancia local Erland
-<<<<<<< HEAD
-DATABASES = {
-    'default': {
-        'ENGINE': 'mysql_cymysql',
-        'NAME': 'pedidos',
-        'USER': 'pedidos',
-        'PASSWORD': 'pedidos',
-        'HOST': 'localhost',
-        'PORT': '3306',
-  }
-}
-=======
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mysql_cymysql',
+#         'NAME': 'pedidos',
+#         'USER': 'pedidos',
+#         'PASSWORD': 'pedidos',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#   }
+# }
 
 # DATABASES = {
 #        'default': {
@@ -133,7 +127,6 @@ DATABASES = {
 #         'PORT': '3306',
 #   }
 # }
->>>>>>> 7ea76c1e4611db43fabeafa0e0ac74f1da80a99b
 
 # DATABASES = {
 #     'default': {
@@ -143,10 +136,10 @@ DATABASES = {
 #         'PASSWORD': '',
 #         'HOST': 'localhost',
 #         'PORT': '3307',
-<<<<<<< HEAD
+
 #     }
 # }
-=======
+
 
 DATABASES = {
     'default': {
@@ -158,7 +151,6 @@ DATABASES = {
         'PORT': '3307',
     }
 }
->>>>>>> 7ea76c1e4611db43fabeafa0e0ac74f1da80a99b
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
