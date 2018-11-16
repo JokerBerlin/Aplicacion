@@ -329,6 +329,7 @@ def BuscarProductoPresentacion (request):
 def ListarPresentacionesProducto (request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
+        print(Datos)
         #print Datos
         usuario=True
         # usuario= BuscarUsuario(Datos["idUsuario"])
@@ -354,7 +355,7 @@ def ListarPresentacionesProducto (request):
                     jsonPrecios.append(jsonPrecio)
                 jsonPresentacion["valor"] =jsonPrecios
                 jsonPresentaciones["presentaciones"].append(jsonPresentacion)
-
+            print(jsonPresentaciones)
             return HttpResponse(json.dumps(jsonPresentaciones), content_type="application/json")
 
 #<QueryDict: {u'imagen': [u''], u'url': [u''], u'1': [u'1'], u'3': [u'1'], u'2': [u'1'], u'nombre': [u'asd'], u'csrfmiddlewaretoken': [u'nsbA68zMnq7Ez6Gi2zEKqQQ45t5yWukYwqC9Tuo3Frl23Q9xajNt8htfhJQzWpP7'], u'codigo': [u''], u'cantidadPrincipal': [u'1']}>
@@ -372,7 +373,9 @@ def CantidadPresentacionesProducto (request):
             jsonProducto = {}
             oProucto = Producto.objects.get(id = idProducto)
             oProductopresentacions = Productopresentacions.objects.get(producto = oProucto , presentacion = idPresentacion)
-            jsonProducto["cantidad"] = (oProucto.cantidad)*(oProductopresentacions.valor)
+            oProductoalmacens = Producto_almacens.objects.filter(producto=oProucto).latest('pk')
+            jsonProducto["cantidad"] = (oProductoalmacens.cantidad)*(oProductopresentacions.valor)
+            print(jsonProducto)
             return HttpResponse(json.dumps(jsonProducto), content_type="application/json")
 
 """

@@ -94,6 +94,7 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 # }
 
 # instancia local Erland
+<<<<<<< HEAD
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'mysql_cymysql',
@@ -127,6 +128,18 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 #         'PORT': '3306',
 #   }
 # }
+=======
+DATABASES = {
+    'default': {
+        'ENGINE': 'mysql_cymysql',
+        'NAME': 'pedidos',
+        'USER': 'pedidos',
+        'PASSWORD': 'pedidos',
+        'HOST': 'localhost',
+        'PORT': '3306',
+  }
+}
+>>>>>>> efe2059b63869bf19de7436f0acfe75b7a80e356
 
 # DATABASES = {
 #     'default': {
@@ -136,6 +149,7 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 #         'PASSWORD': '',
 #         'HOST': 'localhost',
 #         'PORT': '3307',
+<<<<<<< HEAD
 
 #     }
 # }
@@ -151,6 +165,10 @@ DATABASES = {
         'PORT': '3307',
     }
 }
+=======
+#     }
+# }
+>>>>>>> efe2059b63869bf19de7436f0acfe75b7a80e356
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
