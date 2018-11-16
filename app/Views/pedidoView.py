@@ -39,6 +39,7 @@ def insertarPedido(request):
         #Dato = json.loads(request.body)
         #Dato = request.POST
         dnis = Datos['cliente']
+        print(dnis)
 
         # if dnis.isdigit() == False :
         #     dni = Cliente.objects.get(nombre=dnis).numerodocumento
@@ -71,13 +72,9 @@ def insertarPedido(request):
             oPedidoproductospresentacions.save()
         return HttpResponse(json.dumps({'exito':1,"idPedido": oPedido.id}), content_type="application/json")
 
-        #datos_list = json.loads(datos[0])
-
-        #return render(request, '/pedido/listar.html')
     else:
 
         return render(request, 'pedido/nuevo.html', {})
-        #return render(request, 'venta/prueba.html', {})
 
 def registrarPedido(request):
     # if request.method == 'POST':
@@ -258,6 +255,7 @@ def DetallePedido(request,pedido_id):
 def InstarPedido(request):
     if request.method=='POST':
         Datos = json.loads(request.body)
+        print(Datos)
         usuario=True
         # usuario= BuscarUsuario(Datos["idUsuario"])
         if usuario==True:

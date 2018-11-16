@@ -682,7 +682,11 @@ def DetalleVenta(request,venta_id):
         return render(request, 'pedido/listar.html',{"oPedidos": oPedidos})
 
 def reporteVentas(request):
-    return render(request, 'reporte/ventas.html')
+    oEmpleados = Empleado.objects.all()
+    context = {
+        "empleados": oEmpleados
+    }
+    return render(request, 'reporte/ventas.html', context)
 
 def imprimir(request):
     response = HttpResponse(content_type='aplication/pdf')
@@ -710,11 +714,11 @@ def imprimir(request):
     return response
 
 
-def todosEmpleadosVentas(request):
+def todosEmpleadosVentas(request, mesActual, añoActual):
     empleados = Empleado.objects.all()
     jsonFinal = []
-    mesActual = datetime.now().month
-    añoActual = datetime.now().year
+    # mesActual = datetime.now().month
+    # añoActual = datetime.now().year
 
     for empleado in empleados:
         jsonEmpleadoVenta = {}
@@ -736,11 +740,29 @@ def todosEmpleadosVentas(request):
 
     return JsonResponse(jsonFinal, safe=False)
 
-def empleadoVentas(request, id):
-    empleados = Empleado.objects.get(id=id)
-    jsonFinal[]
-    mesActual = datetime.now().month
-    añoActual = datetime.now().year
+def empleadoVentas(request, empleado_id, mesActual, añoActual):
+    jsonFinal = []
 
+    # mesActual = datetime.now().month
+    # añoActual = datetime.now().year
+    empleado = Empleado.objects.get(id=empleado_id)
+
+    if empleado:
+        pedidos = Pedido.objects.filter(empleado=empleado, estado=3, fecha__month=mesActual, fecha__year=añoActual)
+        if pedidos:
+            for pedido in pedidos:
+                montoVentaEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
+                jsonEmpleadoVenta = {}
+                jsonEmpleadoVenta['fecha'] = pedido.fecha
+                jsonEmpleadoVenta['monto'] = montoVentaEmpleado
+                jsonFinal.append(jsonEmpleadoVenta)
+        else:
+            jsonEmpleadoVenta = {}
+            jsonEmpleadoVenta['fecha'] = 'no existen registros'
+            jsonEmpleadoVenta['monto'] = 0.0
+            jsonFinal.append(jsonEmpleadoVenta)
+    else:
+        jsonEmpleadoVenta = {}
+        jsonFinal.append(jsonEmpleadoVenta)
 
     return JsonResponse(jsonFinal, safe=False)
