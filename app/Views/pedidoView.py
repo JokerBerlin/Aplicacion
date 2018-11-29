@@ -289,13 +289,15 @@ def ListarPedido(request):
         # usuario= BuscarUsuario(Datos["idUsuario"])
         if usuario==True:
             fecha = Datos["fecha"]
+            print(fecha)
+            fecha = datetime.strptime(fecha, "%Y-%m-%d")
             idEmpleado = Datos["idEmpleado"]
             jsonPedidos = {}
             jsonPedidos["pedidos"] = []
             TotalPedidos = 0
 
             #oPedidos = Pedido.objects.filter(estado = True,fecha = fecha, empleado = idEmpleado)
-            oPedidos = Pedido.objects.filter(estado = 2, empleado = idEmpleado)
+            oPedidos = Pedido.objects.filter(estado = 2, empleado = idEmpleado, fecha__month=fecha.month+1, fecha__year=fecha.year)
             for oPedido in oPedidos:
                 jsonPedido = {}
                 jsonPedido["idPedido"] = oPedido.id
@@ -314,11 +316,11 @@ def ListarPedido(request):
                     jsonPedido["productos"].append(jsonPedidoProductoPresentacion)
 
 
-                TotalPedidos = TotalPedidos +TotalPedido
+                TotalPedidos = TotalPedidos + TotalPedido
                 jsonPedido["TotalPedido"] = TotalPedido
 
                 jsonPedidos["pedidos"].append(jsonPedido)
-                print(jsonPedidos)
+                # print(jsonPedidos)
             jsonPedidos["TotalPedidos"] = TotalPedidos
             return HttpResponse(json.dumps(jsonPedidos), content_type="application/json")
 

@@ -68,7 +68,7 @@ function agregar(){
         }
         
         var waypts = [];
-        if (markers.length > 2){
+        if (markers.length > 2) {
             for (let index = 1; index < markers.length - 1; index++) {
                 waypts.push({
                     location: markers[index].position,
@@ -99,7 +99,7 @@ function agregar(){
                 destination: markers[markers.length - 1].position,
                 optimizeWaypoints: true,
                 travelMode: 'DRIVING',
-            }, function(response, status){
+            }, function(response, status) {
                 if (status === 'OK') {
                     dr.setDirections(response);
                 } else {

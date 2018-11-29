@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect,  HttpResponseServerError
 from ferreteria import settings
 from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 from datetime import datetime,date
 from app.models import *
@@ -70,19 +71,33 @@ def listarRutas(request):
     if request.method == 'POST':
         return render(request, 'Ruta/listar.html')
     else:
-        oRuta= Ruta.objects.filter(estado = True)
+        oRuta = Ruta.objects.filter(estado = True)
         return render(request, 'ruta/listar.html', {"oRutas": oRuta})
 
 def detalleRuta(request,ruta_id):
     if request.method == 'GET':
         idRuta = int(ruta_id)
-        oRuta= Ruta.objects.get(id=idRuta)
+        oRuta = Ruta.objects.get(id=idRuta)
         oRutaCliente = Rutaclientes.objects.filter(ruta=oRuta)
+        coordenadas = []
+
+        for rutaCliente in oRutaCliente:
+            coord = {}
+            coord['cliente'] = rutaCliente.cliente.nombre
+            coord['lat'] = rutaCliente.cliente.latitud
+            coord['lng'] = rutaCliente.cliente.longitud
+            coordenadas.append(coord)
+        
+        print(coordenadas)
+
+        listaCoordenadas = json.dumps(coordenadas)
 
         context = {
             "oRutaCliente": oRutaCliente,
-            "oRuta": oRuta
+            "oRuta": oRuta,
+            "coordenadas": listaCoordenadas
         }
+
         return render(request, 'ruta/detalle.html', context)
 
 @csrf_exempt

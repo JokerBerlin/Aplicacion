@@ -1,7 +1,76 @@
 {% extends "base.html" %}
 {% block imports %}
-Información de ruta
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=initMap"></script>
+<script type="text/javascript" src="/static/js/listarRuta.js"></script>
 <script type="text/javascript">
+window.onload = function() {    
+    coordenadas.forEach(element => {
+        // console.log(element);
+        pos = {
+            lat: parseFloat(element.lat),
+            lng: parseFloat(element.lng)
+        };
+    
+        config = {
+            position: pos
+        };
+    
+        addMarker(config)
+    });
+    
+    var coords = Array();
+    
+    for (let i = 0; i < markers.length; i++) {
+        const marker = markers[i];
+        const coord = {lat: marker.position.lat(), lng: marker.position.lng()};
+        coords.push(coord);
+    }
+    
+    var waypts = Array();
+    if (markers.length > 2) {
+        for (let i = 1; i < markers.length - 1; i++) {
+            waypts.push({
+                location: markers[i].position,
+                stopover: true
+            })        
+        }
+    } else {
+        waypts = []
+    }
+    const origen = markers[0].position;
+    const destino = markers[markers.length - 1].position;
+
+    if (waypts.length > 0) {
+        ds.route({
+            origin: origen,
+            destination: destino,
+            waypoints: waypts,
+            optimizeWaypoints: true,
+            travelMode: 'DRIVING',
+        }, function(response, status) {
+            if (status === 'OK') {
+                dr.setDirections(response);
+            } else {
+                alert('Error' + status);
+            }
+        })
+    } else {
+        ds.route({
+            origin: origen,
+            destination: destino,
+            travelMode: 'DRIVING',
+        }, function(response, status) {
+            if (status === 'OK') {
+                dr.setDirections(response);
+            } else {
+                alert('Error' + status);
+            }   
+        })
+    }
+
+}
+var coordenadas = {{ coordenadas|safe }};
 var mapa, infoWindow, ds, dr;
 var markers = [];
 
@@ -42,8 +111,7 @@ function initMap() {
           map: mapa,
           draggable: true
       })
-      markers.push(marker);
-      
+      markers.push(marker);      
       mapa.setCenter(pos);
     
     }, function() {
@@ -58,12 +126,10 @@ function initMap() {
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
   infoWindow.setContent(browserHasGeolocation ?
-                        'Error: TEl servicio de geolocalizacion no funciono.' :
+                        'Error: El servicio de geolocalizacion no funciono.' :
                         'Error: Tu navegador no posee servicio de geolocalizacion, utiliza Google Chrome en su lugar.');
   infoWindow.open(mapa);
 }
-
-var pruebaArr = [];
 
 </script>
 {% endblock %}
@@ -103,16 +169,12 @@ Información  detallada de Ruta
 						<td>{{ oRuta.fecha}}</td>
 					</tr>
 				</table>
-
-				<ul>
+        <ul>
 					
 					<h4 class="box-title">Geolocalizacion cliente</h4>
-                    <div id="mapa" style="position: relative;overflow: hidden;height: 300px;">
-                
-                        <br>
-                        <script async defer
-                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=initMap">
-                        </script>
+            <div id="mapa" style="position: relative;overflow: hidden;height: 300px;">
+        
+              <br>
 
             </div>
 				</ul>
