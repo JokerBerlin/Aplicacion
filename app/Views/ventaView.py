@@ -648,7 +648,7 @@ def eliminar_identificador_venta(request):
         cantidadAntesAnulacion = prodAlmacen.cantidad
         cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
 
-        loteReversion = Lote(proveedor_id = 1, recibo_id = 1)
+        loteReversion = Lote(proveedor_id=1, recibo_id=1)
         loteReversion.save()
 
         prodAlmacenNuevo = Producto_almacens(
@@ -726,7 +726,7 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
         jsonEmpleadoVenta['empleadoNombre'] = empleado.nombre
         montoFinal = 0.0
 
-        pedidos = Pedido.objects.filter(empleado=empleado, estado = 3, fecha__month=mesActual, fecha__year=añoActual)
+        pedidos = Pedido.objects.filter(empleado=empleado, estado=3, fecha__month=mesActual, fecha__year=añoActual)
         if pedidos:
             for pedido in pedidos:
                 montoVentasEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
@@ -740,16 +740,8 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
 
     return JsonResponse(jsonFinal, safe=False)
 
-<<<<<<< HEAD
-def empleadoVentas(request, id):
-    empleados = Empleado.objects.get(id=id)
-    jsonFinal = []
-    mesActual = datetime.now().month
-    añoActual = datetime.now().year
-=======
 def empleadoVentas(request, empleado_id, mesActual, añoActual):
     jsonFinal = []
->>>>>>> efe2059b63869bf19de7436f0acfe75b7a80e356
 
     # mesActual = datetime.now().month
     # añoActual = datetime.now().year

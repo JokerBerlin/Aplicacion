@@ -77,24 +77,27 @@ def detalleRuta(request,ruta_id):
     if request.method == 'GET':
         idRuta = int(ruta_id)
         oRuta= Ruta.objects.get(id=idRuta)
-        return render(request, 'ruta/detalle.html', {"oRuta":oRuta})
+        oRutaCliente = Rutaclientes.objects.filter(ruta=oRuta)
+
+        context = {
+            "oRutaCliente": oRutaCliente,
+            "oRuta": oRuta
+        }
+        return render(request, 'ruta/detalle.html', context)
 
 @csrf_exempt
 def registrarRuta(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
-        print(Datos)
-
+        # print(Datos)
+        nombreRuta = Datos['oRutas'][0][0]
+        oRuta = Ruta.objects.create(nombre=nombreRuta)
         for oRutas in Datos['oRutas']:
             print(oRutas)
-            nombreCliente= oRutas[1]
-            oCliente= Cliente.objects.filter(nombre=nombreCliente)
-
-            nombreRuta=oRutas[0]
-            oRuta=Ruta.objects.create(nombre=nombreRuta)
-            for oClientes in oCliente:
-                oRuta.clientes.add(oClientes)
-                oRuta.save()
+            nombreCliente = oRutas[1]
+            oCliente = Cliente.objects.get(nombre=nombreCliente)
+            oRuta.clientes.add(oCliente)
+            oRuta.save()
 
         return HttpResponse(json.dumps({'exito':1, 'idRuta':oRuta.id}), content_type="application/json")
     else:
@@ -121,5 +124,5 @@ def listarRutas(request):
     if request.method == 'POST':
         return render(request, 'Ruta/listar.html')
     else:
-        oRuta= Ruta.objects.filter(estado = True)
+        oRuta = Ruta.objects.filter(estado = True)
         return render(request, 'ruta/listar.html', {"oRutas": oRuta})

@@ -2,6 +2,7 @@ $(document).ready(function(){
 
         $('#bt_add').click(function(){
             agregar();
+            $('#id_cliente').focus();
         });
         $('#bt_del').click(function(){
             eliminar(id_fila_selected);

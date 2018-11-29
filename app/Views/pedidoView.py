@@ -260,7 +260,7 @@ def InstarPedido(request):
         # usuario= BuscarUsuario(Datos["idUsuario"])
         if usuario==True:
             idEmpleado = Datos["idEmpleado"]
-            oEmpleado = Empleado.objects.get(id= idEmpleado)
+            oEmpleado = Empleado.objects.get(id=idEmpleado)
             idCliente = Datos["idCliente"]
             oCliente = Cliente.objects.get(id= idCliente)
 
