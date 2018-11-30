@@ -29,6 +29,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def buscarCliente(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
+        print("DATOS", Datos)
         usuario=True
         if usuario==True:
             nombreCliente = Datos["nombreCliente"]
@@ -45,7 +46,9 @@ def buscarCliente(request):
                     jsonCliente["numerodocumento"] = oCliente.numerodocumento
                     jsonCliente["longitud"] = oCliente.longitud
                     jsonCliente["latitud"] = oCliente.latitud
+                    jsonCliente["precioId"] = oCliente.precio_id
                     jsonfinal["clientes"].append(jsonCliente)
+                print("JSONFINAL", jsonfinal)
                 return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
             except Exception as e:
                 return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
@@ -121,6 +124,7 @@ def registrarCliente(request):
         oCliente.longitud = Datos['longitud']
         oCliente.latitud = Datos['latitud']
         oCliente.numerodocumento = Datos['documento']
+        oCliente.precio_id = Datos['precio']
         oCliente.save()
         return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 

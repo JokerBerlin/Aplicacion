@@ -49,7 +49,8 @@ $(document).ready(function(){
               response($.map(ListasClientes, function (item) {
                     return {label: item.numerodocumento,
                           nombreC: item.nombre,
-                          dniC: item.direccion,};
+                          dniC: item.direccion,
+                          precioId: item.precioId};
 
               }));
 
@@ -65,6 +66,7 @@ $(document).ready(function(){
 
           } else{
               $("#nombreCl").val(ui.item.nombreC);
+              $("#cmbPrecio").val(ui.item.precioId);
               $('#inpt-producto').focus();
           }
 
@@ -326,22 +328,39 @@ Nuevo Pedido
             <div class="col-lg-12" style="margin-top:2px;">
               <div class="col-xs-6 col-sm-6 col-md-6">
                 <label for="id_numerodocumento">Numerodocumento:</label><br>
-              </div>
-            </div>
-            <div class="col-lg-12" style="margin-top:2px;">
-              <div class="col-xs-6 col-sm-6 col-md-6">
                 <input type="text" name="numerodocumento" id="id_numerodocumento" class="form-control" maxlength="11" >
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6">
-                <button id="registrarCliente" type="button" class="btn btn-primary" onclick="RegistrarCliente();">Registrar</button>
+                <label for="tipoCliente">Tipo de Cliente:</label>
+                <select class="form-control" id="cmbPreciomod" name="cmbPreciomod" required="">
+                  {% for precio in precios %}
+                    <option value="{{precio.id}}">
+                    {{precio.nombre}}
+                    </option>
+                  {% endfor %}
+								</select>
+              </div>              
+            </div>
+            <div class="col-lg-12" style="margin-top:2em;">
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                <button style="margin-top:1em;" id="registrarCliente" type="button" class="btn btn-primary" onclick="RegistrarCliente();">Registrar</button>
                 <script type="text/javascript">
                   function RegistrarCliente(){
                     var nombre = document.getElementById("id_nombre").value;
                     var direccion = document.getElementById("id_direccion").value;
                     var longitud = document.getElementById("id_longitud").value;
-                    var latidud = document.getElementById("id_latitud").value;
+                    var latitud = document.getElementById("id_latitud").value;
                     var documento = document.getElementById("id_numerodocumento").value;
-                    var datos = {nombre: nombre,direccion:direccion,longitud:longitud,latitud:latidud,documento:documento};
+                    var precio = document.getElementById("cmbPreciomod").value;
+                    var datos = {
+                      nombre: nombre,
+                      direccion: direccion,
+                      longitud: longitud,
+                      latitud: latitud,
+                      documento: documento,
+                      precio: precio
+                    };
+                    
                     var sendData = JSON.stringify(datos);
                     $.ajax({
                         type: "POST",
@@ -460,7 +479,7 @@ Nuevo Pedido
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="">Tipo precio</label></br>
-                         <select class="form-control" id="cmbPrecio" name="cmbPrecio" required="">
+                         <select class="form-control" id="cmbPrecio" name="cmbPrecio" required="" disabled>
                              {% for precio in precios %}
                                  <option value="{{precio.id}}">
                                  {{precio.nombre}}

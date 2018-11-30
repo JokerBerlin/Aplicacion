@@ -261,8 +261,6 @@ def BuscarProductoPresentacion (request):
             nombreProducto = Datos["nombreProducto"]
             oProductos = Producto.objects.filter(nombre__icontains=nombreProducto,estado = True)
 
-
-
             jsonProductos = {}
 
             jsonProductos["productos"] = []
