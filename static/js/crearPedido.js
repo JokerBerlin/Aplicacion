@@ -11,6 +11,26 @@ $(document).ready(function(){
     });
 
     $('#bt_addVenta').keypress(function(){
+        // var nombreProductoAgregar = $('#inpt-producto').val();
+        // $("#tabla tbody tr").each(function (index) {
+        //     $(this).children("td").each(function (index2) {
+        //         producto = [];
+        //         //dato = index;
+        //         console.log(index);
+        //         switch (index2) {
+        //             case 4:
+        //                 tipoPrecio = $(this).text();
+        //                 if(nombreProductoAgregar === tipoPrecio){
+        //                     alert("Usted ya agrego este producto");
+        //                 }
+        //
+        //                 break;
+        //         }
+        //
+        //     });
+        //     contador = 1;
+        //     productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
+        // });
         $('#inpt-producto').focus();
     });
 
@@ -64,11 +84,58 @@ function agregar(){
     error = "";
     if (Producto==''){
         error = 1;
+    }else{
+      var nombreProductoAgregar = $('#inpt-producto').val();
+      //###################################################################
+      var combo = document.getElementById("cmbPresentacion");
+      var nombrePresentacionAgregar = combo.options[combo.selectedIndex].text;
+      // = $('#cmbPresentacion').val();
+      //alert(nombrePresentacionAgregar);
+      $("#tabla tbody tr").each(function (index) {
+          $(this).children("td").each(function (index2) {
+              producto = [];
+              //dato = index;
+              console.log(index);
+              switch (index2) {
+                  case 4:
+                      nombreProducto = $(this).text();
+                      // if(nombreProductoAgregar === nombreProducto){
+                      //     alert("Usted ya agrego este producto");
+                      //     reset_values();
+                      //     error = 3;
+                      // }
+
+                      //break;
+                  case 6:
+                      tipoPresentacion = $(this).text();
+                      //alert(tipoPresentacion);
+                      //alert(nombreProducto);
+
+                      //
+                        if((nombrePresentacionAgregar === tipoPresentacion) && (nombreProductoAgregar === nombreProducto) ){
+                            //if(){
+                                alert("Usted ya agrego este producto");
+                                reset_values();
+                                error = 3;
+                            //}
+                        }
+
+                      //}
+
+                      break;
+              }
+
+          });
+          contador = 1;
+
+          //productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
+      });
     }
 
     if (cantidad==''){
         error = 2;
     }
+
     if (error=="") {
         SubTotal = parseFloat(precio*cantidad).toFixed(2);
         valor = cont - 1;
