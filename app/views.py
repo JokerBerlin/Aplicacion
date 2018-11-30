@@ -44,6 +44,11 @@ def Logout(request):
 
 @login_required
 def Home(request):
+    usuario = request.user
+    empleado = Empleado.objects.get(usuario=usuario)
+    print(empleado.nombre)
+    print(usuario)
+    print(usuario.id)
     return render(request, "inicio/index.html", {'redirect_to': next})
 
 def Prueba(request):

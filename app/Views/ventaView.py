@@ -531,9 +531,8 @@ def insertarVenta(request):
         #Se hace el descuento de producto en producto_almacen
         oCliente = Cliente.objects.get(numerodocumento=dni_cliente)
         usuario = request.user
-        print(usuario)
-        empleado = 1
-        oPedido = Pedido(estado=3, empleado_id=empleado, cliente=oCliente)
+        empleado = Empleado.objects.get(usuario=usuario)
+        oPedido = Pedido(estado=3, empleado=empleado, cliente=oCliente)
         oPedido.save()
         oVenta = Venta(pedido=oPedido, cliente=oCliente, nrecibo=nroRecibo)
         monto_venta = 0.00
@@ -728,7 +727,7 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
         jsonEmpleadoVenta['empleadoNombre'] = empleado.nombre
         montoFinal = 0.0
 
-        pedidos = Pedido.objects.filter(empleado=empleado, estado=3, fecha__month=mesActual, fecha__year=añoActual)
+        pedidos = Pedido.objects.filter(empleado=empleado, estado=3, fecha__month=mesActual, fecha__year=añoActual) | Pedido.objects.filter(empleado=empleado, estado=4, fecha__month=mesActual, fecha__year=añoActual)
         if pedidos:
             for pedido in pedidos:
                 montoVentasEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
@@ -744,7 +743,6 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
 
 def empleadoVentas(request, empleado_id, mesActual, añoActual):
     jsonFinal = []
-
     # mesActual = datetime.now().month
     # añoActual = datetime.now().year
     empleado = Empleado.objects.get(id=empleado_id)

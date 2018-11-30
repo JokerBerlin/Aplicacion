@@ -48,7 +48,7 @@ def buscarCliente(request):
                     jsonCliente["latitud"] = oCliente.latitud
                     jsonCliente["precioId"] = oCliente.precio_id
                     jsonfinal["clientes"].append(jsonCliente)
-                print("JSONFINAL", jsonfinal)
+                # print("JSONFINAL", jsonfinal)
                 return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
             except Exception as e:
                 return HttpResponse(json.dumps({'exito':0}), content_type="application/json")

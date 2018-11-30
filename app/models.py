@@ -70,7 +70,7 @@ class Empleado(models.Model):
     imagen = models.ImageField(blank=True, null=True)#upload_to='%Y/%m/%d',
     perfil = models.IntegerField(blank=True, null=True,default=1)
     estado = models.BooleanField(blank=True,default=True)
-    almacen = models.ForeignKey('Almacen', default=1, )
+    almacen = models.ForeignKey('Almacen', default=1, on_delete=models.CASCADE)
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Lote(models.Model):
