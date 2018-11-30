@@ -530,6 +530,8 @@ def insertarVenta(request):
         #Se genera el pedido con un estado 3
         #Se hace el descuento de producto en producto_almacen
         oCliente = Cliente.objects.get(numerodocumento=dni_cliente)
+        usuario = request.user
+        print(usuario)
         empleado = 1
         oPedido = Pedido(estado=3, empleado_id=empleado, cliente=oCliente)
         oPedido.save()
