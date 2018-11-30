@@ -70,6 +70,7 @@ class Empleado(models.Model):
     imagen = models.ImageField(blank=True, null=True)#upload_to='%Y/%m/%d',
     perfil = models.IntegerField(blank=True, null=True,default=1)
     estado = models.BooleanField(blank=True,default=True)
+    almacen = models.ForeignKey('Almacen', default=1, )
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Lote(models.Model):
@@ -87,21 +88,21 @@ class Operacion(models.Model):
     estado = models.BooleanField(blank=True,default=True)
     caja = models.ForeignKey(Caja, on_delete=models.CASCADE)  # Field name made lowercase.
     detalletipooperacion = models.ForeignKey(Detalletipooperacion, on_delete=models.CASCADE)  # Field name made lowercase.
-    cobro = models.ForeignKey(Cobro, blank=True, null=True, on_delete=models.CASCADE)  # Field name made lowercase.
+    cobro = models.ForeignKey('Cobro', blank=True, null=True, on_delete=models.CASCADE)  # Field name made lowercase.
 
 class Pedido(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=True)
     estado = models.IntegerField(default=1)
     tipo = models.IntegerField(default=1)
     empleado = models.ForeignKey('Empleado', on_delete=models.CASCADE)  # Field name made lowercase.
-    cliente = models.ForeignKey(Cliente, blank=True, null=True, on_delete=models.CASCADE)  # Field name made lowercase.
+    cliente = models.ForeignKey('Cliente', blank=True, null=True, on_delete=models.CASCADE)  # Field name made lowercase.
     def __str__(self):
         return '%s' % self.cliente
 
 class Movimiento(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     cantidad_producto = models.FloatField(default=0.0)
-    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+    pedido = models.ForeignKey('Pedido', on_delete=models.CASCADE)
 
 class Presentacion(models.Model):
     nombre = models.CharField(max_length=45)
