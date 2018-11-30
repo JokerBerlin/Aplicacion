@@ -43,8 +43,9 @@ def rutaUsuario(request):
                 rutasJson = {}
                 rutasJson["x"]= oVisita.rutacliente.cliente.latitud
                 rutasJson["y"]= oVisita.rutacliente.cliente.longitud
-                rutasJson["activo"]= oVisita.activo
-                rutasJson["idCliente"]= oVisita.rutacliente.cliente.id
+                rutasJson["activo"] = oVisita.activo
+                rutasJson["idCliente"] = oVisita.rutacliente.cliente.id
+                rutasJson["nombreCliente"] = oVisita.rutacliente.cliente.nombre
                 rutasJson["idVisita"]= oVisita.id
                 rutasJson["idPedido"]= 4
                 jsonfinal["rutas"].append(rutasJson)
