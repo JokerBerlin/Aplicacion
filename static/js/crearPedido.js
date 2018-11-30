@@ -16,6 +16,7 @@ $(document).ready(function(){
 
     $('#bt_del').click(function(){
         eliminar(id_fila_selected);
+        //RefrescarTotal();
     });
 
     $('#bt_delall').click(function(){
