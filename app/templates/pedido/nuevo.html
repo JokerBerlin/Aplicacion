@@ -11,12 +11,40 @@
 
 //filtro de clientes por dni o numero documento ajax
 function seleccionarProducto(idProducto){
+    //alert($('#dynamic'+idProducto+'').attr('src'));
+    $('#urlImagen').val($('#dynamic'+idProducto+'').attr('src'));
     $('#producto'+idProducto+'').text();
     //alert($('#producto'+idProducto+'').text());
     $('#inpt-producto').val($('#producto'+idProducto+'').text());
     $('#codigo').val($('#codigo'+idProducto+'').text());
     $("#imagenesProd").empty();
     $("#cantidad").focus();
+
+    //var precioPresentacion = function() {
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/producto-pre-venta/buscar/",
+        data: {
+            'presentacion': document.getElementById('cmbPresentacion').value,
+            'producto': document.getElementById('inpt-producto').value,
+            'precioTipo': document.getElementById('cmbPrecio').value,
+        },
+        async: false,
+        success: function(data) {
+            var precio = document.getElementById('valorPrecio');
+            if (data.precio == ''){
+                precio.value = '';
+            } else {
+                precio.value = data.precio;
+            }
+        },
+        // error: function(jqxhr, status, exception) {
+        //     alert('Exception:', exception);
+        // }
+
+    });
+
 }
 $(document).ready(function(){
   $( "#inpt-cliente" ).focus();
@@ -105,9 +133,9 @@ $(document).ready(function(){
                     var br = $('<br/>');
                     var panelBody = $(' <div class="selected" id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
                     var cierreBody = $('</div>');
-                    var panelBody2 = $('<div id="dynamicPanel'+ListasProductos[i].id+'" class="panel-body">');
+                    var panelBody2 = $('<div id="dynamicPanel'+ListasProductos[i].id+'" onclick="+seleccionarProducto('+ListasProductos[i].id+');" class="panel-body">');
                     panelBody.appendTo('#imagenesProd');
-                    var labelP = $('<label id="producto'+ListasProductos[i].id+'" for="male">  '+ListasProductos[i].nombre+'</label>');
+                    var labelP = $('<label id="producto'+ListasProductos[i].id+'" for="male">'+ListasProductos[i].nombre+'</label>');
                     var labelP2 = $('<label id="codigo'+ListasProductos[i].id+'" for="male1" style="visibility:hidden;">'+ListasProductos[i].codigo+'</label>');
                     var pre = $('<pre>'+ListasProductos[i].codigo+'</pre>');
                     //panelBody2.appendTo('#imagenesProd');
@@ -431,6 +459,7 @@ Nuevo Pedido
                          <div id="imagenesProd">
 
                          </div>
+                         <label id="urlImagen" for=""></label>
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="id_nombreCodigo">Código:</label>
@@ -506,6 +535,7 @@ Nuevo Pedido
                             <thead>
                                 <tr>
                                   <td>Nº</td>
+                                  <td>Imagen</td>
                                   <td>Cantidad</td>
                                   <td>Cod. Producto</td>
                                   <td>Nombre</td>

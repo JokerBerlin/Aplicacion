@@ -58,6 +58,7 @@ function agregar(){
     cantidad = $('#cantidad').val();
     presentacion = $('#cmbPresentacion').val();
     precioTipo = $('#cmbPrecio').val();
+    imagen = $('#urlImagen').val();
 
     error = "";
     if (Producto==''){
@@ -72,7 +73,9 @@ function agregar(){
         valor = cont - 1;
         var fila='<tr class="selected" id="fila' + valor + '" onclick="seleccionar(this.id);">' +
                  '<td>' + valor + '</td>' +
+                 '<td><img src="'+imagen+'" height="100" width="100" alt="" /></td>'+
                  '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td>' +
+
                  '<td>' + codigo + '</td>' +
                  '<td>' + Producto + '</td>' +
                  '<td>' + precioTipo+'</td>' +
