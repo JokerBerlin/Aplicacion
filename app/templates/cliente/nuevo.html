@@ -128,12 +128,22 @@ Registrar Nuevo Cliente
 									<input type="text" name="direccion" id="id_direccion" required="" class="form-control" maxlength="45">
 								</div>
 								<div class="col-xs-4 col-sm-4 col-md-4">
-									<label for="id_numerodocumento">Numerodocumento:</label><br>
+									<label for="id_numerodocumento">Numero documento:</label><br>
 									<input type="text" name="numerodocumento" id="id_numerodocumento" class="form-control" maxlength="11" >
 								</div>
 							</div>
 
 							<div class="col-lg-12" style="margin-top:2px;">
+								<div class="col-xs-4 col-sm-4 col-md-4">
+									<label for="id_precio">Tipo de cliente:</label><br>
+									<select class="form-control" id="cmbPrecio" name="id_precio" required="">
+										{% for precio in precios %}
+											<option value="{{precio.id}}">
+											{{precio.nombre}}
+											</option>
+										{% endfor %}
+									</select>
+								</div>
 								<div class="col-xs-4 col-sm-4 col-md-4">
 									<label for="id_longitud">Longitud:</label><br>
 									<input type="text" name="longitud" id="id_longitud" class="form-control" maxlength="50" readonly="readonly">

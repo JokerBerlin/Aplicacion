@@ -16,7 +16,6 @@ class Almacen(models.Model):
     def __str__(self):
         return '%s' % self.nombre
 
-
 class Caja(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
@@ -38,6 +37,10 @@ class Cierrecaja(models.Model):
     estado = models.BooleanField(blank=True,default=True)
     aperturacaja = models.ForeignKey(Aperturacaja, on_delete=models.CASCADE)  # Field name made lowercase.
 
+class Precio(models.Model):
+    nombre = models.CharField(max_length=45)
+    estado = models.BooleanField(blank=True,default=True)
+
 class Cliente(models.Model):
     nombre = models.CharField(max_length=45,unique=True)
     direccion = models.CharField(max_length=45)
@@ -45,8 +48,10 @@ class Cliente(models.Model):
     latitud = models.CharField(max_length=25, blank=True, null=True)
     numerodocumento = models.CharField(max_length=11, blank=True, null=True)
     estado = models.BooleanField(blank=True,default=True)
+    precio = models.ForeignKey(Precio, default=1, on_delete=models.CASCADE)
     def __str__(self):
         return '%s' % self.nombre
+
 class Cobro(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=True)
     monto = models.FloatField()
@@ -87,6 +92,7 @@ class Operacion(models.Model):
 class Pedido(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=True)
     estado = models.IntegerField(default=1)
+    tipo = models.IntegerField(default=1)
     empleado = models.ForeignKey('Empleado', on_delete=models.CASCADE)  # Field name made lowercase.
     cliente = models.ForeignKey(Cliente, blank=True, null=True, on_delete=models.CASCADE)  # Field name made lowercase.
     def __str__(self):
@@ -96,10 +102,6 @@ class Movimiento(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     cantidad_producto = models.FloatField(default=0.0)
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
-
-class Precio(models.Model):
-    nombre = models.CharField(max_length=45)
-    estado = models.BooleanField(blank=True,default=True)
 
 class Presentacion(models.Model):
     nombre = models.CharField(max_length=45)

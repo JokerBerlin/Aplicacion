@@ -127,16 +127,23 @@ def registrarCliente(request):
 def nuevoCliente(request):
     if request.method == 'POST':
         Datos = request.POST
-        form = ClienteForm(request.POST)
-        if form.is_valid():
-            form = form.save()
+        cliente = Cliente(
+            nombre=Datos['nombre'],
+            direccion=Datos['direccion'],
+            numerodocumento=Datos['numerodocumento'],
+            precio_id=Datos['id_precio'],
+            latitud=Datos['latitud'],
+            longitud=Datos['longitud']
+            )
+        if cliente:
+            cliente.save()
             return redirect('/Cliente/listar/')
 
         else:
             return render(request, 'cliente/error.html')
     else:
-        form = ClienteForm()
-        return render(request, 'cliente/nuevo.html', {'form': form})
+        precios = Precio.objects.all()
+        return render(request, 'cliente/nuevo.html', {'precios': precios})
 
 def listarCliente(request):
     if request.method == 'GET':
