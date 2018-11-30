@@ -10,9 +10,13 @@
 <script type="text/javascript">
 
 //filtro de clientes por dni o numero documento ajax
-function seleccionarProducto(){
-    alert("hola mundo");
+function seleccionarProducto(idProducto){
+    $('#producto'+idProducto+'').text();
+    //alert($('#producto'+idProducto+'').text());
+    $('#inpt-producto').val($('#producto'+idProducto+'').text());
+    $('#codigo').val($('#codigo'+idProducto+'').text());
     $("#imagenesProd").empty();
+    $("#cantidad").focus();
 }
 $(document).ready(function(){
   $( "#inpt-cliente" ).focus();
@@ -99,22 +103,23 @@ $(document).ready(function(){
                 for (var i = 0; i < ListasProductos.length; i+=1) {
                     var img = $('<img id="dynamic'+ListasProductos[i].id+'">'); //Equivalent: $(document.createElement('img'))
                     var br = $('<br/>');
-                    var panelBody = $(' <div id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
+                    var panelBody = $(' <div class="selected" id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
                     var cierreBody = $('</div>');
                     var panelBody2 = $('<div id="dynamicPanel'+ListasProductos[i].id+'" class="panel-body">');
                     panelBody.appendTo('#imagenesProd');
-                    var labelP = $('<label for="male">  '+ListasProductos[i].nombre+'</label>');
-                    var labelP2 = $('<label for="male1">'+ListasProductos[i].codigo+'</label>');
+                    var labelP = $('<label id="producto'+ListasProductos[i].id+'" for="male">  '+ListasProductos[i].nombre+'</label>');
+                    var labelP2 = $('<label id="codigo'+ListasProductos[i].id+'" for="male1" style="visibility:hidden;">'+ListasProductos[i].codigo+'</label>');
                     var pre = $('<pre>'+ListasProductos[i].codigo+'</pre>');
                     //panelBody2.appendTo('#imagenesProd');
                     panelBody2.appendTo("#dynamicPanelPrincipal"+ListasProductos[i].id+"");
 
                     img.attr('src', ListasProductos[i].imagen);
-                    img.attr('onclick', "seleccionarProducto()");
+                    img.attr('onclick', 'seleccionarProducto('+ListasProductos[i].id+')');
                     img.attr('height', "50");
                     img.attr('width', "50");
                     img.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
                     labelP.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
+                    labelP2.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
                     //br.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
                     //labelP2.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
 
@@ -188,9 +193,9 @@ var precioPresentacion = function() {
                     precio.value = data.precio;
                 }
             },
-            error: function(jqxhr, status, exception) {
-                alert('Exception:', exception);
-            }
+            // error: function(jqxhr, status, exception) {
+            //     alert('Exception:', exception);
+            // }
 
         });
 }
