@@ -36,37 +36,71 @@ function agregar(){
     error = "";
     if (Cliente==''){
         error = 1;
+    }else{
+      var nombreClienteAgregar = $('#id_cliente').val();
+      $("#tabla tbody tr").each(function (index) {
+          $(this).children("td").each(function (index2) {
+              producto = [];
+              //dato = index;
+              console.log(index);
+              switch (index2) {
+                  case 2:
+                      nombreCliente = $(this).text();
+                      //alert(tipoPresentacion);
+                      //alert(nombreProducto);
+
+                      //
+                        if(nombreClienteAgregar === nombreCliente){
+                            //if(){
+                                alert("Usted ya agrego este cliente");
+                                reset_values();
+                                error = 3;
+                            //}
+                        }
+
+                      //}
+
+                      break;
+              }
+
+          });
+          contador = 1;
+
+          //productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
+      });
+
+
     }
 
     if (error=="") {
         // se crea el JSON latLng que contiene las coordenadas de los clientes
         var latLng = [Latitud, Longitud];
-        
+
         var pos = {lat: parseFloat(Latitud), lng: parseFloat(Longitud)};
 
         var config = {position: pos};
-        
-        addMarker(config);        
-        
-        var fila = 
+
+        addMarker(config);
+
+        var fila =
                 '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);">' +
                 '<td>'+cont+'</td>' +
                 '<td>'+Nombre+'</td>' +
                 '<td>'+Cliente+'</td>' +
                 '<td>'+Latitud+'</td>' +
-                '<td>'+Longitud+'</td>' +                    
+                '<td>'+Longitud+'</td>' +
                 '</tr>';
         $('#tabla').append(fila);
-        
+
         var coordenadas = Array();
-        
+
         for (let i = 0; i < markers.length; i++) {
             const marker = markers[i];
             const coord = {lat: marker.position.lat(), lng: marker.position.lng()};
             coordenadas.push(coord);
             console.log(coordenadas)
         }
-        
+
         var waypts = [];
         if (markers.length > 2) {
             for (let index = 1; index < markers.length - 1; index++) {
@@ -120,7 +154,7 @@ function agregar(){
             alert("Seleccione un Cliente válido!");
             $( "#id_cliente" ).focus();
             break;
-        
+
         }
     }
 }
@@ -198,14 +232,14 @@ function agregarRuta(){
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: "/ruta/insertar/",                  
-            data: sendData,                   
+            url: "/ruta/insertar/",
+            data: sendData,
             contentType: "application/json; charset=utf-8",
             async: false,
-            cache: false,                    
+            cache: false,
             CrossDomain: true,
 
-            success: function (result) {                
+            success: function (result) {
                 alert('Ruta Registrada');
                 document.location.href = '/Ruta/listar/';
                 // location.reload(true);
@@ -215,5 +249,3 @@ function agregarRuta(){
         alert("ingrese datos");
     }
 }
-
-
