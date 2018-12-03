@@ -17,6 +17,7 @@ $(document).on('Click', '.btn-editar', function(e){
 });
 
 
+
 </script>
 
 <!-- Devuelve datos de clientes ajax -->
@@ -44,16 +45,47 @@ $(document).ready(function(){
                 var valorCliente = document.getElementById('inpt-cliente').value;
 								document.forms.form_busca.action =  "/Cliente/detalle/"+item.id+"/" ;
                 if( isNaN(valorCliente) ){
-                    return {label: item.nombre};
+                    return {label: item.nombre,
+														idcliente: item.id};
+
                 }else{
-                    return {label: item.numerodocumento};
+                    return {label: item.numerodocumento,
+											idcliente:item.id};
+
                 }
+
+
+								$(document).on('ready',function(){
+						    $('#btn-buscar').submit(function(){
+						        var url = "/Cliente/detalle/"+item.id+"/";
+						        $.ajax({
+						           type: "POST",
+						           url: url,
+						           data: $("#form_busca").serialize(),
+						           success: function(data)
+						           {
+						             $('#resp').html(data);
+						           }
+						       });
+						    });
+						});
 
               }));
               }
           });
       },
-      minLength: 1,
+      minLength: 2,
+			select: function (event, ui) {
+          //$.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
+          //$( "#precio" ).val( ui.item.precio);
+          //$( "#codigo" ).val( ui.item.codigo);
+          //$('#presentacion').focus();
+          // de tu elemento
+					// localStorage.setItem("dato","lunes");
+					// var dato = localStorage.getItem("dato");
+					// alert(dato);
+          document.location.href="/Cliente/detalle/"+ui.item.idcliente+"/";
+      }
   });
 });
 
@@ -73,28 +105,6 @@ $(document).ready(function(){
   }
   });
 </script>
-
-
-
-
-<!-- Modal Structure -->
-
-<!--<script type="text/javascript">
-    function eliminarIdentificador(identificadorId) {
-        var request = $.ajax({
-            type: "POST",
-            url: "{% url 'eliminar_identificador' %}",
-            data: {
-                "csrfmiddlewaretoken": "{{ csrf_token }}",
-                "identificador_id": identificadorId
-            },
-        });
-        request.done(function(response) {
-            alert("Identificador eliminado");
-            // Cierra el modal, oculta el identificador eliminado, etc.
-        });
-    }
-</script>-->
 
 <style>
 ul.pagination {
@@ -150,26 +160,27 @@ ul.ui-autocomplete {
 }
 </style>
 
-<script>
-$(document).on('click','.estado_cliente',function(){
-	var id = $(this).data('id');
-
-	$.ajax({
-			url:'',
-			type:'POST',
-			data:{
-					'id':id,
-					'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
-			},
-			success:function(data){
-					$('#modal-default .modal-dialog').html($('#modal-default .modal-dialog',data));
-					$('#modal-default').modal('show');
-			},
-			error:function(){
-					console.log('error')
-			},
-	});
-});
+<script type="text/javascript">
+function eliminarIdentificador(identificadorId) {
+		var request = $.ajax({
+				type: "POST",
+				url: "{% url 'eliminar_cliente' %}",
+				data: {
+						"csrfmiddlewaretoken": "{{ csrf_token }}",
+						"identificador_id": identificadorId
+				},
+		});
+		request.done(function(response) {
+				alert("El cliente fue desactivado con exito");
+				$('#myModal').modal('toggle');
+				location.reload(true);
+				//$("#tabla" + identificadorId).remove();
+		});
+};
+	selPersona = function(idPersona, nombre){
+		document.getElementById('nombreCliente').innerHTML = nombre;
+		$("#eliminar").attr("onclick","eliminarIdentificador('"+idPersona+"')");
+	};
 </script>
 
 
@@ -181,39 +192,51 @@ Clientes
 
 {% block content %}
 
-<li>
-<form action="" method="post" name="form_busca" class="form-inline mr-auto">
-	{% csrf_token %}
-		<input type="text" id="inpt-cliente" placeholder="DNI Cliente..." name="cliente_buscado" class="form-control">
-		<button class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
-</form>
-</li>
 
-<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Cliente</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
 
-      <div class="modal-body">
-				<p>estas apunto de eliminar  {{oCliente.nombe }} 	<span id="data-name"></span> </p>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+
+	<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Cliente</h5>
+
+					<script type="text/javascript">
+						var idCliente = document.getElementById('codigo').value;
+						var nombreCliente = document.getElementById('nombre').value;
+					</script>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body">
+
+
+
+						<p>Estás a punto de desactivar al cliente <label id="nombreCliente"></label> </p>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+				</div>
+			</div>
+		</div>
 </div>
+
 
 	<div class="row">
         <div class="col-sm-12">
             <div class="white-box">
+							<form action="" method="post" id="form_busca" name="form_busca" class="form-inline mr-auto">
+								{% csrf_token %}
+									<input type="text" id="inpt-cliente" placeholder="DNI Cliente..." name="cliente_buscado" class="form-control">
+									<button id="btn-buscar" class="btn blue-gradient btn-rounded btn-sm my-0" type="submit">Buscar</button>
+							</form>
+
+							<br>
                 <h3 class="box-title">Lista de clientes</h3>
 				{% load widget_tweaks %}
 				{% csrf_token %}
@@ -229,40 +252,43 @@ Clientes
 	                        </tr>
 	                    </thead>
 				    {% for oCliente in oClientes %}
-				    <tr>
-				    	<td>{{ forloop.counter }}</td>
-				    	<td>{{oCliente.nombre}}</td>
-				    	<td>{{oCliente.direccion}}</td>
-				    	<td>{{oCliente.numerodocumento}}</td>
-				    	<td>
-				    		<a href="/Cliente/detalle/{{oCliente.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
-				    		<a href="/Cliente/editar/{{oCliente.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
-				    		<a href="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oCliente.id }}" data-name="{{ oCliente.nombre }}">Eliminar</a>
-				    	</td>
-				    </tr>
+
+
+					    <tr id="tabla{{ oCliente.id }}">
+					    	<td>{{ forloop.counter }}</td>
+					    	<td>{{oCliente.nombre}}</td>
+					    	<td>{{oCliente.direccion}}</td>
+					    	<td>{{oCliente.numerodocumento}}</td>
+					    	<td>
+					    		<a href="/Cliente/detalle/{{oCliente.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
+					    		<a href="/Cliente/editar/{{oCliente.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
+									<a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oCliente.id }}" onclick="selPersona('{{oCliente.id}}','{{oCliente.nombre}}');">Eliminar</a>
+
+								</td>
+					    </tr>
 
 				    {% endfor %}
 
 					</table>
 					<br>
-
+						<!--paginacion-->
 			        <div class="center">
 			          <ul class="pagination">
-			            {% if oVenta.has_previous %}
-			                      <li><a href="?page={{oVenta.previous_page_number}}"><<</a></li>
+			            {% if oClientes.has_previous %}
+			                      <li><a href="?page={{oClientes.previous_page_number}}"><<</a></li>
 			                  {% endif %}
 
 
 			                {% for pg in page_range %}
-			                    {% if oVenta.number == pg %}
+			                    {% if oClientes.number == pg %}
 			                        <li><a class="active" href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
 			                    {% else %}
 			                        <li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
 			                    {% endif %}
 			                {% endfor %}
 
-			                  {% if oVenta.has_next %}
-			                      <li><a href="?page={{oVenta.next_page_number}}">>></a></li>
+			                  {% if oClientes.has_next %}
+			                      <li><a href="?page={{oClientes.next_page_number}}">>></a></li>
 			                  {% endif %}
 			          </ul>
 			        </div>

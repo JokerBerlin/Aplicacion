@@ -54,7 +54,7 @@
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top m-b-0">
             <div class="navbar-header"> <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="fa fa-bars"></i></a>
-                <div class="top-left-part"><a class="logo" href="index.html"><b><img src="/static/plugins/images/pixeladmin-logo.png" alt="home" /></b><span class="hidden-xs"><img src="/static/plugins/images/pixeladmin-text.png" alt="home" /></span></a></div>
+                <div class="top-left-part"><a class="logo" href="#"><b><img src="/static/plugins/images/pixeladmin-logo.png" alt="home" /></b><span class="hidden-xs"><img src="/static/plugins/images/pixeladmin-text.png" alt="home" /></span></a></div>
                 <ul class="nav navbar-top-links navbar-left m-l-20 hidden-xs">
                 </ul>
                 <ul class="nav navbar-top-links navbar-right pull-right">
@@ -73,7 +73,7 @@
             <div class="sidebar-nav navbar-collapse slimscrollsidebar">
                 <ul class="nav" id="side-menu">
                     <li style="padding: 10px 0 0;">
-                        <a href="index.html" class="waves-effect"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i><span class="hide-menu">Dashboard</span></a>
+                        <<span class="hide-menu"></span>
                     </li>
                     <li>
                         <a href="/Producto/registrar/" class="waves-effect"><i class="fa fa-user fa-fw" aria-hidden="true"></i><span class="hide-menu">Clientes</span></a>
@@ -83,19 +83,28 @@
                         </ul>
                     </li>
                     <li>
+                        <a class="waves-effect"><i class="fa fa-user fa-fw" aria-hidden="true"></i><span class="hide-menu">Caja</span></a>
+                        <ul>
+                            <li><a href="/Caja/apertura/">Apertura</a></li>
+                        </ul>
+                    </li>
+                    <li >
                         <a href="basic-table.html" class="waves-effect"><i class="fa fa-table fa-fw" aria-hidden="true"></i><span class="hide-menu">Almacén</span></a>
-                         <ul>
+                         <ul id="itemsProducto">
                             <li><a href="/Producto/nuevo/">Nuevo Producto</a></li>
                             <li><a href="/Producto/listar/">Listar Productos</a></li>
                             <li><a href="/Lote/nuevo/">Nuevo Lote</a></li>
+                            <li><a href="/Lote/listar/">Listar Lote</a></li>
+                            <li><a href="/Pedido/listar/1/">Pedidos Pendientes</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="blank.html" class="waves-effect"><i class="fa fa-columns fa-fw" aria-hidden="true"></i><span class="hide-menu">Ventas</span></a>
                         <ul>
-                          <li><a href="/venta/nuevo/">Nueva Venta</a></li>
-                          <li><a href="/venta/listar/">Listar Ventas</a></li>
-                          <li><a href="/venta/anulacion/">Anulación de Venta</a></li>
+                          <li><a href="/Venta/nuevo/">Nueva Venta</a></li>
+                          <li><a href="/Pedido/listar/2/">Ventas pendientes</a></li>
+                          <li><a href="/Venta/listar/">Listar Ventas</a></li>
+                          <li><a href="/venta/anular/">Anulación de Venta</a></li>
                         </ul>
                     </li>
                      <li>
@@ -104,7 +113,6 @@
                             <li><a href="/Pedido/nuevo/">Nuevo</a></li>
                             <li><a href="/Pedido/listar/">Listar</a></li>
                             <li><a href="/Pedido/reporte/">Reporte</a></li>
-                            <li><a href="/Pedido/buscar/">Buscar</a></li>
                         </ul>
                     </li>
                     <li>
@@ -124,32 +132,13 @@
                     </li>
                 </ul>
                 <div class="center p-20">
-                    <span class="hide-menu"><a href="http://wrappixel.com/templates/pixeladmin/" target="_blank" class="btn btn-danger btn-block btn-rounded waves-effect waves-light">Upgrade to Pro</a></span>
                 </div>
             </div>
         </div>
         <!-- Left navbar-header end -->
         <!-- Page Content -->
         <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row bg-title">
-                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                        <h4 class="page-title">{% block title1 %}
-                        {% endblock %}
-                        </h4> </div>
-                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a href="http://wrappixel.com/templates/pixeladmin/" target="_blank" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">{% block title2%}
-                        {% endblock %}</a>
-                        <ol class="breadcrumb">
-                            <li><a href="#">{% block title3 %}
-                        {% endblock %}</a></li>
-                        </ol>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
 
-
-
-                </div>
                 <!-- /.row -->
 
                 <!--row -->

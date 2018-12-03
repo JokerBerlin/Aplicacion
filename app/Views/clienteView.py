@@ -29,22 +29,26 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def buscarCliente(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
-        # usuario= BuscarUsuario(Datos["idUsuario"])
+        print("DATOS", Datos)
         usuario=True
         if usuario==True:
             nombreCliente = Datos["nombreCliente"]
             jsonfinal = {}
             jsonfinal["clientes"] = []
             try:
-                oClientes = Cliente.objects.filter(nombre__icontains=nombreCliente,estado = 1)
+                oClientes = Cliente.objects.filter(nombre__icontains=nombreCliente,estado = 1)|Cliente.objects.filter(numerodocumento__icontains=nombreCliente,estado = 1)
+                
                 for oCliente in oClientes:
                     jsonCliente = {}
                     jsonCliente["id"] = oCliente.id
                     jsonCliente["direccion"] = oCliente.direccion
                     jsonCliente["nombre"] = oCliente.nombre
                     jsonCliente["numerodocumento"] = oCliente.numerodocumento
+                    jsonCliente["longitud"] = oCliente.longitud
+                    jsonCliente["latitud"] = oCliente.latitud
+                    jsonCliente["precioId"] = oCliente.precio_id
                     jsonfinal["clientes"].append(jsonCliente)
-
+                print("JSONFINAL", jsonfinal)
                 return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
             except Exception as e:
                 return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
@@ -58,10 +62,8 @@ def estadoCliente(request):
     pk = request.POST.get('identificador_id')
     id = Cliente.objects.get(id=pk).update(estado=0)
 
-    #oCliente = Cliente.objects.filter(id=cliente_id).update(estado=0)
     response = {}
     return JsonResponse(response)
-    #return redirect('/Cliente/listar/')
 
 @csrf_exempt
 def detalleClienteWS(request):
@@ -112,19 +114,40 @@ def editarCliente(request,cliente_id):
         print(form)
         return render(request, 'cliente/editar.html', {'form': form, 'oCliente':oCliente})
 
+@csrf_exempt
+def registrarCliente(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        oCliente = Cliente()
+        oCliente.nombre = Datos['nombre']
+        oCliente.direccion = Datos['direccion']
+        oCliente.longitud = Datos['longitud']
+        oCliente.latitud = Datos['latitud']
+        oCliente.numerodocumento = Datos['documento']
+        oCliente.precio_id = Datos['precio']
+        oCliente.save()
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
+
 def nuevoCliente(request):
     if request.method == 'POST':
         Datos = request.POST
-        form = ClienteForm(request.POST)
-        if form.is_valid():
-            form = form.save()
+        cliente = Cliente(
+            nombre=Datos['nombre'],
+            direccion=Datos['direccion'],
+            numerodocumento=Datos['numerodocumento'],
+            precio_id=Datos['id_precio'],
+            latitud=Datos['latitud'],
+            longitud=Datos['longitud']
+            )
+        if cliente:
+            cliente.save()
             return redirect('/Cliente/listar/')
 
         else:
             return render(request, 'cliente/error.html')
     else:
-        form = ClienteForm()
-        return render(request, 'cliente/nuevo.html', {'form': form})
+        precios = Precio.objects.all()
+        return render(request, 'cliente/nuevo.html', {'precios': precios})
 
 def listarCliente(request):
     if request.method == 'GET':
@@ -154,9 +177,10 @@ def listarCliente(request):
     else:
         return render(request, 'cliente/nuevo.html', {})
 
-def eliminar_identificador(request):
+def eliminar_identificador_cliente(request):
     pk = request.POST.get('identificador_id')
     identificador = Cliente.objects.get(pk=pk)
-    identificador.delete()
+    identificador.estado = 0
+    identificador.save()
     response = {}
     return JsonResponse(response)

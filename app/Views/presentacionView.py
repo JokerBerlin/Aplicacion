@@ -35,11 +35,23 @@ def registrarPresentacionProducto(request):
             oProductoPresentacionsprecios.save()
         return HttpResponseRedirect('/Presentacion/Listar/'+Datos['idProducto']+'/')
 
-def eliminarPresentacionProducto(request,presentacion_id,producto_id):
-    oPresentacion = Presentacion.objects.get(id=presentacion_id)
-    oProducto = Producto.objects.get(id=producto_id)
-    oProducto.presentacions.remove(oPresentacion)
-    return HttpResponseRedirect('/Presentacion/Listar/'+producto_id+'/')
+def eliminarPresentacionProducto(request, presentacion_id,producto_id):
+    #oPresentacion = Presentacion.objects.get(id=presentacion_id)
+    #oProducto = Producto.objects.get(id=producto_id)
+    #oProducto.presentacions.remove(oPresentacion)
+    try:
+        oProductopresentacion = Productopresentacions.objects.get(id=presentacion_id)
+        # oProductoPresentacionPrecios = Productopresentacionsprecios.objects.filter(productopresentacions_id=oProductopresentacion.id)
+        # for oProductoPresentacionPrecio in oProductoPresentacionPrecios:
+        #     oPresentacionPrecios = Productopresentacionsprecios.objects.get(id=oProductoPresentacionPrecio.id)
+        #     oPresentacionPrecios.delete()
+        oProductopresentacion.delete()
+
+    except Exception as e:
+        print('No se puede eliminar el producto')
+        return HttpResponseRedirect('/Producto/editar/'+producto_id+'/')
+
+    return HttpResponseRedirect('/Producto/editar/'+producto_id+'/')
 
 def presentacion_detalle(request,producto_id):
     oProducto = Producto.objects.get(id=producto_id)
@@ -49,10 +61,10 @@ def presentacion_detalle(request,producto_id):
 
 def getPresentaciones(request):
     if request.method == 'GET':
-        try:            
+        try:
             jsonfinal = {}
             jsonfinal["presentaciones"] = []
-            oPresentacion = Presentacion.objects.filter(estado = True).order_by('nombre')     
+            oPresentacion = Presentacion.objects.filter(estado = True).order_by('nombre')
             for presentacion in oPresentacion:
                 presentacionjson = {}
                 presentacionjson["id"] = presentacion.id
@@ -61,3 +73,26 @@ def getPresentaciones(request):
             return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
         except:
             return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
+
+@csrf_exempt
+def editarPresentacion(request):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        print(Datos)
+
+        cantidad = 1/float(Datos['valorPrecio'])
+        oProductoPresentacion = Productopresentacions.objects.get(id=Datos['productoPresentacionId'])
+        oProductoPresentacion.valor = cantidad
+        oProductoPresentacion.save()
+
+        oPrecios = Precio.objects.filter(estado=True)
+        cont = 1
+        for precio in oPrecios:
+            idPrecio = "precio"+str(cont)+"Id"
+            oProductoPresentacionPrecio = Productopresentacionsprecios.objects.get(id=Datos[idPrecio])
+            valorPrecio = "precio"+str(cont)+"";
+            oProductoPresentacionPrecio.valor = float(Datos[valorPrecio])
+            oProductoPresentacionPrecio.save()
+            cont = cont + 1
+        
+        return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
