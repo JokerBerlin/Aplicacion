@@ -340,12 +340,14 @@ function nuevaVenta() {
     var cliente = document.getElementById("inpt-cliente").value;
     var tipoRecibo = $('#cmbTipoRecibo').val();
     var nrecibo = $('#nroRecibo').val();
+    var cajaId = $('#cmbCaja').val();
     if (contador == 1) {
         var datos = {
             productos: productos,
             cliente: cliente,
             nrecibo: nrecibo,
             tipoRecibo: tipoRecibo,
+            cajaId: cajaId
         };
 
         var sendData = JSON.stringify(datos);
