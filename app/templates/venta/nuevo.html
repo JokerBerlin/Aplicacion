@@ -375,7 +375,7 @@ Nueva Venta
                       <label for="id_nombreCliente">Nombre Cliente:</label>
                         <input type="text" id="nombreCl" name="nombreCl" class="form-control" disabled="disabled">
                   </div>
-                  <div class="col-xs-6 col-sm-6 col-md-6">
+                  <div class="col-xs-4 col-sm-4 col-md-4">
                       <label for="cmbTipoRecibo">Tipo recibo:</label>
                       <select class="form-control" id="cmbTipoRecibo" name="cmbTipoRecibo" required="">
                         {% for recibo in recibos %}
@@ -385,9 +385,19 @@ Nueva Venta
                         {% endfor %}
                     </select>
                   </div>
-                  <div class="col-xd-6 col-sm-6 col-md-6">
+                  <div class="col-xd-4 col-sm-4 col-md-4">
                     <label for="nroRecibo">Nro Recibo</label>
                     <input type="text" id="nroRecibo" name="nroRecibo" class="form-control">
+                  </div>
+                  <div class="col-xs-4 col-sm-4 col-md-4">
+                    <label for="">Caja</label></br>
+                    <select class="form-control" id="cmbCaja" name="cmbCaja" required="">
+                        {% for caja in cajas %}
+                            <option value="{{caja.id}}">
+                            {{caja.nombre}}
+                            </option>
+                        {% endfor %}
+                    </select>
                   </div>
                   
                 </div>

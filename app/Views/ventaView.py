@@ -507,12 +507,14 @@ def ventaNuevo(request):
     oPrecios = Precio.objects.filter(estado=True)
     oPedidos = Pedido.objects.filter(estado=2)
     oRecibos = Recibo.objects.filter(estado=True)
+    oCajas = Caja.objects.filter(estado=True)
 
     context = {
         'presentaciones': oPresentaciones,
         'precios': oPrecios,
         'pedidos': oPedidos,
-        'recibos': oRecibos
+        'recibos': oRecibos,
+        'cajas': oCajas
     }
 
     return render(request, 'venta/nuevo.html', context)
@@ -526,6 +528,7 @@ def insertarVenta(request):
         dni_cliente = datos['cliente']
         nroRecibo = datos['nrecibo']
         tipoRecibo = datos['tipoRecibo']
+        cajaId = datos['cajaId']
 
         #Se genera el pedido con un estado 3
         #Se hace el descuento de producto en producto_almacen
@@ -576,6 +579,14 @@ def insertarVenta(request):
             venta=oVenta
         )
         oCobro.save()
+
+        oOperacion = Operacion(
+            monto=oCobro.monto,
+            estado=True,
+            caja_id=cajaId,
+            cobro=oCobro,
+            detalletipooperacion_id=1
+        )
 
         return HttpResponse(json.dumps({'exito': 1, "idPedido": oPedido.id}), content_type="application/json")
 
