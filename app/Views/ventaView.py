@@ -587,6 +587,16 @@ def insertarVenta(request):
             cobro=oCobro,
             detalletipooperacion_id=1
         )
+        oOperacion.save()
+
+        oAperturaCaja = Aperturacaja.objects.filter(caja_id=cajaId).latest('pk')
+        monto = oAperturaCaja.monto + oOperacion.monto
+        oAperturaCajaNuevo = Aperturacaja(
+            monto=monto,
+            activo=1,
+            estado=1,
+            caja_id=cajaId
+        )
 
         return HttpResponse(json.dumps({'exito': 1, "idPedido": oPedido.id}), content_type="application/json")
 
@@ -739,7 +749,7 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
         jsonEmpleadoVenta['empleadoNombre'] = empleado.nombre
         montoFinal = 0.0
 
-        pedidos = Pedido.objects.filter(empleado=empleado, estado=3, fecha__month=mesActual, fecha__year=añoActual)
+        pedidos = Pedido.objects.filter(empleado=empleado, estado=3, fecha__month=mesActual, fecha__year=añoActual) | Pedido.objects.filter(empleado=empleado, estado=4, fecha__month=mesActual, fecha__year=añoActual)
         if pedidos:
             for pedido in pedidos:
                 montoVentasEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
@@ -761,7 +771,7 @@ def empleadoVentas(request, empleado_id, mesActual, añoActual):
     empleado = Empleado.objects.get(id=empleado_id)
 
     if empleado:
-        pedidos = Pedido.objects.filter(empleado=empleado, estado=3, fecha__month=mesActual, fecha__year=añoActual)
+        pedidos = Pedido.objects.filter(empleado=empleado, estado=3, fecha__month=mesActual, fecha__year=añoActual) | Pedido.objects.filter(empleado=empleado, estado=4, fecha__month=mesActual, fecha__year=añoActual)
         if pedidos:
             for pedido in pedidos:
                 montoVentaEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']

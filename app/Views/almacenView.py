@@ -50,23 +50,31 @@ def salidaProductoAlmacen(request):
     productos = Producto.objects.all()
     jsonfinal = []
     for producto in productos:
+        # print(producto.nombre, producto.id)
         prodAlmacens = Producto_almacens.objects.filter(producto=producto)
-        cantidadProducto = prodAlmacens.latest('pk').cantidad
         jsonProductosSalidas = {}
-        cantidadProductosSalida = 0
-        for prodAlmacen in prodAlmacens:
-            cantSalida = prodAlmacen.cantidad - prodAlmacen.cantidadinicial
-            if cantSalida < 0:
-                cantidadProductosSalida += 0
-            else:
-                cantidadProductosSalida += cantSalida
+        if prodAlmacens:
+            # print('if', prodAlmacens)
+            cantidadProductosSalida = 0
+            cantidadProducto = prodAlmacens.latest('pk').cantidad
+            for prodAlmacen in prodAlmacens:
+                cantSalida = prodAlmacen.cantidad - prodAlmacen.cantidadinicial
+                if cantSalida < 0:
+                    cantidadProductosSalida += 0
+                else:
+                    cantidadProductosSalida += cantSalida
         
-        jsonProductosSalidas['producto'] = producto.nombre
-        jsonProductosSalidas['cantidadSalidas'] = cantidadProductosSalida
-        jsonProductosSalidas['cantidadActualProducto'] = cantidadProducto
+            jsonProductosSalidas['producto'] = producto.nombre
+            jsonProductosSalidas['cantidadSalidas'] = cantidadProductosSalida
+            jsonProductosSalidas['cantidadActualProducto'] = cantidadProducto
+            jsonfinal.append(jsonProductosSalidas)
+        else:
+            # print('else',producto.nombre, prodAlmacens)
+            jsonProductosSalidas['producto'] = producto.nombre
+            jsonProductosSalidas['cantidadSalidas'] = 0
+            jsonProductosSalidas['cantidadActualProducto'] = 0
+            jsonfinal.append(jsonProductosSalidas)
         # print(jsonProductosSalidas)
-
-        jsonfinal.append(jsonProductosSalidas)
 
     return HttpResponse(json.dumps(jsonfinal), content_type="application/json")
 
