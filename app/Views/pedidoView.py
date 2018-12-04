@@ -32,6 +32,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 #   servicio de busqueda de usuario para la app movil
 ###########################################################
 @csrf_exempt
+# Pedido/registrar/
 def insertarPedido(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
@@ -45,7 +46,7 @@ def insertarPedido(request):
         fechaHoy=date.today()
         usuario = request.user
         empleado = Empleado.objects.get(usuario=usuario)
-        oPedido = Pedido(fecha=fechaHoy,estado=1,empleado_id=empleado,cliente_id=oCliente.id)
+        oPedido = Pedido(fecha=fechaHoy,estado=1,empleado=empleado,cliente_id=oCliente.id)
         oPedido.save()
 
         #Datos = request.POST.getlist('datos')

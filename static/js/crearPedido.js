@@ -253,20 +253,19 @@ function GenerarVenta(){
                     numero = $(this).text();
                     numero = parseInt(numero);
                     console.log("esto"+numero);
-                case 1:
+                case 2:
                     cantidad = $("#cantidad"+numero ).val();
                     break;
-
-                case 2:
+                case 3:
                     codigo = $(this).text();
                     break;
-                case 4:
+                case 5:
                     tipoPrecio = $(this).text();
                     break;
-                case 5:
+                case 6:
                     presentacion = $(this).text();
                     break;
-                case 6:
+                case 7:
                     precioUnitario = $(this).text();
                     break;
             }
