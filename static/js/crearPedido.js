@@ -1,5 +1,7 @@
 $(document).ready(function(){
     $('#id_Total').text("0.00");
+
+
     $('#bt_addVenta').click(function(){
         if(document.getElementById('codigo') === '' || document.getElementById('valorPrecio') === '') {
             reset_values();
@@ -60,6 +62,7 @@ function CalcularSubTotal(id,cantidad){
     RefrescarTotal();
     //console.log($(this));
 }
+
 function reset_values(){
     $('#inpt-producto').val('');
     $('#codigo').val('');
