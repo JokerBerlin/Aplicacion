@@ -535,8 +535,9 @@ def insertarVenta(request):
         oCliente = Cliente.objects.get(numerodocumento=dni_cliente)
         usuario = request.user
         print(usuario)
-        empleado = 1
-        oPedido = Pedido(estado=3, empleado_id=empleado, cliente=oCliente)
+        usuario = request.user
+        empleado = Empleado.objects.get(usuario=usuario)
+        oPedido = Pedido(estado=3, empleado=empleado, cliente=oCliente)
         oPedido.save()
         oVenta = Venta(pedido=oPedido, cliente=oCliente, nrecibo=nroRecibo)
         monto_venta = 0.00

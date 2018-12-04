@@ -41,12 +41,10 @@ def insertarPedido(request):
         dnis = Datos['cliente']
         print(dnis)
 
-        # if dnis.isdigit() == False :
-        #     dni = Cliente.objects.get(nombre=dnis).numerodocumento
-
         oCliente = Cliente.objects.get(numerodocumento=dnis)
         fechaHoy=date.today()
-        empleado = 1
+        usuario = request.user
+        empleado = Empleado.objects.get(usuario=usuario)
         oPedido = Pedido(fecha=fechaHoy,estado=1,empleado_id=empleado,cliente_id=oCliente.id)
         oPedido.save()
 
