@@ -38,6 +38,3 @@ def registrarCierrecaja(request):
                 return render(request, 'caja/cierre.html', {'form': form,'Aperturacaja': oAperturacaja,'cajas':oCajas})
         except Exception as e:
             return render(request, 'caja/cierreNoRegistrado.html', {'cajas':oCajas})
-
-def reporteCaja(request):
-    return render(request, 'reporte/caja.html')

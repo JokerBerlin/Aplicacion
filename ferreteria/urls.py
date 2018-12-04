@@ -210,6 +210,7 @@ urlpatterns = [
     url(r'^Reporte/almacen/tiempo-pedido/$', tiempoPedidoAlmacen),
 
     url(r'^Reporte/caja/$', reporteCaja),
+    url(r'^Reporte/caja/(?P<añoActual>\d+)/(?P<mesActual>\d+)/$', montoCajaActual),
     url(r'^Reporte/caja/(?P<cajaId>\d+)/(?P<añoActual>\d+)/(?P<mesActual>\d+)/$', movimientosCaja),
 
     url(r'^Reporte/ventas/$', reporteVentas),

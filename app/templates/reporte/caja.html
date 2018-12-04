@@ -5,26 +5,216 @@
 
 
 {% block title %}
-Reporte de almacen
+Reportes de Caja
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>Reporte Caja</h1>
-    <div class="card mb-3">
-        <div class="card-header" id="saldoActual">
-            <i class="fas fa-chart-area"></i>
+    <div class="card mb-6">
+        <h1>Reporte Montos finales Cajas</h1>
+        <div class="col-xs-6 col-sm-6 col-md-6">
+            <label for="añoMes">Año y mes</label>
+            <input type="month" name="añoMes" id="añoMes" class="form-control">
         </div>
         <div class="card-body">
-            <canvas id="MyChart" width="100%" height="30"></canvas>
+            <canvas id="cajasChart" width="100%" height="30"></canvas>
         </div>
         <div class="card-footer small text-muted">Actualizado ayer a las 11:59 PM</div>
     </div>
-
-
+    <div class="card mb-6">
+            <h1>Reporte Movimientos Cajas</h1>
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <label for="añoMesMov">Año y mes</label>
+                <input type="month" name="añoMesMov" id="añoMesMov" class="form-control">
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <label for="cajaId">Caja</label>
+                <select name="cajaId" id="cajaId" class="form-control">
+                    {% for caja in cajas %}
+                    <option value="{{ caja.id }}">
+                        {{ caja.nombre }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="card-body">
+                <canvas id="cajasMovChart" width="100%" height="30"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Actualizado ayer a las 11:59 PM</div>
+        </div>
 </div>
-{% endblock %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 <script>
 
+const hoy  = new Date();
+var año = hoy.getFullYear();
+var mes = hoy.getMonth() + 1;
+var cajaId = document.getElementById('cajaId').value;
+
+const fechaInicio = año + "-" + mes;
+console.log(fechaInicio);
+var inptAñoMes = document.getElementById('añoMes');
+inptAñoMes.value = fechaInicio;
+inptAñoMes.focus();
+
+var inptAñoMesMov = document.getElementById('añoMesMov');
+inptAñoMesMov.value = fechaInicio;
+
+var endpointCaja = "/Reporte/caja/" + año + "/" + mes + "/";
+var endpointMovCajas = "/Reporte/caja/" + cajaId + "/" + año + "/" + mes + "/";
+
+window.onload = function() {
+
+obtenerMontoCaja(endpointCaja);
+movimientosCajas(endpointMovCajas);
+
+document.getElementById('añoMes').addEventListener("change", function () {
+    var inicio = this.value;
+    año = parseInt(inicio.substring(0, 4));
+    mes = parseInt(inicio.substring(5,7));
+
+    if (/^\d{4}$/.test(año) && /^\d{1,2}$/.test(mes)) {
+        endpointCaja = "/Reporte/caja/" + año + "/" + mes + "/";
+        obtenerMontoCaja(endpointCaja);
+    }
+});
+
+document.getElementById('añoMesMov').addEventListener("change", function() {
+    console.log(cajaId)
+    cajaId = document.getElementById('cajaId').value;
+    var inicio = this.value;
+    año = parseInt(inicio.substring(0, 4));
+    mes = parseInt(inicio.substring(5, 7));
+
+    if (/^\d{4}$/.test(año) && /^\d{1,2}$/.test(mes)) {
+        endpointMovCajas = "/Reporte/caja/" + cajaId + "/" + año + "/" + mes + "/";
+        console.log(endpointMovCajas);
+        movimientosCajas(endpointMovCajas);
+    }
+});
+
+document.getElementById('cajaId').addEventListener("change", function() {
+    cajaId = this.value
+    var inicio = document.getElementById('añoMesMov').value;
+    año = parseInt(inicio.substring(0, 4));
+    mes = parseInt(inicio.substring(5, 7));
+
+    if (/^\d{4}$/.test(año) && /^\d{1,2}$/.test(mes)) {
+        endpointMovCajas = "/Reporte/caja/" + cajaId + "/" + año + "/" + mes + "/";
+        movimientosCajas(endpointMovCajas)        
+    }
+
+});
+
+}
+
+var obtenerMontoCaja = function (endpoint) {
+    var cajas = []
+    var montos = []
+
+    var ctx = document.getElementById('cajasChart').getContext('2d');
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: endpoint,
+        contentType: "application/json; charset=utf-8",
+        success: function(data) {
+            data.forEach(element => {
+                cajas.push(element.caja);
+                montos.push(element.montoFinalCaja);
+            });
+
+            var cajasChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: cajas,
+                    datasets: [{
+                        label: 'monto de cajas en soles',
+                        data: montos,
+                        borderWidth: 1,
+                        backgroundColor: 'rgba(28, 106, 216, 0.6)',
+                        borderColor: 'rgb(28, 106, 216)'
+                    }],
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Valor del monto en cajas por mes'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+    });
+}
+
+var movimientosCajas = function (endpoint) {
+    fechas = [];
+    montos = [];
+
+    var ctx = document.getElementById('cajasMovChart').getContext('2d');
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: endpoint,
+        contentType: "application/json; charset=utf-8",
+        success: function(data) {
+            data.forEach(element => {
+                const año = element.fecha.substring(0, 4);
+                const mes = element.fecha.substring(5, 7);
+                const dia = element.fecha.substring(8, 10);
+                const fecha = dia + "-" + mes + "-" + dia;
+                fechas.push(fecha);
+                montos.push(element.monto);
+            });
+
+            var cajasMovChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: fechas,
+                    datasets: [{
+                        label: 'movimientos de caja en soles',
+                        data: montos,
+                        borderWidth: 1,
+                        backgroundColor: 'rgba(42, 124, 210, 0.6',
+                        borderColor: 'rgb(42, 124, 210)'
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Movimientos de caja en el mes'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+    })
+}
 </script>
+
+{% endblock %}

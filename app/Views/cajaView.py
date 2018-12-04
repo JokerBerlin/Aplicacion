@@ -37,28 +37,36 @@ def registrarOperacion(request):
     oCajas = Caja.objects.filter(estado=1)
     return render(request,'caja/operacion.html',{'oDetalletipooperacions':oDetalletipooperacions,'oCajas':oCajas,})
 
+# Reporte/caja/
+def reporteCaja(request):
+    cajas = Caja.objects.all()
+    context = {
+        'cajas': cajas
+    }
+    return render(request, 'reporte/caja.html', context)
+
+# Reporte/caja/(?P<cajaId>\d+)/(?P<añoActual>\d+)/(?P<mesActual>\d+)/
 def movimientosCaja(request, cajaId, añoActual, mesActual):
     caja = Caja.objects.get(id=cajaId)
-    aperturaCajas = Aperturacaja.objects.filter(
+    operaciones = Operacion.objects.filter(
         caja=caja,
         fecha__month=mesActual,
         fecha__year=añoActual
     )
-    print(aperturaCajas)
-    cierreCajas = Cierrecaja.objects.filter(aperturacaja=aperturaCajas)
+    print(operaciones)
     jsonFinal = []
 
-    for apCaja in aperturaCajas:
+    for operacion in operaciones:
         jsonCaja = {}
-        fecha = str(apCaja.fecha.day) + '-' + str(apCaja.fecha.month) + '-' + str(apCaja.fecha.year)
-        jsonCaja['fecha'] = fecha
-        jsonCaja['monto'] = apCaja.monto
+        jsonCaja['fecha'] = operacion.fecha
+        jsonCaja['monto'] = operacion.monto
 
         jsonFinal.append(jsonCaja)
     
     return JsonResponse(jsonFinal, safe=False)
 
-def movimientosCajaTotales(request, añoActual, mesActual):
+# Reporte/caja/(?P<añoActual>\d+)/(?P<mesActual>\d+)/
+def montoCajaActual(request, añoActual, mesActual):
     cajas = Caja.objects.all()
     jsonFinal = []
     monto = 0
@@ -69,12 +77,19 @@ def movimientosCajaTotales(request, añoActual, mesActual):
             caja=caja,
             fecha__month=mesActual,
             fecha__year=añoActual
-        ).latest('pk')
+        )
 
-        monto += aperturaCaja.monto
-        jsonMontoCaja['cajaId'] = caja.id
-        jsonMontoCaja['caja'] = caja.nombre
-        jsonMontoCaja['montoFinalCaja'] = monto
-        jsonFinal.append(jsonMontoCaja)
+        if aperturaCaja:
+            aperturaCaja = aperturaCaja.latest('pk')
+            monto += aperturaCaja.monto
+            jsonMontoCaja['cajaId'] = caja.id
+            jsonMontoCaja['caja'] = caja.nombre
+            jsonMontoCaja['montoFinalCaja'] = monto
+            jsonFinal.append(jsonMontoCaja)
+        else:
+            jsonMontoCaja['cajaId'] = caja.id
+            jsonMontoCaja['caja'] = caja.nombre
+            jsonMontoCaja['montoFinalCaja'] = '0.0'
+            jsonFinal.append(jsonMontoCaja)
     
     return JsonResponse(jsonFinal, safe=False)
