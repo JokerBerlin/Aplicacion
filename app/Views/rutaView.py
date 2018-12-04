@@ -20,7 +20,7 @@ from django.core import serializers
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
 #   Última modificación:
-#   Descripción: 
+#   Descripción:
 #   servicio de busqueda de usuario para la app movil
 ###########################################################
 
@@ -31,7 +31,7 @@ def rutaUsuario(request):
         print (Datos)
         usuario=True
        # usuario= BuscarUsuario(Datos["idUsuario"])
-        
+
         if usuario==True:
             idEmpleado = Datos["idEmpleado"]
             #try:
@@ -78,17 +78,20 @@ def listarRutas(request):
 def detalleRuta(request,ruta_id):
     if request.method == 'GET':
         idRuta = int(ruta_id)
+        print(idRuta)
         oRuta = Ruta.objects.get(id=idRuta)
+        print(oRuta)
         oRutaCliente = Rutaclientes.objects.filter(ruta=oRuta)
         coordenadas = []
-
+        print(oRutaCliente)
         for rutaCliente in oRutaCliente:
+
             coord = {}
             coord['cliente'] = rutaCliente.cliente.nombre
             coord['lat'] = rutaCliente.cliente.latitud
             coord['lng'] = rutaCliente.cliente.longitud
             coordenadas.append(coord)
-        
+
         print(coordenadas)
 
         listaCoordenadas = json.dumps(coordenadas)
@@ -128,7 +131,7 @@ def editarRuta(request,ruta_id):
             form.save_m2m()
             edit_prod.status=True
             edit_prod.save()
-           
+
             return redirect('/Ruta/listar/')
     else:
         form= RutaForm(instance=oRuta)
