@@ -193,7 +193,7 @@ def ResumenPedidos(request):
             oProducto["nombrePresentacion"] = oProductopresentacions.presentacion.nombre
             oProducto["cantidad"] = o['cantidad__sum']
             oProductos.append(oProducto)
-
+        print(oProductos)    
         paginator = Paginator(oProductos,10)
 
         page = request.GET.get('page')
