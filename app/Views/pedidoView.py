@@ -398,6 +398,12 @@ def pedidoVenta(request,pedido_id):
 
     else:
         #oUltimoP=Producto_almacens.objects.filter(producto_id=oProductoPresentacions.producto_id).latest('id')
+
+        oSerie = Serie.objects.filter(recibo_id=2).latest('id')
+
+        print("#####serie####")
+        print(oSerie.numeroSerie)
+
         oPedido = Pedido.objects.get(id=pedido_id)
         oRecibos = Recibo.objects.filter(estado=True)
         cliente = oPedido.cliente.nombre
@@ -413,45 +419,44 @@ def pedidoVenta(request,pedido_id):
             oNuevo['cantidad']=str(c).replace(",", ".")
             oNuevo['contador']=cont
             oNuevo['valor']=float(oPedido.valor)
-            oNuevo['total']=float(oPedido.cantidad)*float(oPedido.valor)
+            oNuevo['total']="{0:.2f}".format(float(oPedido.cantidad)*float(oPedido.valor))
             cantidadPedido.append(oNuevo)
             cont = cont + 1
-        oVenta = Venta.objects.latest('id')
 
-        listacf = oVenta.nrecibo.split("-")
-        print(listacf)
-        valorNumeroBoleta = int(listacf[1]) + 1
-        print(valorNumeroBoleta)
-        #listacf[1].add(valorNumeroBoleta)
-        #valorNumeroBoleta = 300
-        listacf[1]=valorNumeroBoleta
-        print(listacf)
-        #valorNumeroBoleta = 20
-        #print(list(valorNumeroBoleta))
-        #print(len(str(valorNumeroBoleta)))
-        #valorNumeroBoleta = 100
-        cantidadDigitos = len(str(valorNumeroBoleta))
-        cadena = ''
+        try:
+            oVenta = Venta.objects.latest('id')
+            listacf = oVenta.nrecibo.split("-")
+        except Exception as e:
+            listacf = oSerie.numeroSerie + '-0000001'
+        #else:
+        #    pass
+        #print(listacf)
+        if oSerie.numeroSerie == listacf[0]:
+            print("hola mundo")
+            valorNumeroBoleta = int(listacf[1]) + 1
+            print(valorNumeroBoleta)
+            listacf[1]=valorNumeroBoleta
+            print(listacf)
+            cantidadDigitos = len(str(valorNumeroBoleta))
+            cadena = ''
 
-        # if cantidadDigitos == 3:
-        #     cadena = str(valorNumeroBoleta)
-        # elif cantidadDigitos == 2:
-        #     cadena = "0" + str(valorNumeroBoleta)
-        # elif cantidadDigitos == 1:
-        #     cadena = "00" + str(valorNumeroBoleta)
-        c = 7
-        c = c - cantidadDigitos
-        cadena = ''
-        while c>=1:
-            cadena = cadena + '0'
-            c = c-1
-        cadena = cadena + str(valorNumeroBoleta)
-        listacf[1]=cadena
-        cadenaNueva = "-".join(listacf)
-        print(cadenaNueva)
+            c = 7
+            c = c - cantidadDigitos
+            cadena = ''
+            while c>=1:
+                cadena = cadena + '0'
+                c = c-1
+            cadena = cadena + str(valorNumeroBoleta)
+            listacf[1]=cadena
+            cadenaNueva = "-".join(listacf)
+            print(cadenaNueva)
 
-        #form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
-        #form2= ProductopresentacionsForm(instance=oProductopresentacions)
+        else:
+            print("mala llerva")
+            listacf[0]=oSerie.numeroSerie
+            listacf[1]='0000001'
+            cadenaNueva = "-".join(listacf)
+
         return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos})
 
 

@@ -179,6 +179,10 @@ class Recibo(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
 
+class Serie(models.Model):
+    numeroSerie = models.CharField(max_length=3)
+    recibo = models.ForeignKey('Recibo', blank=True, null=True, on_delete=models.PROTECT)
+
 class Ruta(models.Model):
     nombre   = models.CharField(max_length=45)
     fecha    = models.DateTimeField(auto_now_add=True, blank=True)
