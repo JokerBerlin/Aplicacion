@@ -262,10 +262,12 @@ def InstarPedido(request):
             oEmpleado = Empleado.objects.get(id=idEmpleado)
             idCliente = Datos["idCliente"]
             oCliente = Cliente.objects.get(id= idCliente)
+            tipoPedido = Datos['tipoPedido']
 
             oPedido = Pedido()
             oPedido.empleado = oEmpleado
             oPedido.cliente = oCliente
+            oPedido.tipo = tipoPedido
             oPedido.save()
             oPedidoProductos = Datos["oPedidoProductos"]
             for oPedidoProducto in oPedidoProductos:

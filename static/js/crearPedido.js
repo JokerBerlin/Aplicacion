@@ -46,11 +46,37 @@ $(document).ready(function(){
     });
 
     $('#bt_GenerarVenta').click(function(){
-        GenerarVenta();
+        var regexDNI = /^[0-9](8)$/;
+        var regexRUC = /^[0-9](11)$/;
+        const clienteDoc = document.getElementById('inpt-cliente').value;
+        const nombreCliente = document.getElementById('nombreCl').value;
+        if (regexDNI.test(clienteDoc)) {
+            GenerarVenta();
+        } else if (regexRUC.test(clienteDoc)) {
+            GenerarVenta();
+        } else {
+            alert('El campo "Cliente" tiene que ser apropiadamente llenado')
+            x = document.getElementById('inpt-cliente');
+            x.value = '';
+            x.focus();
+        }
+
     });
 
     $('#bt_nuevaVenta').click(function() {
         nuevaVenta();
+    })
+
+    // VALIDADORES ONKEYPRESS
+    x = document.getElementById('inpt-cliente')
+    x.addEventListener('keypress', (event) => {
+        var valAnterior = x.value;
+        console.log(valAnterior)
+        const keyName = event.key;
+        console.log(keyName);
+        if(keyName == 'e') {
+            x.value = valAnterior;
+        }
     })
 
 });
