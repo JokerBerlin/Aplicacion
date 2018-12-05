@@ -9,6 +9,10 @@
 
 <script type="text/javascript">
 
+var regexDNI = /^[0-9](8)$/;
+var regexRUC = /^[0-9](11)$/;
+
+
 //filtro de clientes por dni o numero documento ajax
 function seleccionarProducto(idProducto){
     //alert($('#dynamic'+idProducto+'').attr('src'));
@@ -277,7 +281,6 @@ initMap= function() {
 
   marker.addListener('click', toggleBounce);
   marker.addListener('dragend', function(event){
-
      document.getElementById("id_latitud").value=this.getPosition().lat();
      document.getElementById("id_longitud").value=this.getPosition().lng();
   });
