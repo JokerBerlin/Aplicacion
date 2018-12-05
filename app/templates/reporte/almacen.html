@@ -138,9 +138,8 @@ var obtenerProductoCantidadSalida = function() {
         url: "/Reporte/almacen/salida-producto/",
         contentType: "application/json; charset=utf-8",
         success: function(data) {
-            console.log(data);
             var tabla = $('#dataTableProductoCantidadSalida').DataTable({
-            dom: 'Bfrtip',
+            dom: 'Blfrtip',
             buttons: ['excel', 'pdf', 'print'],
             "processing": true,
             "data": data,
@@ -149,9 +148,12 @@ var obtenerProductoCantidadSalida = function() {
                 {data: "cantidadSalidas"},
                 {data: "cantidadActualProducto"}
             ],
-            "language": español
-        });
-
+            "language": español,
+            "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
+            "pageLength" : 25,
+            });
+            x = document.getElementById('dataTableProductoCantidadSalida_wrapper');
+            x.children[1].style.marginTop = '1em';
         }
     })
 }
@@ -170,11 +172,10 @@ var obtenerTiempoPedidoAlmacen = function() {
                 data[i].fechaPedido = fechaFormat;  
             }
 
-            console.log(data);
-
             var tabla = $('#dataTableTiempoPedido').DataTable({
-                dom: 'Bfrtip',
+                dom: 'Blfrtip',
                 buttons: ['excel', 'pdf', 'print'],
+                "ordering": false,
                 "processing": true,
                 "data": data,
                 "columns": [
@@ -183,8 +184,12 @@ var obtenerTiempoPedidoAlmacen = function() {
                     {data: "fechaPedido"},
                     {data: "delta"}
                 ],
-                "language": español
+                "language": español,
+                "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
+                "pageLength" : 25,
             });
+            x = document.getElementById('dataTableTiempoPedido_wrapper')
+            x.children[1].style.marginTop = '1em';
         }
     })
 }
