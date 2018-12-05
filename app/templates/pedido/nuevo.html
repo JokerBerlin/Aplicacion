@@ -135,7 +135,7 @@ $(document).ready(function(){
                     var img = $('<img id="dynamic'+ListasProductos[i].id+'">'); //Equivalent: $(document.createElement('img'))
                     var br = $('<br/>');
                     a = a + 1;
-                    var panelBody = $(' <div class="selected" tabindex="'+a+'" onkeypress="seleccionarProducto('+ListasProductos[i].id+');" id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
+                    var panelBody = $(' <div tabindex="'+a+'" onkeypress="seleccionarProducto('+ListasProductos[i].id+');" id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
                     var cierreBody = $('</div>');
                     var panelBody2 = $('<div id="dynamicPanel'+ListasProductos[i].id+'" onclick="seleccionarProducto('+ListasProductos[i].id+');" class="panel-body">');
                     panelBody.appendTo('#imagenesProd');
