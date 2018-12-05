@@ -180,7 +180,7 @@ def ResumenPedidos(request):
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
     else:
-        oPedidos = Pedido.objects.filter(estado = True)
+        oPedidos = Pedido.objects.filter(estado = 2)
 
         oProductos = []
 
