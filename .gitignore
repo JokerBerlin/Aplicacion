@@ -1,8 +1,8 @@
 settings.py
+.vscode
+*.pyc
 app/__pycache__/*
 app/formularios/__pycache__/*
 app/migrations/__pycache__/*
 app/Views/__pycache__/*
 ferreteria/__pycache__/*
-.vscode
-*.pyc
