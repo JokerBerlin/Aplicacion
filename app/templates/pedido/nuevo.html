@@ -130,12 +130,14 @@ $(document).ready(function(){
                 var ListasProductos = result['productos'];
                 $("#imagenesProd").empty();
                 console.log(ListasProductos);
+                a = 1;
                 for (var i = 0; i < ListasProductos.length; i+=1) {
                     var img = $('<img id="dynamic'+ListasProductos[i].id+'">'); //Equivalent: $(document.createElement('img'))
                     var br = $('<br/>');
-                    var panelBody = $(' <div class="selected" id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
+                    a = a + 1;
+                    var panelBody = $(' <div class="selected" tabindex="'+a+'" onkeypress="seleccionarProducto('+ListasProductos[i].id+');" id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
                     var cierreBody = $('</div>');
-                    var panelBody2 = $('<div id="dynamicPanel'+ListasProductos[i].id+'" onclick="+seleccionarProducto('+ListasProductos[i].id+');" class="panel-body">');
+                    var panelBody2 = $('<div id="dynamicPanel'+ListasProductos[i].id+'" onclick="seleccionarProducto('+ListasProductos[i].id+');" class="panel-body">');
                     panelBody.appendTo('#imagenesProd');
                     var labelP = $('<label id="producto'+ListasProductos[i].id+'" for="male">'+ListasProductos[i].nombre+'</label>');
                     var labelP2 = $('<label id="codigo'+ListasProductos[i].id+'" for="male1" style="visibility:hidden;">'+ListasProductos[i].codigo+'</label>');
@@ -305,7 +307,7 @@ Nuevo Pedido
 
 <p id="demo"></p>
 
-<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -473,7 +475,7 @@ Nuevo Pedido
                        <h4 class="box-title">Producto</h4>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="id_nombreProducto">Producto:</label>
-                         <input type="text" name="inpt-producto" id="inpt-producto" autocomplete="off" required="" class="form-control" maxlength="45">
+                         <input tabindex="1" type="text" name="inpt-producto" id="inpt-producto" autocomplete="off" required="" class="form-control" maxlength="45">
                          <img src="" id="imagenProducto" height="100" width="100" alt="" />
                          <div id="imagenesProd">
 
