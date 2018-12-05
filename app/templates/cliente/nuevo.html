@@ -84,6 +84,9 @@
 
 		});
 
+		document.getElementById('id_latitud').value = marker.getPosition().lat();
+		document.getElementById('id_longitud').value = marker.getPosition().lng();
+
 		marker.addListener('click', toggleBounce);
 		marker.addListener('dragend', function(event){
 
@@ -145,13 +148,13 @@ Registrar Nuevo Cliente
 									</select>
 								</div>
 								<div class="col-xs-4 col-sm-4 col-md-4">
-									<label for="id_longitud">Longitud:</label><br>
-									<input type="text" name="longitud" id="id_longitud" class="form-control" maxlength="50" readonly="readonly">
-								</div>
-								<div class="col-xs-4 col-sm-4 col-md-4">
 									<label for="id_latitud">Latitud:</label><br>
 									<input type="text" name="latitud" id="id_latitud" class="form-control" maxlength="50" readonly="readonly">
 									<br>
+								</div>
+								<div class="col-xs-4 col-sm-4 col-md-4">
+									<label for="id_longitud">Longitud:</label><br>
+									<input type="text" name="longitud" id="id_longitud" class="form-control" maxlength="50" readonly="readonly">
 								</div>
 							</div>
 						</ul>

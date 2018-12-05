@@ -75,7 +75,7 @@ Reporte de almacen
                             <th>Pedido</th>
                             <th>Cliente</th>
                             <th>Fecha de pedido</th>
-                            <th>Tiempo pedido</th>
+                            <th>Tiempo pedido sin reponder (días)</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -83,7 +83,7 @@ Reporte de almacen
                             <th>Pedido</th>
                             <th>Cliente</th>
                             <th>Fecha de pedido</th>
-                            <th>Tiempo pedido</th>
+                            <th>Tiempo pedido sin reponder (días)</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -168,7 +168,7 @@ var obtenerTiempoPedidoAlmacen = function() {
             fechaPrueba = data;
             for (let i = 0; i < data.length; i++) {
                 const fecha = data[i].fechaPedido;
-                var fechaFormat = fecha.substring(0,9);
+                var fechaFormat = fecha.substring(0,10);
                 data[i].fechaPedido = fechaFormat;  
             }
 
@@ -187,6 +187,16 @@ var obtenerTiempoPedidoAlmacen = function() {
                 "language": español,
                 "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
                 "pageLength" : 25,
+                createdRow: function(row, data, index) {
+                    if (data.delta >= 3) {
+                        row.style.color = 'red';
+                    } else if (data.delta >= 1) {
+                        row.style.color = 'yellow';
+                    } else {
+                        row.style.color = 'green';
+                    }
+                    
+                }
             });
             x = document.getElementById('dataTableTiempoPedido_wrapper')
             x.children[1].style.marginTop = '1em';
