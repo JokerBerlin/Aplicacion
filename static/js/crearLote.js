@@ -47,7 +47,7 @@ $(document).ready(function(){
         //Almacen = document.getElementById("cmbAlmacen").value;
         Producto = $('#inpt-producto').val();
         cantidad = $('#cantidad').val();
-
+        imagen = $('#urlImagen').val();
         error = "";
         if (cantidad==''){
             error = 1;
@@ -63,7 +63,10 @@ $(document).ready(function(){
         if (error=="") {
             valor = cont - 1;
             var fila=
-            '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td><td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td><td>'+Almacen+'</td><td>'+Producto+'</td></tr>';
+            '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td>'+
+            '<td><img src="'+imagen+'" height="100" width="100" alt="" /></td>'+
+            '<td>'+Producto+'</td>'+
+            '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td><td>'+Almacen+'</td>'+'</tr>';
             $('#tabla').append(fila);
 
             reset_values();
@@ -147,16 +150,15 @@ $(document).ready(function(){
                 cont= index -1;
                 console.log(index);
                 switch (index2) {
-                    case 1:
-                        cantidad = $("#cantidad"+index ).val();
-                        break;
                     case 2:
-                        Almacen = $(this).text();
-                        break;
-                    case 3:
                         Producto = $(this).text();
                         break;
-
+                    case 3:
+                        cantidad = $("#cantidad"+index ).val();
+                        break;
+                    case 4:
+                        Almacen = $(this).text();
+                        break;
                 }
             });
             contador = 1;
@@ -195,3 +197,14 @@ $(document).ready(function(){
             alert("No registró ningún lote");
         }
     }
+
+function seleccionarProducto(idProducto){
+    //alert($('#dynamic'+idProducto+'').attr('src'));
+    $('#urlImagen').val($('#dynamic'+idProducto+'').attr('src'));
+    $('#producto'+idProducto+'').text();
+    //alert($('#producto'+idProducto+'').text());
+    $('#inpt-producto').val($('#producto'+idProducto+'').text());
+    //$('#codigo').val($('#codigo'+idProducto+'').text());
+    $("#imagenesProd").empty();
+    $("#cantidad").focus();
+}

@@ -201,7 +201,7 @@ def BuscarProducto(request):
                 jsonProducto["valor"] = oProducto.valor
 
                 if oProducto.imagen=="":
-                    jsonProducto["imagen"] = "/media/yuca.jpg"
+                    jsonProducto["imagen"] = "/media/default.jpg"
                 else:
                     jsonProducto["imagen"] = oProducto.imagen.url
                 print(jsonProducto["imagen"])
@@ -277,7 +277,7 @@ def BuscarProductoPresentacion (request):
                 print (oProducto.imagen)
                 print ("------------------")
                 if oProducto.imagen=="":
-                    jsonProducto["imagen"] = "/imagen/default.jpg"
+                    jsonProducto["imagen"] = "/media/default.jpg"
                 else:
                     jsonProducto["imagen"] = oProducto.imagen.url
                 jsonProductos["productos"].append(jsonProducto)
