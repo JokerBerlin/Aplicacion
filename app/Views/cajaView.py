@@ -13,27 +13,34 @@ def registrarAperturacaja(request):
         hoy = datetime.today()
         print(Datos)
 
-        oAperturaCaja = Aperturacaja.objects.filter(fecha__day = hoy.day)
+        oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month).latest('pk')
+        oCaja = Caja.objects.get(id=Datos['cmbCaja'])
 
+        monto = 0.0
 
-        if form.is_valid():
-            form = form.save(commit=False)
-            print('esto')
-            oCaja = Caja.objects.get(id = int(Datos['cmbCaja']))
-            print(oCaja.id)
-            form.estado=1
-            form.activo=1
-            form.caja_id = oCaja.id
-            print('esta')
-            print(form.caja_id)
-            print(form)
-            form.save()
-            return redirect('/Producto/listar/')
-        else:
-            return redirect('caja/apertura.html')
+        if Datos['cmbTipo'] == 1:
+            monto = oAperturaCaja.monto + float(Datos['monto'])
+        elif Datos['cmbTipo'] == 2:
+            monto = oAperturaCaja.monto - float(Datos['monto'])
+
+        apCaja = Aperturacaja(
+            monto=monto,
+            estado=True,
+            caja=oCaja,
+            activo=True
+        )
+        apCaja.save()
+
+        operac = Operacion(
+            monto=Datos['monto'],
+            estado=True,
+            caja=oCaja,
+            detalletipooperacion_id=Datos['cmbOperacion']
+        )
+        operac.save()
+        return redirect('/Venta/nuevo/')
 
     else:
-        form = AperturaCajaForm()
         oCajas = Caja.objects.filter(estado=1)
         detalleTipoOperaciones = Detalletipooperacion.objects.all() 
 
