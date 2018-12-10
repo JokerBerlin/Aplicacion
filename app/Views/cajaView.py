@@ -24,18 +24,24 @@ def registrarAperturacaja(request):
             form.save()
             return redirect('/Producto/listar/')
         else:
-            return render(request,'caja/apertura.html',{})
+            return redirect('caja/apertura.html')
 
     else:
         form = AperturaCajaForm()
         oCajas = Caja.objects.filter(estado=1)
+        detalleTipoOperaciones = Detalletipooperacion.objects.all() 
 
-        return render(request,'caja/apertura.html',{'form': form,'cajas':oCajas,})
+        context = {
+            'form': form,
+            'cajas': oCajas,
+            'detalleOperaciones': detalleTipoOperaciones
+        }
+        return render(request,'caja/apertura.html',context)
 
 def registrarOperacion(request):
     oDetalletipooperacions = Detalletipooperacion.objects.filter(estado=1)
     oCajas = Caja.objects.filter(estado=1)
-    return render(request,'caja/operacion.html',{'oDetalletipooperacions':oDetalletipooperacions,'oCajas':oCajas,})
+    return render(request,'caja/operacion.html',{'oDetalletipooperacions':oDetalletipooperacions,'oCajas':oCajas})
 
 # Reporte/caja/
 def reporteCaja(request):
@@ -48,21 +54,20 @@ def reporteCaja(request):
 # Reporte/caja/(?P<cajaId>\d+)/(?P<añoActual>\d+)/(?P<mesActual>\d+)/
 def movimientosCaja(request, cajaId, añoActual, mesActual):
     caja = Caja.objects.get(id=cajaId)
-    operaciones = Operacion.objects.filter(
+    aperturaCaja = Aperturacaja.objects.filter(
         caja=caja,
         fecha__month=mesActual,
         fecha__year=añoActual
     )
-    print(operaciones)
     jsonFinal = []
 
-    for operacion in operaciones:
+    for apertura in aperturaCaja:
         jsonCaja = {}
-        jsonCaja['fecha'] = operacion.fecha
-        jsonCaja['monto'] = operacion.monto
+        jsonCaja['fecha'] = apertura.fecha
+        jsonCaja['monto'] = apertura.monto
 
         jsonFinal.append(jsonCaja)
-    
+
     return JsonResponse(jsonFinal, safe=False)
 
 # Reporte/caja/(?P<añoActual>\d+)/(?P<mesActual>\d+)/

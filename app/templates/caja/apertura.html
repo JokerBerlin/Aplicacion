@@ -19,20 +19,30 @@ Registrar Nuevo Producto
 					<div class="form-group">
 					<label for="">Seleccione una Caja</label></br>
 				    <select class="form-control" id="cmbCaja" name="cmbCaja" required="">
-				    	<option value=""> </option>
                         {% for caja in cajas %}
                             <option value="{{caja.id}}">
                             {{caja.nombre}}
                             </option>
                         {% endfor %}
-                        </select><br>	
-				    {% for field in form %}
-							{{ field.errors }}
-							{{ field.label_tag }}</br>
-							{{ field|add_class:"form-control" }}
-				    {% endfor %}
+					</select><br>
+					<label for="cmbTipo">Tipo de operacion</label>
+					<select name="cmbTipo" id="cmbTipo" class="form-control">
+						<option value="1">Ingreso</option>
+						<option value="2">Salida</option>
+					</select>
+					<label for="cmbOperacion">Detalle operacion</label>
+					<select name="cmbOperacion" id="cmbOperacion" class="form-control" required>
+						{% for operacion in detalleOperaciones %}
+							<option value="{{ operacion.id }}">
+								{{ operacion.nombre }}
+							</option>
+						{% endfor %}
+					</select>
 
-					<button class="btn btn-success" data-toggle="modal" data-target="#agrearPresentacion">Aperturar Caja</button>
+					<label for="monto">Monto</label>
+					<input type="number" name="monto" id="monto" class="form-control">
+				    
+					<button class="btn btn-success" data-toggle="modal" data-target="#agrearPresentacion" style="margin-top: 1em">Aperturar Caja</button>
 
 
 				</ul>
