@@ -3,12 +3,18 @@ from django.shortcuts import render, render_to_response,redirect
 from django.http import JsonResponse
 from app.models import *
 from app.fomularios.cajaForm import *
+from datetime import datetime
 
 
 def registrarAperturacaja(request):
     if request.method == 'POST':
         Datos = request.POST
         form = AperturaCajaForm(request.POST, request.FILES)
+        hoy = datetime.today()
+        print(Datos)
+
+        oAperturaCaja = Aperturacaja.objects.filter(fecha__day = hoy.day)
+
 
         if form.is_valid():
             form = form.save(commit=False)
