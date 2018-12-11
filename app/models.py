@@ -19,6 +19,8 @@ class Almacen(models.Model):
 class Caja(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
+    def __str__(self):
+        return '%s' % self.nombre
 
 class Aperturacaja(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=False)
@@ -26,6 +28,12 @@ class Aperturacaja(models.Model):
     activo = models.BooleanField(blank=True,default=True)
     estado = models.BooleanField(blank=True,default=True)
     caja = models.ForeignKey(Caja, on_delete=models.CASCADE)
+
+class Anulacionventa(models.Model):
+    fecha = models.DateTimeField(auto_now_add=True, blank=False)
+    descripcion = models.TextField(blank=True, null=True)
+    venta = models.ForeignKey('Venta', on_delete=models.CASCADE)
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=45)
@@ -40,6 +48,8 @@ class Cierrecaja(models.Model):
 class Precio(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
+    def __str__(self):
+        return '%s' % self.nombre
 
 class Cliente(models.Model):
     nombre = models.CharField(max_length=45,unique=True)
@@ -63,7 +73,9 @@ class Detalletipooperacion(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
     tipooperacion = models.ForeignKey('Tipooperacion', on_delete=models.CASCADE)  # Field name made lowercase.
-
+    def __str__(self):
+        return '%s' % self.nombre
+    
 class Empleado(models.Model):
     nombre = models.CharField(max_length=45)
     imei = models.CharField(max_length=45, blank=True, null=True)
@@ -72,6 +84,9 @@ class Empleado(models.Model):
     estado = models.BooleanField(blank=True,default=True)
     almacen = models.ForeignKey('Almacen', default=1, on_delete=models.CASCADE)
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return 'Empleado: %s con usuario: %s' % (self.nombre, self.usuario.username)
 
 class Lote(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=True)
@@ -97,7 +112,7 @@ class Pedido(models.Model):
     empleado = models.ForeignKey('Empleado', on_delete=models.CASCADE)  # Field name made lowercase.
     cliente = models.ForeignKey('Cliente', blank=True, null=True, on_delete=models.CASCADE)  # Field name made lowercase.
     def __str__(self):
-        return '%s' % self.cliente
+        return 'Pedido hecho por cliente %s' % self.cliente
 
 class Movimiento(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
@@ -132,10 +147,8 @@ class Productopresentacions(models.Model):
         managed = False
         db_table = 'app_producto_presentacions'
     def __str__(self):
-        return '%s' % self.producto
-    def __str__(self):
-        return '%s' % self.presentacion
-
+        return '%s %s' % (self.producto, self.presentacion)
+    
 class Producto_almacens(models.Model):
     cantidad = models.FloatField()
     cantidadinicial = models.FloatField()
@@ -178,10 +191,14 @@ class Proveedor(models.Model):
 class Recibo(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
+    def __str__(self):
+        return '%s' % self.nombre
 
 class Serie(models.Model):
     numeroSerie = models.CharField(max_length=3)
     recibo = models.ForeignKey('Recibo', blank=True, null=True, on_delete=models.PROTECT)
+    def __str__(self):
+        return 'Numero de serie: %s' % self.numeroSerie
 
 class Ruta(models.Model):
     nombre   = models.CharField(max_length=45)
@@ -206,6 +223,8 @@ class Rutaclientes(models.Model):
 class Tipooperacion(models.Model):
     nombre = models.CharField(max_length=45)
     estado = models.BooleanField(blank=True,default=True)
+    def __str__(self):
+        return '%s' % self.nombre
 
 class Venta(models.Model):
     fecha   = models.DateTimeField(auto_now_add=True, blank=True)

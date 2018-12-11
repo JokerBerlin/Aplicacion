@@ -250,10 +250,10 @@ function reordenar(){
 function RefrescarTotal(){
     Total=0;
     $('#tabla tbody tr').each(function(){
-        valor = $(this).find('td').eq(7).children('label').text();
+        valor = $(this).find('td').eq(8)[0].innerText;
         //console.log(valor);
         Total = Total + parseFloat(valor);
-        $('#id_Total').text(Total);
+        $('#id_Total').text(Total.toFixed(2));
         //alert(Total);
     });
 }
