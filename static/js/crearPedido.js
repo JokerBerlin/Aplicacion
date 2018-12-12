@@ -172,13 +172,13 @@ function agregar(){
         var fila='<tr class="selected" id="fila' + valor + '" onclick="seleccionar(this.id);">' +
                  '<td>' + valor + '</td>' +
                  '<td><img src="'+imagen+'" height="100" width="100" alt="" /></td>'+
-                 '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td>' +
+                 '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" onchange ="eventoCambio('+valor+');" value="' + cantidad + '"></td>' +
 
                  '<td>' + codigo + '</td>' +
                  '<td>' + Producto + '</td>' +
                  '<td>' + precioTipo+'</td>' +
                  '<td>' + presentacion + '</td>' +
-                 '<td id="precioUnitario"'+ valor + '>' + precio + '</td>' +
+                 '<td id="precioUnitario'+ valor +'">' + precio + '</td>' +
                  '<td><label id="SubTotal' + valor + '" name="SubTotal' + valor + '">' + SubTotal + '</label></td>' +
                  '</tr>';
 
@@ -400,4 +400,15 @@ function nuevaVenta() {
     }else{
         alert("No registró ningún producto");
     }
+}
+
+function eventoCambio(valor){
+    var cantidad = $('#cantidad'+valor+'').val();
+    var precioU = $('#precioUnitario'+valor+'').text();
+    console.log(cantidad);
+    console.log(precioU);
+    var subTot = parseFloat(cantidad) * parseFloat(precioU);
+    $('#SubTotal'+valor+'').text(subTot.toFixed(2));
+    RefrescarTotal();
+
 }
