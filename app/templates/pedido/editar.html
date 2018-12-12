@@ -53,13 +53,13 @@ Editar pedido
                                       {% if pedido.id == cant.id %}
                                       <tr>
                                         <td>{{pedido.id}}</td>
-                                        <td><input type="number" class="form-control" id="cantidad{{cant.contador}}" value="{{ cant.cantidad }}">
+                                        <td><input type="number" class="form-control" id="cantidad{{cant.contador}}"  onchange ="eventoCambio({{ cant.contador }});" value="{{ cant.cantidad }}">
                                       </td>
                                         <td>{{pedido.productopresentacions.producto.codigo}}</td>
                                         <td>{{pedido.productopresentacions.producto.nombre}}</td>
                                         <td>{{pedido.productopresentacions.presentacion.nombre}}</td>
-                                        <td>{{cant.valor}}</td>
-                                        <td>{{ cant.total }}</td>
+                                        <td id="precioUnitario{{cant.contador}}">{{cant.valor}}</td>
+                                        <td id="SubTotal{{cant.contador}}">{{ cant.total }}</td>
 
                                       </tr>
                                       {% endif %}
