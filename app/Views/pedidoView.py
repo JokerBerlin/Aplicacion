@@ -193,7 +193,7 @@ def ResumenPedidos(request):
             oProducto["nombrePresentacion"] = oProductopresentacions.presentacion.nombre
             oProducto["cantidad"] = o['cantidad__sum']
             oProductos.append(oProducto)
-        print(oProductos)    
+        print(oProductos)
         paginator = Paginator(oProductos,10)
 
         page = request.GET.get('page')
@@ -357,11 +357,12 @@ def editarPedido(request,pedido_id):
         for oPedido in oPedidoproductospresentacions:
             oNuevo = {}
             oNuevo['id']=oPedido.id
-            c = oPedido.cantidad
+            c = int(round(oPedido.cantidad))
             oNuevo['cantidad']=str(c).replace(",", ".")
             oNuevo['contador']=cont
-            oNuevo['valor']=float(oPedido.valor)
-            oNuevo['total']=float(oPedido.cantidad)*float(oPedido.valor)
+            oNuevo['valor']="{0:.2f}".format(round(float(oPedido.valor),2))
+            subt = float(oPedido.cantidad)*float(oPedido.valor)
+            oNuevo['total']="{0:.2f}".format(round(subt,2))
             cantidadPedido.append(oNuevo)
             cont = cont + 1
         #form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)

@@ -60,3 +60,31 @@ $(document).ready(function() {
 
 
 });
+
+function eventoCambio(valor){
+    var cantidad = $('#cantidad'+valor+'').val();
+    console.log(cantidad);
+    if (cantidad != ''){
+        var precioU = $('#precioUnitario'+valor+'').text();
+        console.log(cantidad);
+        console.log(precioU);
+        var subTot = parseFloat(cantidad) * parseFloat(precioU);
+        $('#SubTotal'+valor+'').text(subTot.toFixed(2));
+        RefrescarTotal();
+    }else{
+        alert("Ingrese una cantidad válida");
+        $('#cantidad'+valor+'').focus();
+    }
+
+}
+
+function RefrescarTotal(){
+    Total=0;
+    $('#tabla tbody tr').each(function(){
+        valor = $(this).find('td').eq(8)[0].innerText;
+        //console.log(valor);
+        Total = Total + parseFloat(valor);
+        $('#id_Total').text(Total.toFixed(2));
+        //alert(Total);
+    });
+}
