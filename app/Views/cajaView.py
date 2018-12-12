@@ -9,19 +9,23 @@ from datetime import datetime
 def registrarAperturacaja(request):
     if request.method == 'POST':
         Datos = request.POST
-        form = AperturaCajaForm(request.POST, request.FILES)
         hoy = datetime.today()
         print(Datos)
 
-        oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month).latest('pk')
         oCaja = Caja.objects.get(id=Datos['cmbCaja'])
+        oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month, fecha__year=hoy.year)
 
         monto = 0.0
-
-        if Datos['cmbTipo'] == 1:
-            monto = oAperturaCaja.monto + float(Datos['monto'])
-        elif Datos['cmbTipo'] == 2:
-            monto = oAperturaCaja.monto - float(Datos['monto'])
+        if oAperturaCaja:
+            if Datos['cmbTipo'] == 1:
+                monto = oAperturaCaja.latest('pk').monto + float(Datos['monto'])
+            elif Datos['cmbTipo'] == 2:
+                monto = oAperturaCaja.latest('pk').monto - float(Datos['monto'])
+        else:
+            if Datos['cmbTipo'] == 1:
+                monto = 0 + float(Datos['monto'])
+            elif Datos['cmbTipo'] == 2:
+                monto = 0 - float(Datos['monto'])
 
         apCaja = Aperturacaja(
             monto=monto,
@@ -45,7 +49,6 @@ def registrarAperturacaja(request):
         detalleTipoOperaciones = Detalletipooperacion.objects.all() 
 
         context = {
-            'form': form,
             'cajas': oCajas,
             'detalleOperaciones': detalleTipoOperaciones
         }
