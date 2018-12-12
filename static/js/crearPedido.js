@@ -404,11 +404,17 @@ function nuevaVenta() {
 
 function eventoCambio(valor){
     var cantidad = $('#cantidad'+valor+'').val();
-    var precioU = $('#precioUnitario'+valor+'').text();
     console.log(cantidad);
-    console.log(precioU);
-    var subTot = parseFloat(cantidad) * parseFloat(precioU);
-    $('#SubTotal'+valor+'').text(subTot.toFixed(2));
-    RefrescarTotal();
+    if (cantidad != ''){
+        var precioU = $('#precioUnitario'+valor+'').text();
+        console.log(cantidad);
+        console.log(precioU);
+        var subTot = parseFloat(cantidad) * parseFloat(precioU);
+        $('#SubTotal'+valor+'').text(subTot.toFixed(2));
+        RefrescarTotal();
+    }else{
+        alert("Ingrese una cantidad válida");
+        $('#cantidad'+valor+'').focus();
+    }
 
 }
