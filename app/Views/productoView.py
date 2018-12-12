@@ -418,22 +418,22 @@ def editarProducto(request,producto_id):
         presentaciones = []
         oPresentaciones = Presentacion.objects.all()
         Productopresentaciones = Productopresentacions.objects.filter(producto_id=oProducto.id,unidadprincipal=1)
-        nombrePresentacionPrincipal = ''
-        for presentacion in Productopresentaciones:
-            nombrePresentacionPrincipal = presentacion.presentacion.nombre
+        nombrePresentacionPrincipal = presentacion.presentacion.nombre
+
         for oPresentacion in oPresentaciones:
             if oPresentacion.nombre != nombrePresentacionPrincipal:
                 nuevoP={}
                 nuevoP['id']=oPresentacion.id
                 nuevoP['nombre']=oPresentacion.nombre
                 presentaciones.append(nuevoP)
+
         precios = Precio.objects.filter(estado=True)
         for oProductoPresentacion in oProductoPresentacions:
             nuevo = {}
             nuevo['productoId'] = producto_id
             nuevo['presentacionId']=oProductoPresentacion.id
             nuevo['presentacion']=oProductoPresentacion.presentacion.nombre
-            nuevo['valor']=int(1/oProductoPresentacion.valor)
+            nuevo['valor']=float(1/oProductoPresentacion.valor)
             oProductoPresentacionsprecios = Productopresentacionsprecios.objects.filter(productopresentacions_id=oProductoPresentacion.id)
             cont = 1
             for oProductoPresentacionsprecio in oProductoPresentacionsprecios:

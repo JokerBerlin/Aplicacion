@@ -649,8 +649,15 @@ def anularVenta(request):
 
 
 def eliminar_identificador_venta(request):
-    pk = request.POST.get('identificador_id')
+    Datos = request.POST
+    pk = Datos['identificador_id']
     identificador = Venta.objects.get(pk=pk)
+    anulacionVenta = Anulacionventa(
+        descripcion=Datos['descripcion'],
+        venta=identificador,
+        usuario=request.user
+    )
+
     oPedido = identificador.pedido
     oPedido.estado = 0
     oPedido.save()
@@ -790,3 +797,21 @@ def empleadoVentas(request, empleado_id, mesActual, añoActual):
         jsonFinal.append(jsonEmpleadoVenta)
 
     return JsonResponse(jsonFinal, safe=False)
+
+def ventasAnuladasReporte(request, empleado_id, mesActual, añoActual):
+    jsonFinal = []
+
+    empleado = Empleado.objects.get(id=empleado_id)
+    anulaciones = Anulacionventa.objects.filter(fecha__month=mesActual, fecha__year=añoActual, empleado=empleado)
+
+    for anulacion in anulaciones:
+        jsonEmpleadoVentaAnulada = {}
+        jsonEmpleadoVentaAnulada['fechaAnulacion'] = anulacion.fecha
+        jsonEmpleadoVentaAnulada['fechaVenta'] = anulacion.venta.fecha
+        jsonEmpleadoVentaAnulada['descripcion'] = anulacion.descripcion
+        jsonFinal.append(jsonEmpleadoVentaAnulada)
+
+    return JsonResponse(jsonFinal, safe=False)
+
+
+
