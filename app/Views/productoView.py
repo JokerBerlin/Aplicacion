@@ -417,8 +417,8 @@ def editarProducto(request,producto_id):
         productos = []
         presentaciones = []
         oPresentaciones = Presentacion.objects.all()
-        Productopresentaciones = Productopresentacions.objects.filter(producto_id=oProducto.id,unidadprincipal=1)
-        nombrePresentacionPrincipal = presentacion.presentacion.nombre
+        Productopresentaciones = Productopresentacions.objects.filter(producto_id=oProducto.id,unidadprincipal=1).latest("id")
+        nombrePresentacionPrincipal = Productopresentaciones.presentacion.nombre
 
         for oPresentacion in oPresentaciones:
             if oPresentacion.nombre != nombrePresentacionPrincipal:
@@ -433,7 +433,7 @@ def editarProducto(request,producto_id):
             nuevo['productoId'] = producto_id
             nuevo['presentacionId']=oProductoPresentacion.id
             nuevo['presentacion']=oProductoPresentacion.presentacion.nombre
-            nuevo['valor']=float(1/oProductoPresentacion.valor)
+            nuevo['valor']=int(round(1/oProductoPresentacion.valor,2))
             oProductoPresentacionsprecios = Productopresentacionsprecios.objects.filter(productopresentacions_id=oProductoPresentacion.id)
             cont = 1
             for oProductoPresentacionsprecio in oProductoPresentacionsprecios:

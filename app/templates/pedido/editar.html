@@ -64,7 +64,8 @@ Editar pedido
                                     {% for cant in cantidadPedido %}
                                       {% if pedido.id == cant.id %}
                                       <tr>
-                                        <td>{{pedido.id}}</td>
+                                        <td style="visibility: hidden; display:none; margin-left:2em; margin-right:8em;" >{{pedido.id}}</td>
+                                        <td>{{ forloop.counter }}</td>
                                         <td><input type="number" class="form-control" id="cantidad{{cant.contador}}"  onchange ="eventoCambio({{ cant.contador }});" value="{{ cant.cantidad }}">
                                       </td>
                                         <td>{{pedido.productopresentacions.producto.codigo}}</td>

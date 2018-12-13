@@ -16,7 +16,7 @@ $(document).ready(function() {
           switch (index2) {
               case 0:
                   id = $(this).text();
-              case 1:
+              case 2:
                   cantidad = $("#cantidad"+index ).val();
                   //
                   // if (cantidad.indexOf(',')==true) {
@@ -82,7 +82,7 @@ function eventoCambio(valor){
 function RefrescarTotal(){
     Total=0;
     $('#tabla tbody tr').each(function(){
-        valor = $(this).find('td').eq(6)[0].innerText;
+        valor = $(this).find('td').eq(7)[0].innerText;
         //console.log(valor);
         Total = Total + parseFloat(valor);
         $('#id_Total').text(Total.toFixed(2));

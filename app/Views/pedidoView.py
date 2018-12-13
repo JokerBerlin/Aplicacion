@@ -458,7 +458,6 @@ def pedidoVenta(request,pedido_id):
             print(cadenaNueva)
 
         else:
-            print("mala llerva")
             listacf[0]=oSerie.numeroSerie
             listacf[1]='0000001'
             cadenaNueva = "-".join(listacf)
