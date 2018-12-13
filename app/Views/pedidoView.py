@@ -354,6 +354,7 @@ def editarPedido(request,pedido_id):
         print(oPedidoproductospresentacions)
         cantidadPedido = []
         cont = 0
+        totalMonto = 0;
         for oPedido in oPedidoproductospresentacions:
             oNuevo = {}
             oNuevo['id']=oPedido.id
@@ -362,12 +363,14 @@ def editarPedido(request,pedido_id):
             oNuevo['contador']=cont
             oNuevo['valor']="{0:.2f}".format(round(float(oPedido.valor),2))
             subt = float(oPedido.cantidad)*float(oPedido.valor)
+            totalMonto = totalMonto + subt
             oNuevo['total']="{0:.2f}".format(round(subt,2))
             cantidadPedido.append(oNuevo)
             cont = cont + 1
+        totalMonto = "{0:.2f}".format(round(totalMonto,2))
         #form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
         #form2= ProductopresentacionsForm(instance=oProductopresentacions)
-        return render(request, 'pedido/editar.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido})
+        return render(request, 'pedido/editar.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'totalMonto':totalMonto,})
 
 @csrf_exempt
 def pedidoVenta(request,pedido_id):

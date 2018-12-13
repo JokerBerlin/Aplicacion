@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  //$('#id_Total').text("0.00");
   $("#generarAlmacen").click(function() {
     var num=1;
     productos = [];
@@ -81,7 +82,7 @@ function eventoCambio(valor){
 function RefrescarTotal(){
     Total=0;
     $('#tabla tbody tr').each(function(){
-        valor = $(this).find('td').eq(8)[0].innerText;
+        valor = $(this).find('td').eq(6)[0].innerText;
         //console.log(valor);
         Total = Total + parseFloat(valor);
         $('#id_Total').text(Total.toFixed(2));
