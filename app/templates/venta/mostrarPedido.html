@@ -13,37 +13,51 @@ Editar pedido
     <div class="row">
         <div class="col-sm-12">
             <div class="white-box">
-                <h3 class="box-title">Editar Pedido</h3>
+                <h3 class="box-title">Realizar Venta</h3>
+                <div class="panel panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">
+                   <div class="panel-body">
+                     <div class="col-xs-4 col-sm-4 col-md-4">
+                       <input class="form-control" type="hidden" id="pedido_id" value="{{ pedidoId }}" disabled>
+                      <label class="control-label col-sm-3" for="inputSuccess3">Nombre cliente:
+                              </label>
+                       <input class="form-control" type="text" id="inpt-cliente" value="{{ cliente }}" disabled>
 
+                     </div>
+                     <div class="col-xs-4 col-sm-4 col-md-4">
+                       <label class="control-label col-sm-3" for="inputSuccess3">Fecha pedido:
+                               </label>
+                        <input class="form-control" type="text" name="" value="{{ fecha }}"disabled>
 
-                    <input class="form-control" type="hidden" id="pedido_id" value="{{ pedidoId }}" disabled>
-                   <label class="control-label col-sm-3" for="inputSuccess3">Nombre cliente:
-                           </label>
-                    <input class="form-control" type="text" id="inpt-cliente" value="{{ cliente }}" disabled>
-                    <br>
-                    <label class="control-label col-sm-3" for="inputSuccess3">Fecha pedido:
-                            </label>
-                     <input class="form-control" type="text" name="" value="{{ fecha }}"disabled>
-                     <br>
-                    <label class="control-label col-sm-3" for="inputSuccess3">Nombre empleado:
-                    </label>
-                    <input class="form-control" type="text" name="" value="{{ empleado }}" disabled>
-                    <br>
-                    <label class="control-label col-sm-3" for="inputSuccess3">Tipo de recibo:
-                    </label>
-                    <select class="form-control" id="cmbRecibo" required>
-      					    	<!--<option value=""> </option>-->
-      	                        {% for oRecibo in oRecibos %}
-      	                            <option value="{{oRecibo.id}}">
-      	                            {{oRecibo.nombre}}
-      	                            </option>
-      	                        {% endfor %}
-      	            </select>
-                    <br>
-                    <label class="control-label col-sm-3" for="inputSuccess3">Numero de recibo:
-                    </label>
-                    <input class="form-control" id="nroRecibo" type="text" name="" value="{{ nroRecibo }}" required >
-                    <br>
+                     </div>
+                     <div class="col-xs-4 col-sm-4 col-md-4">
+                       <label class="control-label col-sm-3" for="inputSuccess3">Nombre empleado:
+                       </label>
+                       <input class="form-control" type="text" name="" value="{{ empleado }}" disabled>
+
+                     </div>
+                     <div class="col-xs-4 col-sm-4 col-md-4">
+                       <br>
+                       <label class="control-label col-sm-3" for="inputSuccess3">Tipo de recibo:
+                       </label>
+                       <select class="form-control" id="cmbRecibo" required>
+                         <!--<option value=""> </option>-->
+                                   {% for oRecibo in oRecibos %}
+                                       <option value="{{oRecibo.id}}">
+                                       {{oRecibo.nombre}}
+                                       </option>
+                                   {% endfor %}
+                       </select>
+
+                     </div>
+                     <div class="col-xs-4 col-sm-4 col-md-4">
+                        <br>
+                       <label class="control-label col-sm-3" for="inputSuccess3">Numero recibo:</label>
+                       <input class="form-control" id="nroRecibo" type="text" name="" value="{{ nroRecibo }}" required >
+
+                     </div>
+                   </div>
+                </div>
+
                     <div class="col-lg-12" style="margin-top:2px;">
                       <div class="col-xs-12 col-sm-12 col-md-12">
 
