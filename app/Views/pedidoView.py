@@ -41,12 +41,20 @@ def insertarPedido(request):
         #Dato = request.POST
         dnis = Datos['cliente']
         print(dnis)
-
-        oCliente = Cliente.objects.get(numerodocumento=dnis)
+        try:
+            oCliente = Cliente.objects.get(numerodocumento=dnis)
+        except Exception as e:
+            oCliente = ''
+            print('none')
+        #   oCliente = Cliente.objects.get(numerodocumento=dnis)
         fechaHoy=date.today()
         usuario = request.user
         empleado = Empleado.objects.get(usuario=usuario)
-        oPedido = Pedido(fecha=fechaHoy,estado=1,empleado=empleado,cliente_id=oCliente.id)
+        if oCliente == '':
+            oPedido = Pedido(fecha=fechaHoy,estado=1,empleado=empleado)
+        else:
+            oPedido = Pedido(fecha=fechaHoy,estado=1,empleado=empleado,cliente_id=oCliente.id)
+
         oPedido.save()
 
         #Datos = request.POST.getlist('datos')

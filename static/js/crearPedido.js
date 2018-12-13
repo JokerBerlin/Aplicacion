@@ -48,21 +48,22 @@ $(document).ready(function(){
     });
 
     $('#bt_GenerarVenta').click(function(){
-        var regexDNI = /^[0-9]{8}$/;
-        var regexRUC = /^[0-9]{11}$/;
-        const clienteDoc = document.getElementById('inpt-cliente').value;
-        const nombreCliente = document.getElementById('nombreCl').value;
-        if (regexDNI.test(clienteDoc)) {
-            GenerarVenta();
-        } else if (regexRUC.test(clienteDoc)) {
-            GenerarVenta();
-        } else {
-            alert('El campo "Cliente" tiene que ser apropiadamente llenado')
-            x = document.getElementById('inpt-cliente');
-            x.value = '';
-            document.getElementById('nombreCl').value = '';
-            x.focus();
-        }
+        // var regexDNI = /^[0-9]{8}$/;
+        // var regexRUC = /^[0-9]{11}$/;
+        // const clienteDoc = document.getElementById('inpt-cliente').value;
+        // const nombreCliente = document.getElementById('nombreCl').value;
+        // if (regexDNI.test(clienteDoc)) {
+        //     GenerarVenta();
+        // } else if (regexRUC.test(clienteDoc)) {
+        //     GenerarVenta();
+        // } else {
+        //     alert('El campo "Cliente" tiene que ser apropiadamente llenado')
+        //     x = document.getElementById('inpt-cliente');
+        //     x.value = '';
+        //     document.getElementById('nombreCl').value = '';
+        //     x.focus();
+        // }
+        GenerarVenta();
 
     });
 
