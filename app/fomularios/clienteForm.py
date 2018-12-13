@@ -6,19 +6,20 @@ from app.models import *
 class ClienteForm(ModelForm):
     class Meta:
         model = Cliente
-        fields = ('nombre','direccion','longitud','latitud','numerodocumento')
+        fields = ('nombre','direccion','numerodocumento','longitud','latitud')
 
         labels={
             'nombre':'Nombre de cliente',
+            'numerodocumento':'Dni',
             'direccion':'Residencia cliente',
             'longitud':'Longitud',
             'latitud':'latitud',
-            'numerodocumento':'Dni',
+
             }
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'numerodocumento': forms.TextInput(attrs={'class': 'form-control'}),
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
             'longitud': forms.TextInput(attrs={'class': 'form-control','readonly':'readonly'}),
             'latitud': forms.TextInput(attrs={'class': 'form-control','readonly':'readonly'}),
-            'numerodocumento': forms.TextInput(attrs={'class': 'form-control'}),
         }

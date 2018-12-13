@@ -98,34 +98,53 @@ Editar Cliente {{oCliente.nombre}}
         <div class="col-sm-12">
             <div class="white-box">
                 <h3 class="box-title">Editar datos de {{oCliente.nombre}}</h3>
-                <form action="." method="post" enctype="multipart/form-data">
-						{% csrf_token %}
-
-				<ul>
-
-				{% load widget_tweaks %}
-				{% csrf_token %}
-					<div class="form-group">
-				    {% for field in form %}
-							{{ field.errors }}
-							{{ field.label_tag }}</br>
-							{{ field|add_class:"form-control" }}
-				    {% endfor %}
 
 
+									<div class="panel panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">
+											<br>
+											<div class="form-group">
+												<form action="." method="post" enctype="multipart/form-data">
+													{% csrf_token %}
 
-					<label for="id_latitud">Geolocalización de {{oCliente.nombre}}</label><br>
-			    			<div id="map" style="position: relative;overflow: hidden;height: 300px;">
-							    <script async defer
-							    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=initMap">
-				    			</script>
+											<ul>
 
-			   			 	</div>
-			   		<br>
-					<button type="submit" class="btn btn-success">Actualizar</button>
-				</ul>
-				</form>
-	    	</div>
+											{% load widget_tweaks %}
+											{% csrf_token %}
+											{% for field in form %}
+													 <div class="col-xs-4 col-sm-4 col-md-4">
+														 {{ field.errors }}
+														 {{ field.label_tag }}</br>
+														 {{ field|add_class:"form-control" }}
+													 </div>
+
+											{% endfor %}
+											</div>
+
+
+											<div class="col-xs-12 col-sm-12 col-md-12">
+												<br>
+												<label for="id_latitud">Geolocalización de {{oCliente.nombre}}</label><br>
+										    			<div id="map" style="position: relative;overflow: hidden;height: 300px;">
+														    <script async defer
+														    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=initMap">
+											    			</script>
+
+										   			 	</div>
+															<br>
+											</div>
+
+											<div class="col-xs-12 col-sm-12 col-md-12">
+												<br>
+												<button type="submit" class="btn btn-success">Actualizar</button>
+												<br>
+												<br>
+											</div>
+										</ul>
+										</form>
+									</div>
+
+
 	    </div>
     </div>
+	</div>
 {% endblock %}

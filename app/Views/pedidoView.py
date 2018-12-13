@@ -423,7 +423,10 @@ def pedidoVenta(request,pedido_id):
 
         oPedido = Pedido.objects.get(id=pedido_id)
         oRecibos = Recibo.objects.filter(estado=True)
-        cliente = oPedido.cliente.nombre
+        try:
+            cliente = oPedido.cliente.nombre
+        except Exception as e:
+            cliente = ''
         empleado = oPedido.empleado.nombre
         fecha = oPedido.fecha
         oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
