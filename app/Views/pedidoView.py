@@ -353,8 +353,11 @@ def editarPedido(request,pedido_id):
 
     else:
         oPedido = Pedido.objects.get(id=pedido_id)
-        cliente = oPedido.cliente.nombre
-        print(cliente)
+        try:
+            cliente = oPedido.cliente.nombre
+
+        except Exception as e:
+            cliente = ''
         empleado = oPedido.empleado.nombre
         print(empleado)
         fecha = oPedido.fecha
