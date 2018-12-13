@@ -148,7 +148,7 @@ Listar pedido
 				    {% for oPedido in oPedidos %}
 				    <tr>
 				    	<td>{{ forloop.counter }}</td>
-				    	<td>{{oPedido.fecha}}</td>
+				    	<td>{{oPedido.fecha|date:"d-m-Y P" }}</td>
 				    	<td>{{oPedido.cliente.nombre}}</td>
 				    	<td>{{oPedido.cliente.direccion}}</td>
 							<td>{{oPedido.empleado.nombre}}</td>
