@@ -248,6 +248,7 @@ Clientes
 	                            <th>Nombre</th>
 	                            <th>Dirección</th>
 	                            <th>N° Documento</th>
+															<th>Tipo de Cliente</th>
 	                            <th>Opciones</th>
 	                        </tr>
 	                    </thead>
@@ -259,7 +260,8 @@ Clientes
 					    	<td>{{oCliente.nombre}}</td>
 					    	<td>{{oCliente.direccion}}</td>
 					    	<td>{{oCliente.numerodocumento}}</td>
-					    	<td>
+								<td>{{oCliente.precio.nombre}}</td>
+								<td>
 					    		<a href="/Cliente/detalle/{{oCliente.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
 					    		<a href="/Cliente/editar/{{oCliente.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
 									<a data-target="#myModal" role="button" class="btn btn-danger" data-toggle="modal" id="{{ oCliente.id }}" onclick="selPersona('{{oCliente.id}}','{{oCliente.nombre}}');">Eliminar</a>
