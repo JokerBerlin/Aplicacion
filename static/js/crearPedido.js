@@ -1,7 +1,9 @@
 $(document).ready(function(){
     $('#id_Total').text("0.00");
 
-
+    $('#inpt-cliente').focusout( function(){
+        $('#inpt-producto').focus();
+    });
     $('#bt_addVenta').click(function(){
         if(document.getElementById('codigo') === '' || document.getElementById('valorPrecio') === '') {
             reset_values();
