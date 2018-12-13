@@ -70,6 +70,9 @@ function EditarPresentacionProducto(precio1Id,precio2Id,precio3Id,productoPresen
   $('#Precio1'+contador+'').prop('disabled', false);
   $('#Precio2'+contador+'').prop('disabled', false);
   $('#Precio3'+contador+'').prop('disabled', false);
+  // $('#Precio3'+contador+'').focusout( function(){
+  //     $('#editar'+contador+'').focus();
+  // });
   $('#editar'+contador+'').attr("onclick","");
   //$('#editar'+contador+'').attr("href","/Producto/listar/");
   console.log(precio1Id+','+precio2Id+','+precio3Id+','+productoPresentacionId);
