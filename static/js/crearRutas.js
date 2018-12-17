@@ -1,5 +1,9 @@
 $(document).ready(function(){
 
+        $('#id_cliente').focusout( function(){
+            $('#bt_add').focus();
+        });
+
         $('#bt_add').click(function(){
             agregar();
             $('#id_cliente').focus();

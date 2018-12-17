@@ -24,7 +24,7 @@ $(document).ready(function(){
                 success: function (result) {
                 var ListasClientes = result['clientes'];
                 response($.map(ListasClientes, function (item) {
-                                        
+
                     return {
                         label: item.nombre,
                         idcliente: item.nombre,
@@ -45,13 +45,13 @@ $(document).ready(function(){
             // var direccion=  ui.item.direccion;
 
             var iDPro = ui.item.Id;
-            
+
             latCliente = ui.item.latitud;
             longCliente = ui.item.longitud;
 
             $('#latitud').val(latCliente);
             $('#longitud').val(longCliente);
-        
+            $('#bt_add').focus();
         }
 
 
@@ -81,7 +81,7 @@ function initMap() {
 
   ds = new google.maps.DirectionsService();
   dr = new google.maps.DirectionsRenderer({map: mapa, suppressMarkers: true});
-  
+
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
@@ -100,9 +100,9 @@ function initMap() {
           draggable: true
       })
       markers.push(marker);
-      
+
       mapa.setCenter(pos);
-    
+
     }, function() {
       handleLocationError(true, infoWindow, mapa.getCenter());
     });
@@ -168,13 +168,13 @@ Nueva Ruta
                     <label for="id_nombre">Cliente:</label>
                     <br>
                     <input type="text" name="id_cliente" id="id_cliente" placeholder="Nombre Cliente..." class="form-control" maxlength="45">
-                    
+
                     <br>
                     <label for="latitud">Latitud:</label>
                     <br>
                     <input type="text" name="direccion" id="latitud" required="" class="form-control" disabled>
-                    
-                    <label for="longitud">Longitud:</label> 
+
+                    <label for="longitud">Longitud:</label>
                     <br>
                     <input type="number" name="precio" id="longitud" required="" class="form-control" disabled>
                     <br>
@@ -182,7 +182,7 @@ Nueva Ruta
                     <a id="bt_add" class="btn btn-success">Agregar</a>
                     <a id="bt_del" class="btn btn-warning">Eliminar</a>
                     <button id="bt_delall" class="btn btn-danger">Eliminar todo</button>
-            
+
                     <div class="row">
                         <div class="form-group">
                             <label ><center>Concepto Operación</center></label>
@@ -200,8 +200,8 @@ Nueva Ruta
                             </table>
                             <br>
                         </div>
-                            
-                       
+
+
 
                     </div>
                         <button id="bt_GenerarRuta" class="btn btn-success">Generar Ruta</button>
@@ -223,7 +223,7 @@ Nueva Ruta
 
                        <h4 class="box-title">Geolocalizacion cliente</h4>
                     <div id="mapa" style="position: relative;overflow: hidden;height: 500px;">
-                
+
                         <br>
                         <script async defer
                         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA94LBsliF6TX_7XT76lfJAopVP_h2RkkU&callback=initMap">
@@ -234,6 +234,6 @@ Nueva Ruta
         <!-- </form> -->
 
                       <br>
-              </div>      
-    </div>  
+              </div>
+    </div>
 {% endblock %}

@@ -75,7 +75,7 @@ class Detalletipooperacion(models.Model):
     tipooperacion = models.ForeignKey('Tipooperacion', on_delete=models.CASCADE)  # Field name made lowercase.
     def __str__(self):
         return '%s' % self.nombre
-    
+
 class Empleado(models.Model):
     nombre = models.CharField(max_length=45)
     imei = models.CharField(max_length=45, blank=True, null=True)
@@ -148,7 +148,7 @@ class Productopresentacions(models.Model):
         db_table = 'app_producto_presentacions'
     def __str__(self):
         return '%s %s' % (self.producto, self.presentacion)
-    
+
 class Producto_almacens(models.Model):
     cantidad = models.FloatField()
     cantidadinicial = models.FloatField()
