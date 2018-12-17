@@ -716,7 +716,7 @@ def reporteVentas(request):
     oEmpleados = Empleado.objects.all()
     context = {
         "empleados": oEmpleados
-    }
+        }
     return render(request, 'reporte/ventas.html', context)
 
 def imprimir(request):
@@ -761,6 +761,7 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
         if pedidos:
             for pedido in pedidos:
                 montoVentasEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
+                print(montoVentasEmpleado)
                 montoFinal += montoVentasEmpleado
 
             jsonEmpleadoVenta['montoVenta'] = montoFinal
@@ -774,8 +775,6 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
 def empleadoVentas(request, empleado_id, mesActual, añoActual):
     jsonFinal = []
 
-    # mesActual = datetime.now().month
-    # añoActual = datetime.now().year
     empleado = Empleado.objects.get(id=empleado_id)
 
     if empleado:
@@ -798,20 +797,53 @@ def empleadoVentas(request, empleado_id, mesActual, añoActual):
 
     return JsonResponse(jsonFinal, safe=False)
 
+
+def reporteVentasAnuladas(request):
+    oEmpleados = Empleado.objects.all()
+    context = {
+        "empleados": oEmpleados
+        }
+
+    return render(request, 'reporte/ventasAnuladas.html', context)
+
+
 def ventasAnuladasReporte(request, empleado_id, mesActual, añoActual):
     jsonFinal = []
 
     empleado = Empleado.objects.get(id=empleado_id)
-    anulaciones = Anulacionventa.objects.filter(fecha__month=mesActual, fecha__year=añoActual, empleado=empleado)
+    anulaciones = Anulacionventa.objects.filter(fecha__month=mesActual, fecha__year=añoActual, usuario=empleado.usuario)
 
     for anulacion in anulaciones:
         jsonEmpleadoVentaAnulada = {}
         jsonEmpleadoVentaAnulada['fechaAnulacion'] = anulacion.fecha
         jsonEmpleadoVentaAnulada['fechaVenta'] = anulacion.venta.fecha
         jsonEmpleadoVentaAnulada['descripcion'] = anulacion.descripcion
+        jsonEmpleadoVentaAnulada['monto'] = anulacion.venta.monto
         jsonFinal.append(jsonEmpleadoVentaAnulada)
 
     return JsonResponse(jsonFinal, safe=False)
 
+def todoMontoVentasAnuladas(request, mesActual, añoActual):
+    jsonFinal = []
 
+    empleados = Empleado.objects.all()
 
+    for empleado in empleados:
+        jsonEmpleadoVentaAnulada = {}
+        jsonEmpleadoVentaAnulada['empleadoId'] = empleado.id
+        jsonEmpleadoVentaAnulada['empleadoNombre'] = empleado.nombre
+        montoFinal = 0.0
+
+        ventaAnuladas = Anulacionventa.objects.filter(fecha__year=añoActual, fecha__month=mesActual, usuario=empleado.usuario)
+        if ventaAnuladas:
+            for ventaAnulada in ventaAnuladas:
+                montoVentaAnulada = ventaAnulada.venta.monto
+                montoFinal += montoVentaAnulada
+            jsonEmpleadoVentaAnulada['monto'] = montoFinal
+        
+        else:
+            jsonEmpleadoVentaAnulada['monto'] = '0.0'
+        
+        jsonFinal.append(jsonEmpleadoVentaAnulada)
+
+    return JsonResponse(jsonFinal, safe=False)
