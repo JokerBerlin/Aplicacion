@@ -372,8 +372,8 @@ def editarPedido(request,pedido_id):
             c = int(round(oPedido.cantidad))
             oNuevo['cantidad']=str(c).replace(",", ".")
             oNuevo['contador']=cont
-            oNuevo['valor']="{0:.2f}".format(round(float(oPedido.valor),2))
-            subt = float(oPedido.cantidad)*float(oPedido.valor)
+            oNuevo['valor']="{0:.2f}".format(round(float(oPedido.valor),8))
+            subt = round(float(oPedido.cantidad)*float(oPedido.valor),8)
             totalMonto = totalMonto + subt
             oNuevo['total']="{0:.2f}".format(round(subt,2))
             cantidadPedido.append(oNuevo)

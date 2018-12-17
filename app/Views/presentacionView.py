@@ -80,7 +80,8 @@ def editarPresentacion(request):
         Datos = json.loads(request.body)
         print(Datos)
 
-        cantidad = 1/float(Datos['valorPrecio'])
+        cantidad = round(1/float(Datos['valorPrecio']),8)
+        print(cantidad)
         oProductoPresentacion = Productopresentacions.objects.get(id=Datos['productoPresentacionId'])
         oProductoPresentacion.valor = cantidad
         oProductoPresentacion.save()
@@ -94,5 +95,5 @@ def editarPresentacion(request):
             oProductoPresentacionPrecio.valor = float(Datos[valorPrecio])
             oProductoPresentacionPrecio.save()
             cont = cont + 1
-        
+
         return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
