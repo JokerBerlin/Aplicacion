@@ -179,7 +179,6 @@ class Productopresentacionsprecios(models.Model):
         managed = False
         db_table = 'app_producto_presentacions_precios'
 
-
 class Proveedor(models.Model):
     nombre = models.CharField(max_length=45)
     direccion = models.CharField(max_length=45)
