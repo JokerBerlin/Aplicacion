@@ -54,7 +54,7 @@ urlpatterns = [
 
     ################## Caja #######################
     url(r'^Caja/apertura/$', registrarAperturacaja),
-    url(r'^Caja/cierre/$', registrarCierrecaja),
+    url(r'^Caja/cierre/$', cierreCaja),
     url(r'^Caja/movimiento/$', registrarOperacion),
 
     ################## Venta #######################

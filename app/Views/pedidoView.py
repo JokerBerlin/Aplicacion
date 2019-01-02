@@ -412,13 +412,28 @@ def pedidoVenta(request,pedido_id):
         oCobro.venta_id=oVenta.id
         oCobro.save()
 
-        # oOperacion = Operacion(
-        #     monto = oCobro.monto,
-        #     estado = True,
-        #     caja_id
-        #
-        # )
+        usuario = request.user
+        empleado = Empleado.objects.get(usuario=usuario)
 
+        oOperacion = Operacion(
+            monto = oCobro.monto,
+            estado = True,
+            caja_id = empleado.caja.id,
+            cobro = oCobro ,
+            detalletipooperacion_id=1
+        )
+
+        oOperacion.save()
+
+        # oAperturaCaja = Aperturacaja.objects.filter(caja_id=empleado.caja.id).latest('pk')
+        # monto = float(oAperturaCaja.monto) + float(oOperacion.monto)
+        # # oAperturaCajaNuevo = Aperturacaja(
+        #     monto=monto,
+        #     activo=1,
+        #     estado=1,
+        #     caja_id=empleado.caja.id
+        # )
+        # oAperturaCajaNuevo.save()
         return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
     else:

@@ -598,7 +598,7 @@ def insertarVenta(request):
             estado=1,
             caja_id=cajaId
         )
-
+        oAperturaCajaNuevo.save()
         return HttpResponse(json.dumps({'exito': 1, "idPedido": oPedido.id}), content_type="application/json")
 
     else:
@@ -840,10 +840,10 @@ def todoMontoVentasAnuladas(request, mesActual, añoActual):
                 montoVentaAnulada = ventaAnulada.venta.monto
                 montoFinal += montoVentaAnulada
             jsonEmpleadoVentaAnulada['monto'] = montoFinal
-        
+
         else:
             jsonEmpleadoVentaAnulada['monto'] = '0.0'
-        
+
         jsonFinal.append(jsonEmpleadoVentaAnulada)
 
     return JsonResponse(jsonFinal, safe=False)
