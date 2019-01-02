@@ -83,6 +83,7 @@ class Empleado(models.Model):
     perfil = models.IntegerField(blank=True, null=True,default=1)
     estado = models.BooleanField(blank=True,default=True)
     almacen = models.ForeignKey('Almacen', default=1, on_delete=models.CASCADE)
+    caja = models.ForeignKey(Caja,null=True, on_delete=models.PROTECT)
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):

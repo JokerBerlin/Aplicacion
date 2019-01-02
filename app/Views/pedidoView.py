@@ -411,6 +411,14 @@ def pedidoVenta(request,pedido_id):
         oCobro.recibo_id=tipoRecibo
         oCobro.venta_id=oVenta.id
         oCobro.save()
+
+        # oOperacion = Operacion(
+        #     monto = oCobro.monto,
+        #     estado = True,
+        #     caja_id
+        #
+        # )
+
         return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
     else:

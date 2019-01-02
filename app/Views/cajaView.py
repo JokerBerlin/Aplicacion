@@ -13,22 +13,25 @@ def registrarAperturacaja(request):
         print(Datos)
 
         oCaja = Caja.objects.get(id=Datos['cmbCaja'])
-        oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month, fecha__year=hoy.year)
-
-        monto = 0.0
-        if oAperturaCaja:
-            if Datos['cmbTipo'] == 1:
-                monto = oAperturaCaja.latest('pk').monto + float(Datos['monto'])
-            elif Datos['cmbTipo'] == 2:
-                monto = oAperturaCaja.latest('pk').monto - float(Datos['monto'])
-        else:
-            if Datos['cmbTipo'] == 1:
-                monto = 0 + float(Datos['monto'])
-            elif Datos['cmbTipo'] == 2:
-                monto = 0 - float(Datos['monto'])
+        montoInicial = 0.0
+        try:
+            oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month, fecha__year=hoy.year)
+            nuevo = float(oAperturaCaja.latest('pk').monto) + float(Datos['monto'])
+            print(nuevo)
+            if Datos['cmbTipo'] == '1':
+                print(Datos['monto'])
+                montoInicial = float(oAperturaCaja.latest('pk').monto) + float(Datos['monto'])
+                print(montoInicial)
+            elif Datos['cmbTipo'] == '2':
+                montoInicial = oAperturaCaja.latest('pk').monto - float(Datos['monto'])
+        except Exception as e:
+            if Datos['cmbTipo'] == '1':
+                montoInicial = 0 + float(Datos['monto'])
+            elif Datos['cmbTipo'] == '2':
+                montoInicial = 0 - float(Datos['monto'])
 
         apCaja = Aperturacaja(
-            monto=monto,
+            monto=montoInicial,
             estado=True,
             caja=oCaja,
             activo=True
@@ -46,7 +49,7 @@ def registrarAperturacaja(request):
 
     else:
         oCajas = Caja.objects.filter(estado=1)
-        detalleTipoOperaciones = Detalletipooperacion.objects.all() 
+        detalleTipoOperaciones = Detalletipooperacion.objects.all()
 
         context = {
             'cajas': oCajas,
@@ -93,7 +96,7 @@ def montoCajaActual(request, añoActual, mesActual):
     monto = 0
 
     for caja in cajas:
-        jsonMontoCaja = {}  
+        jsonMontoCaja = {}
         aperturaCaja = Aperturacaja.objects.filter(
             caja=caja,
             fecha__month=mesActual,
@@ -112,5 +115,5 @@ def montoCajaActual(request, añoActual, mesActual):
             jsonMontoCaja['caja'] = caja.nombre
             jsonMontoCaja['montoFinalCaja'] = '0.0'
             jsonFinal.append(jsonMontoCaja)
-    
+
     return JsonResponse(jsonFinal, safe=False)
