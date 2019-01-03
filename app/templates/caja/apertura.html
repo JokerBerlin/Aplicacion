@@ -16,27 +16,8 @@ Registrar Nuevo Producto
 				<ul>
 				{% load widget_tweaks %}
 				{% csrf_token %}
-					<div class="form-group">
-					<label for="cmbTipo">Tipo de operacion</label>
-					<select name="cmbTipo" id="cmbTipo" class="form-control">
-						<option value="1">Ingreso</option>
-						<option value="2">Salida</option>
-					</select>
-					<label for="cmbOperacion">Detalle operacion</label>
-					<select name="cmbOperacion" id="cmbOperacion" class="form-control" required>
-						{% for operacion in detalleOperaciones %}
-							<option value="{{ operacion.id }}">
-								{{ operacion.nombre }}
-							</option>
-						{% endfor %}
-					</select>
-
-					<label for="monto">Monto</label>
-					<input type="number" name="monto" id="monto" class="form-control" value="0.00" step="0.1" placeholder="0.0">
-				    
-					<button class="btn btn-success" data-toggle="modal" data-target="#agrearPresentacion" style="margin-top: 1em">Aperturar Caja</button>
-
-
+					
+					<button class="btn btn-success" data-toggle="modal" style="margin-top: 1em">Aperturar Caja</button>
 				</ul>
 				</form>
  

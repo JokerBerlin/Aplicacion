@@ -16,6 +16,8 @@ def registrarAperturacaja(request):
 
         oCaja = oEmpleado.caja
         montoInicial = 0.0
+
+        oCierreCaja = Cierrecaja.objects
         try:
             oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month, fecha__year=hoy.year)
             nuevo = float(oAperturaCaja.latest('pk').monto) + float(Datos['monto'])
