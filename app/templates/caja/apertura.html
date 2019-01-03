@@ -12,7 +12,7 @@ Registrar Nuevo Producto
         <div class="col-sm-12">
             <div class="white-box">
                 <h3 class="box-title">Formulario de apertura de caja</h3>
-                <form action="/Caja/apertura/" method="post" enctype="multipart/form-data"> 
+                <form action="/Caja/apertura/" method="post" enctype="multipart/form-data">
 				<ul>
 				{% load widget_tweaks %}
 				{% csrf_token %}
@@ -20,8 +20,8 @@ Registrar Nuevo Producto
 					<button class="btn btn-success" data-toggle="modal" style="margin-top: 1em">Aperturar Caja</button>
 				</ul>
 				</form>
- 
+
 			</div>
 	    </div>
-    </div>  
+    </div>
 {% endblock %}
