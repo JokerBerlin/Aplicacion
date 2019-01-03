@@ -79,10 +79,20 @@ $(document).ready(function(){
                   ListasClientes.push(Cliente);
               }
               response($.map(ListasClientes, function (item) {
-                    return {label: item.numerodocumento,
-                          nombreC: item.nombre,
-                          dniC: item.direccion,
-                          precioId: item.precioId};
+                  var valorCliente = document.getElementById('inpt-cliente').value;
+                  if( isNaN(valorCliente) ){
+                      return {label: item.numerodocumento,
+                            nombreC: item.nombre,
+                            dniC: item.direccion,
+                            precioId: item.precioId};
+
+                  }else{
+                      return {label: item.numerodocumento,
+                            nombreC: item.nombre,
+                            dniC: item.direccion,
+                            precioId: item.precioId};
+
+                  }
 
               }));
 
@@ -464,7 +474,7 @@ Nuevo Pedido
                        <div class="col-xs-6 col-sm-6 col-md-6">
                          <label for="id_nombreDocuento">Cliente:</label>
                          <a data-target="#myModal" role="button" id="nuevoCliente" data-toggle="modal" style="color:green"><span class="fa fa-plus fa-1x"></span></a>
-                         <input type="number" id="inpt-cliente" placeholder="Nr. Documento cliente..." name="cliente_buscado" class="form-control">
+                         <input type="text" id="inpt-cliente" placeholder="Nr. Documento cliente..." name="cliente_buscado" class="form-control">
                        </div>
                        <div class="col-xs-6 col-sm-6 col-md-6">
                            <label for="id_nombreCliente">Nombre Cliente:</label>
