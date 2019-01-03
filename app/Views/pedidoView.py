@@ -297,16 +297,15 @@ def ListarPedido(request):
         usuario=True
         # usuario= BuscarUsuario(Datos["idUsuario"])
         if usuario==True:
-            fecha = Datos["fecha"]
+            fecha = datetime.today()
             print(fecha)
-            fecha = datetime.strptime(fecha, "%Y-%m-%d")
             idEmpleado = Datos["idEmpleado"]
             jsonPedidos = {}
             jsonPedidos["pedidos"] = []
             TotalPedidos = 0
 
             #oPedidos = Pedido.objects.filter(estado = True,fecha = fecha, empleado = idEmpleado)
-            oPedidos = Pedido.objects.filter(estado = 2, empleado = idEmpleado, fecha__month=fecha.month+1, fecha__year=fecha.year)
+            oPedidos = Pedido.objects.filter(estado = 2, empleado = idEmpleado, fecha__month=fecha.month, fecha__year=fecha.year)
             for oPedido in oPedidos:
                 jsonPedido = {}
                 jsonPedido["idPedido"] = oPedido.id
