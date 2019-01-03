@@ -103,8 +103,15 @@ $(document).ready(function(){
       select: function (event, ui) {
 
           if(ui.item.nombreC === "nuevo"){
-              $('#id_numerodocumento').val(ui.item.dniC);
-              $('#nuevoCliente').click();
+              if(isNaN(ui.item.dniC)){
+                $('#id_nombre').val(ui.item.dniC);
+                $('#nuevoCliente').click();
+              }else{
+                $('#id_numerodocumento').val(ui.item.dniC);
+                $('#nuevoCliente').click();
+              }
+
+
 
           } else{
               $("#nombreCl").val(ui.item.nombreC);
