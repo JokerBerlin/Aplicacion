@@ -15,48 +15,25 @@ def registrarAperturacaja(request):
         oEmpleado = Empleado.objects.get(usuario=usuario)
 
         oCaja = oEmpleado.caja
-        montoInicial = 0.0
+        monto = 0.0
 
-        oCierreCaja = Cierrecaja.objects
-        try:
-            oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month, fecha__year=hoy.year)
-            nuevo = float(oAperturaCaja.latest('pk').monto) + float(Datos['monto'])
-            print(nuevo)
-            if Datos['cmbTipo'] == '1':
-                print(Datos['monto'])
-                montoInicial = float(oAperturaCaja.latest('pk').monto) + float(Datos['monto'])
-                print(montoInicial)
-            elif Datos['cmbTipo'] == '2':
-                montoInicial = oAperturaCaja.latest('pk').monto - float(Datos['monto'])
-        except Exception as e:
-            if Datos['cmbTipo'] == '1':
-                montoInicial = 0 + float(Datos['monto'])
-            elif Datos['cmbTipo'] == '2':
-                montoInicial = 0 - float(Datos['monto'])
+        ultimoCierreCaja = Cierrecaja.objects.all().latest('pk')
 
-        apCaja = Aperturacaja(
-            monto=montoInicial,
+        monto = ultimoCierreCaja.monto
+
+        oAperturaCaja = Aperturacaja(
+            monto=monto,
+            activo=True,
             estado=True,
-            caja=oCaja,
-            activo=True
+            caja=oCaja
         )
-        apCaja.save()
-
-        operac = Operacion(
-            monto=Datos['monto'],
-            estado=True,
-            caja=oCaja,
-            detalletipooperacion_id=Datos['cmbOperacion']
-        )
-        operac.save()
+        oAperturaCaja.save()
+        
         return redirect('/Venta/nuevo/')
 
     else:
-        oCajas = Caja.objects.filter(estado=1)
-        detalleTipoOperaciones = Detalletipooperacion.objects.all()
-
+        
         context = {
-            'detalleOperaciones': detalleTipoOperaciones
         }
         return render(request,'caja/apertura.html',context)
 
