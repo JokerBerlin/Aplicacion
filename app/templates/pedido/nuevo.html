@@ -22,7 +22,7 @@ function seleccionarProducto(idProducto){
     $('#inpt-producto').val($('#producto'+idProducto+'').text());
     $('#codigo').val($('#codigo'+idProducto+'').text());
     $("#imagenesProd").empty();
-    $("#cantidad").focus();
+    $("#cmbPresentacion").focus();
 
     //var precioPresentacion = function() {
     $.ajax({
@@ -491,8 +491,15 @@ Nuevo Pedido
 
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
-                         <label for="">Cantidad:</label></br>
-                         <input type="number" name="cantidad" id="cantidad" required="" class="form-control" >
+                         <label for="">Tipo presentacion</label>
+                         <select class="form-control" id="cmbPresentacion" name="cmbPresentacion" required="">
+                             {% for presentacion in presentaciones %}
+                                 <option value="{{ presentacion.nombre }}">
+                                 {{presentacion.nombre}}
+                                 </option>
+                             {% endfor %}
+                         </select>
+
                        </div>
 
                      </div>
@@ -502,14 +509,8 @@ Nuevo Pedido
                      <div class="panel-body">
                        <h4 class="box-title">Presentacion - Precios</h4>
                        <div class="col-xs-4 col-sm-4 col-md-4">
-                         <label for="">Tipo presentacion</label>
-                         <select class="form-control" id="cmbPresentacion" name="cmbPresentacion" required="">
-                             {% for presentacion in presentaciones %}
-                                 <option value="{{ presentacion.nombre }}">
-                                 {{presentacion.nombre}}
-                                 </option>
-                             {% endfor %}
-                         </select>
+                         <label for="">Cantidad:</label></br>
+                         <input type="number" name="cantidad" id="cantidad" required="" onkeydown="agregarProducto();" class="form-control" >
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="">Tipo precio</label></br>

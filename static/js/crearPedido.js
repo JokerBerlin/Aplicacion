@@ -99,6 +99,7 @@ function reset_values(){
     $('#precio').val('');
     $('#cantidad').val('');
     $('#valorPrecio').val('');
+    $('#inpt-producto').focus();
 }
 
 var TotalVenta=0;
@@ -107,9 +108,13 @@ var id_fila_selected=[];
 function agregar(){
     cont++;
     Producto = $('#inpt-producto').val();
+    console.log(Producto);
     codigo = $('#codigo').val();
+    console.log(codigo);
     precio = $('#valorPrecio').val();
+    console.log(precio);
     cantidad = $('#cantidad').val();
+    console.log(cantidad);
     presentacion = $('#cmbPresentacion').val();
     precioTipo = $('#cmbPrecio').val();
     imagen = $('#urlImagen').val();
@@ -201,10 +206,10 @@ function agregar(){
             alert("Seleccione un producto válido!");
             $( "#inpt-producto" ).focus();
             break;
-        case 2:
-            alert("Ingrese una cantidad");
-            $( "#cantidad" ).focus();
-            break;
+        // case 2:
+        //     alert("Ingrese una cantidad");
+        //     $( "#cantidad" ).focus();
+        //     break;
 
         }
     }
@@ -420,4 +425,12 @@ function eventoCambio(valor){
         $('#cantidad'+valor+'').focus();
     }
 
+}
+
+function agregarProducto(){
+  $("#cantidad").keypress(function(e) {
+      if(e.which == 13) {
+        agregar();
+      }
+    });
 }
