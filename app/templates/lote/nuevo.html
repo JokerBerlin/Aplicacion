@@ -206,8 +206,13 @@ $(document).ready(function(){
         minLength: 2,
         select: function (event, ui) {
           if(ui.item.nombreP === "nuevo"){
-              $('#id_numerodocumento').val(ui.item.dniP);
-              $('#nuevoProveedor').click();
+              if(isNaN(ui.item.dniP)){
+                $('#id_nombre').val(ui.item.dniP);
+                $('#nuevoProveedor').click();
+              }else{
+                $('#id_numerodocumento').val(ui.item.dniP);
+                $('#nuevoProveedor').click();
+              }
 
           } else{
               $("#inpt-nombreProveedor").val(ui.item.nombreP);
