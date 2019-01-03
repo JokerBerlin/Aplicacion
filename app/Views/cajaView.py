@@ -11,8 +11,10 @@ def registrarAperturacaja(request):
         Datos = request.POST
         hoy = datetime.today()
         print(Datos)
+        usuario = request.user
+        oEmpleado = Empleado.objects.get(usuario=usuario)
 
-        oCaja = Caja.objects.get(id=Datos['cmbCaja'])
+        oCaja = oEmpleado.caja
         montoInicial = 0.0
         try:
             oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month, fecha__year=hoy.year)
@@ -52,7 +54,6 @@ def registrarAperturacaja(request):
         detalleTipoOperaciones = Detalletipooperacion.objects.all()
 
         context = {
-            'cajas': oCajas,
             'detalleOperaciones': detalleTipoOperaciones
         }
         return render(request,'caja/apertura.html',context)

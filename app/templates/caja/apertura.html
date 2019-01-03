@@ -17,14 +17,6 @@ Registrar Nuevo Producto
 				{% load widget_tweaks %}
 				{% csrf_token %}
 					<div class="form-group">
-					<label for="">Seleccione una Caja</label></br>
-				    <select class="form-control" id="cmbCaja" name="cmbCaja" required="">
-                        {% for caja in cajas %}
-                            <option value="{{caja.id}}">
-                            {{caja.nombre}}
-                            </option>
-                        {% endfor %}
-					</select><br>
 					<label for="cmbTipo">Tipo de operacion</label>
 					<select name="cmbTipo" id="cmbTipo" class="form-control">
 						<option value="1">Ingreso</option>
