@@ -179,9 +179,7 @@ function agregar(){
         valor = cont - 1;
         var fila='<tr class="selected" id="fila' + valor + '" onclick="seleccionar(this.id);">' +
                  '<td>' + valor + '</td>' +
-                 '<td><img src="'+imagen+'" height="100" width="100" alt="" /></td>'+
                  '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" onchange ="eventoCambio('+valor+');" value="' + cantidad + '"></td>' +
-
                  '<td>' + codigo + '</td>' +
                  '<td>' + Producto + '</td>' +
                  '<td>' + precioTipo+'</td>' +
@@ -258,7 +256,7 @@ function reordenar(){
 function RefrescarTotal(){
     Total=0;
     $('#tabla tbody tr').each(function(){
-        valor = $(this).find('td').eq(8)[0].innerText;
+        valor = $(this).find('td').eq(7)[0].innerText;
         //console.log(valor);
         Total = Total + parseFloat(valor);
         $('#id_Total').text(Total.toFixed(2));
