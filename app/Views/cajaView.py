@@ -15,6 +15,7 @@ def registrarAperturacaja(request):
         oEmpleado = Empleado.objects.get(usuario=usuario)
 
         oCaja = oEmpleado.caja
+<<<<<<< HEAD
         montoInicial = 0.0
         try:
             oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month, fecha__year=hoy.year)
@@ -39,22 +40,27 @@ def registrarAperturacaja(request):
             activo=True
         )
         apCaja.save()
+=======
+        monto = 0.0
 
-        operac = Operacion(
-            monto=Datos['monto'],
+        ultimoCierreCaja = Cierrecaja.objects.all().latest('pk')
+>>>>>>> 966e2efb062b2758cb549d855bd2111214a99404
+
+        monto = ultimoCierreCaja.monto
+
+        oAperturaCaja = Aperturacaja(
+            monto=monto,
+            activo=True,
             estado=True,
-            caja=oCaja,
-            detalletipooperacion_id=Datos['cmbOperacion']
+            caja=oCaja
         )
-        operac.save()
+        oAperturaCaja.save()
+        
         return redirect('/Venta/nuevo/')
 
     else:
-        oCajas = Caja.objects.filter(estado=1)
-        detalleTipoOperaciones = Detalletipooperacion.objects.all()
-
+        
         context = {
-            'detalleOperaciones': detalleTipoOperaciones
         }
         return render(request,'caja/apertura.html',context)
 
