@@ -15,39 +15,17 @@ def registrarAperturacaja(request):
         oEmpleado = Empleado.objects.get(usuario=usuario)
 
         oCaja = oEmpleado.caja
-<<<<<<< HEAD
-        montoInicial = 0.0
-        try:
-            oAperturaCaja = Aperturacaja.objects.filter(fecha__day=hoy.day, fecha__month=hoy.month, fecha__year=hoy.year)
-            nuevo = float(oAperturaCaja.latest('pk').monto) + float(Datos['monto'])
-            print(nuevo)
-            if Datos['cmbTipo'] == '1':
-                print(Datos['monto'])
-                montoInicial = float(oAperturaCaja.latest('pk').monto) + float(Datos['monto'])
-                print(montoInicial)
-            elif Datos['cmbTipo'] == '2':
-                montoInicial = oAperturaCaja.latest('pk').monto - float(Datos['monto'])
-        except Exception as e:
-            if Datos['cmbTipo'] == '1':
-                montoInicial = 0 + float(Datos['monto'])
-            elif Datos['cmbTipo'] == '2':
-                montoInicial = 0 - float(Datos['monto'])
-
-        apCaja = Aperturacaja(
-            monto=montoInicial,
-            estado=True,
-            caja=oCaja,
-            activo=True
-        )
-        apCaja.save()
-=======
         monto = 0.0
 
-        ultimoCierreCaja = Cierrecaja.objects.all().latest('pk')
->>>>>>> 966e2efb062b2758cb549d855bd2111214a99404
-
-        monto = ultimoCierreCaja.monto
-
+        try:
+            ultimoCierreCaja = Cierrecaja.objects.all().latest('pk')
+            if ultimoCierreCaja:
+                monto = ultimoCierreCaja.monto
+            else:
+                monto = 0.0
+        except Exception as e:
+            monto = 0.0
+        
         oAperturaCaja = Aperturacaja(
             monto=monto,
             activo=True,
