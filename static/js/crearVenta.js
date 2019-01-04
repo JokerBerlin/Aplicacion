@@ -1,260 +1,434 @@
-// $(document).ready(function(){
-//     $('#id_Total').text("0.00");
-//     $('#bt_add').click(function(){
-//         agregar();
-//         $('#inpt-producto').focus();
-//     });
+$(document).ready(function(){
+    $('#id_Total').text("0.00");
 
-//     $('#bt_add').keypress(function(){
-//         $('#inpt-producto').focus();
-//     });
+    $('#inpt-cliente').focusout( function(){
+        $('#inpt-producto').focus();
+    });
+    $('#bt_addVenta').click(function(){
+        if(document.getElementById('codigo') === '' || document.getElementById('valorPrecio') === '') {
+            reset_values();
+            document.getElementById('inpt-producto').focus();
+        } else {
+            agregar();
+        }
+        $('#inpt-producto').focus();
+    });
 
-//     $('#bt_del').click(function(){
-//         eliminar(id_fila_selected);
-//     });
+    $('#bt_addVenta').keypress(function(){
+        // var nombreProductoAgregar = $('#inpt-producto').val();
+        // $("#tabla tbody tr").each(function (index) {
+        //     $(this).children("td").each(function (index2) {
+        //         producto = [];
+        //         //dato = index;
+        //         console.log(index);
+        //         switch (index2) {
+        //             case 4:
+        //                 tipoPrecio = $(this).text();
+        //                 if(nombreProductoAgregar === tipoPrecio){
+        //                     alert("Usted ya agrego este producto");
+        //                 }
+        //
+        //                 break;
+        //         }
+        //
+        //     });
+        //     contador = 1;
+        //     productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
+        // });
+        $('#inpt-producto').focus();
+    });
 
-//     $('#bt_delall').click(function(){
-//         eliminarTodasFilas();
-//     });
+    $('#bt_del').click(function(){
+        eliminar(id_fila_selected);
+        //RefrescarTotal();
+    });
 
-//     $('#bt_GenerarVenta').click(function(){
-//         GenerarVenta();
-//     });
+    $('#bt_delall').click(function(){
+        eliminarTodasFilas();
+    });
 
-// });
+    $('#bt_GenerarVenta').click(function(){
+        // var regexDNI = /^[0-9]{8}$/;
+        // var regexRUC = /^[0-9]{11}$/;
+        // const clienteDoc = document.getElementById('inpt-cliente').value;
+        // const nombreCliente = document.getElementById('nombreCl').value;
+        // if (regexDNI.test(clienteDoc)) {
+        //     GenerarVenta();
+        // } else if (regexRUC.test(clienteDoc)) {
+        //     GenerarVenta();
+        // } else {
+        //     alert('El campo "Cliente" tiene que ser apropiadamente llenado')
+        //     x = document.getElementById('inpt-cliente');
+        //     x.value = '';
+        //     document.getElementById('nombreCl').value = '';
+        //     x.focus();
+        // }
+        GenerarVenta();
 
-// function CalcularSubTotal(id,cantidad){
-//     SubTotal = $('#precioUnitario'+id).val()*cantidad;
-//     SubTotal = parseFloat(SubTotal).toFixed(2);
-//     $('#SubTotal'+id).text(SubTotal);
-//     RefrescarTotal();
-//     //console.log($(this));
-// }
-// function reset_values(){
-//     $('#inpt-producto').val('');
-//     $('#codigo').val('');
-//     $('#precio').val('');
-//     $('#cantidad').val('');
-//     $('#valorPrecio').val('');
-//     $('cmbPresentacion').val('');
-//     $('#cmbPrecio').val('');
-// }
+    });
 
-// var TotalVenta=0;
-// var cont=0;
-// var id_fila_selected=[];
-// function agregar(){
-//     cont++;
-//     Producto = $('#inpt-producto').val();
-//     codigo = $('#codigo').val();
-//     precio = $('#valorPrecio').val();
-//     cantidad = $('#cantidad').val();
-//     presentacion = $('#cmbPresentacion').val();
-//     precioTipo = $('#cmbPrecio option:selected').text();
+    $('#bt_nuevaVenta').click(function() {
+        nuevaVenta();
+    })
 
-//     error = "";
-//     if (Producto==''){
-//         error = 1;
-//     }
+    // VALIDADORES ONKEYPRESS
+    x = document.getElementById('inpt-cliente')
+    x.addEventListener('keypress', (event) => {
+        var valAnterior = x.value;
+        console.log(valAnterior)
+        const keyName = event.key;
+        console.log(keyName);
+        if(keyName == 'e') {
+            x.value = valAnterior;
+        }
+    })
 
-//     if (cantidad==''){
-//         error = 2;
-//     }
-//     if (error=="") {
-//         SubTotal = parseFloat(precio*cantidad).toFixed(2);
-//         valor = cont - 1;
-//         var fila='<tr class="selected" id="fila' + valor + '" onclick="seleccionar(this.id);">' +
-//                  '<td>' + valor + '</td>' +
-//                  '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td>' +
-//                  '<td>' + codigo + '</td>' +
-//                  '<td>' + Producto + '</td>' + 
-//                  '<td>' + precioTipo+'</td>' +
-//                  '<td>' + presentacion + '</td>' +
-//                  '<td id="precioUnitario"'+ valor + '>' + precio + '</td>' +
-//                  '<td><label id="SubTotal' + valor + '" name="SubTotal' + valor + '">' + SubTotal + '</label></td>' +
-//                  '</tr>';
-                 
-//         $('#tabla').append(fila);
+});
 
-//         TotalVenta =  parseFloat(Math.round((TotalVenta + (precio*cantidad)) * 100) / 100).toFixed(2);
+function CalcularSubTotal(id,cantidad){
+    SubTotal = $('#precioUnitario'+id).val()*cantidad;
+    SubTotal = parseFloat(SubTotal).toFixed(2);
+    $('#SubTotal'+id).text(SubTotal);
+    RefrescarTotal();
+    //console.log($(this));
+}
 
-//         //$('#id_Total').text("S/. "+TotalVenta);
-//         RefrescarTotal();
-//         reset_values();
-//         reordenar();
-//     }
-//     else{
-//         switch(error) {
-//         case 1:
-//             alert("Seleccione un producto válido!");
-//             $( "#inpt-producto" ).focus();
-//             break;
-//         case 2:
-//             alert("Ingrese una cantidad");
-//             $( "#cantidad" ).focus();
-//             break;
-//         }
-//     }
-//     // $('#inpt-producto').focus(function(){
-//     //   if (document.getElementById("presentacion").length!=0 ) {
-//     //     var pre = document.getElementById("presentacion");
-//     //     pre.options.length = 0;
-//     //     var valorRemove = document.getElementById("valor");
-//     //     valorRemove.options.length = 0;
-//     //   }
-//     //   $('#presentacion').prop('disabled', 'disabled');
-//     //   $('#cantidad').prop('disabled', 'disabled');
-//     //
-//     // });
+function reset_values(){
+    $('#inpt-producto').val('');
+    $('#codigo').val('');
+    $('#precio').val('');
+    $('#cantidad').val('');
+    $('#valorPrecio').val('');
+    $('#inpt-producto').focus();
+}
 
-// }
+var TotalVenta=0;
+var cont=0;
+var id_fila_selected=[];
+function agregar(){
+    cont++;
+    Producto = $('#inpt-producto').val();
+    console.log(Producto);
+    codigo = $('#codigo').val();
+    console.log(codigo);
+    precio = $('#valorPrecio').val();
+    console.log(precio);
+    cantidad = $('#cantidad').val();
+    console.log(cantidad);
+    presentacion = $('#cmbPresentacion').val();
+    precioTipo = $('#cmbPrecio').val();
+    imagen = $('#urlImagen').val();
 
-// function seleccionar(id_fila){
-//     if($('#'+id_fila).hasClass('seleccionada')){
-//         $('#'+id_fila).removeClass('seleccionada');
-//     }
-//     else{
-//         $('#'+id_fila).addClass('seleccionada');
-//     }
-//     //2702id_fila_selected=id_fila;
-//     id_fila_selected.push(id_fila);
-// }
+    error = "";
+    if (Producto==''){
+        error = 1;
+    }else{
+      var nombreProductoAgregar = $('#inpt-producto').val();
+      //###################################################################
+      var combo = document.getElementById("cmbPresentacion");
+      var nombrePresentacionAgregar = combo.options[combo.selectedIndex].text;
+      // = $('#cmbPresentacion').val();
+      //alert(nombrePresentacionAgregar);
+      $("#tabla tbody tr").each(function (index) {
+          $(this).children("td").each(function (index2) {
+              producto = [];
+              //dato = index;
+              console.log(index);
+              switch (index2) {
+                  case 4:
+                      nombreProducto = $(this).text();
+                      // if(nombreProductoAgregar === nombreProducto){
+                      //     alert("Usted ya agrego este producto");
+                      //     reset_values();
+                      //     error = 3;
+                      // }
 
-// function eliminar(id_fila){
-//     /*$('#'+id_fila).remove();
-//     reordenar();*/
-//     ValorRestar = 0;
-//     for(var i=0; i<id_fila.length; i++){
-//         $('#'+id_fila[i]).children("td").each(function (index2) {
-//             switch (index2) {
-//                 case 5:
-//                     ValorRestar = parseFloat($(this).text()).toFixed(2);
-//                     break;
-//             }
-//         });
-//         //TotalVenta = TotalVenta - ValorRestar
-//         //$('#id_Total').text("S/. "+TotalVenta);
-//         RefrescarTotal();
-//         $('#'+id_fila[i]).remove();
-//     }
-//     reordenar();
-// }
+                      //break;
+                  case 6:
+                      tipoPresentacion = $(this).text();
+                      //alert(tipoPresentacion);
+                      //alert(nombreProducto);
 
-// function reordenar(){
-//     var num=1;
-//     $('#tabla tbody tr').each(function(){
-//         $(this).find('td').eq(0).text(num);
-//         num++;
-//     });
+                      //
+                        if((nombrePresentacionAgregar === tipoPresentacion) && (nombreProductoAgregar === nombreProducto) ){
+                            //if(){
+                                alert("Usted ya agrego este producto");
+                                reset_values();
+                                error = 3;
+                            //}
+                        }
 
-// }
+                      //}
 
-// function RefrescarTotal(){
-//     Total=0;
-//     $('#tabla tbody tr').each(function(){
-//         valor = $(this).find('td').eq(7).children('label').text();
-//         //console.log(valor);
-//         Total = Total + parseFloat(valor);
-//         $('#id_Total').text(Total);
-//         //alert(Total);
-//     });
-// }
+                      break;
+              }
 
-// function eliminarTodasFilas(){
-// $('#id_Total').text("0.00");
-// $('#tabla tbody tr').each(function(){
-//         $(this).remove();
-//     });
-// }
+          });
+          contador = 1;
 
-// function GenerarVenta(){
-//     var num = 1;
-//     productos = [];
-//     contador = 0;
+          //productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
+      });
+    }
 
-//     $("#tabla tbody tr").each(function (index) {
-//         $(this).children("td").each(function (index2) {
-//             switch (index2) {
-//                 case 1:
-//                     cantidad = $("#cantidad"+index ).val();
-//                     break;
+    if (cantidad==''){
+        error = 2;
+    }
 
-//                 case 2:
-//                     codigo = $(this).text();
-//                     break;
+    if (error=="") {
+        SubTotal = parseFloat(precio*cantidad).toFixed(2);
+        valor = cont - 1;
+        var fila='<tr class="selected" id="fila' + valor + '" onclick="seleccionar(this.id);">' +
+                 '<td>' + valor + '</td>' +
+                 '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" onchange ="eventoCambio('+valor+');" value="' + cantidad + '"></td>' +
+                 '<td>' + codigo + '</td>' +
+                 '<td>' + Producto + '</td>' +
+                 '<td>' + precioTipo+'</td>' +
+                 '<td>' + presentacion + '</td>' +
+                 '<td id="precioUnitario'+ valor +'">' + precio + '</td>' +
+                 '<td><label id="SubTotal' + valor + '" name="SubTotal' + valor + '">' + SubTotal + '</label></td>' +
+                 '</tr>';
 
-//                 case 7:
-//                     precioVenta = $(this).text();
-//                     break;
-//             }
+        $('#tabla').append(fila);
 
-//         });
-//         contador = 1;
-//         productos.push([cantidad,codigo,precioVenta]);
-//     });
+        TotalVenta =  parseFloat(Math.round((TotalVenta + (precio*cantidad)) * 100) / 100).toFixed(2);
+        console.log(TotalVenta);
 
-//     var cliente = '00000000';
-//     if (contador == 1) {
-//         var datos = {
-//             productos: productos,
-//             cliente: cliente
-//         };
+        //$('#id_Total').text("S/. "+TotalVenta);
+        RefrescarTotal();
+        reset_values();
+        //reordenar();
+    }
+    else{
+        switch(error) {
+        case 1:
+            alert("Seleccione un producto válido!");
+            $( "#inpt-producto" ).focus();
+            break;
+        // case 2:
+        //     alert("Ingrese una cantidad");
+        //     $( "#cantidad" ).focus();
+        //     break;
 
-//         console.log(datos.productos[0][0]);
-//         console.log(datos.productos[0][1]);
-//         console.log(datos.productos[0][2]);
-//         console.log(datos.cliente);
-        
-//         sendData = JSON.stringify(datos);
+        }
+    }
+}
 
-//         $.ajax({
-//             type: "POST",
-//             dataType: "json",
-//             url: "/venta/nuevo/",
-//             data: sendData,
-//             contentType: "application/json; charset=utf-8",
-//             async: false,
-//             cache: false,
-//             CrossDomain: true,
+function seleccionar(id_fila){
+    if($('#'+id_fila).hasClass('seleccionada')){
+        $('#'+id_fila).removeClass('seleccionada');
+    }
+    else{
+        $('#'+id_fila).addClass('seleccionada');
+    }
+    //2702id_fila_selected=id_fila;
+    id_fila_selected.push(id_fila);
+}
 
-//             success: function (result) {
-//             //     var id_venta = result["id_venta"];
-//                  alert('Nueva venta registrada');
-//                  //location.reload(true);
-//                  document.location.href='/venta/listar/';
-//             }
-//         });
-//     }else{
-//         alert("No registró ningún producto");
-//     }
-// }
-// function imprimir_venta(id_venta){
-//     window.open('/venta/imprimir/'+id_venta+'/', '_blank');
-// }
+function eliminar(id_fila){
+    /*$('#'+id_fila).remove();
+    reordenar();*/
+    ValorRestar = 0;
+    for(var i=0; i<id_fila.length; i++){
+        $('#'+id_fila[i]).children("td").each(function (index2) {
+            switch (index2) {
+                case 5:
+                    ValorRestar = parseFloat($(this).text()).toFixed(2);
+                    break;
+            }
+        });
+        //TotalVenta = TotalVenta - ValorRestar
+        //$('#id_Total').text("S/. "+TotalVenta);
+        RefrescarTotal();
+        $('#'+id_fila[i]).remove();
+    }
+    //reordenar();
+}
 
+function reordenar(){
+    var num=1;
+    $('#tabla tbody tr').each(function(){
+        $(this).find('td').eq(0).text(num);
+        num++;
+    });
 
-window.onload = function() {
-    const pedido = document.getElementById('cmbPedido');
-    console.log('window on load');
-    pedido.addEventListener('change', consultaPedidoVenta);
+}
+
+function RefrescarTotal(){
+    Total=0;
+    $('#tabla tbody tr').each(function(){
+        valor = $(this).find('td').eq(7)[0].innerText;
+        //console.log(valor);
+        Total = Total + parseFloat(valor);
+        $('#id_Total').text(Total.toFixed(2));
+        //alert(Total);
+    });
+}
+
+function eliminarTodasFilas(){
+$('#id_Total').text("0.00");
+$('#tabla tbody tr').each(function(){
+        $(this).remove();
+    });
+}
+
+// GENERA UN NUEVO PEDIDO
+function GenerarVenta(){
+    var num=1;
+    productos = [];
+    contador = 0;
+    $("#tabla tbody tr").each(function (index) {
+        $(this).children("td").each(function (index2) {
+            producto = [];
+            //dato = index;
+            console.log(index);
+            switch (index2) {
+                case 0:
+                    numero = $(this).text();
+                    numero = parseInt(numero);
+                    console.log("esto"+numero);
+                case 2:
+                    cantidad = $("#cantidad"+numero ).val();
+                    break;
+                case 3:
+                    codigo = $(this).text();
+                    break;
+                case 5:
+                    tipoPrecio = $(this).text();
+                    break;
+                case 6:
+                    presentacion = $(this).text();
+                    break;
+                case 7:
+                    precioUnitario = $(this).text();
+                    break;
+            }
+
+        });
+        contador = 1;
+        productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
+    });
+    console.log(productos);
+    var cliente = document.getElementById("inpt-cliente").value;
+    if (contador == 1) {
+        var datos = {productos: productos,cliente:cliente};
+        var sendData = JSON.stringify(datos);
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/Pedido/registrar/",
+            data: sendData,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            cache: false,
+            CrossDomain: true,
+
+            success: function (result) {
+            //     var id_venta = result["id_venta"];
+                 alert('Pedido Registrado');
+                 //location.reload(true);
+                 document.location.href='/Pedido/listar/';
+            }
+        });
+    }else{
+        alert("No registró ningún producto");
+    }
+}
+
+function imprimir_venta(id_venta){
+    window.open('/venta/imprimir/'+id_venta+'/', '_blank');
 }
 
 
-alert(window.onload);
+// FUNCION QUE GENERA UNA NUEVA VENTA
+function nuevaVenta() {
+    var num=1;
+    productos = [];
+    contador = 0;
+    $("#tabla tbody tr").each(function (index) {
+        $(this).children("td").each(function (index2) {
+            producto = [];
+            //dato = index;
+            console.log(index);
+            switch (index2) {
+                case 1:
+                    cantidad = $("#cantidad"+index ).val();
+                    break;
+                case 2:
+                    codigo = $(this).text();
+                    break;
+                case 4:
+                    tipoPrecio = $(this).text();
+                    break;
+                case 5:
+                    presentacion = $(this).text();
+                    break;
+                case 6:
+                    precioUnitario = $(this).text();
+                    break;
+            }
 
-var consultaPedidoVenta = function() {
-    console.log(pedido.value)
-    var pedidoId = pedido.value;
-    $.ajax({
-        type: "POST",
-        url: "/pedido/venta/",
-        dataType: 'json',
-        data: {
-            pedidoId: pedidoId
-        },        
-        success: function (result) {
-            // document.location.href='/venta/listar/';
-            console.log(result);
-        }
+        });
+        contador = 1;
+        productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
+    });
+    console.log(productos);
+    var cliente = document.getElementById("inpt-cliente").value;
+    var tipoRecibo = $('#cmbTipoRecibo').val();
+    var nrecibo = $('#nroRecibo').val();
+    var cajaId = $('#cmbCaja').val();
+    if (contador == 1) {
+        var datos = {
+            productos: productos,
+            cliente: cliente,
+            nrecibo: nrecibo,
+            tipoRecibo: tipoRecibo,
+            cajaId: cajaId
+        };
+
+        var sendData = JSON.stringify(datos);
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/Venta/registrar/",
+            data: sendData,
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            cache: false,
+            CrossDomain: true,
+
+            success: function (result) {
+            //     var id_venta = result["id_venta"];
+                 alert('Venta Registrada');
+                 //location.reload(true);
+                 document.location.href='/Venta/listar/';
+            }
+        });
+    }else{
+        alert("No registró ningún producto");
+    }
+}
+
+function eventoCambio(valor){
+    var cantidad = $('#cantidad'+valor+'').val();
+    console.log(cantidad);
+    if (cantidad != ''){
+        var precioU = $('#precioUnitario'+valor+'').text();
+        console.log(cantidad);
+        console.log(precioU);
+        var subTot = parseFloat(cantidad) * parseFloat(precioU);
+        $('#SubTotal'+valor+'').text(subTot.toFixed(2));
+        RefrescarTotal();
+    }else{
+        alert("Ingrese una cantidad válida");
+        $('#cantidad'+valor+'').focus();
+    }
+
+}
+
+function agregarProducto(){
+  $("#cantidad").keypress(function(e) {
+      if(e.which == 13) {
+        agregar();
+      }
     });
 }
