@@ -59,4 +59,5 @@ def cierreCaja(request):
     cierreCaja.save()
     oAperturaCaja.estado = False
     oAperturaCaja.save()
+    
     return redirect('/Venta/nuevo/')
