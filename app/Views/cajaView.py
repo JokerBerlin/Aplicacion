@@ -52,8 +52,10 @@ def registrarOperacion(request):
             print(Datos)
             oDetalletipooperacion = Detalletipooperacion.objects.get(id=Datos['cmbOperacion'])
             monto = float(Datos['monto'])
-            if oDetalletipooperacion.tipooperacion_id == '2':
+            print(oDetalletipooperacion.tipooperacion_id)
+            if oDetalletipooperacion.tipooperacion_id == 2:
                 monto = monto * -1
+            print(monto)
             oOperacion = Operacion(
                 monto = monto,
                 descripcion = Datos['descripcion'],
