@@ -12,6 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.cierrecajaForm import *
 from datetime import datetime
+
+from app.validacionUser import validacionUsuario
+
+perfiles_correctos = [1]
 # def registrarCierrecaja(request):
 #     if request.method == 'POST':
 #         Datos = request.POST
@@ -41,6 +45,8 @@ from datetime import datetime
 
 
 def cierreCaja(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     fechaHoraActual = datetime.today()
     usuario = request.user
     empleado = Empleado.objects.get(usuario_id=usuario)

@@ -13,7 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.clienteForm import *
 
+from app.validacionUser import validacionUsuario
 
+perfiles_correctos = [1, 4]
 ##paginacion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -53,6 +55,8 @@ def buscarCliente(request):
                 return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
 
 def detalleCliente(request,cliente_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oCliente = Cliente.objects.get(id=cliente_id,estado=True)
     oPresentaciones = Presentacion.objects.filter(estado=True)
     return render(request, 'cliente/detalle.html', {'oCliente':oCliente})
@@ -109,6 +113,8 @@ def editarCliente(request,cliente_id):
         else:
             return render(request, '/Cliente/error.html')
     else:
+        if not validacionUsuario(request.user) in perfiles_correctos:
+            return redirect('/error/')
         form = ClienteForm(request.POST or None, instance=oCliente)
         print(form)
         return render(request, 'cliente/editar.html', {'form': form, 'oCliente':oCliente})
@@ -145,11 +151,15 @@ def nuevoCliente(request):
         else:
             return render(request, 'cliente/error.html')
     else:
+        if not validacionUsuario(request.user) in perfiles_correctos:
+            return redirect('/error/')
         precios = Precio.objects.all()
         return render(request, 'cliente/nuevo.html', {'precios': precios})
 
 def listarCliente(request):
     if request.method == 'GET':
+        if not validacionUsuario(request.user) in perfiles_correctos:
+            return redirect('/error/')
         oClientes = Cliente.objects.filter(estado=True).order_by('-id')
         paginator = Paginator(oClientes,2)
 

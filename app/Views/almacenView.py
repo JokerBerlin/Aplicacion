@@ -14,6 +14,10 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime as dt
 import json
 
+from app.validacionUser import validacionUsuario
+
+
+perfiles_correctos = [3, 5]
 @csrf_exempt
 def BuscarAlmacen(request):
     if request.method == 'POST':
@@ -40,6 +44,8 @@ def BuscarAlmacen(request):
               return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
 
 def reporteAlmacen(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     context = {}
     return render(request, 'reporte/almacen.html', context)
 

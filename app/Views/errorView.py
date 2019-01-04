@@ -39,3 +39,6 @@ def registrarError(request):
 	        	return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
         else:
 	        return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
+
+def visualizarError(request):
+	return render(request, 'error/error.html')

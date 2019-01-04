@@ -5,6 +5,8 @@ from app.models import *
 from app.fomularios.cajaForm import *
 from datetime import datetime
 
+from app.validacionUser import validacionUsuario
+
 def registrarAperturacaja(request):
     if request.method == 'POST':
         Datos = request.POST
@@ -37,8 +39,10 @@ def registrarAperturacaja(request):
 
     else:
 
-        context = {
-        }
+        if not validacionUsuario(request.user) == 5:
+            return redirect('/error/')
+
+        context = {}
         return render(request,'caja/apertura.html',context)
 
 def registrarOperacion(request):
@@ -66,12 +70,18 @@ def registrarOperacion(request):
         except Exception as e:
             return redirect('/Caja/apertura/')
     else:
+
+        if not validacionUsuario(request.user) == 5:
+            return redirect('/error/')
+
         tipoOperaciones = Tipooperacion.objects.filter(estado=1)
         detalleOperaciones = Detalletipooperacion.objects.filter(estado=1)
         return render(request,'caja/operacion.html',{'tipoOperaciones':tipoOperaciones,'detalleOperaciones':detalleOperaciones})
 
 # Reporte/caja/
 def reporteCaja(request):
+    if not validacionUsuario(request.user) == 5:
+        return redirect('/error/')
     cajas = Caja.objects.all()
     context = {
         'cajas': cajas

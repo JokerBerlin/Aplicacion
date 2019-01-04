@@ -12,6 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.aperturacajaForm import *
 
+from app.validacionUser import validacionUsuario
+
+perfiles_correctos = [1]
+
 def registrarAperturacaja(request):
     if request.method == 'POST':
         Datos = request.POST
@@ -26,6 +30,8 @@ def registrarAperturacaja(request):
         else:
             return render(request, 'caja/apertura.html')
     else:
+        if not validacionUsuario(request.user) in perfiles_correctos:
+            return redirect('/error/')
         oCajas = Caja.objects.filter(estado=True)
         form = AperturacajaForm()
         try:

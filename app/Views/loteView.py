@@ -14,7 +14,13 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.productoForm import *
 
+from app.validacionUser import validacionUsuario
+
+perfiles_correctos = [1, 3]
+
 def nuevoLote(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oRecibos = Recibo.objects.filter(estado=True)
     oAlmacens = Almacen.objects.filter(estado=True)
     context ={
@@ -84,6 +90,8 @@ def registrarLote(request):
 
         #return render(request, '/pedido/listar.html')
     else:
+        if not validacionUsuario(request.user) in perfiles_correctos:
+            return redirect('/error/')
         oRecibos = Recibo.objects.filter(estado=True)
         oAlmacens = Almacen.objects.filter(estado=True)
         context ={
@@ -93,6 +101,8 @@ def registrarLote(request):
         return render(request, 'lote/nuevo.html', context)
 
 def listarLote(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProductos=[]
     if request.method == 'POST':
         return render(request, 'lote/listar.html')
@@ -126,6 +136,8 @@ def listarLote(request):
         #return render(request, 'venta/prueba.html', {})
 
 def detalleLote(request, lote_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'GET':
         oLote = Lote.objects.get(id=lote_id)
         oProductoAlmacens = Producto_almacens.objects.filter(lote_id=oLote.id)
