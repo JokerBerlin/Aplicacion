@@ -5,7 +5,6 @@ from app.models import *
 from app.fomularios.cajaForm import *
 from datetime import datetime
 
-
 def registrarAperturacaja(request):
     if request.method == 'POST':
         Datos = request.POST
@@ -25,7 +24,7 @@ def registrarAperturacaja(request):
                 monto = 0.0
         except Exception as e:
             monto = 0.0
-        
+
         oAperturaCaja = Aperturacaja(
             monto=monto,
             activo=True,
@@ -33,19 +32,19 @@ def registrarAperturacaja(request):
             caja=oCaja
         )
         oAperturaCaja.save()
-        
+
         return redirect('/Venta/nuevo/')
 
     else:
-        
+
         context = {
         }
         return render(request,'caja/apertura.html',context)
 
 def registrarOperacion(request):
-    oDetalletipooperacions = Detalletipooperacion.objects.filter(estado=1)
-    oCajas = Caja.objects.filter(estado=1)
-    return render(request,'caja/operacion.html',{'oDetalletipooperacions':oDetalletipooperacions,'oCajas':oCajas})
+    tipoOperaciones = Tipooperacion.objects.filter(estado=1)
+    detalleOperaciones = Detalletipooperacion.objects.filter(estado=1)
+    return render(request,'caja/operacion.html',{'tipoOperaciones':tipoOperaciones,'detalleOperaciones':detalleOperaciones})
 
 # Reporte/caja/
 def reporteCaja(request):
