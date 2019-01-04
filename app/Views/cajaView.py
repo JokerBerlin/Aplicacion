@@ -42,9 +42,33 @@ def registrarAperturacaja(request):
         return render(request,'caja/apertura.html',context)
 
 def registrarOperacion(request):
-    tipoOperaciones = Tipooperacion.objects.filter(estado=1)
-    detalleOperaciones = Detalletipooperacion.objects.filter(estado=1)
-    return render(request,'caja/operacion.html',{'tipoOperaciones':tipoOperaciones,'detalleOperaciones':detalleOperaciones})
+    if request.method == 'POST':
+        usuario = request.user
+        empleado = Empleado.objects.get(usuario_id=usuario)
+        hoy = datetime.today()
+        try:
+            oCaja = Aperturacaja.objects.get(caja_id=empleado.caja_id,estado=1,fecha__year=hoy.year, fecha__month=hoy.month,fecha__day = hoy.day)
+            Datos = request.POST
+            print(Datos)
+            oDetalletipooperacion = Detalletipooperacion.objects.get(id=Datos['cmbOperacion'])
+            monto = float(Datos['monto'])
+            if oDetalletipooperacion.tipooperacion_id == '2':
+                monto = monto * -1
+            oOperacion = Operacion(
+                monto = monto,
+                descripcion = Datos['descripcion'],
+                estado = 1,
+                caja_id = oCaja.caja_id,
+                detalletipooperacion_id=Datos['cmbOperacion']
+            )
+            oOperacion.save()
+            return redirect('/Pedido/listar/2/')
+        except Exception as e:
+            return redirect('/Caja/apertura/')
+    else:
+        tipoOperaciones = Tipooperacion.objects.filter(estado=1)
+        detalleOperaciones = Detalletipooperacion.objects.filter(estado=1)
+        return render(request,'caja/operacion.html',{'tipoOperaciones':tipoOperaciones,'detalleOperaciones':detalleOperaciones})
 
 # Reporte/caja/
 def reporteCaja(request):
