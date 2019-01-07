@@ -17,7 +17,7 @@ from app.fomularios.rutaForm import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
 
-from django.app.validacionUsuario import validacionUsuario
+from app.validacionUser import validacionUsuario
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
