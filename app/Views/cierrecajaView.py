@@ -87,4 +87,5 @@ def cierreCaja(request):
 def validarCierreCaja(cierreCaja):
     hoy = datetime.today()
 
-    if 
+    if True:
+        pass
