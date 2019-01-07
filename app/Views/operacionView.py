@@ -16,7 +16,10 @@ from app.validacionUser import validacionUsuario
 
 perfiles_correctos = [1]
 
+@login_required
 def registrarOperacion(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         Datos = request.POST
         print (Datos)

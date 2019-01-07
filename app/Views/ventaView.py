@@ -26,8 +26,14 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 
+from app.validacionUser import validacionUsuario
+
+perfiles_correctos = [1, 4]
+
 @login_required
 def ListarVentas(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProductos=[]
     if request.method == 'POST':
         return render(request, 'venta/listar.html')
@@ -60,7 +66,7 @@ def ListarVentas(request):
 
         return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range": page_range})
 
-@login_required
+
 @csrf_exempt
 def filtrarVentas(request):
     if request.method == 'POST':
@@ -231,6 +237,7 @@ def filtrarVentas(request):
         #print(ventass)
         return HttpResponse(json.dumps(oDatosVenta), content_type='application/json')
         #return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range":page_range,"tags":tags,})
+
 @csrf_exempt
 def guardar_cookies(request):
     if request.method == 'POST':
@@ -269,6 +276,8 @@ def eliminar_cookies(request):
 
 @login_required
 def FiltrarVenta(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProductos=[]
     oVentas=[]
     if "producto_busca" in request.COOKIES:
@@ -508,6 +517,8 @@ def eliminar_identificador_venta(request):
 
 @login_required
 def ventaNuevo(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
     oPedidos = Pedido.objects.filter(estado=2)
@@ -528,6 +539,8 @@ def ventaNuevo(request):
 #Caso en el que se crea una venta sin pasar antes por pedidos y almacen
 @login_required
 def insertarVenta(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         datos = json.loads(request.body)
         print(datos)
@@ -613,6 +626,8 @@ def insertarVenta(request):
 
 @login_required
 def anularVenta(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProductos=[]
     if request.method == 'POST':
         return render(request, 'venta/anular.html')
@@ -703,6 +718,8 @@ def eliminar_identificador_venta(request):
 
 @login_required
 def DetalleVenta(request,venta_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'GET':
         oVenta = Venta.objects.get(id=venta_id)
         oPedido = Pedido.objects.get(id = oVenta.pedido_id)
@@ -722,6 +739,8 @@ def DetalleVenta(request,venta_id):
 
 @login_required
 def reporteVentas(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oEmpleados = Empleado.objects.all()
     context = {
         "empleados": oEmpleados
@@ -808,6 +827,8 @@ def empleadoVentas(request, empleado_id, mesActual, añoActual):
 
 @login_required
 def reporteVentasAnuladas(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oEmpleados = Empleado.objects.all()
     context = {
         "empleados": oEmpleados

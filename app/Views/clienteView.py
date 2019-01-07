@@ -27,6 +27,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 #   servicio de busqueda de usuario para la app movil
 ###########################################################
 
+perfiles_correctos = [1, 4]
+
 @csrf_exempt
 def buscarCliente(request):
     if request.method == 'POST':
@@ -54,6 +56,7 @@ def buscarCliente(request):
             except Exception as e:
                 return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
 
+@login_required
 def detalleCliente(request,cliente_id):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
@@ -100,8 +103,10 @@ def detalleClienteWS(request):
             #except Exception as e:
         #    return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
 
-
+@login_required
 def editarCliente(request,cliente_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oCliente = Cliente.objects.get(id = cliente_id)
     if request.method == 'POST':
         Datos = request.POST
@@ -133,7 +138,10 @@ def registrarCliente(request):
         oCliente.save()
         return HttpResponse(json.dumps({'exito':1}), content_type="application/json")
 
+@login_required
 def nuevoCliente(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         Datos = request.POST
         cliente = Cliente(
@@ -156,7 +164,10 @@ def nuevoCliente(request):
         precios = Precio.objects.all()
         return render(request, 'cliente/nuevo.html', {'precios': precios})
 
+@login_required
 def listarCliente(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'GET':
         if not validacionUsuario(request.user) in perfiles_correctos:
             return redirect('/error/')
