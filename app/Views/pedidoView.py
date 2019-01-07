@@ -33,6 +33,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 ###########################################################
 @csrf_exempt
 # Pedido/registrar/
+@login_required
 def insertarPedido(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
@@ -83,6 +84,7 @@ def insertarPedido(request):
 
         return render(request, 'pedido/nuevo.html', {})
 
+@login_required
 def registrarPedido(request):
     # if request.method == 'POST':
         # oPedido = Pedido.objects.get(pk=request.POST['pedido'])
@@ -110,7 +112,7 @@ def registrarPedido(request):
 
     return render(request, 'pedido/nuevo.html', context)
 
-
+@login_required
 def ListarPedidos(request):
     oProductos=[]
     if request.method == 'POST':
@@ -144,7 +146,7 @@ def ListarPedidos(request):
 
         return render(request, 'pedido/listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
         #return render(request, 'venta/prueba.html', {})
-
+@login_required
 def ListarEstadoPedidos(request,estado_id):
     oProductos=[]
     if request.method == 'POST':
@@ -183,7 +185,7 @@ def ListarEstadoPedidos(request,estado_id):
         else:
             return render(request, 'pedido/listar.html', {"oPedidos": pedidoPagina,"oProductos":oProductos,"page_range": page_range})
 
-
+@login_required
 def ResumenPedidos(request):
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
@@ -240,6 +242,7 @@ def DetallePedidoMovil(request):
                 jsonPedidos["productos"].append(oProducto)
             return HttpResponse(json.dumps(jsonPedidos), content_type="application/json")
 
+@login_required
 def DetallePedido(request,pedido_id):
     if request.method == 'GET':
         idPedido = int(pedido_id)
@@ -332,6 +335,7 @@ def ListarPedido(request):
             jsonPedidos["TotalPedidos"] = TotalPedidos
             return HttpResponse(json.dumps(jsonPedidos), content_type="application/json")
 
+@login_required
 def editarPedido(request,pedido_id):
     #oProductopresentacions= Productopresentacions.objects.filter(producto_in=oPedidoproductospresentacions.productopresentacions.producto.id)
     if request.method == 'POST':
@@ -383,6 +387,7 @@ def editarPedido(request,pedido_id):
         return render(request, 'pedido/editar.html', {'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'totalMonto':totalMonto,})
 
 @csrf_exempt
+@login_required
 def pedidoVenta(request,pedido_id):
     #oProductopresentacions= Productopresentacions.objects.filter(producto_in=oPedidoproductospresentacions.productopresentacions.producto.id)
     if request.method == 'POST':
@@ -538,6 +543,7 @@ def eliminar_identificador_pedido(request):
     response = {}
     return JsonResponse(response)
 
+@login_required
 def FiltrarPedido(request):
     oProductos=[]
     oVentas=[]
@@ -700,6 +706,7 @@ def FiltrarPedido(request):
 
     return render(request, 'pedido/listar.html', {"oPedidos": ventaPagina,"oProductos":oProductos,"page_range": page_range,"tags":tags,})
 
+@login_required
 def EstadoPedido(request,estado_id):
     oProductos=[]
     oVentas=[]

@@ -16,6 +16,7 @@ from app.validacionUser import validacionUsuario
 
 perfiles_correctos = [1]
 
+@login_required
 def registrarAperturacaja(request):
     if request.method == 'POST':
         Datos = request.POST

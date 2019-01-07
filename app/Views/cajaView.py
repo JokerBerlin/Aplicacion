@@ -4,9 +4,11 @@ from django.http import JsonResponse
 from app.models import *
 from app.fomularios.cajaForm import *
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 from app.validacionUser import validacionUsuario
 
+@login_required
 def registrarAperturacaja(request):
     if request.method == 'POST':
         Datos = request.POST
@@ -45,6 +47,7 @@ def registrarAperturacaja(request):
         context = {}
         return render(request,'caja/apertura.html',context)
 
+@login_required
 def registrarOperacion(request):
     if request.method == 'POST':
         usuario = request.user
@@ -81,6 +84,7 @@ def registrarOperacion(request):
         return render(request,'caja/operacion.html',{'tipoOperaciones':tipoOperaciones,'detalleOperaciones':detalleOperaciones})
 
 # Reporte/caja/
+@login_required
 def reporteCaja(request):
     if not validacionUsuario(request.user) == 5:
         return redirect('/error/')

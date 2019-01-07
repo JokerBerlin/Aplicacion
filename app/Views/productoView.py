@@ -28,6 +28,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 #   y en buscaar producto retorno de imagen.
 ###########################################################
 
+@login_required
 def ListarProductos(request):
     if request.method == 'POST':
         return render(request, 'Producto/listar.html')
@@ -69,6 +70,7 @@ def ListarProductos(request):
         return render(request, 'producto/listar.html', {'precios':precios,"oProductos": productoPagina,"page_range": page_range})
 
 @csrf_exempt
+@login_required
 def registrarPresentacion(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
@@ -134,7 +136,7 @@ def insertarProducto(request):
 
     return HttpResponse(json.dumps({'exito':1,"idPedido": oPedido.id}), content_type="application/json")
 
-
+@login_required
 def registrarProducto(request):
     if request.method == 'POST':
         Datos = request.POST
@@ -395,11 +397,13 @@ def detalleProducto(request,producto_id):
         oPedi = Producto.objects.filter(estado = True)
         return render(request, 'producto/listar.html',{"oProductos": oPedi})
 """
+@login_required
 def detalleProducto(request,producto_id):
 
     oProducto = Producto.objects.get(pk=producto_id)
     return render(request, 'producto/detalle.html', {'oProducto':oProducto})
 
+@login_required
 def editarProducto(request,producto_id):
     oProducto = Producto.objects.get(id = producto_id)
     if request.method=='POST':

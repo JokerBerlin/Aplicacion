@@ -26,6 +26,7 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 
+@login_required
 def ListarVentas(request):
     oProductos=[]
     if request.method == 'POST':
@@ -59,6 +60,7 @@ def ListarVentas(request):
 
         return render(request, 'venta/listar.html', {"oVenta": ventaPagina,"oProductos":oProductos,"page_range": page_range})
 
+@login_required
 @csrf_exempt
 def filtrarVentas(request):
     if request.method == 'POST':
@@ -265,6 +267,7 @@ def eliminar_cookies(request):
             response.delete_cookie("fecha_fin")
         return response
 
+@login_required
 def FiltrarVenta(request):
     oProductos=[]
     oVentas=[]
@@ -468,6 +471,7 @@ def ListarVenta(request):
 
 """
 
+
 def eliminar_identificador_venta(request):
     pk = request.POST.get('identificador_id')
     print(pk)
@@ -502,6 +506,7 @@ def eliminar_identificador_venta(request):
     response = {}
     return JsonResponse(response)
 
+@login_required
 def ventaNuevo(request):
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
@@ -521,6 +526,7 @@ def ventaNuevo(request):
 
 @csrf_exempt
 #Caso en el que se crea una venta sin pasar antes por pedidos y almacen
+@login_required
 def insertarVenta(request):
     if request.method == 'POST':
         datos = json.loads(request.body)
@@ -605,6 +611,7 @@ def insertarVenta(request):
         return render(request, 'venta/nuevo')
 
 
+@login_required
 def anularVenta(request):
     oProductos=[]
     if request.method == 'POST':
@@ -694,6 +701,7 @@ def eliminar_identificador_venta(request):
     response = {}
     return JsonResponse(response)
 
+@login_required
 def DetalleVenta(request,venta_id):
     if request.method == 'GET':
         oVenta = Venta.objects.get(id=venta_id)
@@ -712,6 +720,7 @@ def DetalleVenta(request,venta_id):
         oPedidos = Pedido.objects.filter(estado = True)
         return render(request, 'pedido/listar.html',{"oPedidos": oPedidos})
 
+@login_required
 def reporteVentas(request):
     oEmpleados = Empleado.objects.all()
     context = {
@@ -797,7 +806,7 @@ def empleadoVentas(request, empleado_id, mesActual, añoActual):
 
     return JsonResponse(jsonFinal, safe=False)
 
-
+@login_required
 def reporteVentasAnuladas(request):
     oEmpleados = Empleado.objects.all()
     context = {

@@ -53,6 +53,7 @@ def eliminarPresentacionProducto(request, presentacion_id,producto_id):
 
     return HttpResponseRedirect('/Producto/editar/'+producto_id+'/')
 
+@login_required
 def presentacion_detalle(request,producto_id):
     oProducto = Producto.objects.get(id=producto_id)
     oPrecios = Precio.objects.filter(estado=True)

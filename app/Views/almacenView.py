@@ -19,6 +19,7 @@ from app.validacionUser import validacionUsuario
 
 perfiles_correctos = [3, 5]
 @csrf_exempt
+@login_required
 def BuscarAlmacen(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
@@ -43,6 +44,7 @@ def BuscarAlmacen(request):
             except Exception as e:
               return HttpResponse(json.dumps({'exito':0}), content_type="application/json")
 
+@login_required
 def reporteAlmacen(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
@@ -52,6 +54,7 @@ def reporteAlmacen(request):
 
 # Servicio para el ranking de productos mas vendidos
 # Sujeto a un datatable dentro de la vista de reporte almacen
+
 def salidaProductoAlmacen(request):
     productos = Producto.objects.all()
     jsonfinal = []

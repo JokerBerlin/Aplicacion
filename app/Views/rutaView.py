@@ -68,6 +68,7 @@ def listarRutas(request):
         return render(request, 'ruta/listar.html', {'oRutas':oRuta})
 
 """
+@login_required
 def listarRutas(request):
     if request.method == 'POST':
         return render(request, 'Ruta/listar.html')
@@ -75,6 +76,7 @@ def listarRutas(request):
         oRuta = Ruta.objects.filter(estado = True)
         return render(request, 'ruta/listar.html', {"oRutas": oRuta})
 
+@login_required
 def detalleRuta(request,ruta_id):
     if request.method == 'GET':
         idRuta = int(ruta_id)
@@ -105,6 +107,7 @@ def detalleRuta(request,ruta_id):
         return render(request, 'ruta/detalle.html', context)
 
 @csrf_exempt
+@login_required
 def registrarRuta(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
@@ -122,6 +125,7 @@ def registrarRuta(request):
     else:
         return render(request, 'ruta/nuevo.html', {})
 
+@login_required
 def editarRuta(request,ruta_id):
     oRuta = Ruta.objects.get(id = ruta_id)
     if request.method=='POST':
@@ -138,7 +142,7 @@ def editarRuta(request,ruta_id):
         ctx = {'form':form, 'oCliente': oRuta.clientes, 'oRuta':oRuta}
     return render(request, 'Ruta/editar.html',ctx)
 
-
+@login_required
 def listarRutas(request):
     if request.method == 'POST':
         return render(request, 'Ruta/listar.html')

@@ -12,6 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.productoForm import *
 
+from app.validacionUser import validacionUsuario
+
+perfiles_correctos = [1]
+
 def registrarOperacion(request):
     if request.method == 'POST':
         Datos = request.POST
