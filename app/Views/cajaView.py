@@ -8,8 +8,12 @@ from django.contrib.auth.decorators import login_required
 
 from app.validacionUser import validacionUsuario
 
+perfiles_correctos = [1,4]
+
 @login_required
 def registrarAperturacaja(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         Datos = request.POST
         hoy = datetime.today()
@@ -40,15 +44,13 @@ def registrarAperturacaja(request):
         return redirect('/Venta/nuevo/')
 
     else:
-
-        if not validacionUsuario(request.user) == 5:
-            return redirect('/error/')
-
         context = {}
         return render(request,'caja/apertura.html',context)
 
 @login_required
 def registrarOperacion(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         usuario = request.user
         empleado = Empleado.objects.get(usuario_id=usuario)
@@ -76,9 +78,6 @@ def registrarOperacion(request):
             return redirect('/Caja/apertura/')
     else:
 
-        if not validacionUsuario(request.user) == 5:
-            return redirect('/error/')
-
         tipoOperaciones = Tipooperacion.objects.filter(estado=1)
         detalleOperaciones = Detalletipooperacion.objects.filter(estado=1)
         return render(request,'caja/operacion.html',{'tipoOperaciones':tipoOperaciones,'detalleOperaciones':detalleOperaciones})
@@ -86,7 +85,7 @@ def registrarOperacion(request):
 # Reporte/caja/
 @login_required
 def reporteCaja(request):
-    if not validacionUsuario(request.user) == 5:
+    if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
     cajas = Caja.objects.all()
     context = {

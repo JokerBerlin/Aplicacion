@@ -16,10 +16,9 @@ import json
 
 from app.validacionUser import validacionUsuario
 
-
 perfiles_correctos = [3, 5]
+
 @csrf_exempt
-@login_required
 def BuscarAlmacen(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)

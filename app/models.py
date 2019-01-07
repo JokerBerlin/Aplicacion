@@ -77,10 +77,17 @@ class Detalletipooperacion(models.Model):
         return '%s' % self.nombre
 
 class Empleado(models.Model):
+    PERFIL_EMP = (
+        (1, 'Administrador'),
+        (2,'Pedido'),
+        (3,'Almacen'),
+        (4,'Ventas'),
+        (5,'Repartidor'),
+    )
     nombre = models.CharField(max_length=45)
     imei = models.CharField(max_length=45, blank=True, null=True)
     imagen = models.ImageField(blank=True, null=True)#upload_to='%Y/%m/%d',
-    perfil = models.IntegerField(blank=True, null=True,default=1)
+    perfil = models.IntegerField(blank=True, null=True,default=2, choices=PERFIL_EMP)
     estado = models.BooleanField(blank=True,default=True)
     almacen = models.ForeignKey('Almacen', default=1, on_delete=models.CASCADE)
     caja = models.ForeignKey(Caja,null=True, on_delete=models.PROTECT)

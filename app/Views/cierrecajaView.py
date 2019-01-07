@@ -11,11 +11,11 @@ from app.models import *
 from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.cierrecajaForm import *
-from datetime import datetime
+from datetime import date
 
 from app.validacionUser import validacionUsuario
 
-perfiles_correctos = [1]
+perfiles_correctos = [1, 4]
 # def registrarCierrecaja(request):
 #     if request.method == 'POST':
 #         Datos = request.POST
@@ -50,20 +50,41 @@ def cierreCaja(request):
     fechaHoraActual = datetime.today()
     usuario = request.user
     empleado = Empleado.objects.get(usuario_id=usuario)
-    oAperturaCaja = Aperturacaja.objects.filter(estado=1,caja_id=empleado.caja_id).latest('id')
-    oOperacions = Operacion.objects.filter(fecha__range=[oAperturaCaja.fecha,fechaHoraActual])
+    oAperturaCaja = Aperturacaja.objects.filter(estado=1,caja_id=empleado.caja_id)
     montoTotal = 0.0
-    for oOperacion in oOperacions:
-        montoTotal = montoTotal + float(oOperacion.monto)
 
+    if oAperturaCaja:
+        oAperturaCaja = oAperturaCaja.latest('id')
+        oOperacions = Operacion.objects.filter(fecha__range=[oAperturaCaja.fecha,fechaHoraActual])
+        
+        for oOperacion in oOperacions:
+            montoTotal = montoTotal + float(oOperacion.monto)
+    else:
+        oAperturaCaja = Aperturacaja(
+            monto=0.0,
+            activo=True,
+            estado=True,
+            caja=empleado.caja
+        )
+        oAperturaCaja.save()
+
+    existeCierreCaja = Cierrecaja.objects.filter(caja=empleado.caja)
+    
     cierreCaja = Cierrecaja(
         monto = montoTotal,
         estado = True,
-        aperturacaja_id = oAperturaCaja.id
+        aperturacaja = oAperturaCaja
     )
+
 
     cierreCaja.save()
     oAperturaCaja.estado = False
     oAperturaCaja.save()
     
     return redirect('/Venta/nuevo/')
+
+
+def validarCierreCaja(cierreCaja):
+    hoy = datetime.today()
+
+    if 
