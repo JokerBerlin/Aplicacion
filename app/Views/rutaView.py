@@ -16,6 +16,8 @@ import json
 from app.fomularios.rutaForm import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core import serializers
+
+from app.validacionUser import validacionUsuario
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
@@ -24,6 +26,7 @@ from django.core import serializers
 #   servicio de busqueda de usuario para la app movil
 ###########################################################
 
+perfiles_correctos = [1, 5]
 @csrf_exempt
 def rutaUsuario(request):
     if request.method == 'POST':
@@ -70,6 +73,8 @@ def listarRutas(request):
 """
 @login_required
 def listarRutas(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         return render(request, 'Ruta/listar.html')
     else:
@@ -78,6 +83,8 @@ def listarRutas(request):
 
 @login_required
 def detalleRuta(request,ruta_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'GET':
         idRuta = int(ruta_id)
         print(idRuta)
@@ -109,6 +116,8 @@ def detalleRuta(request,ruta_id):
 @csrf_exempt
 @login_required
 def registrarRuta(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         Datos = json.loads(request.body)
         # print(Datos)
@@ -127,6 +136,8 @@ def registrarRuta(request):
 
 @login_required
 def editarRuta(request,ruta_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oRuta = Ruta.objects.get(id = ruta_id)
     if request.method=='POST':
         form =RutaForm(request.POST, instance=oRuta)
@@ -144,6 +155,8 @@ def editarRuta(request,ruta_id):
 
 @login_required
 def listarRutas(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         return render(request, 'Ruta/listar.html')
     else:

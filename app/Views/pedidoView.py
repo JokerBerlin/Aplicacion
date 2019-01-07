@@ -24,6 +24,8 @@ from django.db.models import Sum
 ##paginacion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from app.validacionUser import validacionUsuario
+
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
@@ -35,6 +37,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Pedido/registrar/
 @login_required
 def insertarPedido(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         Datos = json.loads(request.body)
         print(Datos)
@@ -86,21 +90,8 @@ def insertarPedido(request):
 
 @login_required
 def registrarPedido(request):
-    # if request.method == 'POST':
-        # oPedido = Pedido.objects.get(pk=request.POST['pedido'])
-        # oPedidoproductospresentacion = Pedidoproductospresentacions.objects.filter(pedido = oPedido)
-        # monto = 0.0
-        # for item in oPedidoproductospresentacion:
-        #     producto = item.productopresentacions.producto
-        #     producto.cantidad -= item.cantidad
-        #     monto += item.valor
-        #
-        # oVenta = Venta()
-        # oVenta = monto
-        # oVenta.nrecibo = request.POST['nrecibo']
-        # oVenta.estado = True
-        # oVenta.pedido_id = request.POST['pedido']
-        # oVenta.cliente_id = oPedido.cliente_id
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
 
     oPresentaciones = Presentacion.objects.filter(estado=True)
     oPrecios = Precio.objects.filter(estado=True)
@@ -114,6 +105,8 @@ def registrarPedido(request):
 
 @login_required
 def ListarPedidos(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProductos=[]
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
@@ -148,6 +141,8 @@ def ListarPedidos(request):
         #return render(request, 'venta/prueba.html', {})
 @login_required
 def ListarEstadoPedidos(request,estado_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProductos=[]
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
@@ -187,6 +182,8 @@ def ListarEstadoPedidos(request,estado_id):
 
 @login_required
 def ResumenPedidos(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
     else:
@@ -244,6 +241,8 @@ def DetallePedidoMovil(request):
 
 @login_required
 def DetallePedido(request,pedido_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'GET':
         idPedido = int(pedido_id)
         oPedido = Pedido.objects.get(id = idPedido)
@@ -337,6 +336,8 @@ def ListarPedido(request):
 
 @login_required
 def editarPedido(request,pedido_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     #oProductopresentacions= Productopresentacions.objects.filter(producto_in=oPedidoproductospresentacions.productopresentacions.producto.id)
     if request.method == 'POST':
         # form = PedidoproductospresentacionsForm(instance=oPedidoproductospresentacions)
@@ -389,6 +390,8 @@ def editarPedido(request,pedido_id):
 @csrf_exempt
 @login_required
 def pedidoVenta(request,pedido_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     #oProductopresentacions= Productopresentacions.objects.filter(producto_in=oPedidoproductospresentacions.productopresentacions.producto.id)
     if request.method == 'POST':
 
@@ -545,6 +548,8 @@ def eliminar_identificador_pedido(request):
 
 @login_required
 def FiltrarPedido(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProductos=[]
     oVentas=[]
     if "producto_busca" in request.COOKIES:
@@ -708,6 +713,8 @@ def FiltrarPedido(request):
 
 @login_required
 def EstadoPedido(request,estado_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProductos=[]
     oVentas=[]
     estadoPedido=int(estado_id)

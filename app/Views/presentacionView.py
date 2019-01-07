@@ -12,6 +12,9 @@ from app.models import *
 from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.productoForm import *
+from app.validacionUser import validacionUsuario
+
+perfiles_correctos = [1, 3]
 
 def registrarPresentacionProducto(request):
     if request.method == 'POST':
@@ -55,6 +58,8 @@ def eliminarPresentacionProducto(request, presentacion_id,producto_id):
 
 @login_required
 def presentacion_detalle(request,producto_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProducto = Producto.objects.get(id=producto_id)
     oPrecios = Precio.objects.filter(estado=True)
     oPresentaciones = Presentacion.objects.filter(estado=True)

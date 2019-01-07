@@ -18,6 +18,7 @@ from app.validacionUser import validacionUsuario
 
 perfiles_correctos = [1, 3]
 
+@login_required
 def nuevoLote(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
@@ -42,7 +43,10 @@ def registrarProveedor(request):
 
 
 @csrf_exempt
+@login_required
 def registrarLote(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
             Datos = json.loads(request.body)
             print(Datos)
@@ -100,6 +104,7 @@ def registrarLote(request):
         }
         return render(request, 'lote/nuevo.html', context)
 
+@login_required
 def listarLote(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
@@ -135,6 +140,7 @@ def listarLote(request):
         return render(request, 'lote/listar.html', {"oLotes": lotePagina,"oProductos":oProductos,"page_range": page_range})
         #return render(request, 'venta/prueba.html', {})
 
+@login_required
 def detalleLote(request, lote_id):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')

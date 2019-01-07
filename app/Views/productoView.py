@@ -19,6 +19,8 @@ from django.views.generic import DetailView
 ##paginacion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from app.validacionUser import validacionUsuario
+
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
@@ -28,8 +30,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 #   y en buscaar producto retorno de imagen.
 ###########################################################
 
+perfiles_correctos = [1, 3]
 @login_required
 def ListarProductos(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         return render(request, 'Producto/listar.html')
     else:
@@ -72,6 +77,8 @@ def ListarProductos(request):
 @csrf_exempt
 @login_required
 def registrarPresentacion(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         Datos = json.loads(request.body)
         print(Datos)
@@ -138,6 +145,8 @@ def insertarProducto(request):
 
 @login_required
 def registrarProducto(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     if request.method == 'POST':
         Datos = request.POST
         print(Datos)
@@ -399,12 +408,16 @@ def detalleProducto(request,producto_id):
 """
 @login_required
 def detalleProducto(request,producto_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
 
     oProducto = Producto.objects.get(pk=producto_id)
     return render(request, 'producto/detalle.html', {'oProducto':oProducto})
 
 @login_required
 def editarProducto(request,producto_id):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
     oProducto = Producto.objects.get(id = producto_id)
     if request.method=='POST':
         form = ProductoForm(request.POST, request.FILES, instance=oProducto)

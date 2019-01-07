@@ -11,39 +11,13 @@ from app.models import *
 from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.cierrecajaForm import *
-from datetime import date
+from datetime import date, datetime
 
 from app.validacionUser import validacionUsuario
 
 perfiles_correctos = [1, 4]
-# def registrarCierrecaja(request):
-#     if request.method == 'POST':
-#         Datos = request.POST
-#         form = CierrecajaForm(request.POST)
-#         if form.is_valid():
-#             form = form.save(commit=False)
-#             try:
-#                 passoAperturacaja = Aperturacaja.objects.get(id=Datos['idApertura'],activo=True)
-#                 form.aperturacaja = oAperturacaja
-#                 form.save()
-#                 oAperturacaja.activo = False
-#                 oAperturacaja.save()
-#                 return render(request, 'caja/cierreRegistrado.html')
-#             except Exception as e:
-#                 return render(request, 'caja/cierreNoRegistrado.html')
-#         else:
-#             return render(request, 'caja/cierre.html')
-#     else:
-#         oCajas = Caja.objects.filter(estado=True)
-#         form = CierrecajaForm()
-#         try:
-#             oAperturacaja = Aperturacaja.objects.latest('id')
-#             if  oAperturacaja.activo==True:
-#                 return render(request, 'caja/cierre.html', {'form': form,'Aperturacaja': oAperturacaja,'cajas':oCajas})
-#         except Exception as e:
-#             return render(request, 'caja/cierreNoRegistrado.html', {'cajas':oCajas})
 
-
+@login_required
 def cierreCaja(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
@@ -67,25 +41,40 @@ def cierreCaja(request):
             caja=empleado.caja
         )
         oAperturaCaja.save()
-
-    existeCierreCaja = Cierrecaja.objects.filter(caja=empleado.caja)
     
     cierreCaja = Cierrecaja(
-        monto = montoTotal,
-        estado = True,
-        aperturacaja = oAperturaCaja
+        fecha=datetime.now(),
+        monto=montoTotal,
+        estado=True,
+        aperturacaja=oAperturaCaja
     )
 
+    res = validarCierreCaja(cierreCaja)
 
-    cierreCaja.save()
-    oAperturaCaja.estado = False
-    oAperturaCaja.save()
-    
-    return redirect('/Venta/nuevo/')
-
+    if res == 'Error ya se hizo el cierre de caja hoy':
+        context = {
+            'msj': 'res' 
+        }
+        return redirect('/Venta/nuevo/')
+    else:
+        cierreCaja.save()
+        oAperturaCaja.estado = False
+        oAperturaCaja.save()
+        context = {
+            'msj': 'res'
+        }
+        return redirect('/Venta/nuevo/')
 
 def validarCierreCaja(cierreCaja):
-    hoy = datetime.today()
-
-    if True:
-        pass
+    hoy = date.today()
+    print('fecha cierre caja %s' % cierreCaja.fecha.date())
+    if cierreCaja.fecha.date() == hoy:
+        msj = 'Error ya se hizo el cierre de caja hoy'
+        # print(msj)
+        # return msj
+    else:
+        msj = 'Se cerró la caja'
+        # print(msj)
+        # return msj
+    print(msj)
+    return msj
