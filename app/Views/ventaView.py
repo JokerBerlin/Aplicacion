@@ -25,6 +25,17 @@ from django.db.models import Sum
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import cm
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, Table, TableStyle, Image
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib import colors
+
+
+
+
+import io
+from django.http import FileResponse
 
 @login_required
 def ListarVentas(request):
@@ -728,13 +739,27 @@ def reporteVentas(request):
         }
     return render(request, 'reporte/ventas.html', context)
 
-def imprimir(request):
+def imprimir(request,venta_id):
     response = HttpResponse(content_type='aplication/pdf')
     response['Content-Disposition'] = 'attachment; filename=Venta-report.pdf'
-
+    print(venta_id)
+    oPedidoproducto = Pedidoproductospresentacions.objects.filter(pedido_id=venta_id)
+    print(oPedidoproducto)
+    productos = []
+    for oPedido in oPedidoproducto:
+        nuevo = {}
+        nuevo['nombreProducto'] = oPedido.productopresentacions.producto.nombre
+        nuevo['nombrePresentacion'] = oPedido.productopresentacions.presentacion.nombre
+        nuevo['cantidad'] = oPedido.cantidad
+        precionUn = float(oPedido.valor)/float(oPedido.cantidad)
+        nuevo['precioUnitario'] = precionUn
+        nuevo['subtotal'] = oPedido.valor
+        productos.append(nuevo)
+    print(productos)
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=A4)
-
+    fecha = datetime.today()
+    hoy = fecha.strftime("%d/%m/%Y")
     #header
     c.setLineWidth(.3)
     c.setFont('Helvetica', 22)
@@ -743,9 +768,45 @@ def imprimir(request):
     c.drawString(30,735,'Reporte')
 
     c.setFont('Helvetica-Bold', 12)
-    c.drawString(480,750,'01/01/16')
+    c.drawString(480,750,hoy)
     c.line(460,747,560,747)
 
+    styles = getSampleStyleSheet()
+    styleBH = styles["Normal"]
+    styleBH.alignment = TA_CENTER
+    styleBH.fontSize = 10
+    nombreProducto = Paragraph('''Producto''',styleBH)
+    nombrePresentacion = Paragraph('''Presentacion''',styleBH)
+    cantidad = Paragraph('''Cantidad''',styleBH)
+    precioUnitario = Paragraph('''Precio Unitario''',styleBH)
+    subtotal = Paragraph('''Sub total''',styleBH)
+
+    data = []
+
+    data.append([nombreProducto,nombrePresentacion,cantidad,precioUnitario,subtotal])
+
+    styles = getSampleStyleSheet()
+    styleN = styles["BodyText"]
+    styleN.alignment = TA_CENTER
+    styleN.fontSize = 7
+
+    width, height = A4
+    high = 650
+    for producto in productos:
+        this_producto = [producto['nombreProducto'],producto['nombrePresentacion'],producto['cantidad'],producto['precioUnitario'],producto['subtotal']]
+        data.append(this_producto)
+        high = high - 18
+
+    width, height = A4
+    table = Table(data, colWidths=[1.9 * cm, 9.5 * cm,1.9 * cm,1.9 * cm,1.9 * cm,1.9 * cm])
+    table.setStyle(TableStyle([
+        ('INNERGRID',(0,0),(-1,-1),0.25,colors.black),
+        ('BOX',(0,0),(-1,-1),0.25,colors.black),
+    ]))
+
+    table.wrapOn(c,width,height)
+    table.drawOn(c,30,high)
+    c.showPage()
 
     c.save()
     pdf = buffer.getvalue()
