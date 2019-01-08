@@ -33,6 +33,8 @@ from app.validacionUser import validacionUsuario
 #   Descripción:
 #   servicio de busqueda de usuario para la app movil
 ###########################################################
+
+perfiles_correctos = [1, 3]
 @csrf_exempt
 # Pedido/registrar/
 @login_required
