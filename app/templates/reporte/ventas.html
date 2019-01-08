@@ -52,15 +52,9 @@ Reporte de almacen
 const hoy = new Date();
 var año = hoy.getFullYear();
 var mes = hoy.getMonth() + 1;
+mes = ('0' + mes).slice(-2);
+
 var empleadoId = document.getElementById('empleadoId').value;
-
-const fechaInicio = año + "-" + mes;
-var inptAñoMes = document.getElementById('añoMes');
-inptAñoMes.value = fechaInicio;
-inptAñoMes.focus();
-
-var inptAñoMesEmp = document.getElementById('añoMesEmp');
-inptAñoMesEmp.value = fechaInicio;
 
 
 var endpointVentasEmpleados = "/Reporte/venta/empleado/" + año + "/" + mes + "/";
@@ -69,11 +63,21 @@ var endpointVentasEmpleadoIndv = "/Reporte/venta/empleado/" + empleadoId + "/" +
 
 window.onload = function() {
 
+const fechaInicio = año + "-" + mes;
+
+var inptAñoMes = document.getElementById('añoMes');
+inptAñoMes.value = fechaInicio;
+inptAñoMes.focus();
+
+var inptAñoMesEmp = document.getElementById('añoMesEmp');
+inptAñoMesEmp.value = fechaInicio;
+
 obtenerVentasEmpleados(endpointVentasEmpleados);
 
 obtenerVentasEmpleadoIndividual(endpointVentasEmpleadoIndv);
 
 document.getElementById('añoMes').addEventListener("change", function() {
+    
     var inicio = this.value;
     año = parseInt(inicio.substring(0, 4));
     mes = parseInt(inicio.substring(5, 7));

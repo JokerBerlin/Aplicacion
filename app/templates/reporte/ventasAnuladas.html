@@ -52,6 +52,7 @@ Reporte de almacen
 const hoy = new Date();
 var año = hoy.getFullYear();
 var mes = hoy.getMonth() + 1;
+mes = ('0' + mes).slice(-2);
 var empleadoId = document.getElementById('empleadoId').value;
 
 const fechaInicio = año + "-" + mes;
@@ -117,7 +118,7 @@ document.getElementById('empleadoId').addEventListener('change', function() {
 }
 
 
-var obtenerVentasAnuladasEmpleados = function(endpoint) {
+let obtenerVentasAnuladasEmpleados = function(endpoint) {
     var empleados = [];
     var ventasAnuladas = [];
 

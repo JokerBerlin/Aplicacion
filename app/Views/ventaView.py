@@ -31,8 +31,7 @@ from reportlab.platypus import Paragraph, Table, TableStyle, Image
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib import colors
 
-
-
+from django.db.models import Q
 
 import io
 from django.http import FileResponse
@@ -752,7 +751,7 @@ def DetalleVenta(request,venta_id):
 def reporteVentas(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
-    oEmpleados = Empleado.objects.all()
+    oEmpleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
     context = {
         "empleados": oEmpleados
         }
@@ -835,7 +834,7 @@ def imprimir(request,venta_id):
 
 
 def todosEmpleadosVentas(request, mesActual, añoActual):
-    empleados = Empleado.objects.all()
+    empleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
     jsonFinal = []
     # mesActual = datetime.now().month
     # añoActual = datetime.now().year
@@ -851,8 +850,11 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
             for pedido in pedidos:
                 montoVentasEmpleado = Venta.objects.filter(pedido=pedido, estado=True).aggregate(Sum('monto'))['monto__sum']
                 print(montoVentasEmpleado)
-                montoFinal += montoVentasEmpleado
-
+                if montoVentasEmpleado:
+                    montoFinal += montoVentasEmpleado
+                else:
+                    montoFinal = 0.0
+                    
             jsonEmpleadoVenta['montoVenta'] = montoFinal
         else:
             jsonEmpleadoVenta['montoVenta'] = 0.0
@@ -890,7 +892,7 @@ def empleadoVentas(request, empleado_id, mesActual, añoActual):
 def reporteVentasAnuladas(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
-    oEmpleados = Empleado.objects.all()
+    oEmpleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
     context = {
         "empleados": oEmpleados
         }
@@ -917,7 +919,7 @@ def ventasAnuladasReporte(request, empleado_id, mesActual, añoActual):
 def todoMontoVentasAnuladas(request, mesActual, añoActual):
     jsonFinal = []
 
-    empleados = Empleado.objects.all()
+    empleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
 
     for empleado in empleados:
         jsonEmpleadoVentaAnulada = {}
