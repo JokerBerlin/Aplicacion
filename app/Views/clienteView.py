@@ -15,7 +15,6 @@ from app.fomularios.clienteForm import *
 
 from app.validacionUser import validacionUsuario
 
-perfiles_correctos = [1, 4]
 ##paginacion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
