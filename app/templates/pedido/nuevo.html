@@ -205,7 +205,6 @@ $(document).ready(function(){
             $("#imagenesProd").empty();
             $( "#imagenProducto" ).attr("src", ui.item.imagen );
             $( "#cantidad" ).focus();
-            $( "#cantidad" ).focus();
             var iDPro = ui.item.Id;
             //agregar();
         }
@@ -527,7 +526,7 @@ Nuevo Pedido
                        <h4 class="box-title">Presentacion - Precios</h4>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="">Cantidad:</label></br>
-                         <input type="number" name="cantidad" id="cantidad" required="" onkeydown="agregarProducto();" class="form-control" >
+                         <input type="number" name="cantidad" id="cantidad" required="" onchange="agregarProducto();" class="form-control" >
                        </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                          <label for="">Tipo precio</label></br>

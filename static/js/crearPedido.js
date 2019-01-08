@@ -410,7 +410,7 @@ function eventoCambio(valor){
 function agregarProducto(){
   $("#cantidad").keypress(function(e) {
       if(e.which == 13) {
-        agregar();
+          $('#bt_addVenta').click();
       }
     });
 }
