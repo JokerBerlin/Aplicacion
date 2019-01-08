@@ -47,7 +47,7 @@ def ListarProductos(request):
                 oUltimoP=Producto_almacens.objects.filter(producto_id=oProducto).latest('id')
                 print(oUltimoP)
                 nuevo['id'] = oProducto.id
-                nuevo['cantidad'] = oUltimoP.cantidad
+                nuevo['cantidad'] = round(oUltimoP.cantidad,2)
             except Exception as e:
                 print(e)
                 nuevo['id'] = oProducto.id
@@ -251,11 +251,15 @@ def BuscarProductoPresentacionVenta(request):
         oPresentacion = Presentacion.objects.get(nombre=presentacion)
         oPrecio = Precio.objects.get(pk=precio)
 
-        oProductoPres = Productopresentacions.objects.get(producto=oProducto, presentacion=oPresentacion)
-        oProductoPresPrecio = Productopresentacionsprecios.objects.get(precio=oPrecio, productopresentacions=oProductoPres)
+        try:
+            oProductoPres = Productopresentacions.objects.get(producto=oProducto, presentacion=oPresentacion)
+            oProductoPresPrecio = Productopresentacionsprecios.objects.get(precio=oPrecio, productopresentacions=oProductoPres)
+            jsonResultado = {}
+            jsonResultado["precio"] = oProductoPresPrecio.valor
 
-        jsonResultado = {}
-        jsonResultado["precio"] = oProductoPresPrecio.valor
+        except Exception as e:
+            jsonResultado = {}
+            jsonResultado["precio"] = ''
 
     return HttpResponse(json.dumps(jsonResultado), content_type='application/json')
 
@@ -412,7 +416,8 @@ def detalleProducto(request,producto_id):
         return redirect('/error/')
 
     oProducto = Producto.objects.get(pk=producto_id)
-    return render(request, 'producto/detalle.html', {'oProducto':oProducto})
+    oAlmacens = Producto_almacens.objects.filter(producto_id = producto_id).latest('id')
+    return render(request, 'producto/detalle.html', {'oProducto':oProducto,'oAlmacens':oAlmacens,})
 
 @login_required
 def editarProducto(request,producto_id):
