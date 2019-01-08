@@ -402,14 +402,17 @@ def pedidoVenta(request,pedido_id):
         tipoRecibo = Datos['tipoRecibo']
         numeroRecibo = Datos['numeroRecibo']
         total = Datos['total']
-
-        oCliente = Cliente.objects.get(nombre=cliente)
         oPedido = Pedido.objects.get(id=pedido_id)
         oVenta = Venta()
         oVenta.monto = total
         oVenta.nrecibo = numeroRecibo
         oVenta.estado = True
-        oVenta.cliente_id = oCliente.id
+        try:
+            oCliente = Cliente.objects.get(nombre=cliente)
+            oVenta.cliente_id = oCliente.id
+        except Exception as e:
+            oCliente = ''
+
         oVenta.pedido_id = oPedido.id
         oVenta.save()
         oPedido.estado = 3
