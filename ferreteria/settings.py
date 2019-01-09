@@ -82,36 +82,29 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 # nube
-# DATABASES = {
-#        'default': {
-#         'ENGINE': 'mysql_cymysql',
-#         'NAME': 'admin_pedidos',
-#         'USER': 'admin_pedidos',
-#         'PASSWORD': 'vn1RhBPs1A',
-#         'HOST': '138.197.36.187',
-#         'PORT': '3306',
+DATABASES = {
+       'default': {
+        'ENGINE': 'mysql_cymysql',
+        'NAME': 'admin_pedidos',
+        'USER': 'admin_pedidos',
+        'PASSWORD': 'vn1RhBPs1A',
+        'HOST': '138.197.36.187',
+        'PORT': '3306',
 
-#   }
-<<<<<<< HEAD
-# }
+  }
+}
 
 # instancia local Erland
-DATABASES = {
-    'default': {
-        'ENGINE': 'mysql_cymysql',
-        'NAME': 'pedidos',
-        'USER': 'pedidos',
-        'PASSWORD': 'pedidos',
-        'HOST': 'localhost',
-        'PORT': '3306',
-  }
-=======
-<<<<<<< HEAD
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mysql_cymysql',
+#         'NAME': 'pedidos',
+#         'USER': 'pedidos',
+#         'PASSWORD': 'pedidos',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#   }
 # }
-=======
->>>>>>> a5b630a882a7fb3a9c1d6dd847b610c4bbd56791
-}
->>>>>>> af7b288f806a5ed05a1f84d96cabfc2b061054e4
 
 # DATABASES = {
 #     'default': {
