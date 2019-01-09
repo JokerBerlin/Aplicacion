@@ -416,7 +416,10 @@ def detalleProducto(request,producto_id):
         return redirect('/error/')
 
     oProducto = Producto.objects.get(pk=producto_id)
-    oAlmacens = Producto_almacens.objects.filter(producto_id = producto_id).latest('id')
+    try:
+        oAlmacens = Producto_almacens.objects.filter(producto_id = producto_id).latest('id')
+    except Exception as e:
+        oAlmacens = ''
     return render(request, 'producto/detalle.html', {'oProducto':oProducto,'oAlmacens':oAlmacens,})
 
 @login_required
