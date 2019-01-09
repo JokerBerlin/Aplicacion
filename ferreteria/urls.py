@@ -176,6 +176,7 @@ urlpatterns = [
     url(r'^venta/eliminar/', eliminar_identificador_venta,name="eliminar_venta"),
     url(r'^venta/anular/', anularVenta),
     url(r'^error/', visualizarError),
+    url(r'^error/cierreCaja-efectuado/', cierreCajaEfectuado),
 
     #url(r'^venta/filtrase/', leer),
     #

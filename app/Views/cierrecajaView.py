@@ -25,18 +25,25 @@ def cierreCaja(request):
     fechaHoraActual = datetime.today()
     usuario = request.user
     empleado = Empleado.objects.get(usuario_id=usuario)
-    oAperturaCaja = Aperturacaja.objects.filter(estado=1,caja_id=empleado.caja_id)
+    oAperturaCaja = Aperturacaja.objects.filter(caja_id=empleado.caja_id)
     montoTotal = 0.0
 
     if oAperturaCaja:
-        oAperturaCaja = oAperturaCaja.latest('id')
-        montoTotal += oAperturaCaja.monto
-        oOperacions = Operacion.objects.filter(fecha__range=[oAperturaCaja.fecha,fechaHoraActual])
-        print(oOperacions)
+        if oAperturaCaja.estado = True:   
+            oAperturaCaja = oAperturaCaja.latest('id')
+            montoTotal += oAperturaCaja.monto
+            oOperacions = Operacion.objects.filter(fecha__range=[oAperturaCaja.fecha,fechaHoraActual])
         
-        for oOperacion in oOperacions:
-            print('monto total: %s' % montoTotal)
-            montoTotal = montoTotal + float(oOperacion.monto)
+            for oOperacion in oOperacions:
+                print('monto total: %s' % montoTotal)
+                montoTotal = montoTotal + float(oOperacion.monto)
+        else:
+            res == 'Error ya se hizo el cierre de caja hoy'
+            context = {
+                'msj': res
+            }
+            return redirect('/error/cierreCaja-efectuado/')
+        
     else:
         oAperturaCaja = Aperturacaja(
             monto=0.0,
@@ -58,7 +65,7 @@ def cierreCaja(request):
     if res == 'Error ya se hizo el cierre de caja hoy':
         # print(res)
         context = {
-            'msj': 'res' 
+            'msj': res
         }
         return redirect('/Venta/nuevo/')
     else:

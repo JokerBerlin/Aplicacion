@@ -43,3 +43,7 @@ def registrarError(request):
 @login_required
 def visualizarError(request):
 	return render(request, 'error/error.html')
+
+@login_required
+def cierreCajaEfectuado(request):
+    return render(request, 'error/errorCierreCaja.html', {})
