@@ -143,13 +143,13 @@ def ListarPedidos(request):
         #return render(request, 'venta/prueba.html', {})
 @login_required
 def ListarEstadoPedidos(request,estado_id):
-    if not validacionUsuario(request.user) in [1, 2]:
+    if validacionUsuario(request.user) in [1, 2]:
         if estado_id != '1':
             return redirect('/error/')
-    if not validacionUsuario(request.user) in [1, 3]:
+    if validacionUsuario(request.user) in [1, 3, 4]:
         if estado_id != '2':
             return redirect('/error/')
-    if not validacionUsuario(request.user) in [1, 4]:
+    if validacionUsuario(request.user) in [1, 4]:
         if estado_id == '3':
             return redirect('/error/')
 
