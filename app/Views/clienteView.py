@@ -19,7 +19,7 @@ from app.validacionUser import validacionUsuario
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-from geopy.distance import distance, lonlat 
+from geopy.distance import distance, lonlat
 
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
@@ -182,7 +182,7 @@ def listarCliente(request):
         if not validacionUsuario(request.user) in perfiles_correctos:
             return redirect('/error/')
         oClientes = Cliente.objects.filter(estado=True).order_by('-id')
-        paginator = Paginator(oClientes,2)
+        paginator = Paginator(oClientes,10)
 
         page = request.GET.get('page')
         try:
