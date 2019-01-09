@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from app.validacionUser import validacionUsuario
 
-perfiles_correctos = [1,4]
+perfiles_correctos = [1, 4]
 
 @login_required
 def registrarAperturacaja(request):

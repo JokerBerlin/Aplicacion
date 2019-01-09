@@ -18,6 +18,9 @@ from app.validacionUser import validacionUsuario
 ##paginacion
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+
+from geopy.distance import distance, lonlat 
+
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
@@ -28,7 +31,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 perfiles_correctos = [1, 4]
 
-# agregar campo de validacion de cercania
+# Funcion para calcular distancia dados la latitud y longitud
+def calcularDistancia(lat1, lng1, lat2, lng2):
+    coords_1 = lonlat(lng1, lat1)
+    coords_2 = lonlat(lng2, lat2)
+
+    return distance(coords_1, coords2).km * 1000
+
+# es necesario pasar el dato de corrdenadas para poder calcular la distancia y devolver verdad o falso
 @csrf_exempt
 def buscarCliente(request):
     if request.method == 'POST':
