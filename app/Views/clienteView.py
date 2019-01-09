@@ -28,6 +28,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 perfiles_correctos = [1, 4]
 
+# agregar campo de validacion de cercania
 @csrf_exempt
 def buscarCliente(request):
     if request.method == 'POST':
