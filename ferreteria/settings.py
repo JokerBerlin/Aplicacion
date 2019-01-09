@@ -92,6 +92,7 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 #         'PORT': '3306',
 
 #   }
+<<<<<<< HEAD
 # }
 
 # instancia local Erland
@@ -104,7 +105,13 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
   }
+=======
+<<<<<<< HEAD
+# }
+=======
+>>>>>>> a5b630a882a7fb3a9c1d6dd847b610c4bbd56791
 }
+>>>>>>> af7b288f806a5ed05a1f84d96cabfc2b061054e4
 
 # DATABASES = {
 #     'default': {
