@@ -143,7 +143,7 @@ def ListarPedidos(request):
         #return render(request, 'venta/prueba.html', {})
 @login_required
 def ListarEstadoPedidos(request,estado_id):
-    if not validacionUsuario(request.user) in perfiles_correctos:
+    if not validacionUsuario(request.user) in [1, 2, 3, 4]:
         return redirect('/error/')
     oProductos=[]
     if request.method == 'POST':
