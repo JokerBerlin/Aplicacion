@@ -143,8 +143,16 @@ def ListarPedidos(request):
         #return render(request, 'venta/prueba.html', {})
 @login_required
 def ListarEstadoPedidos(request,estado_id):
-    if not validacionUsuario(request.user) in [1, 2, 3, 4]:
-        return redirect('/error/')
+    if not validacionUsuario(request.user) in [1, 2]:
+        if estado_id != '1':
+            return redirect('/error/')
+    if not validacionUsuario(request.user) in [1, 3]:
+        if estado_id != '2':
+            return redirect('/error/')
+    if not validacionUsuario(request.user) in [1, 4]:
+        if estado_id == '3':
+            return redirect('/error/')
+
     oProductos=[]
     if request.method == 'POST':
         return render(request, 'pedido/listar.html')
@@ -394,7 +402,7 @@ def editarPedido(request,pedido_id):
 @csrf_exempt
 @login_required
 def pedidoVenta(request,pedido_id):
-    if not validacionUsuario(request.user) in perfiles_correctos:
+    if not validacionUsuario(request.user) in [1, 2, 3, 4]:
         return redirect('/error/')
     #oProductopresentacions= Productopresentacions.objects.filter(producto_in=oPedidoproductospresentacions.productopresentacions.producto.id)
     if request.method == 'POST':
