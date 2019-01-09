@@ -16,7 +16,7 @@ import json
 
 from app.validacionUser import validacionUsuario
 
-perfiles_correctos = [3, 5]
+perfiles_correctos = [1, 3, 5]
 
 @csrf_exempt
 def BuscarAlmacen(request):

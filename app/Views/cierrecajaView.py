@@ -21,6 +21,7 @@ perfiles_correctos = [1, 4]
 def cierreCaja(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
+
     fechaHoraActual = datetime.today()
     usuario = request.user
     empleado = Empleado.objects.get(usuario_id=usuario)
@@ -29,9 +30,12 @@ def cierreCaja(request):
 
     if oAperturaCaja:
         oAperturaCaja = oAperturaCaja.latest('id')
+        montoTotal += oAperturaCaja.monto
         oOperacions = Operacion.objects.filter(fecha__range=[oAperturaCaja.fecha,fechaHoraActual])
+        print(oOperacions)
         
         for oOperacion in oOperacions:
+            print('monto total: %s' % montoTotal)
             montoTotal = montoTotal + float(oOperacion.monto)
     else:
         oAperturaCaja = Aperturacaja(
@@ -52,11 +56,13 @@ def cierreCaja(request):
     res = validarCierreCaja(cierreCaja)
 
     if res == 'Error ya se hizo el cierre de caja hoy':
+        # print(res)
         context = {
             'msj': 'res' 
         }
         return redirect('/Venta/nuevo/')
     else:
+        # print(res)
         cierreCaja.save()
         oAperturaCaja.estado = False
         oAperturaCaja.save()
@@ -66,9 +72,10 @@ def cierreCaja(request):
         return redirect('/Venta/nuevo/')
 
 def validarCierreCaja(cierreCaja):
-    hoy = date.today()
-    print('fecha cierre caja %s' % cierreCaja.fecha.date())
-    if cierreCaja.fecha.date() == hoy:
+    print('monto cierre Caja = %s' % cierreCaja.monto)
+    ultimoCierreCaja = Cierrecaja.objects.all().latest('pk')
+    print('fecha cierre caja %s' % ultimoCierreCaja.fecha.date())
+    if cierreCaja.fecha.date() == ultimoCierreCaja.fecha.date():
         msj = 'Error ya se hizo el cierre de caja hoy'
         # print(msj)
         # return msj
