@@ -104,6 +104,10 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 #         'HOST': 'localhost',
 #         'PORT': '3306',
 #   }
+<<<<<<< HEAD
+=======
+# }
+>>>>>>> 2e577fdef2928ade6ee0d65cb4126955db5d2e63
 
 # }
 

@@ -143,14 +143,15 @@ def ListarPedidos(request):
         #return render(request, 'venta/prueba.html', {})
 @login_required
 def ListarEstadoPedidos(request,estado_id):
-    if validacionUsuario(request.user) in [1, 2]:
-        if estado_id != '1':
+    validacion = validacionUsuario(request.user)
+    if validacion in [1, 2]:
+        if validacion != 1 and estado_id != '1':
             return redirect('/error/')
-    if validacionUsuario(request.user) in [1, 3, 4]:
-        if estado_id != '2':
+    if validacion in [1, 3, 4]:
+        if validacion != 1 and estado_id != '2':
             return redirect('/error/')
-    if validacionUsuario(request.user) in [1, 4]:
-        if estado_id == '3':
+    if validacion in [1, 4]:
+        if validacion != 1 and estado_id == '3':
             return redirect('/error/')
 
     oProductos=[]
