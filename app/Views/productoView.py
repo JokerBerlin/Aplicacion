@@ -442,15 +442,23 @@ def editarProducto(request,producto_id):
         productos = []
         presentaciones = []
         oPresentaciones = Presentacion.objects.all()
-        Productopresentaciones = Productopresentacions.objects.filter(producto_id=oProducto.id,unidadprincipal=1).latest("id")
-        nombrePresentacionPrincipal = Productopresentaciones.presentacion.nombre
-
-        for oPresentacion in oPresentaciones:
-            if oPresentacion.nombre != nombrePresentacionPrincipal:
-                nuevoP={}
-                nuevoP['id']=oPresentacion.id
-                nuevoP['nombre']=oPresentacion.nombre
-                presentaciones.append(nuevoP)
+        Productopresentaciones = Productopresentacions.objects.filter(producto_id=oProducto.id)
+        #nombrePresentacionPrincipal = Productopresentaciones.presentacion.nombre
+        presentaciones = Presentacion.objects.exclude(nombre__in=[p.presentacion.nombre for p in Productopresentaciones])
+        # for oPro in Productopresentaciones:
+        #     for oPresentacion in oPresentaciones:
+        #
+        #         if oPro.presentacion.nombre != oPresentacion.nombre:
+        #             nuevoP={}
+        #             nuevoP['id']=oPresentacion.id
+        #             nuevoP['nombre']=oPresentacion.nombre
+        #             presentaciones.append(nuevoP)
+        #             c = 0
+        #             for indice in presentaciones:
+        #                 if oPro.presentacion.nombre == indice['nombre']:
+        #
+        #                     presentaciones.pop(c)
+        #                 c = c + 1
 
         precios = Precio.objects.filter(estado=True)
         for oProductoPresentacion in oProductoPresentacions:
