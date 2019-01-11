@@ -51,8 +51,8 @@ Realizar Pedido En Almacen
                                 <thead>
                                     <tr>
                                       <td>Nº</td>
-                                      <td>Cantidad</td>
-                                      <td>Cantidad actual</td>
+                                      <td>Cantidad pedido</td>
+                                      <td>Cantidad almacen</td>
                                       <td>Cod. Producto</td>
                                       <td>Nombre</td>
                                       <td>Presentacion</td>
@@ -67,7 +67,7 @@ Realizar Pedido En Almacen
                                       <tr>
                                         <td style="visibility: hidden; display:none; margin-left:2em; margin-right:8em;" >{{pedido.id}}</td>
                                         <td>{{ forloop.counter }}</td>
-                                        <td><input type="number" class="form-control" id="cantidad{{cant.contador}}"  onchange ="eventoCambio({{ cant.contador }});" value="{{ cant.cantidad }}">
+                                        <td><input type="number" class="form-control" id="cantidad{{cant.contador}}"  onchange ="eventoCambio({{ cant.contador }});" value="{{ cant.cantidad }}" min="0" max="{{cant.cantidad}}">
                                         </td>
                                         <td>{{cant.cantidadTotal}}</td>
                                         <td>{{pedido.productopresentacions.producto.codigo}}</td>

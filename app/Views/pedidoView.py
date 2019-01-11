@@ -387,7 +387,8 @@ def editarPedido(request,pedido_id):
             c = int(round(oPedido.cantidad))
             oNuevo['cantidad']=str(c).replace(",", ".")
             oAlmacens = Producto_almacens.objects.filter(producto_id = oPedido.productopresentacions.producto.id).latest('id')
-            oNuevo['cantidadTotal'] = oAlmacens.cantidad
+            valorPresentacion = float(1/(oPedido.productopresentacions.valor))
+            oNuevo['cantidadTotal'] = float(oAlmacens.cantidad) * valorPresentacion
             oNuevo['contador']=cont
             oNuevo['valor']="{0:.2f}".format(round(float(oPedido.valor),8))
             subt = round(float(oPedido.cantidad)*float(oPedido.valor),8)
