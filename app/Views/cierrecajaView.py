@@ -67,7 +67,7 @@ def cierreCaja(request):
         context = {
             'msj': res
         }
-        return redirect('/Venta/nuevo/')
+        return redirect('/error/cierreCaja-efectuado/')
     else:
         # print(res)
         cierreCaja.save()
