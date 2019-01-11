@@ -4,6 +4,7 @@ $(document).ready(function() {
     var num=1;
     productos = [];
     contador = 0;
+    error = "";
     $('#tabla tbody tr').each(function (index) {
       // productosPedido = [];
       // var id = $(this).find("td").eq(0).html();
@@ -23,7 +24,14 @@ $(document).ready(function() {
                   //   cantidad=cantidad.replace(",",".");
                   // }
 
-                  break;
+                  //break;
+              case 3:
+                  cantidadAlmacen = $(this).text();
+                  cantidadAlmacen = parseFloat(cantidadAlmacen);
+                  if (cantidad>cantidadAlmacen){
+                      error = 1;
+                      datos = index;
+                  }
           }
 
       });
@@ -31,31 +39,37 @@ $(document).ready(function() {
       productos.push([id,cantidad]);
       });
       console.log(productos);
-      if (contador == 1) {
-          var pedido = document.getElementById("pedido_id").value;
-          console.log(pedido);
-          var datos = {productos: productos,pedido:pedido};
-          var sendData = JSON.stringify(datos);
-          $.ajax({
-              type: "POST",
-              dataType: "json",
-              url: "/Pedido/modificar/",
-              data: sendData,
-              contentType: "application/json; charset=utf-8",
-              async: false,
-              cache: false,
-              CrossDomain: true,
+      if(error== ""){
+        if (contador == 1) {
+            var pedido = document.getElementById("pedido_id").value;
+            console.log(pedido);
+            var datos = {productos: productos,pedido:pedido};
+            var sendData = JSON.stringify(datos);
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/Pedido/modificar/",
+                data: sendData,
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                cache: false,
+                CrossDomain: true,
 
-              success: function (result) {
-              //     var id_venta = result["id_venta"];
-                   alert('Pedido modificado');
-                   //location.reload(true);
-                   document.location.href='/Pedido/listar/1/';
-              }
-          });
+                success: function (result) {
+                //     var id_venta = result["id_venta"];
+                     alert('Pedido modificado');
+                     //location.reload(true);
+                     document.location.href='/Pedido/listar/1/';
+                }
+            });
+        }else{
+            alert("No registró ningún producto");
+        }
       }else{
-          alert("No registró ningún producto");
+          alert('La cantidad de pedido excede las existencis de almacen');
+          $("#cantidad"+datos ).focus();
       }
+
   });
 
 
