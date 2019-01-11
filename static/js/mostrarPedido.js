@@ -56,7 +56,7 @@ $(document).ready(function() {
              // timeoutID = window.setTimeout(slowAlert, 2000);
              // $("#imprimirBoleta").attr("onclick","listarVenta();");
              // $("#imprimirBoleta").click();
-             timeoutID = window.setTimeout('listarVenta();', 10000);
+             timeoutID = window.setTimeout('listarVenta();', 3000);
 
         }
     });
