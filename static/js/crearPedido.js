@@ -11,30 +11,9 @@ $(document).ready(function(){
         } else {
             agregar();
         }
-        //$('#inpt-producto').focus();
     });
 
     $('#bt_addVenta').keypress(function(){
-        // var nombreProductoAgregar = $('#inpt-producto').val();
-        // $("#tabla tbody tr").each(function (index) {
-        //     $(this).children("td").each(function (index2) {
-        //         producto = [];
-        //         //dato = index;
-        //         console.log(index);
-        //         switch (index2) {
-        //             case 4:
-        //                 tipoPrecio = $(this).text();
-        //                 if(nombreProductoAgregar === tipoPrecio){
-        //                     alert("Usted ya agrego este producto");
-        //                 }
-        //
-        //                 break;
-        //         }
-        //
-        //     });
-        //     contador = 1;
-        //     productos.push([cantidad,codigo,tipoPrecio,presentacion,precioUnitario]);
-        // });
         $('#inpt-producto').focus();
     });
 
@@ -48,23 +27,7 @@ $(document).ready(function(){
     });
 
     $('#bt_GenerarVenta').click(function(){
-        // var regexDNI = /^[0-9]{8}$/;
-        // var regexRUC = /^[0-9]{11}$/;
-        // const clienteDoc = document.getElementById('inpt-cliente').value;
-        // const nombreCliente = document.getElementById('nombreCl').value;
-        // if (regexDNI.test(clienteDoc)) {
-        //     GenerarVenta();
-        // } else if (regexRUC.test(clienteDoc)) {
-        //     GenerarVenta();
-        // } else {
-        //     alert('El campo "Cliente" tiene que ser apropiadamente llenado')
-        //     x = document.getElementById('inpt-cliente');
-        //     x.value = '';
-        //     document.getElementById('nombreCl').value = '';
-        //     x.focus();
-        // }
         GenerarVenta();
-
     });
 
     $('#bt_nuevaVenta').click(function() {
@@ -202,13 +165,10 @@ function seleccionar(id_fila){
     else{
         $('#'+id_fila).addClass('seleccionada');
     }
-    //2702id_fila_selected=id_fila;
     id_fila_selected.push(id_fila);
 }
 
 function eliminar(id_fila){
-    /*$('#'+id_fila).remove();
-    reordenar();*/
     ValorRestar = 0;
     for(var i=0; i<id_fila.length; i++){
         $('#'+id_fila[i]).children("td").each(function (index2) {
@@ -218,12 +178,9 @@ function eliminar(id_fila){
                     break;
             }
         });
-        //TotalVenta = TotalVenta - ValorRestar
-        //$('#id_Total').text("S/. "+TotalVenta);
         RefrescarTotal();
         $('#'+id_fila[i]).remove();
     }
-    //reordenar();
 }
 
 function reordenar(){
@@ -304,10 +261,8 @@ function GenerarVenta(){
             cache: false,
             CrossDomain: true,
 
-            success: function (result) {
-            //     var id_venta = result["id_venta"];
+            success: function () {
                  alert('Pedido Registrado');
-                 //location.reload(true);
                  document.location.href='/Pedido/listar/';
             }
         });
@@ -378,10 +333,8 @@ function nuevaVenta() {
             cache: false,
             CrossDomain: true,
 
-            success: function (result) {
-            //     var id_venta = result["id_venta"];
+            success: function () {
                  alert('Venta Registrada');
-                 //location.reload(true);
                  document.location.href='/Venta/listar/';
             }
         });
