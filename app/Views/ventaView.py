@@ -854,7 +854,7 @@ def todosEmpleadosVentas(request, mesActual, añoActual):
                     montoFinal += montoVentasEmpleado
                 else:
                     montoFinal = 0.0
-                    
+
             jsonEmpleadoVenta['montoVenta'] = montoFinal
         else:
             jsonEmpleadoVenta['montoVenta'] = 0.0

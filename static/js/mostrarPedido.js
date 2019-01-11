@@ -49,10 +49,21 @@ $(document).ready(function() {
 
         success: function (result) {
         //     var id_venta = result["id_venta"];
+            console.log(pedido);
              alert('Venta registrada');
              //location.reload(true);
-             document.location.href='/Venta/listar/';
+             document.location.href='/imprimir/'+pedido+'/';
+             // timeoutID = window.setTimeout(slowAlert, 2000);
+             // $("#imprimirBoleta").attr("onclick","listarVenta();");
+             // $("#imprimirBoleta").click();
+             timeoutID = window.setTimeout('listarVenta();', 10000);
+
         }
     });
   });
 });
+
+
+function listarVenta(){
+    document.location.href='/Venta/listar/';
+}
