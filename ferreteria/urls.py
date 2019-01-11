@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -36,6 +36,7 @@ from app.Views.reciboView import *
 from app.Views.loteView import *
 from app.Views.almacenView import *
 from app.Views.cajaView import *
+
 ###########################################################
 #   Usuario: Erick Sulca, Ulises Bejar
 #   Fecha: 05/06/18
@@ -223,3 +224,10 @@ urlpatterns = [
     url(r'^Reporte/venta-anulada/empleado/(?P<empleado_id>\d+)/(?P<añoActual>\d+)/(?P<mesActual>\d+)/$', ventasAnuladasReporte),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# if settings.DEBUG:
+#     # debug solo para desarrollo
+#     import debug_toolbar
+#     urlpatterns = [
+#         url(r'^__debug__/', include(debug_toolbar.urls)),
+#     ] + urlpatterns

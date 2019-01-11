@@ -128,8 +128,6 @@ def editarCliente(request,cliente_id):
         else:
             return render(request, '/Cliente/error.html')
     else:
-        if not validacionUsuario(request.user) in perfiles_correctos:
-            return redirect('/error/')
         form = ClienteForm(request.POST or None, instance=oCliente)
         print(form)
         return render(request, 'cliente/editar.html', {'form': form, 'oCliente':oCliente})
@@ -169,8 +167,6 @@ def nuevoCliente(request):
         else:
             return render(request, 'cliente/error.html')
     else:
-        if not validacionUsuario(request.user) in perfiles_correctos:
-            return redirect('/error/')
         precios = Precio.objects.all()
         return render(request, 'cliente/nuevo.html', {'precios': precios})
 
@@ -179,8 +175,6 @@ def listarCliente(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
     if request.method == 'GET':
-        if not validacionUsuario(request.user) in perfiles_correctos:
-            return redirect('/error/')
         oClientes = Cliente.objects.filter(estado=True).order_by('-id')
         paginator = Paginator(oClientes,10)
 
