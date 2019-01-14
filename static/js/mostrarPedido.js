@@ -46,16 +46,15 @@ $(document).ready(function() {
         async: false,
         cache: false,
         CrossDomain: true,
-
+        beforeSend: function() {
+            $('#div_carga').css(display:'block');
+        },
         success: function (result) {
         //     var id_venta = result["id_venta"];
             console.log(pedido);
              alert('Venta registrada');
              //location.reload(true);
              document.location.href='/imprimir/'+pedido+'/';
-             // timeoutID = window.setTimeout(slowAlert, 2000);
-             // $("#imprimirBoleta").attr("onclick","listarVenta();");
-             // $("#imprimirBoleta").click();
              timeoutID = window.setTimeout('listarVenta();', 3000);
 
         }
