@@ -759,12 +759,13 @@ def reporteVentas(request):
 
 def imprimir(request,venta_id):
     response = HttpResponse(content_type='aplication/pdf')
-    response['Content-Disposition'] = 'attachment; filename=Venta-report.pdf'
+    response['Content-Disposition'] = 'attachment; filename=Venta-'+venta_id+'.pdf'
     print(venta_id)
     oPedidoproducto = Pedidoproductospresentacions.objects.filter(pedido_id=venta_id)
     print(oPedidoproducto)
 
     productos = []
+    total = 0
     for oPedido in oPedidoproducto:
         nuevo = {}
         nuevo['nombreProducto'] = oPedido.productopresentacions.producto.nombre
@@ -772,6 +773,7 @@ def imprimir(request,venta_id):
         nuevo['cantidad'] = oPedido.cantidad
         nuevo['precioUnitario'] = oPedido.valor
         nuevo['subtotal'] = float(oPedido.valor)*float(oPedido.cantidad)
+        total = total + float(oPedido.valor)*float(oPedido.cantidad)
         productos.append(nuevo)
     print(productos)
     buffer = BytesIO()
@@ -781,13 +783,22 @@ def imprimir(request,venta_id):
     #header
     c.setLineWidth(.3)
     c.setFont('Helvetica', 22)
-    c.drawString(30,750,'Venta')
+    c.drawString(30,750,'Comprobante')
     c.setFont('Helvetica', 22)
-    c.drawString(30,735,'Reporte')
+    c.drawString(30,735,'Pago')
 
     c.setFont('Helvetica-Bold', 12)
     c.drawString(480,750,hoy)
     c.line(460,747,560,747)
+
+    oPedidoc = Pedido.objects.get(id=venta_id)
+    print(oPedidoc)
+
+    c.setFont('Helvetica', 12)
+    c.drawString(30,700,'Cliente: ')
+    c.setFont('Helvetica', 12)
+    c.drawString(150,700,oPedidoc.cliente.nombre)
+
 
     styles = getSampleStyleSheet()
     styleBH = styles["Normal"]
@@ -796,8 +807,13 @@ def imprimir(request,venta_id):
     nombreProducto = Paragraph('''Producto''',styleBH)
     nombrePresentacion = Paragraph('''Presentacion''',styleBH)
     cantidad = Paragraph('''Cantidad''',styleBH)
-    precioUnitario = Paragraph('''Precio Unitario''',styleBH)
+    precioUnitario = Paragraph('''P.U.''',styleBH)
     subtotal = Paragraph('''Sub total''',styleBH)
+
+    c.setFont('Helvetica', 12)
+    c.drawString(30,500,'Total: ')
+    c.setFont('Helvetica', 12)
+    c.drawString(100,500,str(total))
 
     data = []
 
@@ -816,7 +832,7 @@ def imprimir(request,venta_id):
         high = high - 18
 
     width, height = A4
-    table = Table(data, colWidths=[1.9 * cm, 9.5 * cm,1.9 * cm,1.9 * cm,1.9 * cm,1.9 * cm])
+    table = Table(data, colWidths=[5.7 * cm, 5.7 * cm,1.9 * cm,1.9 * cm,1.9 * cm,1.9 * cm])
     table.setStyle(TableStyle([
         ('INNERGRID',(0,0),(-1,-1),0.25,colors.black),
         ('BOX',(0,0),(-1,-1),0.25,colors.black),
