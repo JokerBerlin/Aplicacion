@@ -4,6 +4,33 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+function eliminarIdentificador(identificadorId) {
+		var request = $.ajax({
+				type: "POST",
+				url: "{% url 'eliminar_lote' %}",
+				data: {
+						"csrfmiddlewaretoken": "{{ csrf_token }}",
+						"identificador_id": identificadorId
+				},
+		});
+		request.done(function(response) {
+        if(response['error']=='error'){
+            alert("El lote no se puede eliminar");
+            $('#myModal').modal('toggle');
+        }else{
+            alert("El lote fue eliminado con exito");
+            $('#myModal').modal('toggle');
+            document.location.href='/Lote/listar/';
+        }
+
+		});
+};
+	selLote = function(idLote, fecha){
+		document.getElementById('fechaLote').innerHTML = fecha.toString();
+		$("#eliminar").attr("onclick","eliminarIdentificador('"+idLote+"')");
+	};
+</script>
 
 {% endblock %}
 
@@ -12,6 +39,34 @@ Listar lote
 {% endblock %}
 
 {% block content %}
+
+<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar lote</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+
+
+          <p>Estás a punto de eliminar el lote de la fecha <label id="fechaLote"></label> </p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="row">
       <div class="col-sm-12">
           <div class="white-box">
@@ -24,7 +79,6 @@ Listar lote
                                 <th>Fecha</th>
                                 <th>Proveedor</th>
                                 <th>Recibo</th>
-                                <th>Producto</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -35,21 +89,8 @@ Listar lote
                 <td>{{oLote.proveedor.nombre}}</td>
                 <td>{{oLote.recibo.nombre}}</td>
                 <td>
-                  {% for oNue in oProductos %}
-                    {% if oLote.id == oNue.id %}
-                        <table id="tProductos" class="table">
-                          <tr>
-                            {{ oNue.producto }}
-                          </tr>
-                        </table>
-
-                    {% endif %}
-                  {% endfor %}
-                </td>
-
-                <td>
                   <a href="/Lote/detalle/{{oLote.id}}/"><span class="fa fa-search fa-2x" style="color:purple;"></span></a>
-
+                  <a data-target="#myModal" role="button" data-toggle="modal" id="{{ oProducto.id }}" onclick="selLote('{{oLote.id}}','{{oLote.fecha}}');"><span class="fa fa-trash fa-2x" style="color:red;"></span></a>
                 </td>
               </tr>
 

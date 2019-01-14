@@ -547,13 +547,16 @@ def modificarPedido(request):
             oPedidoproductospresentacions.cantidad = oPedidoProducto[1]
             oPedidoproductospresentacions.save()
             #oPedidoproductospresentacions = Pedidoproductospresentacions.objects.get(id=id)
-
+            hoy = datetime.today()
             oProductoPresentacions = Productopresentacions.objects.get(id=oPedidoproductospresentacions.productopresentacions_id)
             oUltimoP=Producto_almacens.objects.filter(producto_id=oProductoPresentacions.producto_id).latest('id')
             dato = float(oPedidoProducto[1]) * oProductoPresentacions.valor
             cantidadPedido = oUltimoP.cantidad - dato
             oProducto_alma = Producto_almacens(cantidad=cantidadPedido, cantidadinicial= oUltimoP.cantidad, almacen_id=oUltimoP.almacen_id, lote_id= oUltimoP.lote_id, producto_id= oUltimoP.producto_id)
             oProducto_alma.save()
+            oLote = Lote.objects.get(id=oUltimoP.lote_id)
+            oLote.modificado = hoy
+            oLote.save()
         oPedido = Pedido.objects.get(id=idPedido)
         oPedido.estado = 2
         oPedido.save()

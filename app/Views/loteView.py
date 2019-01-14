@@ -113,13 +113,6 @@ def listarLote(request):
         return render(request, 'lote/listar.html')
     else:
         oLotes = Lote.objects.filter(estado=True).order_by('-id')
-        for oLote in oLotes:
-            oProductoAlmacens = Producto_almacens.objects.filter(lote_id=oLote.id)
-            for ope in oProductoAlmacens:
-                oNuevo={}
-                oNuevo['id']=oLote.id
-                oNuevo['producto']=ope.producto.nombre
-                oProductos.append(oNuevo)
 
         paginator = Paginator(oLotes,10)
 
@@ -157,3 +150,14 @@ def detalleLote(request, lote_id):
             oProducto["almacen"] = oProductoAlmacen.almacen.nombre
             oProductos.append(oProducto)
         return render(request, 'lote/detalle.html', {"oProveedor": oLote.proveedor,"oProductos":oProductos})
+
+def eliminar_identificador_lote(request):
+    pk = request.POST.get('identificador_id')
+    identificador = Lote.objects.get(pk=pk)
+    if str(identificador.fecha) == str(identificador.modificado):
+        identificador.delete()
+        response = {}
+    else:
+        response={'error':'error',}
+
+    return JsonResponse(response)
