@@ -408,7 +408,6 @@ def pedidoVenta(request,pedido_id):
         return redirect('/error/')
     #oProductopresentacions= Productopresentacions.objects.filter(producto_in=oPedidoproductospresentacions.productopresentacions.producto.id)
     if request.method == 'POST':
-
         Datos = json.loads(request.body)
         cliente = Datos['cliente']
         tipoRecibo = Datos['tipoRecibo']
@@ -462,69 +461,75 @@ def pedidoVenta(request,pedido_id):
 
     else:
         #oUltimoP=Producto_almacens.objects.filter(producto_id=oProductoPresentacions.producto_id).latest('id')
-
-        oSerie = Serie.objects.filter(recibo_id=2).latest('id')
-
-        print("#####serie####")
-        print(oSerie.numeroSerie)
-
-        oPedido = Pedido.objects.get(id=pedido_id)
-        oRecibos = Recibo.objects.filter(estado=True)
+        usuario = request.user
+        empleado = Empleado.objects.get(usuario_id=usuario)
+        hoy = datetime.today()
         try:
-            cliente = oPedido.cliente.nombre
+            oCaja = Aperturacaja.objects.get(caja_id=empleado.caja_id,estado=1,fecha__year=hoy.year, fecha__month=hoy.month,fecha__day = hoy.day)
+
+            oSerie = Serie.objects.filter(recibo_id=2).latest('id')
+
+            print("#####serie####")
+            print(oSerie.numeroSerie)
+
+            oPedido = Pedido.objects.get(id=pedido_id)
+            oRecibos = Recibo.objects.filter(estado=True)
+            try:
+                cliente = oPedido.cliente.nombre
+            except Exception as e:
+                cliente = ''
+            empleado = oPedido.empleado.nombre
+            fecha = oPedido.fecha
+            oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
+            cantidadPedido = []
+            cont = 0
+            for oPedido in oPedidoproductospresentacions:
+                oNuevo = {}
+                oNuevo['id']=oPedido.id
+                c = oPedido.cantidad
+                oNuevo['cantidad']=str(c).replace(",", ".")
+                oNuevo['contador']=cont
+                oNuevo['valor']=float(oPedido.valor)
+                oNuevo['total']="{0:.2f}".format(float(oPedido.cantidad)*float(oPedido.valor))
+                cantidadPedido.append(oNuevo)
+                cont = cont + 1
+
+            try:
+                oVenta = Venta.objects.latest('id')
+                listacf = oVenta.nrecibo.split("-")
+            except Exception as e:
+                listacf = oSerie.numeroSerie + '-0000001'
+            #else:
+            #    pass
+            #print(listacf)
+            if oSerie.numeroSerie == listacf[0]:
+                print("hola mundo")
+                valorNumeroBoleta = int(listacf[1]) + 1
+                print(valorNumeroBoleta)
+                listacf[1]=valorNumeroBoleta
+                print(listacf)
+                cantidadDigitos = len(str(valorNumeroBoleta))
+                cadena = ''
+
+                c = 7
+                c = c - cantidadDigitos
+                cadena = ''
+                while c>=1:
+                    cadena = cadena + '0'
+                    c = c-1
+                cadena = cadena + str(valorNumeroBoleta)
+                listacf[1]=cadena
+                cadenaNueva = "-".join(listacf)
+                print(cadenaNueva)
+
+            else:
+                listacf[0]=oSerie.numeroSerie
+                listacf[1]='0000001'
+                cadenaNueva = "-".join(listacf)
+
+            return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos})
         except Exception as e:
-            cliente = ''
-        empleado = oPedido.empleado.nombre
-        fecha = oPedido.fecha
-        oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
-        cantidadPedido = []
-        cont = 0
-        for oPedido in oPedidoproductospresentacions:
-            oNuevo = {}
-            oNuevo['id']=oPedido.id
-            c = oPedido.cantidad
-            oNuevo['cantidad']=str(c).replace(",", ".")
-            oNuevo['contador']=cont
-            oNuevo['valor']=float(oPedido.valor)
-            oNuevo['total']="{0:.2f}".format(float(oPedido.cantidad)*float(oPedido.valor))
-            cantidadPedido.append(oNuevo)
-            cont = cont + 1
-
-        try:
-            oVenta = Venta.objects.latest('id')
-            listacf = oVenta.nrecibo.split("-")
-        except Exception as e:
-            listacf = oSerie.numeroSerie + '-0000001'
-        #else:
-        #    pass
-        #print(listacf)
-        if oSerie.numeroSerie == listacf[0]:
-            print("hola mundo")
-            valorNumeroBoleta = int(listacf[1]) + 1
-            print(valorNumeroBoleta)
-            listacf[1]=valorNumeroBoleta
-            print(listacf)
-            cantidadDigitos = len(str(valorNumeroBoleta))
-            cadena = ''
-
-            c = 7
-            c = c - cantidadDigitos
-            cadena = ''
-            while c>=1:
-                cadena = cadena + '0'
-                c = c-1
-            cadena = cadena + str(valorNumeroBoleta)
-            listacf[1]=cadena
-            cadenaNueva = "-".join(listacf)
-            print(cadenaNueva)
-
-        else:
-            listacf[0]=oSerie.numeroSerie
-            listacf[1]='0000001'
-            cadenaNueva = "-".join(listacf)
-
-        return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos})
-
+            return redirect('/Caja/apertura/')
 
 @csrf_exempt
 def modificarPedido(request):

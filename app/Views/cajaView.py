@@ -41,7 +41,7 @@ def registrarAperturacaja(request):
         )
         oAperturaCaja.save()
 
-        return redirect('/Venta/nuevo/')
+        return redirect('/Pedido/listar/2/')
 
     else:
         context = {}

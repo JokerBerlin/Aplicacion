@@ -763,15 +763,15 @@ def imprimir(request,venta_id):
     print(venta_id)
     oPedidoproducto = Pedidoproductospresentacions.objects.filter(pedido_id=venta_id)
     print(oPedidoproducto)
+
     productos = []
     for oPedido in oPedidoproducto:
         nuevo = {}
         nuevo['nombreProducto'] = oPedido.productopresentacions.producto.nombre
         nuevo['nombrePresentacion'] = oPedido.productopresentacions.presentacion.nombre
         nuevo['cantidad'] = oPedido.cantidad
-        precionUn = float(oPedido.valor)/float(oPedido.cantidad)
-        nuevo['precioUnitario'] = precionUn
-        nuevo['subtotal'] = oPedido.valor
+        nuevo['precioUnitario'] = oPedido.valor
+        nuevo['subtotal'] = float(oPedido.valor)*float(oPedido.cantidad)
         productos.append(nuevo)
     print(productos)
     buffer = BytesIO()

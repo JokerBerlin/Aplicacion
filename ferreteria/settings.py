@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'widget_tweaks',
-    'sslserver',
-    # 'debug_toolbar'
+    'sslserver'
 ]
 
 LOGIN_URL = "/login/"
@@ -54,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'ferreteria.urls'
@@ -84,17 +82,17 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 # nube
-DATABASES = {
-       'default': {
-        'ENGINE': 'mysql_cymysql',
-        'NAME': 'admin_pedidos',
-        'USER': 'admin_pedidos',
-        'PASSWORD': 'vn1RhBPs1A',
-        'HOST': '138.197.36.187',
-        'PORT': '3306',
-
-  }
-}
+# DATABASES = {
+#        'default': {
+#         'ENGINE': 'mysql_cymysql',
+#         'NAME': 'admin_pedidos',
+#         'USER': 'admin_pedidos',
+#         'PASSWORD': 'vn1RhBPs1A',
+#         'HOST': '138.197.36.187',
+#         'PORT': '3306',
+#
+#   }
+# }
 
 # instancia local Erland
 # DATABASES = {
@@ -109,16 +107,16 @@ DATABASES = {
 
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mysql_cymysql',
-#         'NAME': 'bdpedidos',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#         'PORT': '3307',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'mysql_cymysql',
+        'NAME': 'bdpedidos',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3307',
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -165,5 +163,3 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'media')
-
-# INTERNAL_IPS = '127.0.0.1'
