@@ -466,16 +466,11 @@ def pedidoVenta(request,pedido_id):
         hoy = datetime.today()
         try:
             oCaja = Aperturacaja.objects.get(caja_id=empleado.caja_id,estado=1,fecha__year=hoy.year, fecha__month=hoy.month,fecha__day = hoy.day)
-            print('##############caja###########')
-            print(oCaja)
+        except Exception as e:
+            oCaja = ''
+        if oCaja != '':
             oSerie = Serie.objects.filter(recibo_id=2).latest('id')
-
-            print("#####serie####")
-            print(oSerie.numeroSerie)
-
             oPedido = Pedido.objects.get(id=pedido_id)
-            print("#####oPedido####")
-            print(oPedido)
             oRecibos = Recibo.objects.filter(estado=True)
             try:
                 cliente = oPedido.cliente.nombre
@@ -502,9 +497,6 @@ def pedidoVenta(request,pedido_id):
                 listacf = oVenta.nrecibo.split("-")
             except Exception as e:
                 listacf = oSerie.numeroSerie + '-0000001'
-            #else:
-            #    pass
-            #print(listacf)
             if oSerie.numeroSerie == listacf[0]:
                 valorNumeroBoleta = int(listacf[1]) + 1
                 print(valorNumeroBoleta)
@@ -512,7 +504,6 @@ def pedidoVenta(request,pedido_id):
                 print(listacf)
                 cantidadDigitos = len(str(valorNumeroBoleta))
                 cadena = ''
-
                 c = 7
                 c = c - cantidadDigitos
                 cadena = ''
@@ -527,9 +518,8 @@ def pedidoVenta(request,pedido_id):
                 listacf[0]=oSerie.numeroSerie
                 listacf[1]='0000001'
                 cadenaNueva = "-".join(listacf)
-
             return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos})
-        except Exception as e:
+        else:
             return redirect('/Caja/apertura/')
 
 @csrf_exempt
