@@ -17,7 +17,7 @@ $(document).ready(function() {
           switch (index2) {
               case 0:
                   id = $(this).text();
-              case 2:
+              case 3:
                   cantidad = $("#cantidad"+index ).val();
                   //
                   // if (cantidad.indexOf(',')==true) {
@@ -25,7 +25,7 @@ $(document).ready(function() {
                   // }
 
                   //break;
-              case 3:
+              case 4:
                   cantidadAlmacen = $(this).text();
                   cantidadAlmacen = parseFloat(cantidadAlmacen);
                   if (cantidad>cantidadAlmacen){
@@ -66,7 +66,7 @@ $(document).ready(function() {
             alert("No registró ningún producto");
         }
       }else{
-          alert('La cantidad de pedido excede las existencis de almacen');
+          alert('La cantidad de pedido excede las existencias de almacen');
           $("#cantidad"+datos ).focus();
       }
 

@@ -67,10 +67,10 @@ Realizar Pedido En Almacen
                                       <tr>
                                         <td style="visibility: hidden; display:none; margin-left:2em; margin-right:8em;" >{{pedido.id}}</td>
                                         <td>{{ forloop.counter }}</td>
+                                        <td><img src="/media/{{pedido.productopresentacions.producto.imagen}}" height="100" width="100" alt="" /></td>
                                         <td><input type="number" class="form-control" id="cantidad{{cant.contador}}"  onchange ="eventoCambio({{ cant.contador }});" value="{{ cant.cantidad }}" min="0" max="{{cant.cantidad}}">
                                         </td>
                                         <td>{{cant.cantidadTotal}}</td>
-                                        <td>{{pedido.productopresentacions.producto.codigo}}</td>
                                         <td>{{pedido.productopresentacions.producto.nombre}}</td>
                                         <td>{{pedido.productopresentacions.presentacion.nombre}}</td>
                                         <td id="precioUnitario{{cant.contador}}">{{cant.valor}}</td>
