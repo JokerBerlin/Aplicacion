@@ -466,13 +466,16 @@ def pedidoVenta(request,pedido_id):
         hoy = datetime.today()
         try:
             oCaja = Aperturacaja.objects.get(caja_id=empleado.caja_id,estado=1,fecha__year=hoy.year, fecha__month=hoy.month,fecha__day = hoy.day)
-
+            print('##############caja###########')
+            print(oCaja)
             oSerie = Serie.objects.filter(recibo_id=2).latest('id')
 
             print("#####serie####")
             print(oSerie.numeroSerie)
 
             oPedido = Pedido.objects.get(id=pedido_id)
+            print("#####oPedido####")
+            print(oPedido)
             oRecibos = Recibo.objects.filter(estado=True)
             try:
                 cliente = oPedido.cliente.nombre
@@ -503,7 +506,6 @@ def pedidoVenta(request,pedido_id):
             #    pass
             #print(listacf)
             if oSerie.numeroSerie == listacf[0]:
-                print("hola mundo")
                 valorNumeroBoleta = int(listacf[1]) + 1
                 print(valorNumeroBoleta)
                 listacf[1]=valorNumeroBoleta
@@ -521,7 +523,6 @@ def pedidoVenta(request,pedido_id):
                 listacf[1]=cadena
                 cadenaNueva = "-".join(listacf)
                 print(cadenaNueva)
-
             else:
                 listacf[0]=oSerie.numeroSerie
                 listacf[1]='0000001'
