@@ -77,8 +77,8 @@ urlpatterns = [
     url(r'^Lote/nuevo/$', registrarLote),
     url(r'^Lote/listar/$', listarLote),
     url(r'^Lote/detalle/(?P<lote_id>\d+)/$', detalleLote),
-        url(r'^Lote/eliminar/$', eliminar_identificador_lote,name='eliminar_lote'),
-
+    url(r'^Lote/eliminar/$', eliminar_identificador_lote,name='eliminar_lote'),
+    url(r'^Lote/editar/(?P<lote_id>\d+)/$', editarLote),
     ################## Catalogo #######################
     url(r'^Presentacion/Listar/(?P<producto_id>\d+)/$', presentacion_detalle),
     url(r'^Presentacion/registrar/$', registrarPresentacionProducto),

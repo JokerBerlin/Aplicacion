@@ -77,7 +77,8 @@ Listar lote
                             <tr>
                                 <th>#</th>
                                 <th>Fecha</th>
-                                <th>Proveedor</th>
+																<th>Fecha modificado</th>
+																<th>Proveedor</th>
                                 <th>Recibo</th>
                                 <th>Opciones</th>
                             </tr>
@@ -86,11 +87,13 @@ Listar lote
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{oLote.fecha|date:"d-m-Y P" }}</td>
+								<td>{{oLote.modificado|date:"d-m-Y P" }}</td>
                 <td>{{oLote.proveedor.nombre}}</td>
                 <td>{{oLote.recibo.nombre}}</td>
                 <td>
                   <a href="/Lote/detalle/{{oLote.id}}/"><span class="fa fa-search fa-2x" style="color:purple;"></span></a>
-                  <a data-target="#myModal" role="button" data-toggle="modal" id="{{ oProducto.id }}" onclick="selLote('{{oLote.id}}','{{oLote.fecha}}');"><span class="fa fa-trash fa-2x" style="color:red;"></span></a>
+									<a href="/Lote/editar/{{oLote.id}}/"><span class="fa fa-edit fa-2x"></span></a>
+									<a data-target="#myModal" role="button" data-toggle="modal" id="{{ oProducto.id }}" onclick="selLote('{{oLote.id}}','{{oLote.fecha}}');"><span class="fa fa-trash fa-2x" style="color:red;"></span></a>
                 </td>
               </tr>
 
