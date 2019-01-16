@@ -481,6 +481,7 @@ def pedidoVenta(request,pedido_id):
             oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
             cantidadPedido = []
             cont = 0
+            montoTotal = 0.0
             for oPedido in oPedidoproductospresentacions:
                 oNuevo = {}
                 oNuevo['id']=oPedido.id
@@ -491,7 +492,8 @@ def pedidoVenta(request,pedido_id):
                 oNuevo['total']="{0:.2f}".format(float(oPedido.cantidad)*float(oPedido.valor))
                 cantidadPedido.append(oNuevo)
                 cont = cont + 1
-
+                montoTotal = montoTotal + float(oPedido.cantidad)*float(oPedido.valor)
+            montoTotal = "{0:.2f}".format(montoTotal)
             try:
                 oVenta = Venta.objects.latest('id')
                 listacf = oVenta.nrecibo.split("-")
@@ -518,7 +520,7 @@ def pedidoVenta(request,pedido_id):
                 listacf[0]=oSerie.numeroSerie
                 listacf[1]='0000001'
                 cadenaNueva = "-".join(listacf)
-            return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos})
+            return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos,'montoTotal':montoTotal})
         else:
             return redirect('/Caja/apertura/')
 
