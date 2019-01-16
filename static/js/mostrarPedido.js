@@ -46,9 +46,6 @@ $(document).ready(function() {
         async: false,
         cache: false,
         CrossDomain: true,
-        beforeSend: function() {
-            $('#div_carga').css(display:'block');
-        },
         success: function (result) {
         //     var id_venta = result["id_venta"];
             console.log(pedido);

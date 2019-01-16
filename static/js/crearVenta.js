@@ -334,8 +334,8 @@ function GenerarVenta(){
     }
 }
 
-function imprimir_venta(id_pedido){
-    window.open('/imprimir/'+id_pedido+'/', '_blank');
+function imprimir_venta(id_venta){
+    window.open('/venta/imprimir/'+id_venta+'/', '_blank');
 }
 
 

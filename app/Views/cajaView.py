@@ -7,6 +7,9 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 
 from app.validacionUser import validacionUsuario
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+import json
 
 perfiles_correctos = [1, 4]
 
@@ -79,8 +82,25 @@ def registrarOperacion(request):
     else:
 
         tipoOperaciones = Tipooperacion.objects.filter(estado=1)
-        detalleOperaciones = Detalletipooperacion.objects.filter(estado=1)
+        tipoOp = Tipooperacion.objects.get(nombre='Ingreso')
+        detalleOperaciones = Detalletipooperacion.objects.filter(estado=1,tipooperacion_id=tipoOp.id)
         return render(request,'caja/operacion.html',{'tipoOperaciones':tipoOperaciones,'detalleOperaciones':detalleOperaciones})
+
+@csrf_exempt
+def buscarDetalleOperacion(request):
+    if request.method == 'POST':
+        tipoOperacion = request.POST['tipoOperacion']
+        detalles = Detalletipooperacion.objects.filter(tipooperacion_id=tipoOperacion)
+        jsonDetalle = []
+        for detalle in detalles:
+            nuevo = {}
+            nuevo['id']=detalle.id
+            nuevo['nombre'] = detalle.nombre
+            jsonDetalle.append(nuevo)
+            print(jsonDetalle)
+
+    return HttpResponse(json.dumps(jsonDetalle), content_type='application/json')
+
 
 # Reporte/caja/
 @login_required

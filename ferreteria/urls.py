@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^Caja/apertura/$', registrarAperturacaja),
     url(r'^Caja/cierre/$', cierreCaja),
     url(r'^Caja/movimiento/$', registrarOperacion),
+    url(r'^Caja/buscar-detalle/$', buscarDetalleOperacion),
 
     ################## Venta #######################
     #vista nueva venta
