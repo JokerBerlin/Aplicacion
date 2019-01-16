@@ -25,16 +25,7 @@ def registrarAperturacaja(request):
         oEmpleado = Empleado.objects.get(usuario=usuario)
 
         oCaja = oEmpleado.caja
-        monto = 0.0
-
-        try:
-            ultimoCierreCaja = Cierrecaja.objects.all().latest('pk')
-            if ultimoCierreCaja:
-                monto = ultimoCierreCaja.monto
-            else:
-                monto = 0.0
-        except Exception as e:
-            monto = 0.0
+        monto = Datos['montoInicial']
 
         oAperturaCaja = Aperturacaja(
             monto=monto,
