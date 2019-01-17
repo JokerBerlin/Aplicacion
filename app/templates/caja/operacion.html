@@ -21,14 +21,6 @@ Registrar Operacion
 				{% load widget_tweaks %}
 				{% csrf_token %}
 					<div class="form-group">
-					<!--<label for="cmbTipo">Tipo de operacion</label>
-					<select name="cmbTipo" id="cmbTipo" class="form-control" required>
-            {% for tipoOperacion in tipoOperaciones %}
-							<option value="{{ tipoOperacion.id }}">
-								{{ tipoOperacion.nombre }}
-							</option>
-						{% endfor %}
-					</select>-->
           <label for="">Tipo de operación</label>
           <select name="cmbTipoOperacion" id="cmbTipoOperacion" onchange="seleccionarTipo();"class="form-control" required>
 						{% for tipoOperacion in tipoOperaciones %}
