@@ -22,18 +22,18 @@ def cierreCaja(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
 
-    fechaHoraActual = datetime.today()
+    hoy = datetime.today()
     usuario = request.user
     empleado = Empleado.objects.get(usuario_id=usuario)
-    oAperturaCaja = Aperturacaja.objects.filter(caja_id=empleado.caja_id)
+    oAperturaCaja = Aperturacaja.objects.filter(caja_id=empleado.caja_id,fecha__year=hoy.year,fecha__month=hoy.month,fecha__day=hoy.day).latest('id')
     montoTotal = 0.0
+    print(oAperturaCaja.estado)
 
     if oAperturaCaja:
-        if oAperturaCaja.estado == True:   
-            oAperturaCaja = oAperturaCaja.latest('id')
+        if oAperturaCaja.estado == True:
             montoTotal += oAperturaCaja.monto
-            oOperacions = Operacion.objects.filter(fecha__range=[oAperturaCaja.fecha,fechaHoraActual])
-        
+            oOperacions = Operacion.objects.filter(fecha__range=[oAperturaCaja.fecha,hoy])
+
             for oOperacion in oOperacions:
                 print('monto total: %s' % montoTotal)
                 montoTotal = montoTotal + float(oOperacion.monto)
@@ -43,16 +43,10 @@ def cierreCaja(request):
                 'msj': res
             }
             return redirect('/error/cierreCaja-efectuado/')
-        
+
     else:
-        oAperturaCaja = Aperturacaja(
-            monto=0.0,
-            activo=True,
-            estado=True,
-            caja=empleado.caja
-        )
-        oAperturaCaja.save()
-    
+        return redirect('/Caja/apertura/')
+
     cierreCaja = Cierrecaja(
         fecha=datetime.now(),
         monto=montoTotal,
@@ -76,7 +70,7 @@ def cierreCaja(request):
         context = {
             'msj': 'res'
         }
-        return redirect('/Venta/nuevo/')
+        return redirect('/home/')
 
 def validarCierreCaja(cierreCaja):
     print('monto cierre Caja = %s' % cierreCaja.monto)
@@ -92,3 +86,17 @@ def validarCierreCaja(cierreCaja):
         # return msj
     print(msj)
     return msj
+
+def mostrarCierre(request):
+    hoy = datetime.today()
+    user = request.user
+    empleado = Empleado.objects.get(usuario_id=user.id)
+    fecha=''
+    try:
+        aperturaCaja = Aperturacaja.objects.filter(fecha__year=hoy.year,fecha__month=hoy.month,fecha__day=hoy.day,caja_id=empleado.caja_id)
+        for apertura in aperturaCaja:
+            fecha = apertura.fecha
+    except Exception as e:
+        fecha = ''
+
+    return render(request,'caja/cierre.html',{'fecha':fecha})

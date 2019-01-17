@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block imports %}
-Registrar Nuevo Producto
+<script type="text/javascript" src="/static/js/cierreCaja.js"></script>
 {% endblock %}
 
 {% block title %}
@@ -12,12 +12,15 @@ Registrar Nuevo Producto
 			<div class="col-sm-12">
 					<div class="white-box">
 							<h3 class="box-title">Formulario de cierre de caja</h3>
-							<form action="/Caja/cierre/" method="post" enctype="multipart/form-data">
+							<form action="" id="controlarCierre" method="post" enctype="multipart/form-data">
 			<ul>
 			{% load widget_tweaks %}
 			{% csrf_token %}
-				
-				<button class="btn btn-success" data-toggle="modal" style="margin-top: 1em">Cierre Caja</button>
+				<label for="">Fecha de apertura caja:</label>
+				<input type="text" id="fechaApertura" class="form-control" name="fecha" value="{{fecha}}" disabled>
+				<br>
+				<br>
+				<input id="cerrarCaja" class="btn btn-success" onclick="ComprobarCaja();" value="Cerrar caja">
 			</ul>
 			</form>
 

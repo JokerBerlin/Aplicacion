@@ -50,14 +50,14 @@ urlpatterns = [
     url(r'^login/$', Login),
     url(r'^logout/$', Logout),
     url(r'^home/$', Home),
-    url(r'^Home/$', Home),
     url(r'^prueba/$', Prueba),
 
     ################## Caja #######################
     url(r'^Caja/apertura/$', registrarAperturacaja),
-    url(r'^Caja/cierre/$', cierreCaja),
+    url(r'^Caja/cerrar/$', cierreCaja),
     url(r'^Caja/movimiento/$', registrarOperacion),
     url(r'^Caja/buscar-detalle/$', buscarDetalleOperacion),
+    url(r'^Caja/cierre/$', mostrarCierre),
 
     ################## Venta #######################
     #vista nueva venta
