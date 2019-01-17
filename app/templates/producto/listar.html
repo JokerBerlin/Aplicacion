@@ -68,7 +68,7 @@ Lista de productos
 				    {% for oProducto in oProductos %}
 				    <tr id="tabla{{ oProducto.id }}">
 				    	<td>{{ forloop.counter }}</td>
-              <td><img src="/media/{{oProducto.imagen}}" height="100" width="100" alt="" /></td>
+              <td><img src="{% if oProducto.imagen %}/media/{{oProducto.imagen}}{% else %}/media/default.jpg{% endif %} " height="100" width="100" alt="" /></td>
 				    	<td>{{oProducto.nombre}}</td>
 				    	<td>{{oProducto.codigo}}</td>
               <td>
