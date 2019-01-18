@@ -82,6 +82,7 @@ def listarRutas(request):
         return render(request, 'ruta/listar.html', {"oRutas": oRuta})
 
 @login_required
+@csrf_exempt
 def detalleRuta(request,ruta_id):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
