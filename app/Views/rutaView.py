@@ -72,16 +72,6 @@ def listarRutas(request):
 
 """
 @login_required
-def listarRutas(request):
-    if not validacionUsuario(request.user) in perfiles_correctos:
-        return redirect('/error/')
-    if request.method == 'POST':
-        return render(request, 'Ruta/listar.html')
-    else:
-        oRuta = Ruta.objects.filter(estado = True)
-        return render(request, 'ruta/listar.html', {"oRutas": oRuta})
-
-@login_required
 @csrf_exempt
 def detalleRuta(request,ruta_id):
     if not validacionUsuario(request.user) in perfiles_correctos:
@@ -161,5 +151,21 @@ def listarRutas(request):
     if request.method == 'POST':
         return render(request, 'Ruta/listar.html')
     else:
-        oRuta = Ruta.objects.filter(estado = True)
-        return render(request, 'ruta/listar.html', {"oRutas": oRuta})
+        oRuta = Ruta.objects.filter(estado = True).order_by('-id')
+        paginator = Paginator(oRuta,10)
+
+        page = request.GET.get('page')
+        try:
+            rutaPagina = paginator.page(page)
+        except PageNotAnInteger:
+            rutaPagina = paginator.page(1)
+        except EmptyPage:
+            rutaPagina = paginator.page(paginator.num_pages)
+
+        index = rutaPagina.number - 1
+        max_index = len(paginator.page_range)
+        start_index = index - 5 if index >= 5 else 0
+        end_index = index + 5 if index <= max_index - 5 else max_index
+        page_range = paginator.page_range[start_index:end_index]
+
+        return render(request, 'ruta/listar.html', {"oRutas": rutaPagina,"page_range": page_range})
