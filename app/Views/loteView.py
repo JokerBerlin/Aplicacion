@@ -151,6 +151,7 @@ def detalleLote(request, lote_id):
             oProductos.append(oProducto)
         return render(request, 'lote/detalle.html', {"oProveedor": oLote.proveedor,"oProductos":oProductos})
 
+@csrf_exempt
 def eliminar_identificador_lote(request):
     pk = request.POST.get('identificador_id')
     identificador = Lote.objects.get(pk=pk)

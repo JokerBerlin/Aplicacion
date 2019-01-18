@@ -4,33 +4,7 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript">
-function eliminarIdentificador(identificadorId) {
-		var request = $.ajax({
-				type: "POST",
-				url: "{% url 'eliminar_lote' %}",
-				data: {
-						"csrfmiddlewaretoken": "{{ csrf_token }}",
-						"identificador_id": identificadorId
-				},
-		});
-		request.done(function(response) {
-        if(response['error']=='error'){
-            alert("El lote no se puede eliminar");
-            $('#myModal').modal('toggle');
-        }else{
-            alert("El lote fue eliminado con exito");
-            $('#myModal').modal('toggle');
-            document.location.href='/Lote/listar/';
-        }
-
-		});
-};
-	selLote = function(idLote, fecha){
-		document.getElementById('fechaLote').innerHTML = fecha.toString();
-		$("#eliminar").attr("onclick","eliminarIdentificador('"+idLote+"')");
-	};
-</script>
+<script type="text/javascript" src="/static/js/listarLote.js"></script>
 
 {% endblock %}
 
