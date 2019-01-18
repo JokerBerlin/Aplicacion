@@ -490,7 +490,7 @@ def ListarVenta(request):
 
 """
 
-
+@csrf_exempt
 def eliminar_identificador_venta(request):
     pk = request.POST.get('identificador_id')
     print(pk)
@@ -679,13 +679,12 @@ def anularVenta(request):
     context = {}
     return render(request, 'venta/anular.html', context)
 
-
+@csrf_exempt
 def eliminar_identificador_venta(request):
     Datos = request.POST
     pk = Datos['identificador_id']
     identificador = Venta.objects.get(pk=pk)
     anulacionVenta = Anulacionventa(
-        descripcion=Datos['descripcion'],
         venta=identificador,
         usuario=request.user
     )
