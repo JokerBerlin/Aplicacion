@@ -1,4 +1,136 @@
 $(document).ready(function(){
+  $( "#inpt-proveedor" ).focus();
+  $('#myModal').on('shown.bs.modal', function () {
+      $('#id_nombre').trigger('focus');
+  });
+  $('#myModalProducto').on('shown.bs.modal', function () {
+
+      window.frames['upload'].document.getElementById('id_nombre').focus();
+      window.frames['upload'].document.getElementById('itemsProducto').className = "collapse";
+
+  });
+
+  $('#myModalProducto').on('hidden.bs.modal', function () {
+      $('#inpt-producto').focus();
+  });
+
+  $( "#inpt-producto" ).autocomplete({
+      source: function (request, response) {
+
+          var datos = {nombreProducto: $("#inpt-producto").val()};
+          var sendData = JSON.stringify(datos);
+          $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "/productopre/buscar/",
+              data: sendData,
+              contentType: "application/json; charset=utf-8",
+              async: false,
+              cache: false,
+              CrossDomain: true,
+
+              success: function (result) {
+
+                var ListasProductos = result['productos'];
+                var ListarPresentaciones = result['presentacion'];
+
+                $("#imagenesProd").empty();
+                console.log(ListasProductos);
+                a = 1;
+                for (var i = 0; i < ListasProductos.length; i+=1) {
+                    var img = $('<img id="dynamic'+ListasProductos[i].id+'">'); //Equivalent: $(document.createElement('img'))
+                    var br = $('<br/>');
+                    a = a + 1;
+                    var panelBody = $(' <div tabindex="'+a+'" onkeypress="seleccionarProducto('+ListasProductos[i].id+');" id="dynamicPanelPrincipal'+ListasProductos[i].id+'" class="panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">');
+                    var cierreBody = $('</div>');
+                    var panelBody2 = $('<div id="dynamicPanel'+ListasProductos[i].id+'" onclick="seleccionarProducto('+ListasProductos[i].id+');" class="panel-body">');
+                    panelBody.appendTo('#imagenesProd');
+                    var labelP = $('<label id="producto'+ListasProductos[i].id+'" for="male">'+ListasProductos[i].nombre+'</label>');
+                    var labelP2 = $('<label id="codigo'+ListasProductos[i].id+'" for="male1" style="visibility:hidden;">'+ListasProductos[i].codigo+'</label>');
+                    var pre = $('<pre>'+ListasProductos[i].codigo+'</pre>');
+                    panelBody2.appendTo("#dynamicPanelPrincipal"+ListasProductos[i].id+"");
+
+                    img.attr('src', ListasProductos[i].imagen);
+                    img.attr('onclick', 'seleccionarProducto('+ListasProductos[i].id+')');
+                    img.attr('height', "50");
+                    img.attr('width', "50");
+                    img.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
+                    labelP.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
+                    labelP2.appendTo("#dynamicPanel"+ListasProductos[i].id+"");
+                }
+
+                response($.map(ListasProductos, function (item) {
+                    return {
+                        idproducto: item.nombre,
+                        Id: item.id,
+                        imagen: item.imagen,
+                        };
+                    })
+                  );
+
+                }
+            });
+      },
+      minLength: 2,
+      select: function (event, ui) {
+          $.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
+          $('#cantidad').focus();
+      }
+
+
+  });
+  $( "#inpt-proveedor" ).autocomplete({
+    source: function (request, response) {
+
+    var datos = {nombreProveedor: $("#inpt-proveedor").val()};
+    var sendData = JSON.stringify(datos);
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/proveedor/buscar/",
+        data: sendData,
+        contentType: "application/json; charset=utf-8",
+        async: false,
+        cache: false,
+        CrossDomain: true,
+
+        success: function (result) {
+        var ListasProveedores = result['proveedores'];
+        if( Object.keys(ListasProveedores).length === 0 ){
+            var numeroNuevo = $('#inpt-proveedor').val();
+            var proveedor = new Object();
+            proveedor.documento = "nuevo";
+            proveedor.nombre = "nuevo";
+            proveedor.direccion = numeroNuevo;
+            ListasProveedores.push(proveedor);
+        }
+        response($.map(ListasProveedores, function (item) {
+           var valorProveedor = document.getElementById('inpt-proveedor').value;
+           return {label: item.documento,
+                 nombreP: item.nombre,
+               dniP: item.direccion,};
+              }));
+          }
+      });
+  },
+  minLength: 2,
+  select: function (event, ui) {
+    if(ui.item.nombreP === "nuevo"){
+        if(isNaN(ui.item.dniP)){
+          $('#id_nombre').val(ui.item.dniP);
+          $('#nuevoProveedor').click();
+        }else{
+          $('#id_numerodocumento').val(ui.item.dniP);
+          $('#nuevoProveedor').click();
+        }
+
+    } else{
+        $("#inpt-nombreProveedor").val(ui.item.nombreP);
+        $('#cmbRecibo').focus();
+    }
+}
+
+});
         $( "#cmbAlmacen" ).blur(function() {
           $('#inpt-producto').focus();
         });

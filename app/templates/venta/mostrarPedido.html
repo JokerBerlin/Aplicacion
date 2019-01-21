@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block title %}
-Editar pedido
+Realizar Venta
 {% endblock %}
 
 {% block content %}
@@ -100,12 +100,12 @@ Editar pedido
                                 </table>
                                 <br>
                             </div>
-                                TOTAL: S/. <label for="id_Total" id="id_Total" name="id_Total"></label>
+                                TOTAL: S/. <label for="id_Total" id="id_Total" name="id_Total">{{montoTotal}}</label>
                                 <br>
                                 <br>
 
                             <button id="generarAlmacen" class="btn btn-primary">Realizar Venta</button>
-                            
+
                         </div>
                       </div>
                     </div>
@@ -128,9 +128,6 @@ Editar pedido
         </div>
     </div>
 
-    <div class="" id="div_carga" style="{display: 'none'}">
-        <img src="{% static 'imgs/ajax-loader.gif'%}" id="cargador" alt="">
-    </div>
 
 
 {% endblock %}

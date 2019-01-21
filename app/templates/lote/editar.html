@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block imports %}
+<script type="text/javascript" src="/static/js/editarLote.js"></script>
+
+{% endblock %}
+
+{% block title %}
+Realizar Pedido En Almacen
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="white-box">
+                <h3 class="box-title">Editar Lote</h3>
+
+                <div class="panel panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">
+                   <div class="panel-body">
+                     <div class="col-xs-6 col-sm-6 col-md-6">
+                       <input class="form-control" type="hidden" id="lote_id" value="{{ oLote.id }}" disabled>
+                      <label class="control-label col-sm-6" for="inputSuccess3">Nombre proveedor:
+                              </label>
+                       <input class="form-control" type="text" name="" value="{{ oLote.proveedor.nombre }}" disabled>
+
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6">
+                       <label class="control-label col-sm-6" for="inputSuccess3">Fecha pedido:
+                               </label>
+                        <input class="form-control" type="text" name="" value="{{ oLote.fecha|date:"d-m-Y P" }}"disabled>
+
+                     </div>
+                   </div>
+                </div>
+
+
+
+                    <div class="col-lg-12" style="margin-top:2px;">
+                      <div class="col-xs-12 col-sm-12 col-md-12">
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label ><center>Concepto Operación</center></label>
+                                <table id="tabla" name="tablacontenido" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                      <td>Nº</td>
+                                      <td>Imagen</td>
+                                      <td>Producto</td>
+                                      <td>Cantidad</td>
+                                      <td>Almacen</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  {% for oAlmacen in oAlmacens  %}
+                                        {% for cant in cantidadAlmacen %}
+                                            {% if oAlmacen.id == cant.id %}
+                                                <tr>
+                                                  <td style="visibility: hidden; display:none; margin-left:2em; margin-right:8em;" >{{oAlmacen.id}}</td>
+                                                  <td>{{ forloop.counter }}</td>
+                                                  <td><img src="/media/{{oAlmacen.producto.imagen}}" height="100" width="100" alt="" /></td>
+                                                  <td>{{oAlmacen.producto.nombre}}</td>
+                                                  <td><input type="number" class="form-control" id="cantidad{{cant.contador}}"  onchange ="eventoCambio({{ cant.contador }});" value="{{ cant.cantidad }}" min="0"></td>
+                                                  <td>{{oAlmacen.almacen.nombre}}</td>
+
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                  {% endfor %}
+                                </tbody>
+
+                                </table>
+                                <br>
+                            </div>
+                                <br>
+                                <br>
+
+                            <button id="generarAlmacen" class="btn btn-primary">Editar Lote Almacen</button>
+                          <!--</form>-->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-8 col-md-8 col-lg-6">
+                                <div id="tabs" style="display:none;">
+                                    <table id="listaProducto"></table>
+                                    <div id="pagerlistaProducto"  style="text-align: center;"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2 col-md-2 col-lg-4">
+
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

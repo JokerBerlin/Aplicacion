@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="/static/js/listarLote.js"></script>
 
 {% endblock %}
 
@@ -12,6 +13,34 @@ Listar lote
 {% endblock %}
 
 {% block content %}
+
+<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar lote</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+
+
+          <p>Estás a punto de eliminar el lote de la fecha <label id="fechaLote"></label> </p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="eliminar" type="button" class="btn btn-primary" onclick="">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="row">
       <div class="col-sm-12">
           <div class="white-box">
@@ -22,9 +51,9 @@ Listar lote
                             <tr>
                                 <th>#</th>
                                 <th>Fecha</th>
-                                <th>Proveedor</th>
+																<th>Fecha modificado</th>
+																<th>Proveedor</th>
                                 <th>Recibo</th>
-                                <th>Producto</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>
@@ -32,24 +61,13 @@ Listar lote
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{oLote.fecha|date:"d-m-Y P" }}</td>
+								<td>{{oLote.modificado|date:"d-m-Y P" }}</td>
                 <td>{{oLote.proveedor.nombre}}</td>
                 <td>{{oLote.recibo.nombre}}</td>
                 <td>
-                  {% for oNue in oProductos %}
-                    {% if oLote.id == oNue.id %}
-                        <table id="tProductos" class="table">
-                          <tr>
-                            {{ oNue.producto }}
-                          </tr>
-                        </table>
-
-                    {% endif %}
-                  {% endfor %}
-                </td>
-
-                <td>
                   <a href="/Lote/detalle/{{oLote.id}}/"><span class="fa fa-search fa-2x" style="color:purple;"></span></a>
-
+									<a href="/Lote/editar/{{oLote.id}}/"><span class="fa fa-edit fa-2x"></span></a>
+									<a data-target="#myModal" role="button" data-toggle="modal" id="{{ oProducto.id }}" onclick="selLote('{{oLote.id}}','{{oLote.fecha}}');"><span class="fa fa-trash fa-2x" style="color:red;"></span></a>
                 </td>
               </tr>
 

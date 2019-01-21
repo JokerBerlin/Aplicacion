@@ -50,14 +50,18 @@ urlpatterns = [
     url(r'^login/$', Login),
     url(r'^logout/$', Logout),
     url(r'^home/$', Home),
-    url(r'^Home/$', Home),
     url(r'^prueba/$', Prueba),
 
     ################## Caja #######################
     url(r'^Caja/apertura/$', registrarAperturacaja),
-    url(r'^Caja/cierre/$', cierreCaja),
+    url(r'^Caja/cerrar/$', cierreCaja),
     url(r'^Caja/movimiento/$', registrarOperacion),
+<<<<<<< HEAD
     url(r'^Caja/exito-cierre/$', exitoCierreCaja),
+=======
+    url(r'^Caja/buscar-detalle/$', buscarDetalleOperacion),
+    url(r'^Caja/cierre/$', mostrarCierre),
+>>>>>>> 018acc7316ec551721ac9ad6374d2bbb206c0251
 
     ################## Venta #######################
     #vista nueva venta
@@ -78,8 +82,8 @@ urlpatterns = [
     url(r'^Lote/nuevo/$', registrarLote),
     url(r'^Lote/listar/$', listarLote),
     url(r'^Lote/detalle/(?P<lote_id>\d+)/$', detalleLote),
-
-
+    url(r'^Lote/eliminar/$', eliminar_identificador_lote,name='eliminar_lote'),
+    url(r'^Lote/editar/(?P<lote_id>\d+)/$', editarLote),
     ################## Catalogo #######################
     url(r'^Presentacion/Listar/(?P<producto_id>\d+)/$', presentacion_detalle),
     url(r'^Presentacion/registrar/$', registrarPresentacionProducto),
@@ -175,7 +179,7 @@ urlpatterns = [
     url(r'^venta/filtrar/eliminar/', eliminar_cookies),
     url(r'^Pedido/filtrar/', FiltrarPedido),
     url(r'^Pedido/estado/(?P<estado_id>\d+)/$', EstadoPedido),
-    url(r'^venta/eliminar/', eliminar_identificador_venta,name="eliminar_venta"),
+    url(r'^Venta/eliminar/', eliminar_identificador_venta,name="eliminar_venta"),
     url(r'^venta/anular/', anularVenta),
     url(r'^error/', visualizarError),
     url(r'^error/cierreCaja-efectuado/', cierreCajaEfectuado),

@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block imports %}
-Lista de Rutas
+<link href="/static/css/styleAutocomplete.css" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script type="text/javascript">
 
 //evento click para boton editar
@@ -42,7 +46,7 @@ Lista de Rutas
 							</ul>
 				    	</td>
 				    	<td>{{oRuta.fecha}}</td>
-						<td> 
+						<td>
 					    		<a href="/Ruta/detalle/{{oRuta.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
 					    		<a href="/Ruta/editar/{{oRuta.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
 					    		<a href="/Ruta/eliminar/{{oRuta.id}}/"><button type="button" class="btn btn-danger">Eliminar</button></a>
@@ -52,6 +56,30 @@ Lista de Rutas
 				    	{% endfor %}
 
 					</table>
+					<div class="center">
+						<ul class="pagination">
+							{% if oRutas.has_previous %}
+												<li><a href="?page={{oVenta.previous_page_number}}"><<</a></li>
+										{% endif %}
+
+
+									{% for pg in page_range %}
+											{% if oRutas.number == pg %}
+													<li><a class="active" href="?page={{pg}}" class="btn btn-default">{{pg}}</a></li>
+											{% else %}
+													<li><a href="?page={{pg}}" class="btn">{{pg}}</a></li>
+											{% endif %}
+									{% endfor %}
+
+										{% if oRutas.has_next %}
+												<li><a href="?page={{oRutas.next_page_number}}">>></a></li>
+										{% endif %}
+						</ul>
+					</div>
+
+
+
+
 				    <br>
 	    			<a href="/Ruta/nuevo/"><button type="button" class="btn btn-success">Nueva Ruta</button> </a>
 

@@ -16,7 +16,9 @@ Registrar Nuevo Producto
 				<ul>
 				{% load widget_tweaks %}
 				{% csrf_token %}
-					
+					<label for="">Monto de apertura de caja:</label>
+					<br>
+					<input type="number" class="form-control" name="montoInicial" value="0.0">
 					<button class="btn btn-success" data-toggle="modal" style="margin-top: 1em">Aperturar Caja</button>
 				</ul>
 				</form>

@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'widget_tweaks',
-    'sslserver',
-    # 'debug_toolbar'
+    'sslserver'
 ]
 
 LOGIN_URL = "/login/"
@@ -54,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'ferreteria.urls'
@@ -164,5 +162,3 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 #MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'media')
-
-# INTERNAL_IPS = '127.0.0.1'

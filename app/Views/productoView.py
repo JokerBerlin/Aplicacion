@@ -40,21 +40,16 @@ def ListarProductos(request):
     else:
         oProductos = Producto.objects.filter(estado = True).order_by('-id')
         precios=[]
-        #for oProducto in oProductos:
         for oProducto in oProductos:
             nuevo={}
             try:
                 oUltimoP=Producto_almacens.objects.filter(producto_id=oProducto).latest('id')
-                print(oUltimoP)
                 nuevo['id'] = oProducto.id
                 nuevo['cantidad'] = round(oUltimoP.cantidad,2)
             except Exception as e:
-                print(e)
                 nuevo['id'] = oProducto.id
                 nuevo['cantidad'] = 0
             precios.append(nuevo)
-        #nuevo={}
-        print(precios)
 
         paginator = Paginator(oProductos,10)
 
@@ -81,9 +76,7 @@ def registrarPresentacion(request):
         return redirect('/error/')
     if request.method == 'POST':
         Datos = json.loads(request.body)
-        print(Datos)
         Dato = Datos['presentaciones']
-        print(Dato)
         #oPrecios = Datos['precios']
         oPresentaciones = Dato
         producto = Datos['producto']
@@ -117,12 +110,10 @@ def registrarPresentacion(request):
 
     else:
         oUltimoP=Producto.objects.all().latest('id')
-        print(oUltimoP.nombre)
         oPrecios = Precio.objects.filter(estado=True)
         oPresentacions = Presentacion.objects.all()
         oProPre = Productopresentacions.objects.get(producto_id=oUltimoP.id)
         oPresent = Presentacion.objects.get(id=oProPre.presentacion_id)
-        print(oProPre.presentacion_id)
         presentaciones=[]
         for oPresentacion in oPresentacions:
             nuevo={}
@@ -131,15 +122,12 @@ def registrarPresentacion(request):
                 nuevo['nombre']=oPresentacion.nombre
                 presentaciones.append(nuevo)
 
-        print(presentaciones)
-
         return render(request,'producto/agregarPresentacion.html',{'precios':oPrecios,'producto':oUltimoP,'presentaciones':presentaciones})
 
 @csrf_exempt
 def insertarProducto(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
-        print(Datos)
 
     return HttpResponse(json.dumps({'exito':1,"idPedido": oPedido.id}), content_type="application/json")
 
@@ -149,9 +137,7 @@ def registrarProducto(request):
         return redirect('/error/')
     if request.method == 'POST':
         Datos = request.POST
-        print(Datos)
         form = ProductoForm(request.POST, request.FILES)
-        print(form)
         if form.is_valid():
             form.valor = 1
             form = form.save(commit=False)
@@ -215,7 +201,6 @@ def BuscarProducto(request):
                     jsonProducto["imagen"] = "/media/default.jpg"
                 else:
                     jsonProducto["imagen"] = oProducto.imagen.url
-                print(jsonProducto["imagen"])
                 jsonProductos["productos"].append(jsonProducto)
 
             return HttpResponse(json.dumps(jsonProductos), content_type="application/json")
@@ -313,7 +298,6 @@ def BuscarProductoPresentacion (request):
                         jsonPrecio["nombre"]=oPrecio.precio.nombre
                         jsonPrecio["valor"]=oPrecio.valor
                         jsonProductos["precios"].append(jsonPrecio)
-                print(jsonProductos)
 
 
             return HttpResponse(json.dumps(jsonProductos), content_type="application/json")
@@ -342,14 +326,10 @@ def BuscarProductoPresentacion (request):
 def ListarPresentacionesProducto (request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
-        print(Datos)
-        #print Datos
         usuario=True
-        # usuario= BuscarUsuario(Datos["idUsuario"])
         if usuario==True:
             idProducto = Datos["idProducto"]
             oProuctoPresentaciones = Productopresentacions.objects.filter(producto= idProducto)
-            #print oProuctoPresentaciones
             jsonPresentaciones = {}
             jsonPresentaciones["presentaciones"] = []
             for oProuctoPresentacion in oProuctoPresentaciones:
@@ -368,18 +348,13 @@ def ListarPresentacionesProducto (request):
                     jsonPrecios.append(jsonPrecio)
                 jsonPresentacion["valor"] =jsonPrecios
                 jsonPresentaciones["presentaciones"].append(jsonPresentacion)
-            print(jsonPresentaciones)
             return HttpResponse(json.dumps(jsonPresentaciones), content_type="application/json")
 
-#<QueryDict: {u'imagen': [u''], u'url': [u''], u'1': [u'1'], u'3': [u'1'], u'2': [u'1'], u'nombre': [u'asd'], u'csrfmiddlewaretoken': [u'nsbA68zMnq7Ez6Gi2zEKqQQ45t5yWukYwqC9Tuo3Frl23Q9xajNt8htfhJQzWpP7'], u'codigo': [u''], u'cantidadPrincipal': [u'1']}>
-#
-#
 @csrf_exempt
 def CantidadPresentacionesProducto (request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
         usuario=True
-        # usuario= BuscarUsuario(Datos["idUsuario"])
         if usuario==True:
             idProducto = Datos["idProducto"]
             idPresentacion = Datos["idPresentacion"]
@@ -388,7 +363,6 @@ def CantidadPresentacionesProducto (request):
             oProductopresentacions = Productopresentacions.objects.get(producto = oProucto , presentacion = idPresentacion)
             oProductoalmacens = Producto_almacens.objects.filter(producto=oProucto).latest('pk')
             jsonProducto["cantidad"] = (oProductoalmacens.cantidad)*(oProductopresentacions.valor)
-            print(jsonProducto)
             return HttpResponse(json.dumps(jsonProducto), content_type="application/json")
 
 """

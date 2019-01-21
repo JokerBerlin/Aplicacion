@@ -113,13 +113,6 @@ def listarLote(request):
         return render(request, 'lote/listar.html')
     else:
         oLotes = Lote.objects.filter(estado=True).order_by('-id')
-        for oLote in oLotes:
-            oProductoAlmacens = Producto_almacens.objects.filter(lote_id=oLote.id)
-            for ope in oProductoAlmacens:
-                oNuevo={}
-                oNuevo['id']=oLote.id
-                oNuevo['producto']=ope.producto.nombre
-                oProductos.append(oNuevo)
 
         paginator = Paginator(oLotes,10)
 
@@ -157,3 +150,48 @@ def detalleLote(request, lote_id):
             oProducto["almacen"] = oProductoAlmacen.almacen.nombre
             oProductos.append(oProducto)
         return render(request, 'lote/detalle.html', {"oProveedor": oLote.proveedor,"oProductos":oProductos})
+
+@csrf_exempt
+def eliminar_identificador_lote(request):
+    pk = request.POST.get('identificador_id')
+    identificador = Lote.objects.get(pk=pk)
+    if str(identificador.fecha) == str(identificador.modificado):
+        identificador.delete()
+        response = {}
+    else:
+        response={'error':'error',}
+
+    return JsonResponse(response)
+
+@csrf_exempt
+def editarLote(request,lote_id):
+    if request.method == 'POST':
+        Datos = json.loads(request.body)
+        productos = Datos['productos']
+        oLote = Lote.objects.get(id=lote_id)
+        if str(oLote.fecha) == str(oLote.modificado):
+            for producto in productos:
+                id=int(producto[0])
+                productoAlmacens = Producto_almacens.objects.get(id=id)
+                productoAlmacens.cantidad = producto[1]
+                productoAlmacens.save()
+                hoy = datetime.today()
+                oLote.modificado = hoy
+                oLote.save()
+            response={}
+        else:
+            response={'error':'error',}
+        return JsonResponse(response)
+    else:
+        oLote = Lote.objects.get(id=lote_id)
+        oAlmacens = Producto_almacens.objects.filter(id=lote_id)
+        cont = 0
+        cantidadAlmacen = []
+        for oAlmacen in oAlmacens:
+            oNuevo = {}
+            oNuevo['id']=oAlmacen.id
+            oNuevo['cantidad']=str(oAlmacen.cantidad).replace(",", ".")
+            oNuevo['contador']=cont
+            cantidadAlmacen.append(oNuevo)
+            cont = cont+1
+        return render (request, 'lote/editar.html',{'oLote':oLote,'oAlmacens':oAlmacens,'cantidadAlmacen':cantidadAlmacen,})

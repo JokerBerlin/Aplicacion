@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block imports %}
 
+<script type="text/javascript" src="/static/js/crearOperacion.js"></script>
+
+
 {% endblock %}
 
 {% block title %}
@@ -18,14 +21,14 @@ Registrar Operacion
 				{% load widget_tweaks %}
 				{% csrf_token %}
 					<div class="form-group">
-					<!--<label for="cmbTipo">Tipo de operacion</label>
-					<select name="cmbTipo" id="cmbTipo" class="form-control" required>
-            {% for tipoOperacion in tipoOperaciones %}
+          <label for="">Tipo de operación</label>
+          <select name="cmbTipoOperacion" id="cmbTipoOperacion" onchange="seleccionarTipo();"class="form-control" required>
+						{% for tipoOperacion in tipoOperaciones %}
 							<option value="{{ tipoOperacion.id }}">
 								{{ tipoOperacion.nombre }}
 							</option>
 						{% endfor %}
-					</select>-->
+					</select>
 					<label for="cmbOperacion">Detalle operacion</label>
 					<select name="cmbOperacion" id="cmbOperacion" class="form-control" required>
 						{% for operacion in detalleOperaciones %}
@@ -40,7 +43,7 @@ Registrar Operacion
 
           <label for="monto">Descripción</label>
           <textarea id="id_descripcion" name="descripcion" rows="4" cols="50" class="form-control"></textarea>
-					<button class="btn btn-success" data-toggle="modal" style="margin-top: 1em">Aperturar Caja</button>
+					<button class="btn btn-success" data-toggle="modal" style="margin-top: 1em">Realizar movimiento</button>
 				</ul>
 				</form>
       </div>

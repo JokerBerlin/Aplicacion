@@ -4,184 +4,9 @@ Clientes
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="/static/css/styleAutocomplete.css" rel="stylesheet">
 
-<script type="text/javascript">
-
-//evento click para boton editar
-
-$(document).on('Click', '.btn-editar', function(e){
-
-	e.preventDefault();
-	 var row=$(this).paren().parent()[0];
-	 console.log(row);
-});
-
-
-
-</script>
-
-<!-- Devuelve datos de clientes ajax -->
-<script type="text/javascript">
-$(document).ready(function(){
-  $( "#inpt-cliente" ).focus();
-  $( "#inpt-cliente" ).autocomplete({
-      source: function (request, response) {
-
-          var datos = {nombreCliente: $("#inpt-cliente").val()};
-          var sendData = JSON.stringify(datos);
-          $.ajax({
-              type: "POST",
-              dataType: "json",
-              url: "/cliente/buscar/",
-              data: sendData,
-              contentType: "application/json; charset=utf-8",
-              async: false,
-              cache: false,
-              CrossDomain: true,
-
-              success: function (result) {
-              var ListasClientes = result['clientes'];
-              response($.map(ListasClientes, function (item) {
-                var valorCliente = document.getElementById('inpt-cliente').value;
-								document.forms.form_busca.action =  "/Cliente/detalle/"+item.id+"/" ;
-                if( isNaN(valorCliente) ){
-                    return {label: item.nombre,
-														idcliente: item.id};
-
-                }else{
-                    return {label: item.numerodocumento,
-											idcliente:item.id};
-
-                }
-
-
-								$(document).on('ready',function(){
-						    $('#btn-buscar').submit(function(){
-						        var url = "/Cliente/detalle/"+item.id+"/";
-						        $.ajax({
-						           type: "POST",
-						           url: url,
-						           data: $("#form_busca").serialize(),
-						           success: function(data)
-						           {
-						             $('#resp').html(data);
-						           }
-						       });
-						    });
-						});
-
-              }));
-              }
-          });
-      },
-      minLength: 2,
-			select: function (event, ui) {
-          //$.data(document.body, 'idproducto', ui.item.Id);//guardar el id en memoria el $.data guarda en memoria
-          //$( "#precio" ).val( ui.item.precio);
-          //$( "#codigo" ).val( ui.item.codigo);
-          //$('#presentacion').focus();
-          // de tu elemento
-					// localStorage.setItem("dato","lunes");
-					// var dato = localStorage.getItem("dato");
-					// alert(dato);
-          document.location.href="/Cliente/detalle/"+ui.item.idcliente+"/";
-      }
-  });
-});
-
-</script>
-<!-- Action al presionar enter -->
-<script>
-  var input = document.getElementById("myInput");
-
-  // Execute a function when the user releases a key on the keyboard
-  input.addEventListener("keyup", function(event) {
-  // Cancel the default action, if needed
-  event.preventDefault();
-  // Number 13 is the "Enter" key on the keyboard
-  if (event.keyCode === 13) {
-    // Trigger the button element with a click
-    document.getElementById("myBtn").click();
-  }
-  });
-</script>
-
-<style>
-ul.pagination {
-    display: inline-block;
-    padding: 0;
-    margin: 0;
-}
-
-ul.pagination li {display: inline;}
-
-ul.pagination li a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-    transition: background-color .3s;
-    border: 1px solid #ddd;
-}
-
-ul.pagination li a.active {
-    background-color: #4CAF50;
-    color: white;
-    border: 1px solid #4CAF50;
-}
-
-ul.pagination li a:hover:not(.active) {background-color: #ddd;}
-
-div.center {text-align: center;}
-</style>
-
-<style>
-ul.ui-autocomplete {
-  z-index: 1100;
-}
-#content{
-  position: absolute;
-  min-height: 50%;
-  width: 80%;
-  top: 20%;
-  left: 5%;
-}
-
-.selected{
-  cursor: pointer;
-}
-.selected:hover{
-  background-color: #0585C0;
-  color: white;
-}
-.seleccionada{
-  background-color: #0585C0;
-  color: white;
-}
-</style>
-
-<script type="text/javascript">
-function eliminarIdentificador(identificadorId) {
-		var request = $.ajax({
-				type: "POST",
-				url: "{% url 'eliminar_cliente' %}",
-				data: {
-						"csrfmiddlewaretoken": "{{ csrf_token }}",
-						"identificador_id": identificadorId
-				},
-		});
-		request.done(function(response) {
-				alert("El cliente fue desactivado con exito");
-				$('#myModal').modal('toggle');
-				location.reload(true);
-				//$("#tabla" + identificadorId).remove();
-		});
-};
-	selPersona = function(idPersona, nombre){
-		document.getElementById('nombreCliente').innerHTML = nombre;
-		$("#eliminar").attr("onclick","eliminarIdentificador('"+idPersona+"')");
-	};
-</script>
+<script type="text/javascript" src="/static/js/listarCliente.js"></script>
 
 
 {% endblock %}
@@ -191,32 +16,19 @@ Clientes
 {% endblock %}
 
 {% block content %}
-
-
-
-
-
 	<div id="myModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Cambiar Estado De Cliente</h5>
 
-					<script type="text/javascript">
-						var idCliente = document.getElementById('codigo').value;
-						var nombreCliente = document.getElementById('nombre').value;
-					</script>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 
 				<div class="modal-body">
-
-
-
 						<p>Estás a punto de desactivar al cliente <label id="nombreCliente"></label> </p>
-
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -302,7 +114,4 @@ Clientes
 	    </div>
     </div>
 	</div>
-
-
-
 {% endblock %}

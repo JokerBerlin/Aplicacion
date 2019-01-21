@@ -323,3 +323,25 @@ $('#btn_buscar').keypress(function(e) {
       });
 
   }
+
+function eliminarIdentificador(identificadorId) {
+		var request = $.ajax({
+				type: "POST",
+				url: "{% url 'eliminar_pedido' %}",
+				data: {
+						"csrfmiddlewaretoken": "{{ csrf_token }}",
+						"identificador_id": identificadorId
+				},
+		});
+		request.done(function(response) {
+				alert("El pedido fue desactivado con exito");
+				$('#myModal').modal('toggle');
+				location.reload(true);
+				//$("#tabla" + identificadorId).remove();
+		});
+};
+
+selPedido = function(idPedido, nombre){
+		document.getElementById('nombreCliente').innerHTML = nombre;
+		$("#eliminar").attr("onclick","eliminarIdentificador('"+idPedido+"')");
+};
