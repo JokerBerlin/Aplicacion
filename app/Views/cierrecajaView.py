@@ -67,7 +67,6 @@ def cierreCaja(request):
         context = {
             'msj': 'res'
         }
-<<<<<<< HEAD
         return redirect('/Caja/exito-cierre')
 
 def exitoCierreCaja(request):
@@ -75,9 +74,6 @@ def exitoCierreCaja(request):
         'msj': 'Se Cerro la caja exitosamente'
     }
     return render(request, 'caja/exito.html')
-=======
-        return redirect('/home/')
->>>>>>> 018acc7316ec551721ac9ad6374d2bbb206c0251
 
 def validarCierreCaja(cierreCaja):
     print('monto cierre Caja = %s' % cierreCaja.monto)
