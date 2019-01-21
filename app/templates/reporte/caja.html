@@ -50,7 +50,7 @@ Reportes de Caja
 
 const hoy  = new Date();
 var año = hoy.getFullYear();
-var mes = hoy.getMonth() + 1;
+var mes = ('0' + hoy.getMonth() + 1).slice(-2);
 var cajaId = document.getElementById('cajaId').value;
 
 const fechaInicio = año + "-" + mes;
