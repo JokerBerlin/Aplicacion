@@ -38,10 +38,6 @@ def cierreCaja(request):
                 print('monto total: %s' % montoTotal)
                 montoTotal = montoTotal + float(oOperacion.monto)
         else:
-            res == 'Error ya se hizo el cierre de caja hoy'
-            context = {
-                'msj': res
-            }
             return redirect('/error/cierreCaja-efectuado/')
         
     else:
@@ -76,7 +72,13 @@ def cierreCaja(request):
         context = {
             'msj': 'res'
         }
-        return redirect('/Venta/nuevo/')
+        return redirect('/Caja/exito-cierre')
+
+def exitoCierreCaja(request):
+    context = {
+        'msj': 'Se Cerro la caja exitosamente'
+    }
+    return render(request, 'caja/exito.html')
 
 def validarCierreCaja(cierreCaja):
     print('monto cierre Caja = %s' % cierreCaja.monto)
@@ -84,11 +86,7 @@ def validarCierreCaja(cierreCaja):
     print('fecha cierre caja %s' % ultimoCierreCaja.fecha.date())
     if cierreCaja.fecha.date() == ultimoCierreCaja.fecha.date():
         msj = 'Error ya se hizo el cierre de caja hoy'
-        # print(msj)
-        # return msj
     else:
         msj = 'Se cerró la caja'
-        # print(msj)
-        # return msj
     print(msj)
     return msj
