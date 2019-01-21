@@ -3,6 +3,10 @@
 Registrar Nuevo Producto
 <script type="text/javascript">
 $(document).ready(function(){
+		var val = $('#montoInicial').val();
+		$('#montoInicial').val('');
+		$('#montoInicial').val(val);
+		$('#montoInicial').select();
 	 $('#montoInicial').focus();
 });
 
