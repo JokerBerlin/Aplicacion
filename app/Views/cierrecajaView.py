@@ -30,12 +30,8 @@ def cierreCaja(request):
     print(oAperturaCaja.estado)
 
     if oAperturaCaja:
-<<<<<<< HEAD
         if oAperturaCaja.latest('pk').estado == True:
             oAperturaCaja = oAperturaCaja.latest('id')
-=======
-        if oAperturaCaja.estado == True:
->>>>>>> 018acc7316ec551721ac9ad6374d2bbb206c0251
             montoTotal += oAperturaCaja.monto
             oOperacions = Operacion.objects.filter(fecha__range=[oAperturaCaja.fecha,hoy])
 
