@@ -118,8 +118,8 @@ def registrarRuta(request):
             print(oRutas)
             nombreCliente = oRutas[1]
             oCliente = Cliente.objects.get(nombre=nombreCliente)
-            oRuta.clientes.add(oCliente)
-            oRuta.save()
+            oRutaCliente = Rutaclientes(ruta=oRuta, cliente=oCliente)
+            oRutaCliente.save()
 
         return HttpResponse(json.dumps({'exito':1, 'idRuta':oRuta.id}), content_type="application/json")
     else:
