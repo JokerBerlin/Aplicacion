@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
@@ -221,6 +222,8 @@ urlpatterns = [
     url(r'^Reporte/ventas/$', reporteVentas),
     url(r'^Reporte/venta/empleado/(?P<añoActual>\d+)/(?P<mesActual>\d+)/$', todosEmpleadosVentas),
     url(r'^Reporte/venta/empleado/(?P<empleado_id>\d+)/(?P<añoActual>\d+)/(?P<mesActual>\d+)/$', empleadoVentas),
+    url(r'^Reporte/venta/empleado-ruta/(?P<ruta>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', ventasRutaCliente),
+
     url(r'^Reporte/ventas-anuladas/$', reporteVentasAnuladas),
     url(r'^Reporte/venta-anulada/empleado/(?P<añoActual>\d+)/(?P<mesActual>\d+)/$', todoMontoVentasAnuladas),
     url(r'^Reporte/venta-anulada/empleado/(?P<empleado_id>\d+)/(?P<añoActual>\d+)/(?P<mesActual>\d+)/$', ventasAnuladasReporte),
