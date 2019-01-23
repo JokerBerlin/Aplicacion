@@ -3,16 +3,13 @@ $(document).ready(function(){
 	$('#id_nombre').val('');
 	$('#id_nombre').val(nuevo);
 	$('#id_nombre').focus();
-  var a = parseFloat($('#id_latitud').val());
-  var b = parseFloat($('#id_longitud').val());
-  var marker;
+
   console.log(a);
-  initMap(a,b,marker);
+
 
 });
 
-
-function initMap(a,b,marker) {
+function initMap() {
 	var uluru = {lat: a, lng: b};
 
 	var map = new google.maps.Map(document.getElementById('map'), {

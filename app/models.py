@@ -100,8 +100,11 @@ class Lote(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=True)
     modificado = models.DateTimeField(auto_now=True, blank=True)
     estado = models.BooleanField(blank=True,default=True)
+    nrecibo = models.CharField(max_length=45, blank=True, null=True)
+    precioCompra = models.FloatField(null=True)
     proveedor = models.ForeignKey('Proveedor', on_delete=models.CASCADE)  # Field name made lowercase.
     recibo = models.ForeignKey('Recibo', on_delete=models.CASCADE)  # Field name made lowercase.
+
 
 
 class Operacion(models.Model):

@@ -8,7 +8,11 @@
 {% block imports %}
 <script type="text/javascript" src="/static/js/editarCliente.js"></script>
 <link href="/static/css/styleEditarCliente.css" rel="stylesheet">
-
+<script type="text/javascript">
+var a = {{oCliente.latitud}};
+var b = {{oCliente.longitud}};
+var marker;
+</script>
 {% endblock %}
 
 {% block title %}
