@@ -101,7 +101,6 @@ class Lote(models.Model):
     modificado = models.DateTimeField(auto_now=True, blank=True)
     estado = models.BooleanField(blank=True,default=True)
     nrecibo = models.CharField(max_length=45, blank=True, null=True)
-    precioCompra = models.FloatField(null=True)
     proveedor = models.ForeignKey('Proveedor', on_delete=models.CASCADE)  # Field name made lowercase.
     recibo = models.ForeignKey('Recibo', on_delete=models.CASCADE)  # Field name made lowercase.
 
@@ -164,6 +163,7 @@ class Producto_almacens(models.Model):
     cantidad = models.FloatField()
     cantidadinicial = models.FloatField()
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)  # Field name made lowercase.
+    precioCompra = models.FloatField(null=True)
     almacen = models.ForeignKey(Almacen, on_delete=models.CASCADE)  # Field name made lowercase.
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE)  # Field name made lowercase.
 

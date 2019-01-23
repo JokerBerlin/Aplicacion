@@ -168,6 +168,7 @@ $(document).ready(function(){
        // $('#inpt-almacen').val('');
         $('#inpt-producto').val('');
         $('#cantidad').val('');
+        $('#precioCompra').val('');
 
     }
     var cont=0;
@@ -180,6 +181,8 @@ $(document).ready(function(){
         Producto = $('#inpt-producto').val();
         cantidad = $('#cantidad').val();
         imagen = $('#urlImagen').val();
+        numerRecibo = $('#numeroRecibo').val();
+        precioCompra = $('#precioCompra').val();
         error = "";
         if (cantidad==''){
             error = 1;
@@ -191,6 +194,13 @@ $(document).ready(function(){
         if (Producto==''){
             error = 3;
         }
+        if (numeroRecibo==''){
+            error = 6;
+        }
+        if (precioCompra==''){
+            error = 7;
+        }
+
 
         if (error=="") {
             valor = cont - 1;
@@ -198,7 +208,9 @@ $(document).ready(function(){
             '<tr class="selected" id="fila'+cont+'" onclick="seleccionar(this.id);"><td>'+cont+'</td>'+
             '<td><img src="'+imagen+'" height="100" width="100" alt="" /></td>'+
             '<td>'+Producto+'</td>'+
-            '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td><td>'+Almacen+'</td>'+'</tr>';
+            '<td><input type="number" name="cantidad' + valor + '" id="cantidad' + valor + '" required="" class="form-control" value="' + cantidad + '"></td>'+
+            '<td><input type="number" name="precioCompra' + valor + '" id="precioCompra' + valor + '" required="" class="form-control" value="' + precioCompra + '"></td>'+
+            '<td>'+Almacen+'</td>'+'</tr>';
             $('#tabla').append(fila);
 
             reset_values();
@@ -229,7 +241,14 @@ $(document).ready(function(){
                 alert("Ingrese un producto válido");
                 $( "#inpt-producto" ).focus();
                 break;
-
+            case 6:
+                alert("Ingrese un número de recibo válido");
+                $( "#numerRecibo" ).focus();
+                break;
+            case 7:
+                alert("Ingrese un precio de compra válido");
+                $( "#precioCompra" ).focus();
+                break;
             }
         }
     }
@@ -289,22 +308,26 @@ $(document).ready(function(){
                         cantidad = $("#cantidad"+index ).val();
                         break;
                     case 4:
+                        precioCompra = $("#precioCompra"+index ).val();
+                        break;
+                    case 5:
                         Almacen = $(this).text();
                         break;
                 }
             });
             contador = 1;
-            oProductoAlmacen.push([cantidad,Almacen, Producto]);
+            oProductoAlmacen.push([cantidad,Almacen, Producto, precioCompra]);
         });
         console.log(oProductoAlmacen);
         var oProveedor = document.getElementById("inpt-proveedor").value;
         console.log(oProveedor);
         var comboRecibo = document.getElementById("cmbRecibo");
         var oRecibo = comboRecibo.options[comboRecibo.selectedIndex].text;
+        var oNumeroRecibo = document.getElementById("numeroRecibo").value;
         console.log(oRecibo);
         //var oPresentacion = document.getElementById("presentacion").value;
         if (contador == 1) {
-            var datos = {oProductoAlmacen: oProductoAlmacen, oProveedor: oProveedor, oRecibo: oRecibo};
+            var datos = {oProductoAlmacen: oProductoAlmacen, oProveedor: oProveedor, oRecibo: oRecibo, oNumeroRecibo: oNumeroRecibo,};
             var sendData = JSON.stringify(datos);
             $.ajax({
                 type: "POST",

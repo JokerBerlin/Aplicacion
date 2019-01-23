@@ -57,11 +57,10 @@ def registrarLote(request):
                 nombreProveedor = Proveedor.objects.get(nombre=nombreProveedor).documento
 
             oProveedor = Proveedor.objects.get(documento=nombreProveedor)
-            print(oProveedor.nombre)
             nombreRecibo= Datos['oRecibo']
+            numeroRecibo = Datos['oNumeroRecibo']
             oRecibo= Recibo.objects.get(nombre=nombreRecibo)
-            print(oRecibo.nombre)
-            oLote= Lote(proveedor_id=oProveedor.id, recibo_id= oRecibo.id)
+            oLote= Lote(proveedor_id=oProveedor.id, recibo_id= oRecibo.id, nrecibo = numeroRecibo)
             oLote.save()
 
             oProductoAlmacens= Datos['oProductoAlmacen']
@@ -73,18 +72,20 @@ def registrarLote(request):
                 oAlmacen= Almacen.objects.get(nombre=nombreAlmacen)
                 nombreProducto=oProductoAlmacen[2]
                 oProducto= Producto.objects.get(nombre= nombreProducto)
+                precioCompra = float(oProductoAlmacen[3])
                 oAlmacenese = Producto_almacens.objects.filter(producto_id=oProducto.id).exists()
+
                 print(oAlmacenese)
                 if oAlmacenese == True:
                     oUltimoP=Producto_almacens.objects.filter(producto_id=oProducto).latest('id')
                     cantidadIni = float(oUltimoP.cantidad)
 
                     cantidadNueva = cantidadIni + cantidad
-                    oProducto_alma = Producto_almacens(cantidad=cantidadNueva, cantidadinicial= cantidadIni, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
+                    oProducto_alma = Producto_almacens(cantidad=cantidadNueva, cantidadinicial= cantidadIni,precioCompra = precioCompra, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
                     oProducto_alma.save()
                 else:
                     #oUltimoP=Producto_almacens.objects.filter(producto_id=oProducto).latest('id')
-                    oProducto_alma = Producto_almacens(cantidad=cantidad, cantidadinicial= 0, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
+                    oProducto_alma = Producto_almacens(cantidad=cantidad, cantidadinicial= 0,precioCompra=precioCompra, almacen_id=oAlmacen.id, lote_id= oLote.id, producto_id= oProducto.id)
                     oProducto_alma.save()
 
 
