@@ -3,6 +3,13 @@
 Información de Cliente
 
 <script type="text/javascript" src="/static/js/detalleCliente.js"></script>
+<script type="text/javascript">
+var marker;  //variable de marcador
+
+var a= parseFloat('{{oCliente.latitud}}');
+var b= parseFloat('{{oCliente.longitud}}');
+
+</script>
 {% endblock %}
 
 {% block title %}
@@ -41,7 +48,7 @@ Información de Cliente
 					</tr>
 					<tr>
 						<td>Ubicación: </td>
-						<td>{{ oCliente.longitud }} - {{ oCliente.longitud }}</td>
+						<td>{{ oCliente.latitud }} - {{ oCliente.longitud }}</td>
 					</tr>
 				</table>
 				<br>

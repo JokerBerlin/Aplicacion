@@ -1,7 +1,3 @@
-var marker;  //variable de marcador
-
-var a= parseFloat('{{oCliente.latitud}}');
-var b= parseFloat('{{oCliente.longitud}}');
 
 $( document ).ready(function() {
   console.log( "ready!" );
