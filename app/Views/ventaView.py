@@ -679,9 +679,12 @@ def anularVenta(request):
     context = {}
     return render(request, 'venta/anular.html', context)
 
+# se debe inicializar un proveedor fantasma en la DB para hacer la devolucion
+# se debe inicializar un recibo fantasma en la DB para hacer la devolucion
 @csrf_exempt
 def eliminar_identificador_venta(request):
     Datos = request.POST
+    print(Datos)
     pk = Datos['identificador_id']
     identificador = Venta.objects.get(pk=pk)
     anulacionVenta = Anulacionventa(
@@ -710,7 +713,11 @@ def eliminar_identificador_venta(request):
         cantidadAntesAnulacion = prodAlmacen.cantidad
         cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
 
-        loteReversion = Lote(proveedor_id=1, recibo_id=1)
+        # proveedor_id pertenece al proveedor fantasma que se debe inicializar en la BD antes del funcionamiento del sistema
+        # el recibo_id pertenece al recibo fantasma que se debe inicializar en la BD antes del funcionamiento del sistema
+        proveedor_anulacion = Proveedor.objects.get(nombre='anulacion', documento=10000000, estado=False)
+        recibo_anulacion = Recibo.objects.get(nombre='anulacion', estado='0')
+        loteReversion = Lote(proveedor=proveedor_anulacion, recibo=recibo_anulacion)
         loteReversion.save()
 
         prodAlmacenNuevo = Producto_almacens(
