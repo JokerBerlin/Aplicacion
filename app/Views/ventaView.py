@@ -955,3 +955,23 @@ def todoMontoVentasAnuladas(request, mesActual, añoActual):
         jsonFinal.append(jsonEmpleadoVentaAnulada)
 
     return JsonResponse(jsonFinal, safe=False)
+
+def ventasRutaCliente(request, ruta, month, year):
+    jsonFinal = []
+    clientes = Cliente.objects.filter(ruta=ruta)
+
+    for cliente in clientes:
+        jsonVentaRutas = {}
+        jsonVentaRutas['cliente'] = cliente.nombre
+        ventas = Venta.objects.filter(cliente=cliente, fecha__year=year, fecha__month=month)
+        for venta in ventas:
+            pedidoProdPres = Pedidoproductospresentacions.objects.filter(pedido=venta.pedido)
+            jsonVentaRutas['monto'] = venta.monto
+            jsonVentaRutas['fecha'] = venta.fecha
+        
+        jsonFinal.append(jsonVentaRutas)
+
+        return JsonResponse(jsonfinal, safe=False)
+
+
+

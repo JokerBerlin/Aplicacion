@@ -56,7 +56,6 @@ mes = ('0' + mes).slice(-2);
 
 var empleadoId = document.getElementById('empleadoId').value;
 
-
 var endpointVentasEmpleados = "/Reporte/venta/empleado/" + año + "/" + mes + "/";
 
 var endpointVentasEmpleadoIndv = "/Reporte/venta/empleado/" + empleadoId + "/" + año + "/" + mes + "/";
@@ -190,7 +189,7 @@ var obtenerVentasEmpleadoIndividual = function(endpoint) {
                 const año = element.fecha.substring(0, 4);
                 const mes = element.fecha.substring(5, 7);
                 const dia = element.fecha.substring(8, 10);
-                const fecha = dia + "-" + mes + "-" + dia;
+                const fecha = dia + "-" + mes + "-" + año;
                 fechas.push(fecha);
                 montos.push(element.monto);
             });
