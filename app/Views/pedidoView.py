@@ -386,7 +386,10 @@ def editarPedido(request,pedido_id):
             oNuevo['id']=oPedido.id
             c = int(round(oPedido.cantidad))
             oNuevo['cantidad']=str(c).replace(",", ".")
-            oAlmacens = Producto_almacens.objects.filter(producto_id = oPedido.productopresentacions.producto.id).latest('id')
+            oProductos = Producto.objects.get(id=oPedido.productopresentacions.producto.id)
+            print("##########################")
+            print(oProductos)
+            oAlmacens = Producto_almacens.objects.filter(producto_id = oProductos.id).latest('id')
             valorPresentacion = float(1/(oPedido.productopresentacions.valor))
             oNuevo['cantidadTotal'] = float(oAlmacens.cantidad) * valorPresentacion
             oNuevo['contador']=cont
@@ -517,9 +520,7 @@ def pedidoVenta(request,pedido_id):
                 cadenaNueva = "-".join(listacf)
                 print(cadenaNueva)
             else:
-                listacf[0]=oSerie.numeroSerie
-                listacf[1]='0000001'
-                cadenaNueva = "-".join(listacf)
+                cadenaNueva = listacf
             return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos,'montoTotal':montoTotal})
         else:
             return redirect('/Caja/apertura/')
