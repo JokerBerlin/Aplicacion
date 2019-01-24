@@ -691,7 +691,8 @@ def eliminar_identificador_venta(request):
         venta=identificador,
         usuario=request.user
     )
-
+    anulacionVenta.save()
+    
     oPedido = identificador.pedido
     oPedido.estado = 0
     oPedido.save()
@@ -972,17 +973,41 @@ def ventasRutaCliente(request, ruta, month, year):
         ventas = Venta.objects.filter(cliente=cliente, fecha__year=year, fecha__month=month)
         for venta in ventas:
             pedProdPres = Pedidoproductospresentacions.objects.filter(pedido=venta.pedido)
+            arrProductoPresentacion = []
             for pedProdPre in pedProdPres:
                 jsonProductoPresentacion = {}
                 jsonProductoPresentacion['prodPresentacion'] = str(pedProdPre.productopresentacions)
                 jsonProductoPresentacion['cantidad'] = pedProdPre.cantidad
-                jsonVentaRutas['prodCantidad'] = jsonProductoPresentacion            
+                arrProductoPresentacion.append(jsonProductoPresentacion)
+            jsonVentaRutas['prodCantidad'] = arrProductoPresentacion
             jsonVentaRutas['monto'] = venta.monto
             jsonVentaRutas['fecha'] = venta.fecha
         
         jsonFinal.append(jsonVentaRutas)
 
     return JsonResponse(jsonFinal, safe=False)
+
+def ventasAnuladasRutaCliente(request, ruta, month, year):
+    jsonFinal = []
+    clientes = Cliente.objects.filter(ruta=ruta)
+    for cliente in clientes:
+        jsonAnulacionRutas = {}
+        jsonAnulacionRutas['cliente'] = cliente.nombre
+        ventasAnuladas = Anulacionventa.objects.filter(fecha__year=year, fecha__month=month)
+        for venta in ventas:
+            pedProdPres = Pedidoproductospresentacions.objects.filter(pedido=venta.pedido)
+            arrProductoPresentacion = []
+            for pedProdPre in pedProdPres:
+                jsonProductoPresentacion = {}
+                jsonProductoPresentacion['prodPresentacion'] = str(pedProdPre.productopresentacions)
+                jsonProductoPresentacion['cantidad'] = pedProdPre.cantidad
+                arrProductoPresentacion.append(jsonProductoPresentacion)
+            jsonAnulacionRutas['prodCantidad'] = arrProductoPresentacion
+
+            jsonAnulacionRutas['monto'] = venta.monto
+            jsonAnulacionRutas['fecha'] = venta.fecha
+
+        jsonFinal.append(jsonAnulacionRutas)
 
 
 

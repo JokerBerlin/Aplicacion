@@ -33,7 +33,7 @@ class Anulacionventa(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=False)
     descripcion = models.TextField(blank=True, null=True)
     venta = models.ForeignKey('Venta', on_delete=models.CASCADE)
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=45)
