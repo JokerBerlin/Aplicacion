@@ -754,16 +754,6 @@ def DetalleVenta(request,venta_id):
         oPedidos = Pedido.objects.filter(estado = True)
         return render(request, 'pedido/listar.html',{"oPedidos": oPedidos})
 
-@login_required
-def reporteVentas(request):
-    if not validacionUsuario(request.user) in perfiles_correctos:
-        return redirect('/error/')
-    oEmpleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
-    context = {
-        "empleados": oEmpleados
-        }
-    return render(request, 'reporte/ventas.html', context)
-
 def imprimir(request,venta_id):
     response = HttpResponse(content_type='aplication/pdf')
     response['Content-Disposition'] = 'attachment; filename=Venta-'+venta_id+'.pdf'
@@ -855,6 +845,17 @@ def imprimir(request,venta_id):
     response.write(pdf)
     return response
 
+@login_required
+def reporteVentas(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
+    oEmpleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
+    oRutas = Ruta.objects.filter(activo=True, estado=True)
+    context = {
+        "empleados": oEmpleados,
+        "rutas": oRutas
+        }
+    return render(request, 'reporte/ventas.html', context)
 
 def todosEmpleadosVentas(request, mesActual, añoActual):
     empleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
@@ -993,9 +994,9 @@ def ventasAnuladasRutaCliente(request, ruta, month, year):
     for cliente in clientes:
         jsonAnulacionRutas = {}
         jsonAnulacionRutas['cliente'] = cliente.nombre
-        ventasAnuladas = Anulacionventa.objects.filter(fecha__year=year, fecha__month=month)
-        for venta in ventas:
-            pedProdPres = Pedidoproductospresentacions.objects.filter(pedido=venta.pedido)
+        ventasAnuladas = Anulacionventa.objects.filter(fecha__year=year, fecha__month=month, venta__cliente=cliente)
+        for ventaAnulada in ventasAnuladas:
+            pedProdPres = Pedidoproductospresentacions.objects.filter(pedido=ventaAnulada.venta.pedido)
             arrProductoPresentacion = []
             for pedProdPre in pedProdPres:
                 jsonProductoPresentacion = {}
@@ -1004,10 +1005,7 @@ def ventasAnuladasRutaCliente(request, ruta, month, year):
                 arrProductoPresentacion.append(jsonProductoPresentacion)
             jsonAnulacionRutas['prodCantidad'] = arrProductoPresentacion
 
-            jsonAnulacionRutas['monto'] = venta.monto
-            jsonAnulacionRutas['fecha'] = venta.fecha
+            jsonAnulacionRutas['monto'] = ventaAnulada.venta.monto
+            jsonAnulacionRutas['fecha'] = ventaAnulada.venta.fecha
 
         jsonFinal.append(jsonAnulacionRutas)
-
-
-

@@ -12,7 +12,7 @@ Reporte de almacen
 <div class="container">
     <div class="card mb-3">
         <h1>Reporte Ventas de Empleados General</h1>
-        <div class="col-xs-6 col-sm-6 col-md-6">
+        <div class="col-xs-12 col-sm-6 col-md-6">
             <label for="añoMes">Año y mes</label>
             <input type="month" name="añoMes" id="añoMes" class="form-control">
         </div>
@@ -24,12 +24,12 @@ Reporte de almacen
 
     <div class="card mb-3">
         <h1>Reporte Ventas de Empleado</h1>
-        <div class="col-xs-6 col-sm-6 col-md-6">
+        <div class="col-xs-12 col-sm-6 col-md-6">
             <label for="añoMesEmp">Año y mes</label>
             <!-- <br> -->
             <input type="month" name="añoMesEmp" id="añoMesEmp" class="form-control">
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-6">
+        <div class="col-xs-12 col-sm-6 col-md-6">
                 <label for="empleadoId">Empleado</label>
                 <select name="empleadoId" id="empleadoId" class="form-control">
                     {% for empleado in empleados %}
@@ -44,6 +44,27 @@ Reporte de almacen
         </div>
         <div class="card-footer small text-muted">Actualizado ayer a las 11:59 PM</div>
     </div>
+
+    <div class="car mb-3">
+        <h1>Reporte de Ventas por Ruta</h1>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <label for="yearMonth">Año y mes</label>
+            <input type="month" name="yearMonth" id="yearMonth" class="form-control">
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <label for="rutas">Rutas</label>
+            <select name="ruta" id="ruta" class=form-control>
+                {% for ruta in rutas %}
+                    <option value="{{ ruta.id }}">
+                        {{ ruta.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="card-body">
+            <canvas id="ventasRuta" width="100%" height="30"></canvas>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
@@ -54,28 +75,33 @@ var año = hoy.getFullYear();
 var mes = hoy.getMonth() + 1;
 mes = ('0' + mes).slice(-2);
 
-var empleadoId = document.getElementById('empleadoId').value;
+let empleadoId = document.getElementById('empleadoId').value;
+let rutaId = document.getElementById('ruta').value;
 
-var endpointVentasEmpleados = "/Reporte/venta/empleado/" + año + "/" + mes + "/";
-
-var endpointVentasEmpleadoIndv = "/Reporte/venta/empleado/" + empleadoId + "/" + año + "/" + mes + "/";
+let endpointVentasEmpleados = "/Reporte/venta/empleado/" + año + "/" + mes + "/";
+let endpointVentasEmpleadoIndv = "/Reporte/venta/empleado/" + empleadoId + "/" + año + "/" + mes + "/";
+let endpointVentasRuta = "/Reporte/venta/empleado-ruta/" + rutaId + "/" + año + "/" + mes + "/";
 
 window.onload = function() {
 
 const fechaInicio = año + "-" + mes;
 
-var inptAñoMes = document.getElementById('añoMes');
+let inptAñoMes = document.getElementById('añoMes');
 inptAñoMes.value = fechaInicio;
 inptAñoMes.focus();
 
-var inptAñoMesEmp = document.getElementById('añoMesEmp');
+let inptAñoMesEmp = document.getElementById('añoMesEmp');
 inptAñoMesEmp.value = fechaInicio;
 
+let yearMonthRuta = document.getElementById('yearMonth');
+yearMonthRuta.value = fechaInicio;
+
 obtenerVentasEmpleados(endpointVentasEmpleados);
-
 obtenerVentasEmpleadoIndividual(endpointVentasEmpleadoIndv);
+obtenerVentasRuta(endpointVentasRuta);
 
-document.getElementById('añoMes').addEventListener("change", function() {
+
+inptAñoMes.addEventListener("change", function() {
     
     var inicio = this.value;
     año = parseInt(inicio.substring(0, 4));
@@ -90,7 +116,7 @@ document.getElementById('añoMes').addEventListener("change", function() {
     
 });
 
-document.getElementById('añoMesEmp').addEventListener('change', function() {
+inptAñoMesEmp.addEventListener('change', function() {
     console.log(empleadoId)
     empleadoId = document.getElementById('empleadoId').value;
     var inicio = this.value;
@@ -102,7 +128,7 @@ document.getElementById('añoMesEmp').addEventListener('change', function() {
         console.log(endpointVentasEmpleadoIndv);
         obtenerVentasEmpleadoIndividual(endpointVentasEmpleadoIndv);
     }
-})
+});
 
 document.getElementById('empleadoId').addEventListener('change', function() {
     var inicio = document.getElementById('añoMes').value;
@@ -116,12 +142,33 @@ document.getElementById('empleadoId').addEventListener('change', function() {
         console.log(endpointVentasEmpleadoIndv);
         obtenerVentasEmpleadoIndividual(endpointVentasEmpleadoIndv);
     } 
-})
+});
+
+yearMonthRuta.addEventListener('change', function() {
+    let inicio = this.value;
+    let rutaId = document.getElementById('ruta').value;
+    let year = parseInt(inicio.substring(0, 4));
+    let month = parseInt(inicio.substring(5, 7));
+
+    endpointVentasRuta = "/Reporte/venta/empleado-ruta/" + rutaId + "/" + year + "/" + month + "/";
+    obtenerVentasRuta(endpointVentasRuta);
+
+});
+
+document.getElementById('ruta').addEventListener('change', function() {
+    let rutaId = this.value;
+    let fecha = document.getElementById('yearMonth').value;
+    let year = parseInt(fecha.substring(0, 4));
+    let month = parseInt(fecha.substring(5, 7));
+
+    endpointVentasRuta = "/Reporte/venta/empleado-ruta/" + rutaId + "/" + year + "/" + month + "/";
+    obtenerVentasRuta(endpointVentasRuta);
+});
 
 }
 
 
-var obtenerVentasEmpleados = function(endpoint) {
+let obtenerVentasEmpleados = function(endpoint) {
     var empleados = [];
     var ventas = [];
 
@@ -173,7 +220,7 @@ var obtenerVentasEmpleados = function(endpoint) {
     });
 }
 
-var obtenerVentasEmpleadoIndividual = function(endpoint) {
+let obtenerVentasEmpleadoIndividual = function(endpoint) {
     fechas = [];
     montos = [];
 
@@ -227,6 +274,26 @@ var obtenerVentasEmpleadoIndividual = function(endpoint) {
             });
         }
     })
+}
+
+let obtenerVentasRuta = function(endpoint) {
+
+    let clientes = [];
+    let productos = [];
+
+    let ctx = document.getElementById('ventasRuta').getContext('2d');
+
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: endpoint,
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            console.log(data);
+        }
+    })
+
+
 }
 </script>
 
