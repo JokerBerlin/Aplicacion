@@ -970,7 +970,6 @@ def ventasRutaCliente(request, ruta, month, year):
     clientes = Cliente.objects.filter(ruta=ruta)
     for cliente in clientes:
         jsonVentaRutas = {}
-        jsonVentaRutas['cliente'] = cliente.nombre
         ventas = Venta.objects.filter(cliente=cliente, fecha__year=year, fecha__month=month)
         for venta in ventas:
             pedProdPres = Pedidoproductospresentacions.objects.filter(pedido=venta.pedido)
@@ -980,9 +979,10 @@ def ventasRutaCliente(request, ruta, month, year):
                 jsonProductoPresentacion['prodPresentacion'] = str(pedProdPre.productopresentacions)
                 jsonProductoPresentacion['cantidad'] = pedProdPre.cantidad
                 arrProductoPresentacion.append(jsonProductoPresentacion)
-            jsonVentaRutas['prodCantidad'] = arrProductoPresentacion
+            jsonVentaRutas['cliente'] = cliente.nombre
             jsonVentaRutas['monto'] = venta.monto
             jsonVentaRutas['fecha'] = venta.fecha
+            jsonVentaRutas['prodCantidad'] = arrProductoPresentacion
         
         jsonFinal.append(jsonVentaRutas)
 
