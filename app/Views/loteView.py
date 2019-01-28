@@ -59,10 +59,11 @@ def registrarLote(request):
             oProveedor = Proveedor.objects.get(documento=nombreProveedor)
             nombreRecibo= Datos['oRecibo']
             numeroRecibo = Datos['oNumeroRecibo']
+            fechaVencimiento = Datos['oFechaVen']
+            fechaVencimiento = datetime.strftime(datetime.strptime(fechaVencimiento,'%d-%m-%Y'),'%Y-%m-%d')
             oRecibo= Recibo.objects.get(nombre=nombreRecibo)
-            oLote= Lote(proveedor_id=oProveedor.id, recibo_id= oRecibo.id, nrecibo = numeroRecibo)
+            oLote= Lote(proveedor_id=oProveedor.id, recibo_id= oRecibo.id, nrecibo = numeroRecibo,fechavencimiento = fechaVencimiento)
             oLote.save()
-
             oProductoAlmacens= Datos['oProductoAlmacen']
             for oProductoAlmacen in oProductoAlmacens:
                 print(oProductoAlmacen)

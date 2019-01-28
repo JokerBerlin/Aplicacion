@@ -154,7 +154,16 @@ $(document).ready(function(){
 
 });
         $( "#cmbAlmacen" ).blur(function() {
+          $('#fechaVencimiento').focus();
+        });
+        $( "#fechaVencimiento" ).blur(function() {
           $('#inpt-producto').focus();
+        });
+        $( "#inpt-producto" ).blur(function() {
+          $('#cantidad').focus();
+        });
+        $( "#cantidad" ).blur(function() {
+          $('#precioCompra').focus();
         });
         $('#bt_add').click(function(){
             agregar();
@@ -346,10 +355,10 @@ $(document).ready(function(){
         var comboRecibo = document.getElementById("cmbRecibo");
         var oRecibo = comboRecibo.options[comboRecibo.selectedIndex].text;
         var oNumeroRecibo = document.getElementById("numeroRecibo").value;
-        console.log(oRecibo);
-        //var oPresentacion = document.getElementById("presentacion").value;
+        var oFechaVen = document.getElementById("fechaVencimiento").value;
+
         if (contador == 1) {
-            var datos = {oProductoAlmacen: oProductoAlmacen, oProveedor: oProveedor, oRecibo: oRecibo, oNumeroRecibo: oNumeroRecibo,};
+            var datos = {oProductoAlmacen: oProductoAlmacen, oProveedor: oProveedor, oRecibo: oRecibo, oNumeroRecibo: oNumeroRecibo, oFechaVen: oFechaVen,};
             var sendData = JSON.stringify(datos);
             $.ajax({
                 type: "POST",
