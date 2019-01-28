@@ -1,0 +1,5 @@
+Para anulacion de venta se necesita crear un proveedor fantasma que haga las devoluciones a almacen
+Proveedor(nombre='anulacion', direccion='anulacion', documento='10000000', estado=False).save()
+
+Para anulacion de venta se necesita crear un recibo fantasma que forme parte del lote que hace la devolucion a almacen
+Recibo(nombre='devolucion', estado=False).save()

@@ -679,16 +679,20 @@ def anularVenta(request):
     context = {}
     return render(request, 'venta/anular.html', context)
 
+# se debe inicializar un proveedor fantasma en la DB para hacer la devolucion
+# se debe inicializar un recibo fantasma en la DB para hacer la devolucion
 @csrf_exempt
 def eliminar_identificador_venta(request):
     Datos = request.POST
+    print(Datos)
     pk = Datos['identificador_id']
     identificador = Venta.objects.get(pk=pk)
     anulacionVenta = Anulacionventa(
         venta=identificador,
         usuario=request.user
     )
-
+    anulacionVenta.save()
+    
     oPedido = identificador.pedido
     oPedido.estado = 0
     oPedido.save()
@@ -710,7 +714,11 @@ def eliminar_identificador_venta(request):
         cantidadAntesAnulacion = prodAlmacen.cantidad
         cantidadDespuesAnulacion = float(cantidadAntesAnulacion) + float(cantidad) * float(fraccion)
 
-        loteReversion = Lote(proveedor_id=1, recibo_id=1)
+        # proveedor_id pertenece al proveedor fantasma que se debe inicializar en la BD antes del funcionamiento del sistema
+        # el recibo_id pertenece al recibo fantasma que se debe inicializar en la BD antes del funcionamiento del sistema
+        proveedor_anulacion = Proveedor.objects.get(nombre='anulacion', documento=10000000, estado=False)
+        recibo_anulacion = Recibo.objects.get(nombre='anulacion', estado='0')
+        loteReversion = Lote(proveedor=proveedor_anulacion, recibo=recibo_anulacion)
         loteReversion.save()
 
         prodAlmacenNuevo = Producto_almacens(
@@ -745,16 +753,6 @@ def DetalleVenta(request,venta_id):
     else:
         oPedidos = Pedido.objects.filter(estado = True)
         return render(request, 'pedido/listar.html',{"oPedidos": oPedidos})
-
-@login_required
-def reporteVentas(request):
-    if not validacionUsuario(request.user) in perfiles_correctos:
-        return redirect('/error/')
-    oEmpleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
-    context = {
-        "empleados": oEmpleados
-        }
-    return render(request, 'reporte/ventas.html', context)
 
 def imprimir(request,venta_id):
     response = HttpResponse(content_type='aplication/pdf')
@@ -847,6 +845,17 @@ def imprimir(request,venta_id):
     response.write(pdf)
     return response
 
+@login_required
+def reporteVentas(request):
+    if not validacionUsuario(request.user) in perfiles_correctos:
+        return redirect('/error/')
+    oEmpleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
+    oRutas = Ruta.objects.filter(activo=True, estado=True)
+    context = {
+        "empleados": oEmpleados,
+        "rutas": oRutas
+        }
+    return render(request, 'reporte/ventas.html', context)
 
 def todosEmpleadosVentas(request, mesActual, añoActual):
     empleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
@@ -961,21 +970,42 @@ def ventasRutaCliente(request, ruta, month, year):
     clientes = Cliente.objects.filter(ruta=ruta)
     for cliente in clientes:
         jsonVentaRutas = {}
-        jsonVentaRutas['cliente'] = cliente.nombre
         ventas = Venta.objects.filter(cliente=cliente, fecha__year=year, fecha__month=month)
         for venta in ventas:
             pedProdPres = Pedidoproductospresentacions.objects.filter(pedido=venta.pedido)
+            arrProductoPresentacion = []
             for pedProdPre in pedProdPres:
                 jsonProductoPresentacion = {}
                 jsonProductoPresentacion['prodPresentacion'] = str(pedProdPre.productopresentacions)
                 jsonProductoPresentacion['cantidad'] = pedProdPre.cantidad
-                jsonVentaRutas['prodCantidad'] = jsonProductoPresentacion            
+                arrProductoPresentacion.append(jsonProductoPresentacion)
+            jsonVentaRutas['cliente'] = cliente.nombre
             jsonVentaRutas['monto'] = venta.monto
             jsonVentaRutas['fecha'] = venta.fecha
+            jsonVentaRutas['prodCantidad'] = arrProductoPresentacion
         
         jsonFinal.append(jsonVentaRutas)
 
     return JsonResponse(jsonFinal, safe=False)
 
+def ventasAnuladasRutaCliente(request, ruta, month, year):
+    jsonFinal = []
+    clientes = Cliente.objects.filter(ruta=ruta)
+    for cliente in clientes:
+        jsonAnulacionRutas = {}
+        jsonAnulacionRutas['cliente'] = cliente.nombre
+        ventasAnuladas = Anulacionventa.objects.filter(fecha__year=year, fecha__month=month, venta__cliente=cliente)
+        for ventaAnulada in ventasAnuladas:
+            pedProdPres = Pedidoproductospresentacions.objects.filter(pedido=ventaAnulada.venta.pedido)
+            arrProductoPresentacion = []
+            for pedProdPre in pedProdPres:
+                jsonProductoPresentacion = {}
+                jsonProductoPresentacion['prodPresentacion'] = str(pedProdPre.productopresentacions)
+                jsonProductoPresentacion['cantidad'] = pedProdPre.cantidad
+                arrProductoPresentacion.append(jsonProductoPresentacion)
+            jsonAnulacionRutas['prodCantidad'] = arrProductoPresentacion
 
+            jsonAnulacionRutas['monto'] = ventaAnulada.venta.monto
+            jsonAnulacionRutas['fecha'] = ventaAnulada.venta.fecha
 
+        jsonFinal.append(jsonAnulacionRutas)
