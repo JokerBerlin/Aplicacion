@@ -166,7 +166,7 @@ Nuevo Lote
                       </div>
                       <div class="panel panel-default col-xs-12 col-sm-12 col-md-12" style="border: 0.05px solid #ECECEC;">
             				     <div class="panel-body">
-                           <div class="col-xs-4 col-sm-4 col-md-4">
+                           <div class="col-xs-3 col-sm-3 col-md-3">
                              <label for="id_nombre">Tipo de Recibo:</label>
                              <select class="form-control" id="cmbRecibo" name="cmbRecibo">
                                {% for recibo in recibos %}
@@ -176,11 +176,11 @@ Nuevo Lote
                                {% endfor %}
                              </select>
                            </div>
-                           <div class="col-xs-4 col-sm-4 col-md-4">
+                           <div class="col-xs-3 col-sm-3 col-md-3">
                              <label for="id_nombre">Número de Recibo:</label>
                              <input type="text" name="numeroRecibo" id="numeroRecibo" value="" class="form-control">
                            </div>
-                           <div class="col-xs-4 col-sm-4 col-md-4">
+                           <div class="col-xs-3 col-sm-3 col-md-3">
                              <label for="id_nombre">Almacen:</label>
                              <select class="form-control" id="cmbAlmacen" name="cmbAlmacen">
                                {% for almacen in almacens %}
@@ -189,6 +189,10 @@ Nuevo Lote
                                    </option>
                                {% endfor %}
                              </select>
+                           </div>
+                           <div class="col-xs-3 col-sm-3 col-md-3">
+                             <label for="id_nombre">Fecha Venc.:</label>
+                             <input type="text" name="" id="fechaVencimiento" class="form-control" value="">
                            </div>
 
                          </div>

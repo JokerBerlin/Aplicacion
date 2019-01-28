@@ -98,6 +98,7 @@ class Empleado(models.Model):
 
 class Lote(models.Model):
     fecha = models.DateTimeField(auto_now_add=True, blank=True)
+    fechavencimiento = models.DateField(auto_now=False, auto_now_add=False,null=True)
     modificado = models.DateTimeField(auto_now=True, blank=True)
     estado = models.BooleanField(blank=True,default=True)
     nrecibo = models.CharField(max_length=45, blank=True, null=True)
