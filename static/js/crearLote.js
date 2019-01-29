@@ -159,12 +159,7 @@ $(document).ready(function(){
         $( "#fechaVencimiento" ).blur(function() {
           $('#inpt-producto').focus();
         });
-        $( "#inpt-producto" ).blur(function() {
-          $('#cantidad').focus();
-        });
-        $( "#cantidad" ).blur(function() {
-          $('#precioCompra').focus();
-        });
+
         $('#bt_add').click(function(){
             agregar();
             $('#inpt-producto').focus();
