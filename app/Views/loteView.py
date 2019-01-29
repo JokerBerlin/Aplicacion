@@ -35,7 +35,7 @@ def registrarProveedor(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
         oProveedor = Proveedor()
-        oProveedor.nombre = Datos['nombre']
+        oProveedor.nombre = Datos['nombre'].lower()
         oProveedor.direccion = Datos['direccion']
         oProveedor.documento = Datos['documento']
         oProveedor.save()
