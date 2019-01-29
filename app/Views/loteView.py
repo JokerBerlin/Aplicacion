@@ -176,6 +176,7 @@ def editarLote(request,lote_id):
                 id=int(producto[0])
                 productoAlmacens = Producto_almacens.objects.get(id=id)
                 productoAlmacens.cantidad = producto[1]
+                productoAlmacens.precioCompra = producto[2]
                 productoAlmacens.save()
                 hoy = datetime.today()
                 oLote.modificado = hoy
@@ -194,6 +195,7 @@ def editarLote(request,lote_id):
             oNuevo = {}
             oNuevo['id']=oAlmacen.id
             oNuevo['cantidad']=str(oAlmacen.cantidad).replace(",", ".")
+            oNuevo['precioCompra']=str(oAlmacen.precioCompra).replace(",", ".")
             oNuevo['contador']=cont
             cantidadAlmacen.append(oNuevo)
             cont = cont+1

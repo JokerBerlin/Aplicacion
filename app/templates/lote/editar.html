@@ -48,6 +48,7 @@ Realizar Pedido En Almacen
                                       <td>Imagen</td>
                                       <td>Producto</td>
                                       <td>Cantidad</td>
+                                      <td>Precio compra</td>
                                       <td>Almacen</td>
                                     </tr>
                                 </thead>
@@ -61,6 +62,7 @@ Realizar Pedido En Almacen
                                                   <td><img src="/media/{{oAlmacen.producto.imagen}}" height="100" width="100" alt="" /></td>
                                                   <td>{{oAlmacen.producto.nombre}}</td>
                                                   <td><input type="number" class="form-control" id="cantidad{{cant.contador}}"  onchange ="eventoCambio({{ cant.contador }});" value="{{ cant.cantidad }}" min="0"></td>
+                                                  <td><input type="number" class="form-control" id="precioCompra{{cant.contador}}" value="{{ cant.precioCompra }}" min="0"></td>
                                                   <td>{{oAlmacen.almacen.nombre}}</td>
 
                                                 </tr>
