@@ -186,7 +186,8 @@ def editarLote(request,lote_id):
         return JsonResponse(response)
     else:
         oLote = Lote.objects.get(id=lote_id)
-        oAlmacens = Producto_almacens.objects.filter(id=lote_id)
+        oAlmacens = Producto_almacens.objects.filter(lote_id=lote_id)
+        print(oAlmacens)
         cont = 0
         cantidadAlmacen = []
         for oAlmacen in oAlmacens:
