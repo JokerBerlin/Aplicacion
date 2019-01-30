@@ -1009,3 +1009,5 @@ def ventasAnuladasRutaCliente(request, ruta, month, year):
             jsonAnulacionRutas['fecha'] = ventaAnulada.venta.fecha
 
         jsonFinal.append(jsonAnulacionRutas)
+    
+    return JsonResponse(jsonFinal, safe=False)
