@@ -57,6 +57,7 @@ class Cliente(models.Model):
     longitud = models.CharField(max_length=25, blank=True, null=True)
     latitud = models.CharField(max_length=25, blank=True, null=True)
     numerodocumento = models.CharField(max_length=11, blank=True, null=True)
+    email = models.CharField(max_length=40, blank=True, null=True)
     estado = models.BooleanField(blank=True,default=True)
     precio = models.ForeignKey(Precio, default=1, on_delete=models.CASCADE)
     def __str__(self):

@@ -24,25 +24,46 @@ Reporte de almacen
 
     <div class="card mb-3">
         <h1>Reporte Ventas Anuladas por Empleado</h1>
-        <div class="col-xs-6 col-sm-6 col-md-6">
+        <div class="col-xs-12 col-sm-12 col-md-6">
             <label for="añoMesEmp">Año y mes</label>
             <!-- <br> -->
             <input type="month" name="añoMesEmp" id="añoMesEmp" class="form-control">
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6">
-                <label for="empleadoId">Empleado</label>
-                <select name="empleadoId" id="empleadoId" class="form-control">
-                    {% for empleado in empleados %}
-                        <option value="{{ empleado.id }}">
-                            {{ empleado.nombre }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+            <label for="empleadoId">Empleado</label>
+            <select name="empleadoId" id="empleadoId" class="form-control">
+                {% for empleado in empleados %}
+                    <option value="{{ empleado.id }}">
+                        {{ empleado.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
         <div class="card-body">
             <canvas id="ventasAnuladasEmpChart" width="100%" height="30"></canvas>
         </div>
         <div class="card-footer small text-muted">Actualizado ayer a las 11:59 PM</div>
+    </div>
+
+    <div class="card mb-3">
+        <h1>Reporte Ventas Anuladas por ruta</h1>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <label for="yearMonth">Año y mes</label>
+            <input type="month" name="yearMonth" id="yearMonth" class="form-control">
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <label for="ruta">Ruta</label>
+            <select name="ruta" id="ruta" class="form-control">
+                {% for ruta in rutas %}
+                    <option value="{{ ruta.id }}">
+                        {{ ruta.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>  
+        <div class="card-body">
+            <canvas id="ventasAnuladasRutaChart" width="100%" height="30"></canvas>
+        </div>
     </div>
 </div>
 
@@ -50,29 +71,32 @@ Reporte de almacen
 
 <script>
 const hoy = new Date();
-var año = hoy.getFullYear();
-var mes = hoy.getMonth() + 1;
+let año = hoy.getFullYear();
+let mes = hoy.getMonth() + 1;
 mes = ('0' + mes).slice(-2);
-var empleadoId = document.getElementById('empleadoId').value;
+let empleadoId = document.getElementById('empleadoId').value;
 
 const fechaInicio = año + "-" + mes;
-var inptAñoMes = document.getElementById('añoMes');
+let inptAñoMes = document.getElementById('añoMes');
 inptAñoMes.value = fechaInicio;
 inptAñoMes.focus();
 
-var inptAñoMesEmp = document.getElementById('añoMesEmp');
+let inptAñoMesEmp = document.getElementById('añoMesEmp');
 inptAñoMesEmp.value = fechaInicio;
 
+let inptYearMonth = document.getElementById('yearMonth');
+inptYearMonth.value = fechaInicio;
+let rutaId = document.getElementById('ruta').value;
 
-var endpointVentasAnuladasEmpleados = "/Reporte/venta-anulada/empleado/" + año + "/" + mes + "/";
-
-var endpointVentasAnuladasEmpleadoIndv = "/Reporte/venta-anulada/empleado/" + empleadoId + "/" + año + "/" + mes + "/";
+let endpointVentasAnuladasEmpleados = "/Reporte/venta-anulada/empleado/" + año + "/" + mes + "/";
+let endpointVentasAnuladasEmpleadoIndv = "/Reporte/venta-anulada/empleado/" + empleadoId + "/" + año + "/" + mes + "/";
+let endpointVentasAnuladasRuta = "/Reporte/venta-anulada/empleado-ruta/" + rutaId + "/" + año + "/" + mes + "/";
 
 window.onload = function() {
 
 obtenerVentasAnuladasEmpleados(endpointVentasAnuladasEmpleados);
-
 obtenerVentasAnuladasEmpleadoIndividual(endpointVentasAnuladasEmpleadoIndv);
+obtenerVentasAnuladasRuta(endpointVentasAnuladasRuta);
 
 document.getElementById('añoMes').addEventListener("change", function() {
     var inicio = this.value;
@@ -90,7 +114,7 @@ document.getElementById('añoMes').addEventListener("change", function() {
 document.getElementById('añoMesEmp').addEventListener('change', function() {
     console.log(empleadoId)
     empleadoId = document.getElementById('empleadoId').value;
-    var inicio = this.value;
+    let inicio = this.value;
     año = parseInt(inicio.substring(0, 4));
     mes = parseInt(inicio.substring(5, 7));
 
@@ -99,10 +123,10 @@ document.getElementById('añoMesEmp').addEventListener('change', function() {
         console.log(endpointVentasAnuladasEmpleadoIndv);
         obtenerVentasAnuladasEmpleadoIndividual(endpointVentasAnuladasEmpleadoIndv);
     }
-})
+});
 
 document.getElementById('empleadoId').addEventListener('change', function() {
-    var inicio = document.getElementById('añoMes').value;
+    let inicio = document.getElementById('añoMes').value;
     año = parseInt(inicio.substring(0, 4));
     mes = parseInt(inicio.substring(5, 7));
 
@@ -113,7 +137,17 @@ document.getElementById('empleadoId').addEventListener('change', function() {
         console.log(endpointVentasAnuladasEmpleadoIndv);
         obtenerVentasEmpleadoIndividual(endpointVentasAnuladasEmpleadoIndv);
     } 
-})
+});
+
+document.getElementById('yearMonth').addEventListener('change', function() {
+    let fecha = this.value;
+    let rutaId = document.getElementById('ruta').value;
+    const year = inicio.substring(0, 4);
+    const mes = inicio.substring(5, 7);
+
+    endpointVentasAnuladasRuta = "/Reporte/venta-anulada/empleado-ruta/" + rutaId + "/" + año + "/" + mes + "/";
+    obtenerVentasAnuladasRuta(endpointVentasAnuladasRuta);
+});
 
 }
 
@@ -170,7 +204,7 @@ let obtenerVentasAnuladasEmpleados = function(endpoint) {
     });
 }
 
-var obtenerVentasAnuladasEmpleadoIndividual = function(endpoint) {
+let obtenerVentasAnuladasEmpleadoIndividual = function(endpoint) {
     fechas = [];
     montos = [];
 
@@ -222,6 +256,72 @@ var obtenerVentasAnuladasEmpleadoIndividual = function(endpoint) {
                 }
 
             });
+        }
+    })
+}
+
+let obtenerVentasAnuladasRuta = function(endpoint) {
+    let ctx = document.getElementById('ventasAnuladasRutaChart').getContext('2d');
+
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: endpoint,
+        contentType: 'application/json; charset=utf-8',
+        success: function(data) {
+            ejeX = data.map(element => {
+                if (typeof element.fecha !== "undefined") {
+                    const year = element.fecha.substring(0, 4);
+                    const month = element.fecha.substring(5, 7);
+                    const day = element.fecha.substring(8, 10);
+                    const fecha = day + '-' + month + '-' + year;
+                    const cliente = element.cliente;
+
+                    return element.prodCantidad.map(el => {
+                        return el.prodPresentacion + ' ' + cliente + ' ' + fecha; 
+                    })
+                } else {
+                    return '0';
+                }
+            }).filter(el => el !== '0');
+            ejeX = [].concat.apply([], ejeX);
+
+            ejeY = [].concat.apply([], data.map(el => {
+                let { prodCantidad } = el;
+                return prodCantidad;
+            }).filter(el => typeof el !== 'undefined'))
+              .map(el => el.cantidad);
+
+            let ventasAnuladasRutaChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ejeX,
+                    datasets: [{
+                        label: 'venta anuladas en cantidad de producto',
+                        data: ejeY,
+                        borderWidth: 1,
+                        backgroundColor: 'rgba(42, 124, 210, 0.6)',
+                        borderColor: 'rgb(42, 124, 210)'
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Ventas anuladas por ruta'
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            })
         }
     })
 }

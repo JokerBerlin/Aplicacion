@@ -917,8 +917,10 @@ def reporteVentasAnuladas(request):
     if not validacionUsuario(request.user) in perfiles_correctos:
         return redirect('/error/')
     oEmpleados = Empleado.objects.filter(Q(perfil=1) | Q(perfil=4))
+    oRutas = Ruta.objects.filter(activo=True, estado=True)
     context = {
-        "empleados": oEmpleados
+        "empleados": oEmpleados,
+        "rutas": oRutas
         }
 
     return render(request, 'reporte/ventasAnuladas.html', context)
