@@ -418,7 +418,8 @@ def pedidoVenta(request,pedido_id):
         total = Datos['total']
         tipoVenta = int(Datos['tipoVenta'])
         oPedido = Pedido.objects.get(id=pedido_id)
-        if tipoVenta== 3:
+        
+        if tipoVenta == 3:
             oPedidoproductospresentacion = Pedidoproductospresentacions.objects.filter(pedido_id = oPedido.id)
             for pedidoProductos in oPedidoproductospresentacion:
                 oPedidoproducto = Pedidoproductospresentacions.objects.get(id = pedidoProductos.id)
@@ -441,6 +442,12 @@ def pedidoVenta(request,pedido_id):
 
         oVenta.pedido_id = oPedido.id
         oVenta.save()
+        oTipoVenta = Tipoventa.objects.get(id=tipoVenta)
+        oVenta.tipoventa.add(oTipoVenta)
+        
+        oVenta.save()
+       
+        
         oPedido.estado = 3
         oPedido.save()
         oCobro = Cobro()
