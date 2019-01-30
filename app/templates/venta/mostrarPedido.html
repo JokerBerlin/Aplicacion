@@ -103,7 +103,17 @@ Realizar Venta
                                 TOTAL: S/. <label for="id_Total" id="id_Total" name="id_Total">{{montoTotal}}</label>
                                 <br>
                                 <br>
-
+                                <label for="tipoVenta">Tipo de Venta:</label>
+                                <select class="form-control" id="cmbTipoVenta" required="">
+                                {% for tipoVenta in tipoVentas %}
+                                    <option value="{{tipoVenta.id}}">
+                                    {{tipoVenta.nombre}}
+                                    </option>
+                                {% endfor %}
+                                </select>
+                                <br>
+                                <br>
+                                
                             <button id="generarAlmacen" class="btn btn-primary">Realizar Venta</button>
 
                         </div>

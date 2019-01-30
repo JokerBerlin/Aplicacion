@@ -34,8 +34,8 @@ $(document).ready(function() {
     var total = document.getElementById("id_Total").innerHTML;
     var tipoRecibo = document.getElementById("cmbRecibo").value;
     var numeroRecibo = document.getElementById("nroRecibo").value;
-
-    var datos = {cliente:cliente,total:total,tipoRecibo:tipoRecibo,numeroRecibo:numeroRecibo};
+    var tipoVenta = $('#cmbTipoVenta').val();
+    var datos = {cliente:cliente,total:total,tipoRecibo:tipoRecibo,numeroRecibo:numeroRecibo, tipoVenta:tipoVenta};
     var sendData = JSON.stringify(datos);
     $.ajax({
         type: "POST",

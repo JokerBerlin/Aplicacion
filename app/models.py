@@ -256,7 +256,13 @@ class Visita(models.Model):
     estado       = models.BooleanField(blank=True,default=True)
     clientes     = models.ManyToManyField(Cliente)
 
+class Tipoventa(models.Model):
+    nombre = models.CharField(max_length=45, blank=True, null=True)
+    venta = models.ManyToManyField(Venta)
+    estado       = models.BooleanField(blank=True,default=True)
+
 class Error(models.Model):
     fecha        = models.DateTimeField(auto_now_add=True, blank=True)
     descripcion = models.TextField(blank=True, null=True)
     actividad  = models.CharField(max_length=20)
+

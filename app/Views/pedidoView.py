@@ -416,9 +416,21 @@ def pedidoVenta(request,pedido_id):
         tipoRecibo = Datos['tipoRecibo']
         numeroRecibo = Datos['numeroRecibo']
         total = Datos['total']
+        tipoVenta = int(Datos['tipoVenta'])
         oPedido = Pedido.objects.get(id=pedido_id)
+        if tipoVenta== 3:
+            oPedidoproductospresentacion = Pedidoproductospresentacions.objects.filter(pedido_id = oPedido.id)
+            for pedidoProductos in oPedidoproductospresentacion:
+                oPedidoproducto = Pedidoproductospresentacions.objects.get(id = pedidoProductos.id)
+                oPedidoproducto.valor = 0
+                oPedidoproducto.save()
+
+        
         oVenta = Venta()
-        oVenta.monto = total
+        if tipoVenta == 3:
+            oVenta.monto = 0
+        else:
+            oVenta.monto = total
         oVenta.nrecibo = numeroRecibo
         oVenta.estado = True
         try:
@@ -483,6 +495,7 @@ def pedidoVenta(request,pedido_id):
             fecha = oPedido.fecha
             oPedidoproductospresentacions= Pedidoproductospresentacions.objects.filter(pedido=pedido_id)
             cantidadPedido = []
+            oTipoVenta = Tipoventa.objects.filter(estado=1)
             cont = 0
             montoTotal = 0.0
             for oPedido in oPedidoproductospresentacions:
@@ -521,7 +534,7 @@ def pedidoVenta(request,pedido_id):
                 print(cadenaNueva)
             else:
                 cadenaNueva = listacf
-            return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos,'montoTotal':montoTotal})
+            return render(request, 'venta/mostrarPedido.html', {'nroRecibo':cadenaNueva,'cliente': cliente,'pedidoId':pedido_id,'fecha':fecha, 'empleado': empleado, 'pedidos':oPedidoproductospresentacions,'tipoVentas':oTipoVenta,'cantidadPedido':cantidadPedido,'oRecibos':oRecibos,'montoTotal':montoTotal})
         else:
             return redirect('/Caja/apertura/')
 
