@@ -19,12 +19,13 @@ $(document).ready(function() {
                   id = $(this).text();
               case 3:
                   cantidad = $("#cantidad"+index ).val();
-
+              case 4:
+                  precioCompra = $("#precioCompra"+index).val();
           }
 
       });
       contador = 1;
-      productos.push([id,cantidad]);
+      productos.push([id,cantidad,precioCompra]);
       });
       console.log(productos);
 

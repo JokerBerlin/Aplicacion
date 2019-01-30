@@ -35,7 +35,7 @@ def registrarProveedor(request):
     if request.method == 'POST':
         Datos = json.loads(request.body)
         oProveedor = Proveedor()
-        oProveedor.nombre = Datos['nombre']
+        oProveedor.nombre = Datos['nombre'].lower()
         oProveedor.direccion = Datos['direccion']
         oProveedor.documento = Datos['documento']
         oProveedor.save()
@@ -176,6 +176,7 @@ def editarLote(request,lote_id):
                 id=int(producto[0])
                 productoAlmacens = Producto_almacens.objects.get(id=id)
                 productoAlmacens.cantidad = producto[1]
+                productoAlmacens.precioCompra = producto[2]
                 productoAlmacens.save()
                 hoy = datetime.today()
                 oLote.modificado = hoy
@@ -186,13 +187,15 @@ def editarLote(request,lote_id):
         return JsonResponse(response)
     else:
         oLote = Lote.objects.get(id=lote_id)
-        oAlmacens = Producto_almacens.objects.filter(id=lote_id)
+        oAlmacens = Producto_almacens.objects.filter(lote_id=lote_id)
+        print(oAlmacens)
         cont = 0
         cantidadAlmacen = []
         for oAlmacen in oAlmacens:
             oNuevo = {}
             oNuevo['id']=oAlmacen.id
             oNuevo['cantidad']=str(oAlmacen.cantidad).replace(",", ".")
+            oNuevo['precioCompra']=str(oAlmacen.precioCompra).replace(",", ".")
             oNuevo['contador']=cont
             cantidadAlmacen.append(oNuevo)
             cont = cont+1

@@ -159,12 +159,7 @@ $(document).ready(function(){
         $( "#fechaVencimiento" ).blur(function() {
           $('#inpt-producto').focus();
         });
-        $( "#inpt-producto" ).blur(function() {
-          $('#cantidad').focus();
-        });
-        $( "#cantidad" ).blur(function() {
-          $('#precioCompra').focus();
-        });
+
         $('#bt_add').click(function(){
             agregar();
             $('#inpt-producto').focus();
@@ -393,4 +388,40 @@ function seleccionarProducto(idProducto){
     //$('#codigo').val($('#codigo'+idProducto+'').text());
     $("#imagenesProd").empty();
     $("#cantidad").focus();
+}
+
+function RegistrarProveedor(){
+  var nombre = document.getElementById("id_nombre").value;
+  var direccion = document.getElementById("id_direccion").value;
+  var documento = document.getElementById("id_numerodocumento").value;
+  console.log(documento);
+  var datos = {nombre: nombre,direccion:direccion,documento:documento};
+  var sendData = JSON.stringify(datos);
+  $.ajax({
+      type: "POST",
+      dataType: "json",
+      url: "/Proveedor/Registrar/",
+      data: sendData,
+      contentType: "application/json; charset=utf-8",
+      async: false,
+      cache: false,
+      CrossDomain: true,
+
+      success: function (result) {
+      //     var id_venta = result["id_venta"];
+           alert('El proveedor se registro con exito');
+           var numDocumento = $("#id_numerodocumento").val();
+           $('#inpt-proveedor').val(numDocumento);
+          var nombrePro = $("#id_nombre").val();
+           $('#inpt-nombreProveedor').val(nombrePro.toLowerCase());
+
+
+           $('#myModal').modal('toggle');
+           $('#id_nombre').val('');
+           $('#id_direccion').val('');
+           $('#id_numerodocumento').val('');
+           //location.reload(true);
+           $('#cmbRecibo').focus();
+      }
+  });
 }
