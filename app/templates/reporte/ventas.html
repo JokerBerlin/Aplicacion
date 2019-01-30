@@ -295,7 +295,7 @@ let obtenerVentasRuta = function(endpoint) {
                     const cliente = element.cliente;
 
                     return element.prodCantidad.map(el => {
-                        return cliente + ' ' + fecha + ';' + el.prodPresentacion
+                        return el.prodPresentacion + ' ' + cliente + ' ' + fecha; 
                     })
                 } else {
                     return '0';
