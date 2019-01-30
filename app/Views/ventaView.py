@@ -493,12 +493,12 @@ def ListarVenta(request):
 @csrf_exempt
 def eliminar_identificador_venta(request):
     pk = request.POST.get('identificador_id')
-    print(pk)
+    # print(pk)
     identificador = Venta.objects.get(pk=pk)
     oPedido = identificador.pedido
     oPedido.estado = 0
     oPedido.save()
-    print(oPedido)
+    # print(oPedido)
     identificador.estado = 0
     identificador.save()
 
