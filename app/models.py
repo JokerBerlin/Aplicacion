@@ -237,6 +237,11 @@ class Tipooperacion(models.Model):
     def __str__(self):
         return '%s' % self.nombre
 
+class Tipoventa(models.Model):
+    nombre = models.CharField(max_length=45, blank=True, null=True)
+    estado = models.BooleanField(blank=True,default=True)
+
+
 class Venta(models.Model):
     fecha   = models.DateTimeField(auto_now_add=True, blank=True)
     monto   = models.FloatField()
@@ -244,6 +249,7 @@ class Venta(models.Model):
     estado  = models.BooleanField(blank=True,default=True)
     pedido  = models.ForeignKey(Pedido, on_delete=models.CASCADE)  # Field name made lowercase.
     cliente = models.ForeignKey(Cliente, blank=True, null=True, on_delete=models.CASCADE)  # Field name made lowercase.
+    tipoventa = models.ManyToManyField(Tipoventa)
 
 
 class Visita(models.Model):
@@ -255,11 +261,6 @@ class Visita(models.Model):
     activo       = models.BooleanField(blank=True,default=True)
     estado       = models.BooleanField(blank=True,default=True)
     clientes     = models.ManyToManyField(Cliente)
-
-class Tipoventa(models.Model):
-    nombre = models.CharField(max_length=45, blank=True, null=True)
-    venta = models.ManyToManyField(Venta)
-    estado       = models.BooleanField(blank=True,default=True)
 
 class Error(models.Model):
     fecha        = models.DateTimeField(auto_now_add=True, blank=True)
