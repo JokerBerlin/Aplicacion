@@ -534,7 +534,7 @@ def ventaNuevo(request):
     oPedidos = Pedido.objects.filter(estado=2)
     oRecibos = Recibo.objects.filter(estado=True)
     oCajas = Caja.objects.filter(estado=True)
-
+    oTipoVentas
     context = {
         'presentaciones': oPresentaciones,
         'precios': oPrecios,
