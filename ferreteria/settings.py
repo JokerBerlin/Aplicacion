@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'ferreteria.wsgi.application'
 # nube
 DATABASES = {
        'default': {
-        'ENGINE': 'mysql_cymysql',
+        'ENGINE': 'mysql.connector.django',
         'NAME': 'admin_pedidos',
         'USER': 'admin_pedidos',
         'PASSWORD': 'vn1RhBPs1A',
