@@ -218,6 +218,7 @@ class Ruta(models.Model):
     activo   = models.BooleanField(blank=True,default=True)
     estado   = models.BooleanField(blank=True,default=True)
     clientes = models.ManyToManyField(Cliente)
+    repartidor = models.OneToOneField(Empleado, on_delete=models.CASCADE)
 
 
 class Rutaclientes(models.Model):

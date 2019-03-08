@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 from app.models import *
 from app.views import *
-from ferreteria.urls import *
+# from ferreteria.urls import *
 from django.views.decorators.csrf import csrf_exempt
 import json
 from app.fomularios.productoForm import *
