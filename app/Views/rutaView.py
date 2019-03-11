@@ -169,3 +169,36 @@ def listarRutas(request):
         page_range = paginator.page_range[start_index:end_index]
 
         return render(request, 'ruta/listar.html', {"oRutas": rutaPagina,"page_range": page_range})
+
+@login_required
+def asignarRuta(request):
+    if request.method == 'POST':
+        data = request.POST
+        print(data['ruta'])
+        ruta = Ruta.objects.get(id=data['ruta'])
+        repartidor = Empleado.objects.get(id=data['repartidor'])
+
+        ruta.repartidor = repartidor
+        ruta.save()
+        return redirect('/Ruta/listar/')
+        
+    rutas = Ruta.objects.filter(repartidor__isnull=True, activo=True)
+    repartidores = Empleado.objects.filter(perfil=5, estado=True)
+    context = {
+        'rutas': rutas,
+        'repartidores': repartidores
+    }
+
+    return render(request, 'ruta/asignar.html', context)
+
+def rutasNoAsignadas(request):
+    jsonFinal = []
+    rutas = Ruta.objects.filter(repartidor__isnull=True)
+    
+    for ruta in rutas:
+        jsonRutasNoAsignadas = {}
+        jsonRutasNoAsignadas['id'] = ruta.id
+        jsonRutasNoAsignadas['nombre'] = ruta.nombre
+        jsonFinal.append(jsonRutasNoAsignadas)
+            
+    return HttpResponse(json.dumps(jsonFinal), content_type='application/json')

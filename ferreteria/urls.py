@@ -126,7 +126,8 @@ urlpatterns = [
     url(r'^Ruta/nuevo/$', registrarRuta),
     url(r'^Ruta/listar/$',listarRutas),
     url(r'^Ruta/detalle/(?P<ruta_id>\d+)/$', detalleRuta),
-
+    url(r'^Ruta/asignar/$', asignarRuta),
+    url(r'^Ruta/no-asignadas/$', rutasNoAsignadas),
     ################## APP Movil #######################
     url(r'^usuario/validar/$', validarUsuario),
     url(r'^usuario/ruta/$', rutaUsuario),

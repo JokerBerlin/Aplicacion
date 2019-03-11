@@ -30,28 +30,29 @@ Lista de Rutas
 	                            <th>#</th>
 	                            <th>Nombre</th>
 	                            <th>Cliente</th>
-	                            <th>fecha</th>
+								<th>Repartidor</th>
+								<th>Fecha</th>
 								<th>Opciones</th>
 	                        </tr>
 	                    </thead>
 				    {% for oRuta in oRutas %}
 				    <tr>
 				    	<td>{{ forloop.counter }}</td>
-				    	<td>{{oRuta.nombre}}</td>
+				    	<td>{{ oRuta.nombre }}</td>
 				    	<td>
 				    		<ul>
-				    		{%for cliente in oRuta.clientes.all %}
-				    			<li>{{cliente.nombre}}</li>
-								{%endfor%}
+				    			{% for cliente in oRuta.clientes.all %}
+				    			<li>{{ cliente.nombre }}</li>
+								{% endfor %}
 							</ul>
-				    	</td>
-				    	<td>{{oRuta.fecha}}</td>
+						</td>
+						<td>{{ oRuta.repartidor }}</td>
+				    	<td>{{ oRuta.fecha }}</td>
 						<td>
-					    		<a href="/Ruta/detalle/{{oRuta.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
-					    		<a href="/Ruta/editar/{{oRuta.id}}/"><button type="button" class="btn btn-primary">Editar</button></a>
-					    		<a href="/Ruta/eliminar/{{oRuta.id}}/"><button type="button" class="btn btn-danger">Eliminar</button></a>
-					    	</td>
-					    	</tr>
+							<a href="/Ruta/detalle/{{oRuta.id}}/"><button type="button" class="btn btn-info">Ver</button> </a>
+							<a href="/Ruta/eliminar/{{oRuta.id}}/"><button type="button" class="btn btn-danger">Eliminar</button></a>
+						</td>
+					</tr>
 
 				    	{% endfor %}
 

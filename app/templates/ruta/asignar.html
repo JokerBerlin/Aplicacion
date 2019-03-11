@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block imports %}
+{% endblock %}
+
+
+{% block title %}
+Asignación de Rutas
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h3>Asignar ruta a repartidor</h3>
+        <form action="." method='POST'>
+            <div class="form-group">
+                {% csrf_token %}
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <label for="ruta">Rutas sin Asignar</label>
+                    <select name="ruta" id="ruta" class="form-control">
+                        {% for ruta in rutas %}
+                        <option value="{{ ruta.id }}">
+                            {{ ruta.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <label for="repartidor">Repartidores</label>
+                    <select name="repartidor" id="repartidor" class="form-control">
+                        {% for repartidor in repartidores %}
+                        <option value="{{ repartidor.id }}">
+                            {{ repartidor.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-12 col-xs-12 col-sm-12">
+                    <br>
+                    <button class="btn btn-success">Asignar Ruta</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
